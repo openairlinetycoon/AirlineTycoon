@@ -3,6 +3,12 @@
 //      are changed infrequently
 //
 
+template<bool>
+struct static_assert;
+
+template<>
+struct static_assert<true> {};
+
 #include <afxwin.h>
 #include <ddraw.h>
 #include <dplay.h>

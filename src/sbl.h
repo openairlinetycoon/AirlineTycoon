@@ -141,7 +141,14 @@ private:
 
 class PixelFormat
 {
+public:
+    UBYTE bitDepth;
+    UBYTE bytesperPixel;
+    word Unknown0;
     SLONG redMask, greenMask, blueMask;
+    UBYTE bitDepthAgain;
+    UBYTE bitDepthStatic;
+    word Unknown1;
 };
 
 class SB_CBitmapCore
@@ -171,11 +178,11 @@ public:
     unsigned long BlitT(class SB_CBitmapCore* bm, long x, long y, struct tagRECT const* rect = NULL, short flags = 16, unsigned long unk = 0) { return Blit(bm, x, y, rect, flags, unk); }
     unsigned long SetPixel(long x, long y, SLONG color) { return SetPixel(x, y, (SB_CHardwarecolorHelper*)color); }
     unsigned long Line(long x1, long y1, long x2, long y2, DWORD color) { return Line(x1, y1, x2, y2, (SB_CHardwarecolorHelper*)color); }
-    SLONG GetXSize() { return *((SLONG*)this + 16); }
-    SLONG GetYSize() { return *((SLONG*)this + 17); }
-    RECT GetClipRect() { return *(RECT*)((UBYTE*)this + 16); }
-    LPDIRECTDRAWSURFACE GetSurface() { DebugBreak(); return *(LPDIRECTDRAWSURFACE*)((UBYTE*)this + 8); }
-    PixelFormat* GetPixelFormat(void) { DebugBreak(); return NULL; }
+    SLONG GetXSize() { return Size.x; }
+    SLONG GetYSize() { return Size.y; }
+    RECT GetClipRect() { return ClipRect; }
+    LPDIRECTDRAWSURFACE GetSurface() { return lpDDSurface; }
+    PixelFormat* GetPixelFormat(void) { return &Format; }
 
 protected:
     void FillPixelFormat(void);
@@ -183,7 +190,19 @@ protected:
     virtual long Unlock(struct _DDSURFACEDESC*) const;
 
     ~SB_CBitmapCore(void);
+
+private:
+    LPDIRECTDRAW lpDD;
+    LPDIRECTDRAWSURFACE lpDDSurface;
+    dword Unknown0;
+    RECT ClipRect;
+    PixelFormat Format;
+    dword Unknown1[3];
+    XY Size;
+    dword Unknown2[5];
 };
+
+static_assert<sizeof(SB_CBitmapCore) == 0x5Cu> SB_CBitmapCore_size_check;
 
 class SB_CCursor
 {
@@ -203,7 +222,11 @@ private:
     long SaveBackground(enum tagEnumBlitImage, struct IDirectDrawSurface*, unsigned short);
     long CreateBackground(void);
     long CreateSurface(struct IDirectDrawSurface**, long, long);
+
+    dword Unknown[27];
 };
+
+static_assert<sizeof(SB_CCursor) == 0x6Cu> SB_CCursor_size_check;
 
 class SB_CPrimaryBitmap : public SB_CBitmapCore
 {
@@ -217,13 +240,18 @@ public:
     void SetPos(struct tagPOINT&);
     struct IDirectDrawSurface* GetLastPage(void);
 
-    void AssignCursor(SB_CCursor*) { DebugBreak(); }
+    void AssignCursor(SB_CCursor* c) { Cursor = c; }
     LPDIRECTDRAWSURFACE GetPrimarySurface() { DebugBreak(); return NULL; }
     bool FastClip(struct tagRECT, struct tagPOINT const*, struct tagRECT const*) { DebugBreak(); return false; }
 
 private:
     void Delete(void);
+
+    dword Unknown[10];
+    SB_CCursor* Cursor;
 };
+
+static_assert<sizeof(SB_CPrimaryBitmap) == 0x88u> SB_CPrimaryBitmap_size_check;
 
 class SB_CBitmapMain
 {
@@ -232,10 +260,15 @@ public:
     ~SB_CBitmapMain(void);
     unsigned long Release(void);
     unsigned long CreateBitmap(SB_CBitmapCore**, GfxLib*, __int64, unsigned long);
-    unsigned long CreateBitmap(SB_CBitmapCore**, long, long, unsigned long, unsigned long = 0, unsigned long = 0);
+    unsigned long CreateBitmap(SB_CBitmapCore**, long, long, unsigned long, unsigned long = 16, unsigned long = 0);
     unsigned long ReleaseBitmap(SB_CBitmapCore*);
     unsigned long DelEntry(SB_CBitmapCore*);
+
+private:
+    dword Unknown[7];
 };
+
+static_assert<sizeof(SB_CBitmapMain) == 0x1Cu> SB_CBitmapMain_size_check;
 
 class SB_CBitmapKey
 {
@@ -245,7 +278,10 @@ public:
 
     void* Bitmap;
     unsigned long lPitch;
+    dword Unknown[28];
 };
+
+static_assert<sizeof(SB_CBitmapKey) == 0x78u> SB_CBitmapKey_size_check;
 
 typedef struct
 {
@@ -284,17 +320,11 @@ public:
     long GetWordLength(char*, long);
     long GetWidth(char*, long);
     long GetWidth(char);
-    bool Load(struct IDirectDraw*, char*, struct HPALETTE__*);
+    bool Load(struct IDirectDraw*, char*, struct HPALETTE__* = NULL);
     bool CopyMemToSurface(struct HPALETTE__*);
     void SetTabulator(struct tagTabs*, unsigned long);
 
-    bool Load(struct IDirectDraw* pDD, char* fn)
-    {
-        DebugBreak();
-        return Load(pDD, fn, NULL);
-    }
-
-    void SetLineSpace(long) { DebugBreak(); }
+    void SetLineSpace(BOOL LineSpace) { Flags = LineSpace ? 0x3F800000 : 0x3FC00000; }
 
 protected:
     void Init(void);
@@ -306,7 +336,14 @@ protected:
     unsigned char* GetDataPtr(void);
     bool CreateFontSurface(struct IDirectDraw*);
     bool CopyBitmapToMem(struct tagCreateFont*);
+
+private:
+    dword Unknown0[26];
+    SLONG Flags;
+    dword Unknown1;
 };
+
+static_assert<sizeof(SB_CFont) == 0x70u> SB_CFont_size_check;
 
 class SB_CXList
 {
@@ -332,4 +369,8 @@ public:
 private:
     void Init(void);
     void Delete(void);
+
+    dword Unknown[4];
 };
+
+static_assert<sizeof(SB_CXList) == 0x10u> SB_CXList_size_check;

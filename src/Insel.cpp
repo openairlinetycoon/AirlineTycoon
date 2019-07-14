@@ -111,7 +111,7 @@ void WaterBlur (SBBM *pTargetBm, SLONG AnimOffset, XY TargetOffset, SBBM &Reflex
    static SLONG *pMoveOffset=MoveOffset;
    static UWORD *pTgtPixel;
    static UWORD *pSrcPixel;
-   static UBYTE *pRefTable;
+   static const UBYTE *pRefTable;
 
    SB_CBitmapKey SrcKey(*ReflexionSourceBm.pBitmap);
    SB_CBitmapKey TgtKey(*pTargetBm->pBitmap);

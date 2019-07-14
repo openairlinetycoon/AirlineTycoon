@@ -153,7 +153,7 @@
          void  ReSize (CHLPool *pHLPool, const CString &graphicIDs, SLONG Anzahl);
          SLONG AnzEntries() const { return (Bitmaps.AnzEntries()); }
 
-         CHLBm& operator [](const SLONG Index) const { return Bitmaps[Index]; }
-         CHLBm& operator [](const int Index) const { return Bitmaps[Index]; }
+         const CHLBm& operator [](const SLONG Index) const { return Bitmaps[Index]; }
+         const CHLBm& operator [](const int Index) const { return Bitmaps[Index]; }
    };
 #endif hline_h

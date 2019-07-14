@@ -3,8 +3,16 @@
 //      are changed infrequently
 //
 
-#include "\sb-projekt\TeaklibW\TeakLibW.H"
-#include "\sb-projekt\sbl\inc\sbl.h"
+#include <afxwin.h>
+#include <ddraw.h>
+#include <dplay.h>
+#include <math.h>
+#include <mmsystem.h>
+
+#include "Defines.h"
+
+#include "TeakLibW.H"
+#include "sbl.h"
 #include "sbbm.h"
 #include "sse.h"
 #include "ColorFx.h"
@@ -12,9 +20,8 @@
 #include "glstd.h"
 #include "glbasis.h"
 
-#include "res\Resource.h"
+//#include "res\Resource.h"
 
-#include "Defines.h"
 #include "class.h"         //Eigene Klassen
 #include "Proto.h"
 #include "TakeOff.h"

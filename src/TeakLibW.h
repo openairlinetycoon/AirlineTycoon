@@ -1,8 +1,5 @@
 #pragma once
 
-typedef UWORD word;
-typedef ULONG dword;
-
 extern void memswap(void* param_1, void* param_2, ULONG param_3);
 extern char* bprintf(char const*, ...);
 extern char* bitoa(long, long = 10);

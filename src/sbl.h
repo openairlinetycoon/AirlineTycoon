@@ -1,11 +1,14 @@
 #pragma once
 
+typedef UWORD word;
+typedef ULONG dword;
+
 #define DD_ERROR(x) (x)
 
-#define CREATE_VIDMEM		1
-#define CREATE_FULLSCREEN	2
-#define CREATE_SYSMEM		4
-#define CREATE_USECOLORKEY	8
+#define CREATE_SYSMEM      0
+#define CREATE_VIDMEM      1
+#define CREATE_USECOLORKEY 2
+#define CREATE_FULLSCREEN  4
 
 class GfxLib
 {
@@ -136,7 +139,7 @@ private:
     SLONG color;
 };
 
-struct PixelFormat
+class PixelFormat
 {
     SLONG redMask, greenMask, blueMask;
 };
@@ -250,22 +253,22 @@ typedef struct
     SB_CBitmapCore* pBitmapCore;
 } CFRONTDATA;
 
-#define TEC_FONT_LEFT		0
-#define TEC_FONT_CENTERED	1
-#define TEC_FONT_RIGHT		2
+#define TEC_FONT_LEFT      0
+#define TEC_FONT_CENTERED  1
+#define TEC_FONT_RIGHT     2
 
-#define TAB_STYLE_LEFT		0
-#define TAB_STYLE_CENTER	1
-#define TAB_STYLE_RIGHT		2
+#define TAB_STYLE_LEFT     0
+#define TAB_STYLE_CENTER   1
+#define TAB_STYLE_RIGHT    2
 
 typedef struct tagTabs
 {
-    SLONG Unknown[2];
+    dword Unknown[2];
 } TABS;
 
 typedef struct tagTextStyle
 {
-    SLONG Unknown[1];
+    dword Unknown[1];
 } TEXT_STYLE;
 
 class SB_CFont

@@ -8,7 +8,7 @@ typedef ULONG dword;
 #define CREATE_SYSMEM      0
 #define CREATE_VIDMEM      1
 #define CREATE_USECOLORKEY 2
-#define CREATE_FULLSCREEN  4
+#define CREATE_FULLSCREEN  16
 
 class GfxLib
 {

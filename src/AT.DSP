@@ -1,24 +1,24 @@
 # Microsoft Developer Studio Project File - Name="AT" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
-# ** NICHT BEARBEITEN **
+# ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Application" 0x0101
 
 CFG=AT - Win32 Debug
-!MESSAGE Dies ist kein gültiges Makefile. Zum Erstellen dieses Projekts mit NMAKE
-!MESSAGE verwenden Sie den Befehl "Makefile exportieren" und führen Sie den Befehl
+!MESSAGE This is not a valid makefile. To build this project using NMAKE,
+!MESSAGE use the Export Makefile command and run
 !MESSAGE 
 !MESSAGE NMAKE /f "AT.MAK".
 !MESSAGE 
-!MESSAGE Sie können beim Ausführen von NMAKE eine Konfiguration angeben
-!MESSAGE durch Definieren des Makros CFG in der Befehlszeile. Zum Beispiel:
+!MESSAGE You can specify a configuration when running NMAKE
+!MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
 !MESSAGE NMAKE /f "AT.MAK" CFG="AT - Win32 Debug"
 !MESSAGE 
-!MESSAGE Für die Konfiguration stehen zur Auswahl:
+!MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "AT - Win32 Release" (basierend auf  "Win32 (x86) Application")
-!MESSAGE "AT - Win32 Debug" (basierend auf  "Win32 (x86) Application")
+!MESSAGE "AT - Win32 Release" (based on "Win32 (x86) Application")
+!MESSAGE "AT - Win32 Debug" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -38,7 +38,7 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 5
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "Release"
+# PROP Output_Dir "../Release"
 # PROP Intermediate_Dir "Release"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
@@ -53,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /machine:I386
-# ADD LINK32 dplayx.lib ddraw.lib ole32.lib winmm.lib dxguid.lib dsound.lib smackw32.lib \sb-projekt\stacksaver\debug\stacksaver.obj /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:"LIBCMTD" /nodefaultlib:"nafxcwd.lib"
+# ADD LINK32 dplayx.lib ddraw.lib ole32.lib winmm.lib dxguid.lib dsound.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "AT - Win32 Debug"
@@ -65,13 +65,12 @@ LINK32=link.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 5
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "Debug"
+# PROP Output_Dir "../Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /Yu"stdafx.h" /FD /c
-# SUBTRACT CPP /Fr
+# ADD CPP /nologo /MT /W3 /GX /ZI /Od /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /Fr /Yu"stdafx.h" /FD /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x407 /d "_DEBUG"
@@ -81,8 +80,8 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 dplayx.lib ddraw.lib ole32.lib winmm.lib dxguid.lib dsound.lib smackw32.lib /nologo /version:1.1 /subsystem:windows /debug /machine:I386
-# SUBTRACT LINK32 /profile /incremental:no
+# ADD LINK32 dplayx.lib ddraw.lib ole32.lib winmm.lib dxguid.lib dsound.lib /nologo /version:1.1 /subsystem:windows /debug /machine:I386 /pdbtype:sept
+# SUBTRACT LINK32 /pdb:none
 
 !ENDIF 
 
@@ -294,6 +293,7 @@ SOURCE=.\Route.Cpp
 # Begin Source File
 
 SOURCE=.\res\Script2.rc
+# PROP Exclude_From_Build 1
 # End Source File
 # Begin Source File
 
@@ -593,36 +593,36 @@ SOURCE=.\DeltaVid.cpp
 # Begin Source File
 
 SOURCE=.\SBLib\source\Debug.cpp
-# SUBTRACT CPP /YX /Yc /Yu
+# PROP Exclude_From_Build 1
 # End Source File
 # Begin Source File
 
 SOURCE=.\SBLib\source\Network.cpp
-# SUBTRACT CPP /YX /Yc /Yu
+# PROP Exclude_From_Build 1
 # End Source File
 # Begin Source File
 
 SOURCE=.\SBLib\source\String.cpp
-# SUBTRACT CPP /YX /Yc /Yu
+# PROP Exclude_From_Build 1
 # End Source File
 # Begin Source File
 
 SOURCE=.\SBLib\source\Tool2.cpp
-# SUBTRACT CPP /YX /Yc /Yu
+# PROP Exclude_From_Build 1
 # End Source File
 # End Group
 # Begin Source File
 
+SOURCE=.\sbl.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\TeakLibW.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\Sbl\Release\SBL.lib
-
-!IF  "$(CFG)" == "AT - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "AT - Win32 Debug"
-
 # PROP Exclude_From_Build 1
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -637,45 +637,34 @@ SOURCE=D:\Projekte\Sys\SoundEngine\Dll\Release\SSE.lib
 # Begin Source File
 
 SOURCE=..\SoundEngine\Dll\Release\SSE.lib
+# PROP Exclude_From_Build 1
 # End Source File
 # Begin Source File
 
 SOURCE=..\TeakLibW\Release\TeakLibW.lib
-
-!IF  "$(CFG)" == "AT - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "AT - Win32 Debug"
-
 # PROP Exclude_From_Build 1
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\Sbl\Debug\SBL.lib
-
-!IF  "$(CFG)" == "AT - Win32 Release"
-
 # PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "AT - Win32 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\TeakLibW\Debug\TeakLibW.lib
-
-!IF  "$(CFG)" == "AT - Win32 Release"
-
 # PROP Exclude_From_Build 1
+# End Source File
+# Begin Source File
 
-!ELSEIF  "$(CFG)" == "AT - Win32 Debug"
+SOURCE=..\libs\SBL.lib
+# End Source File
+# Begin Source File
 
-!ENDIF 
+SOURCE=..\libs\SSE.lib
+# End Source File
+# Begin Source File
 
+SOURCE=..\libs\TeakLibW.lib
 # End Source File
 # End Group
 # Begin Group "Räume"

@@ -3,7 +3,22 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "AT"=src\AT.DSP - Package Owner=<4>
+Project: "AT"=".\src\AT.DSP" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name libsmacker
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "libsmacker"=.\libsmacker\libsmacker.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

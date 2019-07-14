@@ -4,7 +4,7 @@
 // CAuftrag CFlugplan CPlane PLAYER
 //============================================================================================
 #include "HLine.h"
-#include "\sb-projekt\smksdk\Smack.h"
+#include "../libsmacker/smacker.h"
 
 typedef BUFFER<UBYTE> BUFFER_UBYTE;
 
@@ -1811,8 +1811,8 @@ class CSmack16
 {
    public:
       UWORD        PaletteMapper [257];    //Tabelle zum Mappen von 8 auf 16 Bit
-      BUFFER<BYTE> SmackPic;               //Das Bild, wie der Smacker es sieht
-      Smack       *pSmack;
+      //BUFFER<BYTE> SmackPic;               //Das Bild, wie der Smacker es sieht
+      smk_t       *pSmack;
 
    public:
       CSmack16 ();

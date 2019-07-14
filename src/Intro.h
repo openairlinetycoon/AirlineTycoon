@@ -12,8 +12,8 @@ public:
 // Attributes
 public:
     UWORD        PaletteMapper [257];    //Tabelle zum Mappen von 8 auf 16 Bit
-    BUFFER<BYTE> SmackPic;               //Das Bild, wie der Smacker es sieht
-    Smack       *pSmack;
+    //BUFFER<BYTE> SmackPic;               //Das Bild, wie der Smacker es sieht
+    smk_t       *pSmack;
     SBBM         Bitmap;
 
     SBBM         FadeFrom;

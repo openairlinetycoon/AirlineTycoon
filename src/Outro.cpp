@@ -10,7 +10,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-void ConvertBitmapTo16Bit (UBYTE *SourcePic, SBBM *pBitmap, UWORD *pPaletteMapper, SLONG SmackWidth, SLONG SourceSizeY, XY TargetOffset);
+void ConvertBitmapTo16Bit (const UBYTE *SourcePic, SBBM *pBitmap, UWORD *pPaletteMapper, SLONG SmackWidth, SLONG SourceSizeY, XY TargetOffset);
 
 //--------------------------------------------------------------------------------------------
 //ULONG PlayerNum
@@ -27,15 +27,14 @@ COutro::COutro (BOOL bHandy, SLONG PlayerNum, CString SmackName) : CStdRaum (bHa
 
    gMouseStartup = TRUE;
 
-   pSmack = SmackOpen (FullFilename (SmackName, IntroPath), SMACKTRACKS, SMACKAUTOEXTRA);
-   SmackPic.ReSize (pSmack->Width*pSmack->Height);
-   CalculatePalettemapper (pSmack->Palette, PaletteMapper+1);
+   pSmack = smk_open_file (FullFilename (SmackName, IntroPath), SMK_MODE_DISK);
+   //SmackPic.ReSize (pSmack->Width*pSmack->Height);
+   CalculatePalettemapper (smk_get_palette(pSmack), PaletteMapper+1);
 
-   Bitmap.ReSize (pSmack->Width, pSmack->Height);
-   SmackToBuffer (pSmack, 0, 0, Bitmap.Size.x, Bitmap.Size.y, (UBYTE*)SmackPic, FALSE);
-   SmackDoFrame (pSmack);
-   SmackNextFrame (pSmack);
-   ConvertBitmapTo16Bit ((UBYTE*)SmackPic, &Bitmap, PaletteMapper+1, pSmack->Width, pSmack->Height, XY(0, 0));
+   ULONG Width, Height;
+   smk_info_video(pSmack, &Width, &Height, NULL);
+   Bitmap.ReSize (Width, Height);
+   ConvertBitmapTo16Bit (smk_get_video(pSmack), &Bitmap, PaletteMapper+1, Width, Height, XY(0, 0));
 
    ShowWindow(SW_SHOW);
    UpdateWindow();
@@ -46,7 +45,7 @@ COutro::COutro (BOOL bHandy, SLONG PlayerNum, CString SmackName) : CStdRaum (bHa
 //--------------------------------------------------------------------------------------------
 COutro::~COutro()
 {
-   if (pSmack) SmackClose (pSmack);
+   if (pSmack) smk_close (pSmack);
    pSmack = NULL;
 
    gMouseStartup = FALSE;
@@ -83,23 +82,22 @@ void COutro::OnPaint()
    
    if (FrameNum++<2) PrimaryBm.BlitFrom (RoomBm);
 
-   if (!SmackWait (pSmack) && pSmack->FrameNum<pSmack->Frames-1)
+   ULONG Width, Height, CurFrame, Frames;
+   smk_info_video(pSmack, &Width, &Height, NULL);
+   smk_info_all(pSmack, &CurFrame, &Frames, NULL);
+   if (smk_next(pSmack) != SMK_DONE && CurFrame < Frames-1)
    {
       //Take the next frame:
-      Bitmap.ReSize (pSmack->Width, pSmack->Height);
-      SmackToBuffer (pSmack, 0, 0, Bitmap.Size.x, Bitmap.Size.y, (UBYTE*)SmackPic, FALSE);
+      Bitmap.ReSize (Width, Height);
 
-      if (pSmack->NewPalette) CalculatePalettemapper (pSmack->Palette, PaletteMapper+1);
+      CalculatePalettemapper (smk_get_palette(pSmack), PaletteMapper+1);
 
-      SmackDoFrame (pSmack);
-      SmackNextFrame (pSmack);
-
-      ConvertBitmapTo16Bit ((UBYTE*)SmackPic, &Bitmap, PaletteMapper+1, pSmack->Width, pSmack->Height, XY(0, 0));
+      ConvertBitmapTo16Bit (smk_get_video(pSmack), &Bitmap, PaletteMapper+1, Width, Height, XY(0, 0));
    }
 
-   PrimaryBm.BlitFrom (Bitmap, 320-pSmack->Width/2, 240-pSmack->Height/2);
+   PrimaryBm.BlitFrom (Bitmap, 320-Width/2, 240-Height/2);
 
-   if (pSmack->FrameNum >= pSmack->Frames-1)
+   if (CurFrame >= Frames-1)
       Sim.Gamestate = GAMESTATE_BOOT;
 }
 

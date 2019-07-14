@@ -349,11 +349,16 @@ void DoAppPath (void)
 {
    BUFFER<char> buffer (200);
 
+#if 0
    //Vollen Programmnamen anfordern:
    GetModuleFileName (NULL, (LPSTR)buffer, 200);
 
    //eigentlichen Programmteil löschen:
    while (strlen(buffer)>0 && buffer[(SLONG)(strlen(buffer)-1)]!='\\') buffer[(SLONG)(strlen(buffer)-1)]=0;
+#else
+   GetCurrentDirectory(200, (LPSTR)buffer);
+   if (buffer[(SLONG)(strlen(buffer)-1)]!='\\') strcat(buffer, "\\");
+#endif
 
    //Verzeichnis-Namen der %§$@#"$! MS-Entwicklungsumgebung löschen:
    if (strlen (buffer)>6 && strnicmp (buffer+strlen(buffer)-6, "debug\\", 6)==0) buffer[(SLONG)(strlen(buffer)-6)]=0;

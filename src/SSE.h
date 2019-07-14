@@ -13,6 +13,8 @@
 
 #include "dsound.h"
 
+#define DllExport
+
 #define	MAX_FX_BUFFER			(4)
 #define	EVENTS					(2)
 

@@ -1,0 +1,627 @@
+The Block Cipher Encryption Algorithm
+by Joan Daemen, Lars R. Knudsen, Vincent Rijmen
+
+
+
+/* square.h */
+
+#ifndef __SQUARE_H
+#define __SQUARE_H
+
+#define R 8	/* number of rounds */
+#define SQUARE_BLOCKSIZE (4*sizeof(word32))
+
+#ifndef USUAL_TYPES
+#define USUAL_TYPES
+typedef unsigned char	byte;	/*  8 bit */
+typedef unsigned short	word16;	/* 16 bit */
+typedef unsigned long	word32;	/* 32 bit */
+#endif /* ?USUAL_TYPES */
+
+void squareGenerateRoundkeys (word32 key[4],
+	word32 roundkeys_e[R+1][4], word32 roundkeys_d[R+1][4]);
+void squareEncrypt (word32 text[4], word32 roundkeys_e[R+1][4]);
+void squareDecrypt (word32 text[4], word32 roundkeys_d[R+1][4]);
+
+#endif /* __SQUARE_H */
+
+
+
+
+
+/* square.c */
+/*
+ * The Square block cipher.
+ *
+ * Algorithm developed by Joan Daemen <Daemen.J@banksys.com> and
+ * Vincent Rijmen <vincent.rijmen@esat.kuleuven.ac.be>
+ *
+ * This public domain implementation by Paulo S.L.M. Barreto
+ * <pbarreto@uninet.com.br> based on software written by Vincent Rijmen.
+ *
+ * Caveat: this code assumes 32-bit words and probably will not work
+ * otherwise.
+ *
+ * Version 2.0 (1997.02.11)
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHORS ''AS IS'' AND ANY EXPRESS
+ * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHORS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+ * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define R 8
+
+#if R != 8
+	#error "This implementation is optimized for (and assumes) exactly 8 rounds"
+#endif
+
+#ifndef USUAL_TYPES
+#define USUAL_TYPES
+typedef unsigned char	byte;	/*  8 bit */
+typedef unsigned short	word16;	/* 16 bit */
+typedef unsigned long	word32;	/* 32 bit */
+#endif /* ?USUAL_TYPES */
+
+#include "square.tab"			/* substitution boxes */
+
+#ifdef HARDWARE_ROTATIONS
+#define ROTL(x, s) (_lrotl ((x), (s)))
+#else  /* !HARDWARE_ROTATIONS */
+#define ROTL(x, s) (((x) << (s)) | ((x) >> (32 - (s))))
+#endif /* ?HARDWARE_ROTATIONS */
+
+#ifdef MASKED_BYTE_EXTRACTION
+#define MSB(x) (((x) >> 24) & 0xffU)	/* most  significant byte */
+#define SSB(x) (((x) >> 16) & 0xffU)	/* second in significance */
+#define TSB(x) (((x) >>  8) & 0xffU)	/* third  in significance */
+#define LSB(x) (((x)      ) & 0xffU)	/* least significant byte */
+#else  /* !MASKED_BYTE_EXTRACTION */
+#define MSB(x) ((byte)  ((x) >> 24))	/* most  significant byte */
+#define SSB(x) ((byte)  ((x) >> 16))	/* second in significance */
+#define TSB(x) ((byte)  ((x) >>  8))	/* third  in significance */
+#define LSB(x) ((byte)  ((x)      ))	/* least significant byte */
+#endif /* ?MASKED_BYTE_EXTRACTION */
+
+#define mul(a, b) ((a && b) ? alogtab[logtab[a] + logtab[b]] : 0)
+
+void squareTransform (word32 in[4], word32 out[4])
+	/* apply theta to a roundkey */
+{
+	int i, j;
+	byte A[4][4], B[4][4];
+
+	for (i = 0; i < 4; i++) {
+		A[i][0] = (byte) (in[i] >> 24);
+		A[i][1] = (byte) (in[i] >> 16);
+		A[i][2] = (byte) (in[i] >>  8);
+		A[i][3] = (byte) (in[i]      );
+	}
+
+
+	/* B = A * G */      
+	for (i = 0; i < 4; i++) {
+		for (j = 0; j < 4; j++) {
+			B[i][j] =
+				mul (A[i][0], G[0][j]) ^
+				mul (A[i][1], G[1][j]) ^
+				mul (A[i][2], G[2][j]) ^
+				mul (A[i][3], G[3][j]);
+		}
+	}
+
+	for (i = 0; i < 4; i++) {
+		out[i] =
+			(B[i][0] << 24) ^
+			(B[i][1] << 16) ^
+			(B[i][2] <<  8) ^
+			(B[i][3]      );
+	}
+#ifdef DESTROY_TEMPORARIES
+	memset (A, 0, sizeof (A));
+	memset (B, 0, sizeof (B));
+#endif /* ?DESTROY_TEMPORARIES */
+} /* squareTransform */
+
+void squareGenerateRoundkeys (word32 key[4],
+	word32 roundkeys_e[R+1][4],
+	word32 roundkeys_d[R+1][4])
+{
+	int t, u;
+	word32 tempkeys[R+1][4];
+
+	/* apply the key evolution function */
+
+	for (u = 0; u < 4; u++) {
+		tempkeys[0][u] = key[u];
+	}
+   
+	for (t = 1; t < R+1; t++) {
+		tempkeys[t][0] =
+			tempkeys[t-1][0] ^ ROTL (tempkeys[t-1][3], 8) ^ offset[t-1];
+		tempkeys[t][1] =
+			tempkeys[t-1][1] ^ tempkeys[t][0];
+		tempkeys[t][2] =
+			tempkeys[t-1][2] ^ tempkeys[t][1];
+		tempkeys[t][3] =
+			tempkeys[t-1][3] ^ tempkeys[t][2];
+	}  
+
+	/* produce the round keys */
+	for (t = 0; t < R; t++) {
+		squareTransform (tempkeys[t], roundkeys_e[t]);
+	}
+	for (u = 0; u < 4; u++) {
+		roundkeys_e[R][u] = tempkeys[R][u];  
+	}
+	for (t = 0; t < R; t++) {
+		for (u = 0; u < 4; u++) {
+			roundkeys_d[t][u] = tempkeys[R-t][u];  
+		}
+	}
+	for (u = 0; u < 4; u++) {
+		roundkeys_d[R][u] = roundkeys_e[0][u];  
+	}
+#ifdef DESTROY_TEMPORARIES
+	memset (tempkeys, 0, sizeof (tempkeys));
+#endif /* ?DESTROY_TEMPORARIES */
+} /* squareGenerateRoundkeys */
+
+#define squareRound(text, temp, T0, T1, T2, T3, roundkey) \
+{ \
+	temp[0] = T0[MSB (text[0])] \
+			^ T1[MSB (text[1])] \
+			^ T2[MSB (text[2])] \
+			^ T3[MSB (text[3])] \
+			^ roundkey[0]; \
+	temp[1] = T0[SSB (text[0])] \
+			^ T1[SSB (text[1])] \
+			^ T2[SSB (text[2])] \
+			^ T3[SSB (text[3])] \
+			^ roundkey[1]; \
+	temp[2] = T0[TSB (text[0])] \
+			^ T1[TSB (text[1])] \
+			^ T2[TSB (text[2])] \
+			^ T3[TSB (text[3])] \
+			^ roundkey[2]; \
+	temp[3] = T0[LSB (text[0])] \
+			^ T1[LSB (text[1])] \
+			^ T2[LSB (text[2])] \
+			^ T3[LSB (text[3])] \
+			^ roundkey[3]; \
+} /* squareRound */
+
+#define squareFinal(text, temp, S, roundkey) \
+{ \
+	text[0] = ((word32) (S[MSB (temp[0])]) << 24) \
+			^ ((word32) (S[MSB (temp[1])]) << 16) \
+			^ ((word32) (S[MSB (temp[2])]) <<  8) \
+			^  (word32) (S[MSB (temp[3])]) \
+			^ roundkey[0]; \
+	text[1] = ((word32) (S[SSB (temp[0])]) << 24) \
+			^ ((word32) (S[SSB (temp[1])]) << 16) \
+			^ ((word32) (S[SSB (temp[2])]) <<  8) \
+			^  (word32) (S[SSB (temp[3])]) \
+			^ roundkey[1]; \
+	text[2] = ((word32) (S[TSB (temp[0])]) << 24) \
+			^ ((word32) (S[TSB (temp[1])]) << 16) \
+			^ ((word32) (S[TSB (temp[2])]) <<  8) \
+			^  (word32) (S[TSB (temp[3])]) \
+			^ roundkey[2]; \
+	text[3] = ((word32) (S[LSB (temp[0])]) << 24) \
+			^ ((word32) (S[LSB (temp[1])]) << 16) \
+			^ ((word32) (S[LSB (temp[2])]) <<  8) \
+			^  (word32) (S[LSB (temp[3])]) \
+			^ roundkey[3]; \
+} /* squareFinal */
+
+void squareEncrypt(word32 text[4], word32 roundkeys[R+1][4])
+{
+	word32 temp[4];
+   
+	/* initial key addition */
+	text[0] ^= roundkeys[0][0];
+	text[1] ^= roundkeys[0][1];
+	text[2] ^= roundkeys[0][2];
+	text[3] ^= roundkeys[0][3];
+ 
+	/* R - 1 full rounds */
+	squareRound (text, temp, Te0, Te1, Te2, Te3, roundkeys[1]);
+	squareRound (temp, text, Te0, Te1, Te2, Te3, roundkeys[2]);
+	squareRound (text, temp, Te0, Te1, Te2, Te3, roundkeys[3]);
+	squareRound (temp, text, Te0, Te1, Te2, Te3, roundkeys[4]);
+	squareRound (text, temp, Te0, Te1, Te2, Te3, roundkeys[5]);
+	squareRound (temp, text, Te0, Te1, Te2, Te3, roundkeys[6]);
+	squareRound (text, temp, Te0, Te1, Te2, Te3, roundkeys[7]);
+
+	/* last round (diffusion becomes only transposition) */
+	squareFinal (text, temp, Se, roundkeys[R]);
+#ifdef DESTROY_TEMPORARIES
+	memset (temp, 0, sizeof (temp));
+#endif /* ?DESTROY_TEMPORARIES */
+} /* squareEncrypt */
+
+void squareDecrypt(word32 text[4], word32 roundkeys[R+1][4])
+{
+	word32 temp[4];
+   
+	/* initial key addition */
+	text[0] ^= roundkeys[0][0];
+	text[1] ^= roundkeys[0][1];
+	text[2] ^= roundkeys[0][2];
+	text[3] ^= roundkeys[0][3];
+ 
+	/* R - 1 full rounds */
+	squareRound (text, temp, Td0, Td1, Td2, Td3, roundkeys[1]);
+	squareRound (temp, text, Td0, Td1, Td2, Td3, roundkeys[2]);
+	squareRound (text, temp, Td0, Td1, Td2, Td3, roundkeys[3]);
+	squareRound (temp, text, Td0, Td1, Td2, Td3, roundkeys[4]);
+	squareRound (text, temp, Td0, Td1, Td2, Td3, roundkeys[5]);
+	squareRound (temp, text, Td0, Td1, Td2, Td3, roundkeys[6]);
+	squareRound (text, temp, Td0, Td1, Td2, Td3, roundkeys[7]);
+
+	/* last round (diffusion becomes only transposition) */
+	squareFinal (text, temp, Sd, roundkeys[R]);
+#ifdef DESTROY_TEMPORARIES
+	memset (temp, 0, sizeof (temp));
+#endif /* ?DESTROY_TEMPORARIES */
+} /* squareDecrypt */
+
+#ifdef TEST_SQUARE
+
+#include <time.h>
+
+#define TIMING_ITERATIONS 20000000L
+
+int main (void)
+{
+	word32 key[4], text[4];
+	word32 roundkeys_e[R+1][4], roundkeys_d[R+1][4];
+	long n; clock_t elapsed; double sec;
+
+	printf ("Square cipher (compiled on " __DATE__ " " __TIME__ ").\n");
+
+	printf ("Checking correctness...\n");
+	key[0] = 0x00010203UL;
+	key[1] = 0x04050607UL;
+	key[2] = 0x08090a0bUL;
+	key[3] = 0x0c0d0e0fUL;
+	printf ("%08lx %08lx %08lx %08lx  user key\n",
+		key[0], key[1], key[2], key[3]);
+	squareGenerateRoundkeys (key, roundkeys_e, roundkeys_d);
+	text[0] = 0x00010203UL;
+	text[1] = 0x04050607UL;
+	text[2] = 0x08090a0bUL;
+	text[3] = 0x0c0d0e0fUL;
+	printf ("%08lx %08lx %08lx %08lx  in\n",
+		text[0], text[1], text[2], text[3]);
+	squareEncrypt (text, roundkeys_e);
+	printf ("%08lx %08lx %08lx %08lx  encrypted\n",
+		text[0], text[1], text[2], text[3]);
+	printf ("7c3491d9 4994e70f 0ec2e7a5 ccb5a14f  expected\n");
+	squareDecrypt (text, roundkeys_d);
+	printf ("%08lx %08lx %08lx %08lx  out\n",
+		text[0], text[1], text[2], text[3]);
+	
+	printf ("Measuring encryption speed...");
+	squareGenerateRoundkeys(key, roundkeys_e, roundkeys_d);
+	elapsed = -clock ();
+	for (n = TIMING_ITERATIONS; n > 0; n--) {
+		squareEncrypt(text, roundkeys_e);
+	}
+	elapsed += clock ();
+	sec = elapsed ? (double) elapsed / CLOCKS_PER_SEC : 1.0;
+	printf (" %.2f sec, %.1f K/sec.\n",
+		sec, 16.0*TIMING_ITERATIONS/1024.0/sec);
+
+	printf ("Measuring decryption speed...");
+	elapsed = -clock ();
+	for (n = TIMING_ITERATIONS; n > 0; n--) {
+		squareDecrypt(text, roundkeys_d);   
+	}
+	elapsed += clock ();
+	sec = elapsed ? (double) elapsed / CLOCKS_PER_SEC : 1.0;
+	printf (" %.2f sec, %.1f K/sec.\n",
+		sec, 16.0*TIMING_ITERATIONS/1024.0/sec);
+
+	return 0;
+} /* main */
+
+#endif /* TEST_SQUARE */
+
+
+
+
+
+
+/* maketabs.c */
+
+#include <stdio.h>
+#include <stdlib.h>
+
+
+#define R 8
+#define ROOT 0x1f5U
+#define ROTR(x, s) (((x) >> (s)) | ((x) << (32 - (s))))   
+
+typedef unsigned char byte;
+typedef unsigned short word16;
+typedef unsigned long word32;
+
+byte exptab[256], logtab[256];
+byte offset[R];
+
+byte mul(byte a, byte b)
+/* multiply two elements of GF(2^m)
+ */
+{
+   if (a && b) return exptab[(logtab[a] + logtab[b])%255];
+   else return 0;
+}
+
+void init()
+/* produce logtab, exptab, and offset,
+ * needed for multiplying in the field GF(2^m)
+ * and/or in the key schedule
+ */
+{
+   word16 i, j;
+   exptab[0] = 1;
+   for(i = 1; i < 256; i++) { 
+      j = exptab[i-1] << 1;
+      if (j & 0x100U) j ^= ROOT;
+      exptab[i] = (byte)j;
+      }
+   logtab[0] = 0;
+   for(i = 1; i < 255; i++)
+      logtab[exptab[i]] = (byte)i;
+   /* generate the offset values
+    */
+   offset[0] = 1;
+   for(i = 1; i < R; i++) offset[i] = mul(2,offset[i-1]); 
+}
+
+
+static word32 T[256];
+
+void main()
+{
+   FILE *out;
+   byte ibox[256], g[9];
+   byte in, u, t, pivot, tmp;
+   byte box[256], G[4][4], iG[4][4], A[4][8];
+   byte trans[9] = { 0xd6, 0x7b, 0x3d, 0x1f, 
+                     0x0f, 0x05, 0x03, 0x01,
+                     0xb1};
+   word16 i, j, k;
+
+   init();
+   /* the substitution box based on F^{-1}(x)
+    * + affine transform of the output
+    */
+   box[0] = 0;
+   box[1] = 1;
+   for(i = 2; i < 256; i++) 
+      box[i] = exptab[255 - logtab[i]];
+    
+   for(i = 0; i < 256; i++) {
+      in = box[i];
+      box[i] = 0;
+      for(t = 0; t < 8; t++) {
+         u = in & trans[t];
+         box[i] ^= ((1 & (u ^ (u >> 1) ^ (u >> 2) ^ (u >> 3) 
+                  ^ (u >> 4) ^ (u >> 5) ^ (u >> 6) ^ (u >> 7)))
+                   << (7 - t));
+         }
+      box[i] ^= trans[8];
+      }
+   
+   /* diffusion box G
+    * created by make_g.c
+    */
+   g[3] = 3;
+   g[2] = 1;
+   g[1] = 1;
+   g[0] = 2;
+    
+   for(i = 0; i < 4; i++) 
+      for(j = 0; j < 4; j++) 
+         G[i][j] = g[(4 + j - i) % 4];
+   
+   for(i = 0; i < 4; i++) {
+      for(j = 0; j < 4; j++) A[i][j] = G[i][j];
+      for(j = 4; j < 8; j++) A[i][j] = 0;
+      A[i][i+4] = 1;
+      }
+   for(i = 0; i < 4; i++) {
+      pivot = A[i][i];
+      if (pivot == 0) {
+         t = i + 1;
+         while ((A[t][i] == 0) && (t < 4)) t++;
+         if (t == 4) fprintf(stderr,"noninvertible matrix G\n");
+         else {
+            for(j = 0; j < 8; j++) {
+               tmp = A[i][j];
+               A[i][j] = A[t][j];
+               A[t][j] = tmp;
+               }
+            pivot = A[i][i];
+            }
+         }
+      for(j = 0; j < 8; j++) 
+         if (A[i][j])
+            A[i][j] = exptab[(255 + logtab[A[i][j]] - logtab[pivot])%255];
+      for(t = 0; t < 4; t++)
+         if (i != t)
+            {
+            for(j = i+1; j < 8; j++)
+               A[t][j] ^= mul(A[i][j],A[t][i]);
+            A[t][i] = 0;
+            }
+      }
+   for(i = 0; i < 4; i++)
+      for(j = 0; j < 4; j++) iG[i][j] = A[i][j+4];
+   
+   
+   /* output
+    */
+   out = fopen("square.tab","w");
+   for(i = 0; i < 256; i++) ibox[box[i]] = (byte)i;
+   
+   fprintf(out,"static const byte Se[256] = {\n");
+   for(i = 0; i < 16; i++) {
+      for(j = 0; j < 16; j++) fprintf(out,"%3d, ",box[i*16+j]);
+      fprintf(out,"\n");
+      }
+   fprintf(out,"};\n\n");
+   fprintf(out,"static const byte Sd[256] = {\n");
+   for(i = 0; i < 16; i++) {
+      for(j = 0; j < 16; j++) fprintf(out,"%3d, ",ibox[i*16+j]);
+      fprintf(out,"\n");
+      }
+   fprintf(out,"};\n\n");
+   fprintf(out,"static const byte G[4][4] = {\n");
+   for(i = 0; i < 4; i++) {
+      for(k = 0; k < 4; k++) fprintf(out,"0x%02xU, ",G[i][k]);
+      fprintf(out,"\n");
+      }
+   fprintf(out,"};\n\n");
+   fprintf(out,"static const byte iG[4][4] = {\n");
+   for(i = 0; i < 4; i++) {
+      for(k = 0; k < 4; k++) fprintf(out,"0x%02xU, ",iG[i][k]);
+      fprintf(out,"\n");
+      }
+   fprintf(out,"};\n\n");
+
+   for(t = 0; t < 64; t++) {
+      for(k = 0; k < 4; k++) {
+         if (box[k]) 
+			T[4*t+k] =
+				((word32) mul(box[4*t+k],G[0][0]) << 24) ^
+				((word32) mul(box[4*t+k],G[0][1]) << 16) ^
+				((word32) mul(box[4*t+k],G[0][2]) <<  8) ^
+				((word32) mul(box[4*t+k],G[0][3]));
+         else
+			T[4*t+k] = 0L;
+         }
+      }
+
+   fprintf(out,"static const byte logtab[256] = {\n");
+   for(i = 0; i < 16; i++) {
+      for(j = 0; j < 16; j++) fprintf(out,"%3u, ",logtab[i*16+j]);
+      fprintf(out,"\n");
+      }
+   fprintf(out,"};\n\n");
+   fprintf(out,"static const byte alogtab[512] = {\n");
+   for(i = 0; i < 32; i++) {
+      for(j = 0; j < 16; j++) fprintf(out,"%3u, ",exptab[(i*16+j)%255]);
+      fprintf(out,"\n");
+      }
+   fprintf(out,"};\n\n");
+   fprintf(out,"static const word32 offset[R] = {\n");
+   for(i = 0; i < R; i++) {
+	   fprintf(out,"0x%08lxUL,%s", (word32)(offset[i]) << 24, (i+1)%4 == 0? "\n" : " ");
+      }
+   fprintf(out,"};\n\n");
+
+   fprintf(out,"static const word32 Te0[256] = {\n");
+   for(t = 0; t < 64; t++) {
+      for(k = 0; k < 4; k++) {
+         fprintf(out,"0x%08lxUL, ", T[4*t+k]);
+         }
+      fprintf(out,"\n");   
+      }
+   fprintf(out,"};\n\n");
+
+   fprintf(out,"static const word32 Te1[256] = {\n");
+   for(t = 0; t < 64; t++) {
+      for(k = 0; k < 4; k++) {
+         fprintf(out,"0x%08lxUL, ", ROTR(T[4*t+k],  8));
+         }
+      fprintf(out,"\n");   
+      }
+   fprintf(out,"};\n\n");
+
+   fprintf(out,"static const word32 Te2[256] = {\n");
+   for(t = 0; t < 64; t++) {
+      for(k = 0; k < 4; k++) {
+         fprintf(out,"0x%08lxUL, ", ROTR(T[4*t+k], 16));
+         }
+      fprintf(out,"\n");   
+      }
+   fprintf(out,"};\n\n");
+
+   fprintf(out,"static const word32 Te3[256] = {\n");
+   for(t = 0; t < 64; t++) {
+      for(k = 0; k < 4; k++) {
+         fprintf(out,"0x%08lxUL, ", ROTR(T[4*t+k], 24));
+         }
+      fprintf(out,"\n");   
+      }
+   fprintf(out,"};\n\n");
+
+   for(t = 0; t < 64; t++) {
+      for(k = 0; k < 4; k++) {
+         if (ibox[k]) 
+			T[4*t+k] =
+				((word32) mul(ibox[4*t+k],iG[0][0]) << 24) ^
+				((word32) mul(ibox[4*t+k],iG[0][1]) << 16) ^
+				((word32) mul(ibox[4*t+k],iG[0][2]) <<  8) ^
+				((word32) mul(ibox[4*t+k],iG[0][3]));
+         else
+			T[4*t+k] = 0L;
+         }
+      }
+
+   fprintf(out,"static const word32 Td0[256] = {\n");
+   for(t = 0; t < 64; t++) {
+      for(k = 0; k < 4; k++) {
+         fprintf(out,"0x%08lxUL, ", T[4*t+k]);
+         }
+      fprintf(out,"\n");   
+      }
+   fprintf(out,"};\n\n");
+
+   fprintf(out,"static const word32 Td1[256] = {\n");
+   for(t = 0; t < 64; t++) {
+      for(k = 0; k < 4; k++) {
+         fprintf(out,"0x%08lxUL, ", ROTR(T[4*t+k],  8));
+         }
+      fprintf(out,"\n");   
+      }
+   fprintf(out,"};\n\n");
+
+   fprintf(out,"static const word32 Td2[256] = {\n");
+   for(t = 0; t < 64; t++) {
+      for(k = 0; k < 4; k++) {
+         fprintf(out,"0x%08lxUL, ", ROTR(T[4*t+k], 16));
+         }
+      fprintf(out,"\n");   
+      }
+   fprintf(out,"};\n\n");
+
+   fprintf(out,"static const word32 Td3[256] = {\n");
+   for(t = 0; t < 64; t++) {
+      for(k = 0; k < 4; k++) {
+         fprintf(out,"0x%08lxUL, ", ROTR(T[4*t+k], 24));
+         }
+      fprintf(out,"\n");   
+      }
+   fprintf(out,"};\n\n");
+
+   fclose(out);
+   }
+
+
+
+

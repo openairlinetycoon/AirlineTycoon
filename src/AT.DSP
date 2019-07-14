@@ -128,6 +128,10 @@ SOURCE=.\cd_prot.h
 !ENDIF 
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\cipher.txt
+# End Source File
 # End Group
 # Begin Group "Diverse"
 

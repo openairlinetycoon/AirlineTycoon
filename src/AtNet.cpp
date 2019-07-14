@@ -1866,8 +1866,8 @@ void PumpNetwork (void)
                 break;
          }
 
-         if (Message.MemPointer!=Message.MemBufferUsed)
-            __asm { int 3 }
+         //if (Message.MemPointer!=Message.MemBufferUsed)
+         //   __asm { int 3 }
       }
    }
 }

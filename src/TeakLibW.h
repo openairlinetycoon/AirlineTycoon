@@ -560,15 +560,15 @@ public:
     void CheckIfIsMaster(void);
 };
 
-#define VIDRAMBM 1
-#define SYSRAMBM 2
+#define VIDRAMBM (void*)1
+#define SYSRAMBM (void*)2
 
 class TECBM
 {
 public:
     TECBM(void);
-    TECBM(CString const&, void* = NULL);
-    TECBM(CString const&, long, void* = NULL);
+    TECBM(CString const&, void*);
+    TECBM(CString const&, long, void*);
     TECBM(long, long, void*);
     TECBM(TXY<long>, void*);
     ~TECBM(void);
@@ -582,13 +582,13 @@ public:
     static int IsHardwareCritical(void);
     static int IsEitherCritical(void);
     static void SetCriticalMem(long);
-    void ReSize(CString const&, void* = NULL);
-    void ReSize(CString const&, long, void* = NULL);
-    void ReSizeLbm(CString const&, void* = NULL);
-    void ReSizeLbm(CString const&, long, void* = NULL);
-    void ReSize(TXY<long>, void* = NULL);
-    void ReSizePcx(CString const&, long, void* = NULL);
-    void ReSizePcx(CString const&, void* = NULL);
+    void ReSize(CString const&, void*);
+    void ReSize(CString const&, long, void*);
+    void ReSizeLbm(CString const&, void*);
+    void ReSizeLbm(CString const&, long, void*);
+    void ReSize(TXY<long>, void*);
+    void ReSizePcx(CString const&, long, void*);
+    void ReSizePcx(CString const&, void*);
     int SavePCX(CString const&, PALETTE const&) const;
     void ShiftColors(long);
     void RemapColor(unsigned char, unsigned char);

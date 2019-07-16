@@ -629,6 +629,8 @@ public:
     int ParseVertikalSubBitmapNumberXInto(long, TECBM&);
     int ParseHorizontalSubBitmapNumberXInto(long, TECBM&);
 
+    SLONG Unknown[7];
+
     XY Size;
 
 private:
@@ -636,6 +638,8 @@ private:
     static long CriticalVidMem;
     static long TotalVidMem;
 };
+
+static_assert<sizeof(TECBM) == 40> TECBM_size_check;
 
 class TECBMKEY
 {

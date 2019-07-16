@@ -163,6 +163,7 @@ public:
     void* MemPointer;
     ULONG MemBufferUsed;
     BUFFER<UBYTE> MemBuffer;
+    SLONG Unknown[12];
 
     friend TEAKFILE& operator << (TEAKFILE& File, const BOOL& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
     friend TEAKFILE& operator >> (TEAKFILE& File, BOOL& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }
@@ -203,6 +204,8 @@ public:
 private:
     void CodeBlock(unsigned char*, long, long);
 };
+
+static_assert<sizeof(TEAKFILE) == 68> TEAKFILE_size_check;
 
 template <typename T>
 class FBUFFER : public BUFFER<T>

@@ -215,8 +215,23 @@ public:
 
     FBUFFER(SLONG anz) : BUFFER<T>(anz) {}
 
-    friend TEAKFILE& operator << (TEAKFILE& File, const FBUFFER<T>& buffer) { DebugBreak(); return File; }
-    friend TEAKFILE& operator >> (TEAKFILE& File, FBUFFER<T>& buffer) { DebugBreak(); return File; }
+    friend TEAKFILE& operator << (TEAKFILE& File, const FBUFFER<T>& buffer)
+    {
+        DebugBreak();
+        return File;
+    }
+
+    friend TEAKFILE& operator >> (TEAKFILE& File, FBUFFER<T>& buffer)
+    {
+        SLONG size, offset;
+        File >> size;
+        buffer = FBUFFER<T>(size);
+        File >> offset;
+        for (SLONG i; i < buffer.Size; i++)
+            File >> buffer.MemPointer[i];
+        buffer.DelPointer = buffer.MemPointer + offset;
+        return File;
+    }
 };
 
 class TEAKRAND

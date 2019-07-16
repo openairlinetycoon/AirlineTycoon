@@ -704,7 +704,7 @@ extern void TeakAlbumRemoveT(FBUFFER<unsigned long>&, unsigned long, CString con
 extern void TeakAlbumRefresh(FBUFFER<unsigned long>&, unsigned long);
 extern long TeakAlbumSearchT(FBUFFER<unsigned long>&, unsigned long, CString const&, unsigned long);
 extern long TeakAlbumXIdSearchT(FBUFFER<unsigned long>&, unsigned long, CString const&, XID&);
-extern bool TeakAlbumIsInAlbum(FBUFFER<unsigned long>&, unsigned long, unsigned long);
+extern int TeakAlbumIsInAlbum(FBUFFER<unsigned long>&, unsigned long, unsigned long);
 extern unsigned long TeakAlbumAddT(FBUFFER<unsigned long>&, unsigned long, CString const&, unsigned long);
 extern unsigned long TeakAlbumFrontAddT(FBUFFER<unsigned long>&, unsigned long, CString const&, unsigned long);
 extern unsigned long TeakAlbumGetNumFree(FBUFFER<unsigned long>&, unsigned long);
@@ -716,10 +716,10 @@ class ALBUM
 {
 public:
     ALBUM(BUFFER<T>& buffer, CString str)
-        : values(reinterpret_cast<FBUFFER<T>&>(buffer))
-        , name(str)
+        : NextId(0xFFFFFF)
+        , Values(reinterpret_cast<FBUFFER<T>&>(buffer))
+        , Name(str)
     {
-        //TeakAlbumRefresh(ids, values.AnzEntries());
     }
 
     void Repair(BUFFER<T>& buffer)
@@ -729,55 +729,52 @@ public:
 
     bool IsInAlbum(unsigned long id)
     {
-        DebugBreak();
-        //return TeakAlbumIsInAlbum(ids, values.AnzEntries(), id);
-        return 0;
+        return !!TeakAlbumIsInAlbum(Ids, Values.AnzEntries(), id);
     }
 
     long AnzEntries()
     {
-        return values.AnzEntries();
+        return Values.AnzEntries();
     }
 
     long GetNumFree()
     {
         DebugBreak();
-        //return TeakAlbumGetNumFree(ids, values.AnzEntries());
+        //return TeakAlbumGetNumFree(Ids, Values.AnzEntries());
         return 0;
     }
 
     long GetNumUsed()
     {
         DebugBreak();
-        //return TeakAlbumGetNumUsed(ids, values.AnzEntries());
+        //return TeakAlbumGetNumUsed(Ids, Values.AnzEntries());
         return 0;
     }
 
     long GetRandomUsedIndex(TEAKRAND* rand = NULL)
     {
         DebugBreak();
-        //return TeakAlbumRandom(ids, values.AnzEntries(), name, rand);
+        //return TeakAlbumRandom(Ids, Values.AnzEntries(), name, rand);
         return 0;
     }
 
     long GetUniqueId()
     {
-        DebugBreak();
-        return 0;
+        return ++NextId;
     }
 
     unsigned long GetIdFromIndex(long i)
     {
         DebugBreak();
-        return ids[i];
+        return Ids[i];
     }
 
     void ClearAlbum()
     {
         DebugBreak();
-        //TeakAlbumRefresh(ids, values.AnzEntries());
-        for (long i = ids.AnzEntries() - 1; i >= 0; --i)
-            ids[i] = 0;
+        //TeakAlbumRefresh(Ids, Values.AnzEntries());
+        for (long i = Ids.AnzEntries() - 1; i >= 0; --i)
+            Ids[i] = 0;
     }
 
     void Swap(long a, long b)
@@ -798,65 +795,59 @@ public:
 
     unsigned long operator*=(unsigned long id)
     {
-        DebugBreak();
-        //return TeakAlbumFrontAddT(ids, values.AnzEntries(), name, id);
-        return 0;
+        return TeakAlbumFrontAddT(Ids, Values.AnzEntries(), Name, id);
     }
 
     unsigned long operator+=(unsigned long id)
     {
-        DebugBreak();
-        //return TeakAlbumAddT(ids, values.AnzEntries(), name, id);
-        return 0;
+        return TeakAlbumAddT(Ids, Values.AnzEntries(), Name, id);
     }
 
     void operator-=(unsigned long id)
     {
         DebugBreak();
-        //TeakAlbumRemoveT(ids, values.AnzEntries(), name, id);
+        //TeakAlbumRemoveT(Ids, Values.AnzEntries(), name, id);
     }
 
     unsigned long operator*=(T& rhs)
     {
         DebugBreak();
-        //return TeakAlbumFrontAddT(ids, values.AnzEntries(), name, 0);
+        //return TeakAlbumFrontAddT(Ids, Values.AnzEntries(), name, 0);
         return 0;
     }
 
     unsigned long operator+=(T& rhs)
     {
         DebugBreak();
-        //return TeakAlbumAddT(ids, values.AnzEntries(), name, 0);
+        //return TeakAlbumAddT(Ids, Values.AnzEntries(), name, 0);
         return 0;
     }
 
     void operator-=(T& rhs)
     {
         DebugBreak();
-        //TeakAlbumRemoveT(ids, values.AnzEntries(), name, 0);
+        //TeakAlbumRemoveT(Ids, Values.AnzEntries(), name, 0);
     }
 
     long operator()(unsigned long id)
     {
-        DebugBreak();
-        //return TeakAlbumSearchT(ids, values.AnzEntries(), name, id);
-        return 0;
+        return TeakAlbumSearchT(Ids, Values.AnzEntries(), Name, id);
     }
 
-    T& operator[](unsigned long i)
+    T& operator[](unsigned long id)
     {
-        DebugBreak();
-        return values[i];
+        unsigned long i = TeakAlbumSearchT(Ids, Values.AnzEntries(), Name, id);
+        return Values[i];
     }
 
     friend TEAKFILE& operator<< (TEAKFILE& File, const ALBUM<T>& r) { DebugBreak(); return File; }
     friend TEAKFILE& operator>> (TEAKFILE& File, ALBUM<T>& r) { DebugBreak(); return File; }
 
 private:
-    FBUFFER<unsigned long> ids;
-    FBUFFER<T>& values;
-    CString name;
     unsigned long NextId;
+    FBUFFER<unsigned long> Ids;
+    FBUFFER<T>& Values;
+    CString Name;
 };
 
 extern int DoesFileExist(char const*);

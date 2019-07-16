@@ -133,27 +133,27 @@ public:
     SB_Hardwarecolor() : color(0) { DebugBreak(); }
     SB_Hardwarecolor(const SB_CHardwarecolorHelper* helper) : color(reinterpret_cast<SLONG>(helper)) { DebugBreak(); }
     operator SB_CHardwarecolorHelper* () { return reinterpret_cast<SB_CHardwarecolorHelper*>(this); }
-	operator word() { DebugBreak(); return 0; }
+    operator word() { DebugBreak(); return 0; }
 
 private:
     SLONG color;
 };
 
-class PixelFormat
-{
-public:
-    UBYTE bitDepth;
-    UBYTE bytesperPixel;
-    word Unknown0;
-    SLONG redMask, greenMask, blueMask;
-    UBYTE bitDepthAgain;
-    UBYTE bitDepthStatic;
-    word Unknown1;
-};
-
 class SB_CBitmapCore
 {
 public:
+    class PixelFormat
+    {
+    public:
+        UBYTE bitDepth;
+        UBYTE bytesperPixel;
+        word Unknown0;
+        SLONG redMask, greenMask, blueMask;
+        UBYTE bitDepthAgain;
+        UBYTE bitDepthStatic;
+        word Unknown1;
+    };
+
     unsigned long AddAlphaMsk(void);
     unsigned long AddZBuffer(unsigned long, unsigned long);
     class SB_CHardwarecolorHelper* GetHardwarecolor(unsigned long);
@@ -302,10 +302,14 @@ typedef struct tagTabs
     dword Unknown[2];
 } TABS;
 
+static_assert<sizeof(TABS) == 8> TABS_size_check;
+
 typedef struct tagTextStyle
 {
-    dword Unknown[1];
+    dword Unknown[3];
 } TEXT_STYLE;
+
+static_assert<sizeof(TEXT_STYLE) == 12> TEXT_STYLE_size_check;
 
 class SB_CFont
 {

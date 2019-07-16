@@ -522,6 +522,8 @@ public:
     BUFFER<PALETTEENTRY> Pal;
 };
 
+static_assert<sizeof(PALETTE) == 16> PALETTE_size_check;
+
 #define TEXTRES_CACHED (void*)1
 
 class TEXTRES
@@ -537,7 +539,12 @@ public:
     char* GetS(unsigned long, unsigned long);
     char* GetS(unsigned long, char const*);
     char* GetS(char const* c, unsigned long i) { return GetS(i, c); }
+
+private:
+    SLONG Unknown[8];
 };
+
+static_assert<sizeof(TEXTRES) == 32> TEXTRES_size_check;
 
 class CRegistration
 {

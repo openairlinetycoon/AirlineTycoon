@@ -643,8 +643,12 @@ public:
     TECBMKEY(TECBM&);
     ~TECBMKEY(void);
 
+    LPDIRECTDRAW lpDD;
     UBYTE* Bitmap;
+    SLONG lPitch;
 };
+
+static_assert<sizeof(TECBMKEY) == 12> TECBMKEY_size_check;
 
 class TECBMKEYC
 {
@@ -652,9 +656,12 @@ public:
     TECBMKEYC(const TECBM&);
     ~TECBMKEYC(void);
 
-    long lPitch;
+    LPDIRECTDRAW lpDD;
     const UBYTE* Bitmap;
+    SLONG lPitch;
 };
+
+static_assert<sizeof(TECBMKEYC) == 12> TECBMKEYC_size_check;
 
 
 class HDU

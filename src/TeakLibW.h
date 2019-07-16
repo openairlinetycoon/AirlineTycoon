@@ -28,11 +28,11 @@ public:
     {
         if (anz == 0)
         {
-            MemPointer = MemBufferUsed = NULL;
+            MemPointer = DelPointer = NULL;
         }
         else
         {
-            MemPointer = MemBufferUsed = new T[anz]();
+            MemPointer = DelPointer = new T[anz]();
             if (!MemPointer)
                 TeakLibW_Exception(NULL, 0, ExcOutOfMem);
         }
@@ -40,7 +40,7 @@ public:
         Size = anz;
     }
 
-    BUFFER(void) : MemPointer(0), MemBufferUsed(0), Size(0) {}
+    BUFFER(void) : MemPointer(NULL), DelPointer(NULL), Size(0) {}
 
     ~BUFFER()
     {
@@ -54,7 +54,7 @@ public:
             if (!MemPointer)
                 delete[] MemPointer;
 
-            MemPointer = MemBufferUsed = NULL;
+            MemPointer = DelPointer = NULL;
         }
 
         T* m = new T[anz]();
@@ -63,7 +63,7 @@ public:
 
         if (!MemPointer)
         {
-            MemBufferUsed = m;
+            DelPointer = m;
         }
         else
         {
@@ -78,7 +78,7 @@ public:
             memswap(m, MemPointer, sizeof(T) * num);
             delete[] MemPointer;
 
-            MemBufferUsed = m + ((MemBufferUsed - MemPointer) / sizeof(T));
+            DelPointer = m + ((DelPointer - MemPointer) / sizeof(T));
         }
 
         MemPointer = m;
@@ -96,7 +96,7 @@ public:
     {
         for (int i = 0; i < Size; i++)
             MemPointer[i] = value;
-        MemBufferUsed = MemPointer + Size;
+        DelPointer = MemPointer + Size;
     }
 
     //T& operator[](int i) const
@@ -117,18 +117,17 @@ public:
     void operator+=(T& rhs)
     {
         DebugBreak();
-        *MemBufferUsed++ = rhs;
+        *DelPointer++ = rhs;
     }
 
     void operator+=(int rhs)
     {
         DebugBreak();
-        *MemBufferUsed++ = (T)rhs;
+        *DelPointer++ = (T)rhs;
     }
 
     T* MemPointer;
     T* DelPointer;
-    T* MemBufferUsed;
     SLONG Size;
 };
 
@@ -520,6 +519,7 @@ public:
     void CopyAreaFrom(PALETTE const&, long, long, long);
 
     BUFFER<PALETTEENTRY> Pal;
+    SLONG Unknown;
 };
 
 static_assert<sizeof(PALETTE) == 16> PALETTE_size_check;

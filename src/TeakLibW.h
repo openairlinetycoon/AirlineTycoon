@@ -55,6 +55,7 @@ public:
                 delete[] MemPointer;
 
             MemPointer = DelPointer = NULL;
+            return;
         }
 
         T* m = new T[anz]();

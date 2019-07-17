@@ -191,7 +191,6 @@ protected:
 
     ~SB_CBitmapCore(void);
 
-private:
     LPDIRECTDRAW lpDD;
     LPDIRECTDRAWSURFACE lpDDSurface;
     dword Unknown0;
@@ -241,13 +240,14 @@ public:
     struct IDirectDrawSurface* GetLastPage(void);
 
     void AssignCursor(SB_CCursor* c) { Cursor = c; }
-    LPDIRECTDRAWSURFACE GetPrimarySurface() { DebugBreak(); return NULL; }
+    LPDIRECTDRAWSURFACE GetPrimarySurface() { return lpPrimarySurface; }
     bool FastClip(struct tagRECT, struct tagPOINT const*, struct tagRECT const*) { DebugBreak(); return false; }
 
 private:
     void Delete(void);
 
-    dword Unknown[10];
+    LPDIRECTDRAWSURFACE lpPrimarySurface;
+    dword Unknown[9];
     SB_CCursor* Cursor;
 };
 

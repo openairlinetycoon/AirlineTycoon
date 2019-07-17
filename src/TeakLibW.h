@@ -127,6 +127,24 @@ public:
         *DelPointer++ = (T)rhs;
     }
 
+    friend class TEAKFILE& operator << (TEAKFILE& File, const BUFFER<T>& buffer)
+    {
+        DebugBreak();
+        return File;
+    }
+
+    friend class TEAKFILE& operator >> (TEAKFILE& File, BUFFER<T>& buffer)
+    {
+        SLONG size, offset;
+        File >> size;
+        buffer = BUFFER<T>(size);
+        File >> offset;
+        for (SLONG i; i < buffer.Size; i++)
+            File >> buffer.MemPointer[i];
+        buffer.DelPointer = buffer.MemPointer + offset;
+        return File;
+    }
+
     T* MemPointer;
     T* DelPointer;
     SLONG Size;
@@ -218,24 +236,6 @@ public:
     FBUFFER(void) : BUFFER<T>(0) {}
 
     FBUFFER(SLONG anz) : BUFFER<T>(anz) {}
-
-    friend TEAKFILE& operator << (TEAKFILE& File, const FBUFFER<T>& buffer)
-    {
-        DebugBreak();
-        return File;
-    }
-
-    friend TEAKFILE& operator >> (TEAKFILE& File, FBUFFER<T>& buffer)
-    {
-        SLONG size, offset;
-        File >> size;
-        buffer = FBUFFER<T>(size);
-        File >> offset;
-        for (SLONG i; i < buffer.Size; i++)
-            File >> buffer.MemPointer[i];
-        buffer.DelPointer = buffer.MemPointer + offset;
-        return File;
-    }
 };
 
 class TEAKRAND

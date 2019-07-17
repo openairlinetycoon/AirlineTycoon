@@ -162,8 +162,11 @@ public:
 
     void* MemPointer;
     ULONG MemBufferUsed;
-    BUFFER<UBYTE> MemBuffer;
-    SLONG Unknown[12];
+    struct DummyBuffer
+    {
+        void ReSize(SLONG anz, void* p = NULL) { DebugBreak(); }
+    } MemBuffer;
+    SLONG Unknown[14];
 
     friend TEAKFILE& operator << (TEAKFILE& File, const BOOL& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
     friend TEAKFILE& operator >> (TEAKFILE& File, BOOL& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }

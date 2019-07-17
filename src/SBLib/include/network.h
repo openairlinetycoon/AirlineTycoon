@@ -101,7 +101,7 @@ public:
         return false;
     }
 
-    bool Send(BUFFER<UBYTE>&, unsigned long, unsigned long, bool)
+    bool Send(struct TEAKFILE::DummyBuffer&, unsigned long, unsigned long, bool)
     {
         DebugBreak();
         return false;

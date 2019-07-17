@@ -45,13 +45,14 @@ public:
     ~BUFFER()
     {
         delete[] MemPointer;
+        MemPointer = NULL;
     }
 
     void ReSize(SLONG anz)
     {
         if (anz == 0)
         {
-            if (!MemPointer)
+            if (MemPointer)
                 delete[] MemPointer;
 
             MemPointer = DelPointer = NULL;

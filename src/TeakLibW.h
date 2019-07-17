@@ -138,7 +138,8 @@ public:
     {
         SLONG size, offset;
         File >> size;
-        buffer = BUFFER<T>(size);
+        buffer.ReSize(0);
+        buffer.ReSize(size);
         File >> offset;
         for (SLONG i; i < buffer.Size; i++)
             File >> buffer.MemPointer[i];

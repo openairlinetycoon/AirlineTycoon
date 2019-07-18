@@ -276,9 +276,9 @@ public:
     SB_CBitmapKey(class SB_CBitmapCore&);
     ~SB_CBitmapKey(void);
 
+    dword Unknown[28];
     void* Bitmap;
     unsigned long lPitch;
-    dword Unknown[28];
 };
 
 static_assert<sizeof(SB_CBitmapKey) == 0x78u> SB_CBitmapKey_size_check;

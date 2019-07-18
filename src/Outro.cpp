@@ -32,7 +32,10 @@ COutro::COutro (BOOL bHandy, SLONG PlayerNum, CString SmackName) : CStdRaum (bHa
    CalculatePalettemapper (smk_get_palette(pSmack), PaletteMapper+1);
 
    ULONG Width, Height;
+   UBYTE Mask;
    smk_info_video(pSmack, &Width, &Height, NULL);
+   smk_info_audio(pSmack, &Mask, NULL, NULL, NULL);
+   smk_enable_all(pSmack, SMK_VIDEO_TRACK | Mask);
    Bitmap.ReSize (Width, Height);
    ConvertBitmapTo16Bit (smk_get_video(pSmack), &Bitmap, PaletteMapper+1, Width, Height, XY(0, 0));
 

@@ -43,7 +43,10 @@ CIntro::CIntro (BOOL bHandy, SLONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "",
       if (pSmack) bWasIntroPlayed=true;
 
       ULONG Width, Height;
+      UBYTE Mask;
       smk_info_video(pSmack, &Width, &Height, NULL);
+      smk_info_audio(pSmack, &Mask, NULL, NULL, NULL);
+      smk_enable_all(pSmack, SMK_VIDEO_TRACK | Mask);
       //SmackPic.ReSize (Width*Height);
       CalculatePalettemapper (smk_get_palette(pSmack), PaletteMapper+1);
 

@@ -176,6 +176,11 @@ CSmack16::~CSmack16 ()
 void CSmack16::Open (CString Filename)
 {
    pSmack = smk_open_file(FullFilename (Filename, SmackerPath), SMK_MODE_DISK);
+
+   UBYTE Mask;
+   smk_info_audio(pSmack, &Mask, NULL, NULL, NULL);
+   smk_enable_all(pSmack, SMK_VIDEO_TRACK | Mask);
+
    //SmackPic.ReSize (pSmack->Width*pSmack->Height);
    CalculatePalettemapper (smk_get_palette(pSmack), PaletteMapper+1);
 }

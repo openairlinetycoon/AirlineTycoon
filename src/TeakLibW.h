@@ -294,16 +294,14 @@ public:
         return TXY(x / b.x, y / b.y);
     }
 
-    T operator*(const T& b) const
+    TXY operator*(const T& b) const
     {
-        DebugBreak();
-        return 0;
+        return TXY(x * b, y * b);
     }
 
-    T operator/(const T& b) const
+    TXY operator/(const T& b) const
     {
-        DebugBreak();
-        return 0;
+        return TXY(x / b, y / b);
     }
 
     TXY operator-() const
@@ -373,15 +371,13 @@ public:
         return reinterpret_cast<CPoint&>(*this);
     }
 
-    T abs() const
+    double abs() const
     {
-        DebugBreak();
-        return 0;
+        return sqrt(x * x + y * y);
     }
 
     bool IfIsWithin(T _x, T _y, T w, T h) const
     {
-        DebugBreak();
         return x >= _x && y >= _y && x <= _x + w && y <= _y + h;
     }
 
@@ -393,7 +389,6 @@ public:
 
     bool IfIsWithin(const TXY<T>& a, const TXY<T>& b) const
     {
-        DebugBreak();
         return a < *this && *this < b;
     }
 
@@ -562,13 +557,13 @@ public:
     char* GetP(unsigned long, unsigned long);
     char* GetS(unsigned long, unsigned long);
     char* GetS(unsigned long, char const*);
-    char* GetS(char const* c, unsigned long i) { return GetS(i, c); }
+    const char* GetS(char const* c, unsigned long i) { return c; /*GetS(i, c);*/ }
 
 private:
-    SLONG Unknown[8];
+    SLONG Unknown[9];
 };
 
-static_assert<sizeof(TEXTRES) == 32> TEXTRES_size_check;
+static_assert<sizeof(TEXTRES) == 36> TEXTRES_size_check;
 
 class CRegistration
 {

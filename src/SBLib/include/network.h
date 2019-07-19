@@ -45,7 +45,6 @@ public:
 
     void DisConnect()
     {
-        DebugBreak();
     }
 
     bool CreateSession(SBStr, SBNetworkCreation*)
@@ -61,7 +60,6 @@ public:
 
     unsigned long GetLocalPlayerID()
     {
-        DebugBreak();
         return 0;
     }
 

@@ -557,7 +557,7 @@ public:
     char* GetP(unsigned long, unsigned long);
     char* GetS(unsigned long, unsigned long);
     char* GetS(unsigned long, char const*);
-    const char* GetS(char const* c, unsigned long i) { return c; /*GetS(i, c);*/ }
+    char* GetS(char const* c, unsigned long i) { return GetS((unsigned long)*c, i); }
 
 private:
     SLONG Unknown[9];

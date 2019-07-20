@@ -752,9 +752,9 @@ public:
         DebugBreak();
     }
 
-    bool IsInAlbum(unsigned long id)
+    int IsInAlbum(unsigned long id)
     {
-        return !!TeakAlbumIsInAlbum(Ids, Values.AnzEntries(), id);
+        return TeakAlbumIsInAlbum(Ids, Values.AnzEntries(), id);
     }
 
     long AnzEntries()
@@ -790,7 +790,6 @@ public:
 
     unsigned long GetIdFromIndex(long i)
     {
-        DebugBreak();
         return Ids[i];
     }
 
@@ -815,7 +814,38 @@ public:
 
     void Sort()
     {
-        DebugBreak();
+        UBYTE* tmp = new UBYTE[sizeof(T)];
+        if (!tmp)
+            TeakLibW_Exception(FNL, ExcOutOfMem);
+        TeakAlbumRefresh(Ids, Values.AnzEntries());
+        for (SLONG i = 0; i < Values.AnzEntries(); i++)
+        {
+            if (Ids[i] && Ids[i + 1] && Values[i] > Values[i + 1])
+            {
+                ::Swap(Ids[i], Ids[i + 1]);
+                memcpy(tmp, &Values[i], sizeof(T));
+                memcpy(&Values[i], &Values[i + 1], sizeof(T));
+                memcpy(&Values[i + 1], tmp, sizeof(T));
+                i -= 2;
+                if ( i < -1 )
+                    i = -1;
+            }
+            else if (!Ids[i])
+            {
+                if (Ids[i + 1])
+                {
+                    ::Swap(Ids[i], Ids[i + 1]);
+                    memcpy(tmp, &Values[i], sizeof(T));
+                    memcpy(&Values[i], &Values[i + 1], sizeof(T));
+                    memcpy(&Values[i + 1], tmp, sizeof(T));
+                    i -= 2;
+                    if (i < -1)
+                        i = -1;
+                }
+            }
+        }
+        if (tmp)
+            delete [] tmp;
     }
 
     unsigned long operator*=(unsigned long id)

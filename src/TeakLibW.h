@@ -543,12 +543,20 @@ public:
 
 static_assert<sizeof(PALETTE) == 16> PALETTE_size_check;
 
+struct TEXTRES_CACHE_ENTRY
+{
+    SLONG Group, Id;
+    const char* Text;
+};
+
+static_assert<sizeof(TEXTRES_CACHE_ENTRY) == 12> TEXTRES_CACHE_ENTRY_size_check;
+
 #define TEXTRES_CACHED (void*)1
 
 class TEXTRES
 {
 public:
-    TEXTRES() {};
+    TEXTRES() { memset(Unknown, 0, sizeof(Unknown)); };
     TEXTRES(char const*, void*);
     ~TEXTRES(void);
 
@@ -557,10 +565,11 @@ public:
     char* GetP(unsigned long, unsigned long);
     char* GetS(unsigned long, unsigned long);
     char* GetS(unsigned long, char const*);
-    char* GetS(char const* c, unsigned long i) { return GetS((unsigned long)*c, i); }
+    char* GetS(char const* c, unsigned long i) { return GetS(*(unsigned long*)c, i); }
 
 private:
-    SLONG Unknown[9];
+    SLONG Unknown[6];
+    BUFFER<TEXTRES_CACHE_ENTRY> Entries;
 };
 
 static_assert<sizeof(TEXTRES) == 36> TEXTRES_size_check;

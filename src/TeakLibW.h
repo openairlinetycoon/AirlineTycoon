@@ -40,11 +40,21 @@ public:
         Size = anz;
     }
 
+    BUFFER(BUFFER& buffer)
+        : MemPointer(buffer.MemPointer)
+        , DelPointer(buffer.DelPointer)
+        , Size(buffer.Size)
+    {
+        buffer.MemPointer = buffer.DelPointer = NULL;
+        buffer.Size = 0;
+    }
+
     BUFFER(void) : MemPointer(NULL), DelPointer(NULL), Size(0) {}
 
     ~BUFFER()
     {
-        delete[] MemPointer;
+        if (MemPointer)
+            delete[] MemPointer;
         MemPointer = NULL;
     }
 

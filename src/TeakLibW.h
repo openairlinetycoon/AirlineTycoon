@@ -818,7 +818,7 @@ public:
         if (!tmp)
             TeakLibW_Exception(FNL, ExcOutOfMem);
         TeakAlbumRefresh(Ids, Values.AnzEntries());
-        for (SLONG i = 0; i < Values.AnzEntries(); i++)
+        for (SLONG i = 0; i < Values.AnzEntries() - 1; i++)
         {
             if (Ids[i] && Ids[i + 1] && Values[i] > Values[i + 1])
             {

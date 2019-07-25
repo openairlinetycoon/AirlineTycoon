@@ -60,6 +60,9 @@ public:
 
     void ReSize(SLONG anz)
     {
+        if (anz == Size)
+            return;
+
         if (anz == 0)
         {
             if (MemPointer)
@@ -87,6 +90,8 @@ public:
                 num = Size;
             }
 
+            // This is *will* break self-referencing pointers
+            // ... please don't resize anything that uses ALBUM
             memswap(m, MemPointer, sizeof(T) * num);
             delete[] MemPointer;
 
@@ -905,6 +910,9 @@ public:
 private:
     unsigned long NextId;
     FBUFFER<unsigned long> Ids;
+
+    // This self-reference could be stored as an offset to survive reallocations,
+    // but that is not how Spellbound implemented ALBUM.
     FBUFFER<T>& Values;
     CString Name;
 };

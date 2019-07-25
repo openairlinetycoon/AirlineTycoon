@@ -518,8 +518,7 @@ public:
 
     T abs() const
     {
-        DebugBreak();
-        return 0;
+        return sqrt(x * x + y * y + z * z);
     }
 
     friend TEAKFILE& operator << (TEAKFILE& File, const TXYZ<T>& b) { File.Write((UBYTE*)& b, sizeof(T) * 3); return (File); }

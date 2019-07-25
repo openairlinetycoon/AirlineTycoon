@@ -774,16 +774,12 @@ public:
 
     long GetNumFree()
     {
-        DebugBreak();
-        //return TeakAlbumGetNumFree(Ids, Values.AnzEntries());
-        return 0;
+        return TeakAlbumGetNumFree(Ids, Values.AnzEntries());
     }
 
     long GetNumUsed()
     {
-        DebugBreak();
-        //return TeakAlbumGetNumUsed(Ids, Values.AnzEntries());
-        return 0;
+        return TeakAlbumGetNumUsed(Ids, Values.AnzEntries());
     }
 
     long GetRandomUsedIndex(TEAKRAND* rand = NULL)
@@ -805,8 +801,7 @@ public:
 
     void ClearAlbum()
     {
-        DebugBreak();
-        //TeakAlbumRefresh(Ids, Values.AnzEntries());
+        TeakAlbumRefresh(Ids, Values.AnzEntries());
         for (long i = Ids.AnzEntries() - 1; i >= 0; --i)
             Ids[i] = 0;
     }
@@ -818,8 +813,7 @@ public:
 
     void ResetNextId()
     {
-        DebugBreak();
-        NextId = 0;
+        NextId = 0xFFFFFF;
     }
 
     void Sort()

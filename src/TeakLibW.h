@@ -755,47 +755,47 @@ class ALBUM
 {
 public:
     ALBUM(BUFFER<T>& buffer, CString str)
-        : NextId(0xFFFFFF)
-        , Values(reinterpret_cast<FBUFFER<T>&>(buffer))
+        : LastId(0xFFFFFF)
+        , Values((FBUFFER<T>*)(&buffer))
         , Name(str)
     {
     }
 
     void Repair(BUFFER<T>& buffer)
     {
-        DebugBreak();
+        Values = (FBUFFER<T>*)&buffer;
     }
 
     int IsInAlbum(unsigned long id)
     {
-        return TeakAlbumIsInAlbum(Ids, Values.AnzEntries(), id);
+        return TeakAlbumIsInAlbum(Ids, Values->AnzEntries(), id);
     }
 
     long AnzEntries()
     {
-        return Values.AnzEntries();
+        return Values->AnzEntries();
     }
 
     long GetNumFree()
     {
-        return TeakAlbumGetNumFree(Ids, Values.AnzEntries());
+        return TeakAlbumGetNumFree(Ids, Values->AnzEntries());
     }
 
     long GetNumUsed()
     {
-        return TeakAlbumGetNumUsed(Ids, Values.AnzEntries());
+        return TeakAlbumGetNumUsed(Ids, Values->AnzEntries());
     }
 
     long GetRandomUsedIndex(TEAKRAND* rand = NULL)
     {
         DebugBreak();
-        //return TeakAlbumRandom(Ids, Values.AnzEntries(), name, rand);
+        //return TeakAlbumRandom(Ids, Values->AnzEntries(), name, rand);
         return 0;
     }
 
     long GetUniqueId()
     {
-        return ++NextId;
+        return ++LastId;
     }
 
     unsigned long GetIdFromIndex(long i)
@@ -805,7 +805,7 @@ public:
 
     void ClearAlbum()
     {
-        TeakAlbumRefresh(Ids, Values.AnzEntries());
+        TeakAlbumRefresh(Ids, Values->AnzEntries());
         for (long i = Ids.AnzEntries() - 1; i >= 0; --i)
             Ids[i] = 0;
     }
@@ -817,7 +817,7 @@ public:
 
     void ResetNextId()
     {
-        NextId = 0xFFFFFF;
+        LastId = 0xFFFFFF;
     }
 
     void Sort()
@@ -825,15 +825,15 @@ public:
         UBYTE* tmp = new UBYTE[sizeof(T)];
         if (!tmp)
             TeakLibW_Exception(FNL, ExcOutOfMem);
-        TeakAlbumRefresh(Ids, Values.AnzEntries());
-        for (SLONG i = 0; i < Values.AnzEntries() - 1; i++)
+        TeakAlbumRefresh(Ids, Values->AnzEntries());
+        for (SLONG i = 0; i < Values->AnzEntries() - 1; i++)
         {
-            if (Ids[i] && Ids[i + 1] && Values[i] > Values[i + 1])
+            if (Ids[i] && Ids[i + 1] && Values->MemPointer[i] > Values->MemPointer[i + 1])
             {
                 ::Swap(Ids[i], Ids[i + 1]);
-                memcpy(tmp, &Values[i], sizeof(T));
-                memcpy(&Values[i], &Values[i + 1], sizeof(T));
-                memcpy(&Values[i + 1], tmp, sizeof(T));
+                memcpy(tmp, &Values->MemPointer[i], sizeof(T));
+                memcpy(&Values->MemPointer[i], &Values->MemPointer[i + 1], sizeof(T));
+                memcpy(&Values->MemPointer[i + 1], tmp, sizeof(T));
                 i -= 2;
                 if ( i < -1 )
                     i = -1;
@@ -843,9 +843,9 @@ public:
                 if (Ids[i + 1])
                 {
                     ::Swap(Ids[i], Ids[i + 1]);
-                    memcpy(tmp, &Values[i], sizeof(T));
-                    memcpy(&Values[i], &Values[i + 1], sizeof(T));
-                    memcpy(&Values[i + 1], tmp, sizeof(T));
+                    memcpy(tmp, &Values->MemPointer[i], sizeof(T));
+                    memcpy(&Values->MemPointer[i], &Values->MemPointer[i + 1], sizeof(T));
+                    memcpy(&Values->MemPointer[i + 1], tmp, sizeof(T));
                     i -= 2;
                     if (i < -1)
                         i = -1;
@@ -858,61 +858,61 @@ public:
 
     unsigned long operator*=(unsigned long id)
     {
-        return TeakAlbumFrontAddT(Ids, Values.AnzEntries(), Name, id);
+        return TeakAlbumFrontAddT(Ids, Values->AnzEntries(), Name, id);
     }
 
     unsigned long operator+=(unsigned long id)
     {
-        return TeakAlbumAddT(Ids, Values.AnzEntries(), Name, id);
+        return TeakAlbumAddT(Ids, Values->AnzEntries(), Name, id);
     }
 
     void operator-=(unsigned long id)
     {
         DebugBreak();
-        //TeakAlbumRemoveT(Ids, Values.AnzEntries(), name, id);
+        //TeakAlbumRemoveT(Ids, Values->AnzEntries(), Name, id);
     }
 
     unsigned long operator*=(T& rhs)
     {
-        DebugBreak();
-        //return TeakAlbumFrontAddT(Ids, Values.AnzEntries(), name, 0);
-        return 0;
+        unsigned long Id = TeakAlbumFrontAddT(Ids, Values->AnzEntries(), Name, GetUniqueId());
+        (*this)[Id] = rhs;
+        return Id;
     }
 
     unsigned long operator+=(T& rhs)
     {
-        DebugBreak();
-        //return TeakAlbumAddT(Ids, Values.AnzEntries(), name, 0);
-        return 0;
+        unsigned long Id = TeakAlbumAddT(Ids, Values->AnzEntries(), Name, GetUniqueId());
+        (*this)[Id] = rhs;
+        return Id;
     }
 
     void operator-=(T& rhs)
     {
         DebugBreak();
-        //TeakAlbumRemoveT(Ids, Values.AnzEntries(), name, 0);
+        //TeakAlbumRemoveT(Ids, Values->AnzEntries(), Name, 0);
     }
 
     long operator()(unsigned long id)
     {
-        return TeakAlbumSearchT(Ids, Values.AnzEntries(), Name, id);
+        return TeakAlbumSearchT(Ids, Values->AnzEntries(), Name, id);
     }
 
     T& operator[](unsigned long id)
     {
-        unsigned long i = TeakAlbumSearchT(Ids, Values.AnzEntries(), Name, id);
-        return Values[i];
+        unsigned long i = TeakAlbumSearchT(Ids, Values->AnzEntries(), Name, id);
+        return (*Values)[i];
     }
 
     friend TEAKFILE& operator<< (TEAKFILE& File, const ALBUM<T>& r) { DebugBreak(); return File; }
     friend TEAKFILE& operator>> (TEAKFILE& File, ALBUM<T>& r) { DebugBreak(); return File; }
 
 private:
-    unsigned long NextId;
+    unsigned long LastId;
     FBUFFER<unsigned long> Ids;
 
     // This self-reference could be stored as an offset to survive reallocations,
-    // but that is not how Spellbound implemented ALBUM.
-    FBUFFER<T>& Values;
+    // but instead Spellbound implemented a Repair() function.
+    FBUFFER<T>* Values;
     CString Name;
 };
 

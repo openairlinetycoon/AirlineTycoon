@@ -904,7 +904,12 @@ public:
     }
 
     friend TEAKFILE& operator<< (TEAKFILE& File, const ALBUM<T>& r) { DebugBreak(); return File; }
-    friend TEAKFILE& operator>> (TEAKFILE& File, ALBUM<T>& r) { DebugBreak(); return File; }
+    friend TEAKFILE& operator>> (TEAKFILE& File, ALBUM<T>& r)
+    {
+        File >> r.LastId;
+        File >> r.Ids;
+        return File;
+    }
 
 private:
     unsigned long LastId;

@@ -9,7 +9,7 @@ static const char FileId[] = "Smak";
 //--------------------------------------------------------------------------------------------
 //Berechnet eine Remapper-Tabelle anhand einer 256-Farben Palette
 //--------------------------------------------------------------------------------------------
-void CalculatePalettemapper (const UBYTE *pPalette, UWORD *pPaletteMapper)
+void CalculatePalettemapper (UBYTE *pPalette, UWORD *pPaletteMapper)
 {
    SLONG c;
 
@@ -25,14 +25,14 @@ void CalculatePalettemapper (const UBYTE *pPalette, UWORD *pPaletteMapper)
 //--------------------------------------------------------------------------------------------
 //Konvertiert eine halb beschriebene 8-Bit Bitmap in eine mit 16-Bit:
 //--------------------------------------------------------------------------------------------
-void ConvertBitmapTo16Bit (const UBYTE *SourcePic, SBBM *pBitmap, UWORD *pPaletteMapper, SLONG SmackWidth, SLONG SourceSizeY, XY TargetOffset)
+void ConvertBitmapTo16Bit (UBYTE *SourcePic, SBBM *pBitmap, UWORD *pPaletteMapper, SLONG SmackWidth, SLONG SourceSizeY, XY TargetOffset)
 {
    if (NULL==pBitmap || NULL==pBitmap->pBitmap) return;
 
    SLONG register y;
    SB_CBitmapKey  Key(*pBitmap->pBitmap);
 
-   static DWORD _EBP;
+   static _EBP;
 
    if (Key.Bitmap==NULL) return;
 
@@ -166,7 +166,7 @@ CSmack16::CSmack16 ()
 //--------------------------------------------------------------------------------------------
 CSmack16::~CSmack16 ()
 {
-   if (pSmack) smk_close(pSmack);
+   if (pSmack) SmackClose (pSmack);
    pSmack = NULL;
 }
 
@@ -175,38 +175,32 @@ CSmack16::~CSmack16 ()
 //--------------------------------------------------------------------------------------------
 void CSmack16::Open (CString Filename)
 {
-   pSmack = smk_open_file(FullFilename (Filename, SmackerPath), SMK_MODE_DISK);
-
-   UBYTE Mask;
-   smk_info_audio(pSmack, &Mask, NULL, NULL, NULL);
-   smk_enable_all(pSmack, SMK_VIDEO_TRACK | Mask);
-
-   //SmackPic.ReSize (pSmack->Width*pSmack->Height);
-   CalculatePalettemapper (smk_get_palette(pSmack), PaletteMapper+1);
+   pSmack = SmackOpen (FullFilename (Filename, SmackerPath), SMACKTRACKS, SMACKAUTOEXTRA);
+   SmackPic.ReSize (pSmack->Width*pSmack->Height);
+   CalculatePalettemapper (pSmack->Palette, PaletteMapper+1);
 }
 
 //--------------------------------------------------------------------------------------------
 //Nächster Frame:
 //--------------------------------------------------------------------------------------------
-BOOL CSmack16::Next(SBBM* pTargetBm)
+BOOL CSmack16::Next (SBBM *pTargetBm)
 {
-    if (smk_next(pSmack) != SMK_DONE)
-    {
-        //Take the next frame:
-        ULONG Width, Height;
-        smk_info_video(pSmack, &Width, &Height, NULL);
+   if (!SmackWait (pSmack))
+   {
+      //Take the next frame:
+      SmackToBuffer (pSmack, 0, 0, pSmack->Width, pSmack->Height, (UBYTE*)SmackPic, FALSE);
+      SmackDoFrame (pSmack);
+      SmackNextFrame (pSmack);
 
-        if (pTargetBm)
-        {
-            if (SLONG(Width) != pTargetBm->Size.x || SLONG(Height) != pTargetBm->Size.y)
-                pTargetBm->ReSize(Width, Height);
-            ConvertBitmapTo16Bit(smk_get_video(pSmack), pTargetBm, PaletteMapper + 1, Width, Height, XY(0, 0));
-        }
-    }
+      if (pTargetBm)
+      {
+         if (SLONG(pSmack->Width)!=pTargetBm->Size.x || SLONG(pSmack->Height)!=pTargetBm->Size.y)
+            pTargetBm->ReSize (pSmack->Width, pSmack->Height);
+         ConvertBitmapTo16Bit ((UBYTE*)SmackPic, pTargetBm, PaletteMapper+1, pSmack->Width, pSmack->Height, XY(0,0));
+      }
+   }
 
-    ULONG FrameNum, Frames;
-    smk_info_all(pSmack, &FrameNum, &Frames, NULL);
-    return (FrameNum < Frames - 1);
+   return (pSmack->FrameNum<pSmack->Frames-1);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -214,7 +208,7 @@ BOOL CSmack16::Next(SBBM* pTargetBm)
 //--------------------------------------------------------------------------------------------
 void CSmack16::Close (void)
 {
-   if (pSmack) smk_close(pSmack);
+   if (pSmack) SmackClose (pSmack);
    pSmack = NULL;
 }
 
@@ -234,7 +228,7 @@ CSmackerClip::CSmackerClip ()
 //--------------------------------------------------------------------------------------------
 CSmackerClip::~CSmackerClip ()
 {
-   if (pSmack) smk_close(pSmack);
+   if (pSmack) SmackClose (pSmack);
    pSmack = NULL;
 }
 
@@ -243,14 +237,14 @@ CSmackerClip::~CSmackerClip ()
 //--------------------------------------------------------------------------------------------
 void CSmackerClip::Start (void)
 {
-   if (pSmack) smk_close(pSmack);
+   if (pSmack) SmackClose (pSmack);
    pSmack = NULL;
 
    if (Filename.GetLength()>0)
    {
-      pSmack = smk_open_file(FullFilename (Filename, SmackerPath), SMK_MODE_DISK);
-      //SmackPic.ReSize (pSmack->Width*pSmack->Height);
-      CalculatePalettemapper (smk_get_palette(pSmack), PaletteMapper+1);
+      pSmack = SmackOpen (FullFilename (Filename, SmackerPath), SMACKTRACKS, SMACKAUTOEXTRA);
+      SmackPic.ReSize (pSmack->Width*pSmack->Height);
+      CalculatePalettemapper (pSmack->Palette, PaletteMapper+1);
    }
 
    if (!IsFXPlaying)
@@ -288,10 +282,12 @@ void CSmackerClip::Start (void)
 //--------------------------------------------------------------------------------------------
 void CSmackerClip::Stop (void)
 {
-   if (pSmack) smk_close(pSmack);
+   if (pSmack) SmackClose (pSmack);
    pSmack = NULL;
 
    LastFrame = 0;
+
+   SmackPic.ReSize (0);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -318,7 +314,7 @@ void CSmackerClip::ReSize (SLONG          ClipId,
 {
    SLONG c;
 
-   if (pSmack) smk_close(pSmack);
+   if (pSmack) SmackClose (pSmack);
 
    CSmackerClip::Filename      = Filename;
    CSmackerClip::SoundFilename = SoundFilename;
@@ -487,16 +483,10 @@ SLONG CSmackerPerson::GetClip (void)
 //--------------------------------------------------------------------------------------------
 SLONG CSmackerPerson::GetFrame (void)
 {
-	if (ActiveClip != -1 && Clips[ActiveClip].pSmack)
-	{
-		ULONG FrameNum;
-		smk_info_all(Clips[ActiveClip].pSmack, NULL, &FrameNum, NULL);
-		return (FrameNum);
-	}
-	else
-	{
-		return (NULL);
-	}
+   if (ActiveClip!=-1 && Clips[ActiveClip].pSmack)
+      return (Clips[ActiveClip].pSmack->FrameNum);
+   else
+      return (NULL);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -522,11 +512,6 @@ void CSmackerPerson::Pump (void)
       Clips[ActiveClip].PlaySyllable ();
    }
 
-
-   ULONG Frames, FrameNum, Width, Height;
-   smk_info_all(Clips[ActiveClip].pSmack, &FrameNum, &Frames, NULL);
-   smk_info_video(Clips[ActiveClip].pSmack, &Width, &Height, NULL);
-
    //Wenn gerade ein Leerclip abgespielt wird:
    if (ActiveClip!=-1 && Clips[ActiveClip].pSmack==NULL)
    {
@@ -536,15 +521,17 @@ void CSmackerPerson::Pump (void)
 
       if (Clips[ActiveClip].pSmack!=NULL && ActiveClip!=-1)
       {
-         Bitmap.ReSize (Width, Height);
-         //Clips[ActiveClip].SmackPic.ReSize (Clips[ActiveClip].pSmack->Width*Clips[ActiveClip].pSmack->Height);
-         ConvertBitmapTo16Bit (smk_get_video(Clips[ActiveClip].pSmack), &Bitmap, Clips[ActiveClip].PaletteMapper+1, Width, Height, XY(0,0));
+         Bitmap.ReSize (Clips[ActiveClip].pSmack->Width, Clips[ActiveClip].pSmack->Height);
+         Clips[ActiveClip].SmackPic.ReSize (Clips[ActiveClip].pSmack->Width*Clips[ActiveClip].pSmack->Height);
+         SmackToBuffer (Clips[ActiveClip].pSmack, 0, 0, Bitmap.Size.x, Bitmap.Size.y, (UBYTE*)Clips[ActiveClip].SmackPic, FALSE);
+         SmackDoFrame (Clips[ActiveClip].pSmack);
+         ConvertBitmapTo16Bit ((UBYTE*)Clips[ActiveClip].SmackPic, &Bitmap, Clips[ActiveClip].PaletteMapper+1, Clips[ActiveClip].pSmack->Width, Clips[ActiveClip].pSmack->Height, XY(0,0));
          BitmapPos = Clips[ActiveClip].ScreenOffset;
 
-         if (FrameNum==0 && !Clips[ActiveClip].IsFXPlaying)
+         if (Clips[ActiveClip].pSmack->FrameNum==0 && !Clips[ActiveClip].IsFXPlaying)
             Clips[ActiveClip].PlaySyllable ();
 
-		 smk_next(Clips[ActiveClip].pSmack);
+         SmackNextFrame (Clips[ActiveClip].pSmack);
       }
 
       return;
@@ -562,15 +549,17 @@ void CSmackerPerson::Pump (void)
       if (Clips[ActiveClip].pSmack==NULL)
          return;
 
-      Bitmap.ReSize (Width, Height);
-      //Clips[ActiveClip].SmackPic.ReSize (Clips[ActiveClip].pSmack->Width*Clips[ActiveClip].pSmack->Height);
-      ConvertBitmapTo16Bit (smk_get_video(Clips[ActiveClip].pSmack), &Bitmap, Clips[ActiveClip].PaletteMapper+1, Width, Height, XY(0,0));
+      Bitmap.ReSize (Clips[ActiveClip].pSmack->Width, Clips[ActiveClip].pSmack->Height);
+      Clips[ActiveClip].SmackPic.ReSize (Clips[ActiveClip].pSmack->Width*Clips[ActiveClip].pSmack->Height);
+      SmackToBuffer (Clips[ActiveClip].pSmack, 0, 0, Bitmap.Size.x, Bitmap.Size.y, (UBYTE*)Clips[ActiveClip].SmackPic, FALSE);
+      SmackDoFrame (Clips[ActiveClip].pSmack);
+      ConvertBitmapTo16Bit ((UBYTE*)Clips[ActiveClip].SmackPic, &Bitmap, Clips[ActiveClip].PaletteMapper+1, Clips[ActiveClip].pSmack->Width, Clips[ActiveClip].pSmack->Height, XY(0,0));
       BitmapPos = Clips[ActiveClip].ScreenOffset;
 
-      if (FrameNum==0 && !Clips[ActiveClip].IsFXPlaying)
+      if (Clips[ActiveClip].pSmack->FrameNum==0 && !Clips[ActiveClip].IsFXPlaying)
          Clips[ActiveClip].PlaySyllable ();
 
-	  smk_next(Clips[ActiveClip].pSmack);
+      SmackNextFrame (Clips[ActiveClip].pSmack);
    }
 
    if (Clips[ActiveClip].CanCancelClip && (CurrentMood!=DesiredMood || (Clips[ActiveClip].DecisionVar && Clips[ActiveClip].DecisionVar[0]!=-1)))
@@ -584,18 +573,20 @@ void CSmackerPerson::Pump (void)
 
    if (Clips[ActiveClip].State==SMACKER_CLIP_PLAYING)
    {
-      if (smk_next(Clips[ActiveClip].pSmack) != SMK_DONE)
+      if (!SmackWait (Clips[ActiveClip].pSmack))
       {
          //Take the next frame:
-         Bitmap.ReSize (Width, Height);
-         //Clips[ActiveClip].SmackPic.ReSize (Clips[ActiveClip].pSmack->Width*Clips[ActiveClip].pSmack->Height);
-         ConvertBitmapTo16Bit (smk_get_video(Clips[ActiveClip].pSmack), &Bitmap, Clips[ActiveClip].PaletteMapper+1, Width, Height, XY(0,0));
+         Bitmap.ReSize (Clips[ActiveClip].pSmack->Width, Clips[ActiveClip].pSmack->Height);
+         Clips[ActiveClip].SmackPic.ReSize (Clips[ActiveClip].pSmack->Width*Clips[ActiveClip].pSmack->Height);
+         SmackToBuffer (Clips[ActiveClip].pSmack, 0, 0, Bitmap.Size.x, Bitmap.Size.y, (UBYTE*)Clips[ActiveClip].SmackPic, FALSE);
+         SmackDoFrame (Clips[ActiveClip].pSmack);
+         ConvertBitmapTo16Bit ((UBYTE*)Clips[ActiveClip].SmackPic, &Bitmap, Clips[ActiveClip].PaletteMapper+1, Clips[ActiveClip].pSmack->Width, Clips[ActiveClip].pSmack->Height, XY(0,0));
          BitmapPos = Clips[ActiveClip].ScreenOffset;
 
          //Variablenveränderung, während der Film läuft?
          if (Clips[ActiveClip].PostVar && (Clips[ActiveClip].PostOperation&SMACKER_CLIP_FRAME)) //Variablen-Messageing:
          {
-            if (FrameNum >= ULONG(Clips[ActiveClip].PostOperation>>13) &&
+            if (Clips[ActiveClip].pSmack->FrameNum >= ULONG(Clips[ActiveClip].PostOperation>>13) &&
                 Clips[ActiveClip].LastFrame < (Clips[ActiveClip].PostOperation>>13))
 
             switch (Clips[ActiveClip].PostOperation&1023)
@@ -607,9 +598,9 @@ void CSmackerPerson::Pump (void)
             }
          }
 
-         Clips[ActiveClip].LastFrame = FrameNum;
+         Clips[ActiveClip].LastFrame = Clips[ActiveClip].pSmack->FrameNum;
 
-         if (FrameNum >= Frames-1)
+         if (Clips[ActiveClip].pSmack->FrameNum >= Clips[ActiveClip].pSmack->Frames-1)
          {
             Clips[ActiveClip].RepeatCount--;
 
@@ -642,10 +633,10 @@ void CSmackerPerson::Pump (void)
          }
          else
          {
-            if (FrameNum==0 && !Clips[ActiveClip].IsFXPlaying)
+            if (Clips[ActiveClip].pSmack->FrameNum==0 && !Clips[ActiveClip].IsFXPlaying)
                Clips[ActiveClip].PlaySyllable ();
 
-			smk_next(Clips[ActiveClip].pSmack);
+            SmackNextFrame (Clips[ActiveClip].pSmack);
          }
       }
    }

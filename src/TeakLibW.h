@@ -156,7 +156,7 @@ public:
         buffer.ReSize(0);
         buffer.ReSize(size);
         File >> offset;
-        for (SLONG i; i < buffer.Size; i++)
+        for (SLONG i = 0; i < buffer.Size; i++)
             File >> buffer.MemPointer[i];
         buffer.DelPointer = buffer.MemPointer + offset;
         return File;

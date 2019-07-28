@@ -166,11 +166,11 @@ GameFrame::GameFrame()
 
    if (lpDD==NULL) { MB(); Sleep(100); MB(); Sleep(100); MB(); }
 
-   /*if (DetectCurrentDisplayResolution ().z!=16 && !bFullscreen)
+   if (DetectCurrentDisplayResolution ().z!=16 && !bFullscreen)
    {
       ::MessageBox (NULL, "Airline Tycoon braucht einen Videomodus mit 65.000 Farben!", "Fehler!", MB_OK );
       exit (-1);
-   }*/
+   }
 
    if (DetectCurrentDisplayResolution().x<=640 || DetectCurrentDisplayResolution().y<=480)
       bFullscreen=TRUE;

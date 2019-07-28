@@ -868,8 +868,7 @@ public:
 
     void operator-=(unsigned long id)
     {
-        DebugBreak();
-        //TeakAlbumRemoveT(Ids, Values->AnzEntries(), Name, id);
+        TeakAlbumRemoveT(Ids, Values->AnzEntries(), Name, id);
     }
 
     unsigned long operator*=(T& rhs)

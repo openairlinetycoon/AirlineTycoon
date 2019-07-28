@@ -391,9 +391,9 @@ public:
         return sqrt(x * x + y * y);
     }
 
-    bool IfIsWithin(T _x, T _y, T w, T h) const
+    bool IfIsWithin(T _x1, T _y1, T _x2, T _y2) const
     {
-        return x >= _x && y >= _y && x <= _x + w && y <= _y + h;
+        return x >= _x1 && y >= _y1 && x <= _x2 && y <= _y2;
     }
 
     bool IfIsWithin(T a, T b, T c) const

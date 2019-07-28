@@ -40,13 +40,11 @@ public:
         Size = anz;
     }
 
-    BUFFER(BUFFER& buffer)
-        : MemPointer(buffer.MemPointer)
-        , DelPointer(buffer.DelPointer)
-        , Size(buffer.Size)
+    BUFFER(BUFFER& rhs)
     {
-        buffer.MemPointer = buffer.DelPointer = NULL;
-        buffer.Size = 0;
+        ::Swap(MemPointer, rhs.MemPointer);
+        ::Swap(DelPointer, rhs.DelPointer);
+        ::Swap(Size, rhs.Size);
     }
 
     BUFFER(void) : MemPointer(NULL), DelPointer(NULL), Size(0) {}
@@ -131,16 +129,16 @@ public:
         return MemPointer;
     }
 
-    void operator+=(T& rhs)
-    {
-        DebugBreak();
-        *DelPointer++ = rhs;
-    }
-
     void operator+=(int rhs)
     {
-        DebugBreak();
-        *DelPointer++ = (T)rhs;
+        DelPointer += rhs;
+    }
+
+    void operator=(BUFFER<T>& rhs)
+    {
+        ::Swap(MemPointer, rhs.MemPointer);
+        ::Swap(DelPointer, rhs.DelPointer);
+        ::Swap(Size, rhs.Size);
     }
 
     friend class TEAKFILE& operator << (TEAKFILE& File, const BUFFER<T>& buffer)
@@ -251,6 +249,8 @@ class FBUFFER : public BUFFER<T>
 {
 public:
     FBUFFER(void) : BUFFER<T>(0) {}
+
+    FBUFFER(FBUFFER& buffer) : BUFFER<T>(buffer) {}
 
     FBUFFER(SLONG anz) : BUFFER<T>(anz) {}
 };

@@ -4,7 +4,7 @@
 // CAuftrag CFlugplan CPlane PLAYER
 //============================================================================================
 #include "HLine.h"
-#include "\sb-projekt\smksdk\Smack.h"
+#include "..\smksdk\Smack.h"
 
 typedef BUFFER<UBYTE> BUFFER_UBYTE;
 

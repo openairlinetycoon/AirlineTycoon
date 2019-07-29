@@ -670,6 +670,10 @@ SOURCE=..\libs\SSE.lib
 
 SOURCE=..\libs\TeakLibW.lib
 # End Source File
+# Begin Source File
+
+SOURCE=..\smksdk\SMACKW32.LIB
+# End Source File
 # End Group
 # Begin Group "Räume"
 

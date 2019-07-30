@@ -61,42 +61,41 @@ public:
         if (anz == Size)
             return;
 
-        if (anz == 0)
+        if (anz > 0)
+        {
+            T* m = new T[anz]();
+            if (!m)
+                TeakLibW_Exception(NULL, 0, ExcOutOfMem);
+
+            if (MemPointer)
+            {
+                SLONG num;
+                if (anz < Size)
+                    num = anz;
+                else
+                    num = Size;
+
+                // This is *will* break self-referencing pointers
+                // ... please don't resize anything that uses ALBUM
+                memswap(m, MemPointer, sizeof(T) * num);
+                delete[] MemPointer;
+
+                DelPointer = m + ((DelPointer - MemPointer) / sizeof(T));
+            }
+            else
+            {
+                DelPointer = m;
+            }
+            MemPointer = m;
+        }
+        else
         {
             if (MemPointer)
                 delete[] MemPointer;
 
             MemPointer = DelPointer = NULL;
-            return;
         }
 
-        T* m = new T[anz]();
-        if (!m)
-            TeakLibW_Exception(NULL, 0, ExcOutOfMem);
-
-        if (!MemPointer)
-        {
-            DelPointer = m;
-        }
-        else
-        {
-            SLONG num;
-            if (anz < Size) {
-                num = anz;
-            }
-            else {
-                num = Size;
-            }
-
-            // This is *will* break self-referencing pointers
-            // ... please don't resize anything that uses ALBUM
-            memswap(m, MemPointer, sizeof(T) * num);
-            delete[] MemPointer;
-
-            DelPointer = m + ((DelPointer - MemPointer) / sizeof(T));
-        }
-
-        MemPointer = m;
         Size = anz;
     }
 

@@ -911,7 +911,13 @@ public:
         return (*Values)[i];
     }
 
-    friend TEAKFILE& operator<< (TEAKFILE& File, const ALBUM<T>& r) { DebugBreak(); return File; }
+    friend TEAKFILE& operator<< (TEAKFILE& File, const ALBUM<T>& r)
+    {
+        File << r.LastId;
+        File << r.Ids;
+        return File;
+    }
+
     friend TEAKFILE& operator>> (TEAKFILE& File, ALBUM<T>& r)
     {
         File >> r.LastId;

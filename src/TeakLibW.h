@@ -809,7 +809,18 @@ public:
 
     void Swap(long a, long b)
     {
-        DebugBreak();
+        TeakAlbumRefresh(Ids, Values->AnzEntries());
+        if (a >= Ids.Size)
+            a = (*this)(a);
+        if (b >= Ids.Size)
+            b = (*this)(b);
+
+        UBYTE* tmp = new UBYTE[sizeof(T)];
+        ::Swap(Ids[a], Ids[b]);
+        memcpy(tmp, &Values->MemPointer[a], sizeof(T));
+        memcpy(&Values->MemPointer[a], &Values->MemPointer[b], sizeof(T));
+        memcpy(&Values->MemPointer[b], tmp, sizeof(T));
+        delete [] tmp;
     }
 
     void ResetNextId()

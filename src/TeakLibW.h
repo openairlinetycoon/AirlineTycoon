@@ -900,12 +900,6 @@ public:
         return Id;
     }
 
-    void operator-=(T& rhs)
-    {
-        DebugBreak();
-        //TeakAlbumRemoveT(Ids, Values->AnzEntries(), Name, 0);
-    }
-
     long operator()(unsigned long id)
     {
         return TeakAlbumSearchT(Ids, Values->AnzEntries(), Name, id);

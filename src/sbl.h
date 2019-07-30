@@ -130,13 +130,12 @@ class SB_CHardwarecolorHelper;
 class SB_Hardwarecolor
 {
 public:
-    SB_Hardwarecolor() : color(0) { DebugBreak(); }
-    SB_Hardwarecolor(const SB_CHardwarecolorHelper* helper) : color(reinterpret_cast<SLONG>(helper)) { DebugBreak(); }
-    operator SB_CHardwarecolorHelper* () { return reinterpret_cast<SB_CHardwarecolorHelper*>(this); }
-    operator word() { DebugBreak(); return 0; }
+    SB_Hardwarecolor() : color(0) { }
+    SB_Hardwarecolor(const SB_CHardwarecolorHelper* helper) : color(reinterpret_cast<SLONG>(helper)) { }
+    operator dword() { return color; }
 
 private:
-    SLONG color;
+    dword color;
 };
 
 class SB_CBitmapCore

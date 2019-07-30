@@ -793,9 +793,7 @@ public:
 
     long GetRandomUsedIndex(TEAKRAND* rand = NULL)
     {
-        DebugBreak();
-        //return TeakAlbumRandom(Ids, Values->AnzEntries(), name, rand);
-        return 0;
+        return TeakAlbumRandom(Ids, Values->AnzEntries(), Name, rand);
     }
 
     long GetUniqueId()

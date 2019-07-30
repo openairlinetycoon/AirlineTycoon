@@ -142,7 +142,10 @@ public:
 
     friend class TEAKFILE& operator << (TEAKFILE& File, const BUFFER<T>& buffer)
     {
-        DebugBreak();
+        File << buffer.Size;
+        File << (buffer.DelPointer - buffer.MemPointer);
+        for (SLONG i = 0; i < buffer.Size; i++)
+            File << buffer.MemPointer[i];
         return File;
     }
 

@@ -234,11 +234,24 @@ public:
     friend TEAKFILE& operator << (TEAKFILE& File, const float& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
     friend TEAKFILE& operator >> (TEAKFILE& File, float& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }
 
-    friend TEAKFILE& operator << (TEAKFILE& File, const CString& b) { DebugBreak(); return File; }
-    friend TEAKFILE& operator >> (TEAKFILE& File, CString& b) { DebugBreak(); return File; }
+    friend TEAKFILE& operator << (TEAKFILE& File, const CPoint& b) { File.Write((UBYTE*)& b, sizeof(CPoint)); return (File); }
+    friend TEAKFILE& operator >> (TEAKFILE& File, CPoint& b) { File.Read((UBYTE*)& b, sizeof(CPoint)); return (File); }
 
-    friend TEAKFILE& operator << (TEAKFILE& File, const CPoint& b) { DebugBreak(); return File; }
-    friend TEAKFILE& operator >> (TEAKFILE& File, CPoint& b) { DebugBreak(); return File; }
+    friend TEAKFILE& operator << (TEAKFILE& File, const CString& b)
+    {
+        File << b.GetLength();
+        File.Write((UBYTE*)(LPCTSTR)b, b.GetLength());
+        return File;
+    }
+    friend TEAKFILE& operator >> (TEAKFILE& File, CString& b)
+    {
+        ULONG size;
+        File >> size;
+        BUFFER<BYTE> str(size);
+        File.Read(str, size);
+        b = str;
+        return File;
+    }
 
 private:
     void CodeBlock(unsigned char*, long, long);

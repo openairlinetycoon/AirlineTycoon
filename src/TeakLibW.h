@@ -401,12 +401,6 @@ public:
         return x >= _x1 && y >= _y1 && x <= _x2 && y <= _y2;
     }
 
-    bool IfIsWithin(T a, T b, T c) const
-    {
-        DebugBreak();
-        return false;
-    }
-
     bool IfIsWithin(const TXY<T>& a, const TXY<T>& b) const
     {
         return a < *this && *this < b;

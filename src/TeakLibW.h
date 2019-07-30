@@ -99,11 +99,6 @@ public:
         Size = anz;
     }
 
-    void ReSize(SLONG, T*)
-    {
-        DebugBreak();
-    }
-
     long AnzEntries() const { return Size; }
 
     void FillWith(T value)
@@ -112,11 +107,6 @@ public:
             MemPointer[i] = value;
         DelPointer = MemPointer + Size;
     }
-
-    //T& operator[](int i) const
-    //{
-    //    return MemPointer[i];
-    //}
 
     operator T* ()
     {

@@ -223,8 +223,8 @@ public:
 
     friend TEAKFILE& operator << (TEAKFILE& File, const CString& b)
     {
-        File << b.GetLength();
-        File.Write((UBYTE*)(LPCTSTR)b, b.GetLength());
+        File << b.GetLength() + 1;
+        File.Write((UBYTE*)(LPCTSTR)b, b.GetLength() + 1);
         return File;
     }
     friend TEAKFILE& operator >> (TEAKFILE& File, CString& b)

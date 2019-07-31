@@ -90,7 +90,7 @@ AirportView::AirportView (BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, Play
 
    LastAnzPeopleOnScreen=-1;
 
-   if (Sim.GetHour()==9 && Sim.GetMinute==0) bgJustDidLotsOfWork=TRUE;
+   if (Sim.GetHour()==9 && Sim.GetMinute()==0) bgJustDidLotsOfWork=TRUE;
 
    if (CreditsFilesAreMissing && Sim.Time>9*60000)
       MenuStart (MENU_CLOSED, MENU_CLOSED_PROTECTION);

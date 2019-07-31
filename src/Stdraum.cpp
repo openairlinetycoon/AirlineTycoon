@@ -2930,7 +2930,7 @@ void CStdRaum::PostPaint (void)
    {
       static SLONG LastTime=0;
 
-      if (CheatTestGame==2 && Sim.GetHour()==9 && Sim.GetMinute==0 && rand()%30==0)
+      if (CheatTestGame==2 && Sim.GetHour()==9 && Sim.GetMinute()==0 && rand()%30==0)
          FrameWnd->SendMessage (WM_RBUTTONDOWN, 0, gMousePosition.x+gMousePosition.y*65536);
 
       if (Sim.Time-LastTime>255 && Sim.Persons[Sim.Persons.GetPlayerIndex(Sim.localPlayer)].Dir>=8 && Sim.GetHour()<17 && Sim.GetHour()>9)

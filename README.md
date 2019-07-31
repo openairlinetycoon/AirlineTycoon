@@ -1,6 +1,6 @@
 # AirlineTycoon
 
-This repository completes the partial source code that is provided as a free bonus in the GOG release
+This repository aims to complete the partial source code that is provided as a free bonus in the GOG release
 of Airline Tycoon Deluxe. To run it you'll need the game assets from either the Deluxe or Evolution edition
 of the game. You can purchase these assets from GOG.com: https://www.gog.com/game/airline_tycoon_deluxe
 

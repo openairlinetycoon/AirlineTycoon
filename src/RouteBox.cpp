@@ -32,7 +32,7 @@ SLONG CalcDistanceLine2Dot (XY LineP1, XY LineP2, XY p)
 {
    float Abschnitt;
 
-   Abschnitt = ((LineP1-p)*(LineP1-LineP2)).abs() / (float)(LineP2-LineP1).abs() / (float)(LineP2-LineP1).abs();
+   Abschnitt = ((LineP1-p)*(LineP1-LineP2)) / (float)(LineP2-LineP1).abs() / (float)(LineP2-LineP1).abs();
 
    //if ((LineP1.x<LineP2.x && p.x<=LineP1.x) || (LineP1.x>LineP2.x && p.x>=LineP1.x) || (LineP1.y<LineP2.y && p.y<=LineP1.y) || (LineP1.y>LineP2.y && p.y>=LineP1.y))
    if (Abschnitt<0.0)
@@ -48,7 +48,7 @@ SLONG CalcDistanceLine2Dot (XY LineP1, XY LineP2, XY p)
    {
       XY r (LineP1.y-LineP2.y, LineP2.x-LineP1.x);
 
-      return (abs((SLONG)((LineP1-p)*r/r.abs()).abs()));
+      return (abs(SLONG((LineP1-p)*r/r.abs())));
    }
 
    return (0);

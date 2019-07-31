@@ -390,6 +390,16 @@ public:
         return sqrt(x * x + y * y);
     }
 
+    double operator*(const double& b) const
+    {
+        return (x + y) * b;
+    }
+
+    double operator/(const double& b) const
+    {
+        return (x + y) / b;
+    }
+
     bool IfIsWithin(T _x1, T _y1, T _x2, T _y2) const
     {
         return x >= _x1 && y >= _y1 && x <= _x2 && y <= _y2;
@@ -509,9 +519,19 @@ public:
         return *this;
     }
 
-    T abs() const
+    double abs() const
     {
         return sqrt(x * x + y * y + z * z);
+    }
+
+    double operator*(const double& b) const
+    {
+        return (x + y + z) * b;
+    }
+
+    double operator/(const double& b) const
+    {
+        return (x + y + z) / b;
     }
 
     friend TEAKFILE& operator << (TEAKFILE& File, const TXYZ<T>& b) { File.Write((UBYTE*)& b, sizeof(T) * 3); return (File); }

@@ -4,6 +4,8 @@ This repository aims to complete the partial source code that is provided as a f
 of Airline Tycoon Deluxe. To run it you'll need the game assets from either the Deluxe or Evolution edition
 of the game. You can purchase these assets from GOG.com: https://www.gog.com/game/airline_tycoon_deluxe
 
+## License
+
 The code in the repository is licensed under the terms included in the GOG release. As such the code can
 only be used for non-commercial purposes and remains property of BFG.
 

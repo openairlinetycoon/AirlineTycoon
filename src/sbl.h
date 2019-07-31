@@ -315,13 +315,13 @@ typedef struct
     SB_CBitmapCore* pBitmapCore;
 } CFRONTDATA;
 
-#define TEC_FONT_LEFT      0
-#define TEC_FONT_CENTERED  1
+#define TEC_FONT_LEFT      1
 #define TEC_FONT_RIGHT     2
+#define TEC_FONT_CENTERED  3
 
-#define TAB_STYLE_LEFT     0
-#define TAB_STYLE_CENTER   1
+#define TAB_STYLE_LEFT     1
 #define TAB_STYLE_RIGHT    2
+#define TAB_STYLE_CENTER   3
 
 typedef struct tagTabs
 {

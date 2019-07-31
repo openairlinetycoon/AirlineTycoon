@@ -105,17 +105,11 @@ public:
     {
         for (int i = 0; i < Size; i++)
             MemPointer[i] = value;
-        DelPointer = MemPointer + Size;
     }
 
-    operator T* ()
+    operator T* () const
     {
-        return MemPointer;
-    }
-
-    operator const T* () const
-    {
-        return MemPointer;
+        return DelPointer;
     }
 
     void operator+=(int rhs)

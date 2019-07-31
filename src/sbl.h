@@ -82,8 +82,8 @@ public:
 	operator char*() { return Buffer; }
     class SB_CString const& operator=(class SB_CString const&);
     class SB_CString const& operator=(char const*);
-    class SB_CString const& operator=(int b) { DebugBreak(); Empty(); *this += b; return *this; }
-    class SB_CString const& operator=(char b) { DebugBreak(); Empty(); *this += b; return *this; }
+    class SB_CString const& operator=(int b) { Empty(); *this += b; return *this; }
+    class SB_CString const& operator=(char b) { Empty(); *this += b; return *this; }
     class SB_CString const& operator+=(char const*);
     class SB_CString const& operator+=(char);
     class SB_CString const& operator+=(class SB_CString const&);

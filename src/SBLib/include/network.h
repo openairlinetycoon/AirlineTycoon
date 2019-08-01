@@ -23,23 +23,21 @@ class SBNetwork
 public:
     SBNetwork(bool, GUID)
     {
+        m_connections.Add("Unsupported");
     }
 
     size_t GetMessageCount()
     {
-        DebugBreak();
         return 0;
     }
 
     bool Connect(SBStr)
     {
-        DebugBreak();
         return false;
     }
 
     bool Connect(SBStr, char*)
     {
-        DebugBreak();
         return false;
     }
 
@@ -49,13 +47,11 @@ public:
 
     bool CreateSession(SBStr, SBNetworkCreation*)
     {
-        DebugBreak();
         return false;
     }
 
     void CloseSession()
     {
-        DebugBreak();
     }
 
     unsigned long GetLocalPlayerID()
@@ -65,61 +61,56 @@ public:
 
     SBList<SBStr>* GetConnectionList()
     {
-        DebugBreak();
-        return NULL;
+        return &m_connections;
     }
 
     SBList<SBStr>* GetSessionListAsync()
     {
-        DebugBreak();
-        return NULL;
+        return &m_sessions;
     }
 
     bool StartGetSessionListAsync()
     {
-        DebugBreak();
         return false;
     }
 
     GUID* GetProviderGuid(char*)
     {
-        DebugBreak();
-        return NULL;
+        return (GUID*)&DPSPGUID_TCPIP;
     }
 
     bool IsEnumSessionFinished()
     {
-        DebugBreak();
         return false;
     }
 
     bool IsInSession()
     {
-        DebugBreak();
         return false;
     }
 
     bool Send(struct TEAKFILE::DummyBuffer&, unsigned long, unsigned long, bool)
     {
-        DebugBreak();
         return false;
     }
 
     bool Receive(UBYTE**, unsigned long&)
     {
-        DebugBreak();
         return false;
     }
 
     bool JoinSession(SBStr, SBStr)
     {
-        DebugBreak();
         return false;
     }
 
     SBList<SBNetworkPlayer>* GetAllPlayers()
     {
-        DebugBreak();
-        return NULL;
+        return &m_players;
     }
+
+private:
+    SBList<SBStr> m_connections;
+    SBList<SBStr> m_sessions;
+    SBList<SBNetworkPlayer> m_players;
 };

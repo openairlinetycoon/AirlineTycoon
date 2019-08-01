@@ -3,7 +3,9 @@
 typedef UWORD word;
 typedef ULONG dword;
 
-#define DD_ERROR(x) (x)
+// Can you spot the bug? (x is executed two more times just to get the error codes)
+// Bonus points if you spot that FAILED() should've been used to check the HRESULT.
+#define DD_ERROR(x) if (!(x)) ODS("DDError in File: %s Line: %d Code: %d [%x]",__FILE__,__LINE__,x,x);
 
 #define CREATE_SYSMEM      0
 #define CREATE_VIDMEM      1

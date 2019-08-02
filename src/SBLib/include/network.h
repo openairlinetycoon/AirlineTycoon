@@ -23,7 +23,7 @@ class SBNetwork
 public:
     SBNetwork(bool, GUID)
     {
-        m_connections.Add("Unsupported");
+        m_connections.Add("Unknown");
     }
 
     size_t GetMessageCount()
@@ -76,7 +76,7 @@ public:
 
     GUID* GetProviderGuid(char*)
     {
-        return (GUID*)&DPSPGUID_TCPIP;
+        return NULL;
     }
 
     bool IsEnumSessionFinished()

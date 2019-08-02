@@ -705,8 +705,8 @@ BOOL CTakeOffApp::InitInstance()
       InitEinheiten (FullFilename ("ein_ger.res", MiscPath));
 
       //Großes und kleines Icon setzen:
-      //FrameWnd->SetIcon (m_hBigIcon = LoadIcon(IDR_MAINFRAME1), 1);
-      //FrameWnd->SetIcon (m_hSmallIcon = LoadIcon(IDR_MAINFRAME), 0);
+      FrameWnd->SetIcon (m_hBigIcon = LoadIcon(IDR_MAINFRAME1), 1);
+      FrameWnd->SetIcon (m_hSmallIcon = LoadIcon(IDR_MAINFRAME), 0);
 
            if (gLanguage==LANGUAGE_N) LOADING_TEXT("Initialiseren...")
       else if (gLanguage==LANGUAGE_F) LOADING_TEXT("Francais...")

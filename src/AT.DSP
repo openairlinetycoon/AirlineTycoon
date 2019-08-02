@@ -297,7 +297,6 @@ SOURCE=.\Route.Cpp
 # Begin Source File
 
 SOURCE=.\res\Script2.rc
-# PROP Exclude_From_Build 1
 # End Source File
 # Begin Source File
 

@@ -26,7 +26,7 @@ struct static_assert<true> {};
 #include "glstd.h"
 #include "glbasis.h"
 
-//#include "res\Resource.h"
+#include "res\Resource.h"
 
 #include "class.h"         //Eigene Klassen
 #include "Proto.h"

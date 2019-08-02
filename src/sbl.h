@@ -132,12 +132,14 @@ class SB_CHardwarecolorHelper;
 class SB_Hardwarecolor
 {
 public:
-    SB_Hardwarecolor() : color(0) { }
-    SB_Hardwarecolor(const SB_CHardwarecolorHelper* helper) : color(reinterpret_cast<SLONG>(helper)) { }
-    operator dword() { return color; }
+    SB_Hardwarecolor() : Color() { }
+    SB_Hardwarecolor(SB_CHardwarecolorHelper* helper) : Color(helper) { }
+
+    operator SB_CHardwarecolorHelper*() { return Color; }
+    operator word() { return (word)Color; }
 
 private:
-    dword color;
+    SB_CHardwarecolorHelper* Color;
 };
 
 class SB_CBitmapCore
@@ -177,8 +179,8 @@ public:
     long BlitAT(class SB_CBitmapCore*, long, long, struct tagRECT const*);
 
     unsigned long BlitT(class SB_CBitmapCore* bm, long x, long y, struct tagRECT const* rect = NULL, short flags = 16, unsigned long unk = 0) { return Blit(bm, x, y, rect, flags, unk); }
-    unsigned long SetPixel(long x, long y, SLONG color) { return SetPixel(x, y, (SB_CHardwarecolorHelper*)color); }
-    unsigned long Line(long x1, long y1, long x2, long y2, DWORD color) { return Line(x1, y1, x2, y2, (SB_CHardwarecolorHelper*)color); }
+    unsigned long SetPixel(long x, long y, SLONG color) { return SetPixel(x, y, GetHardwarecolor(color)); }
+    unsigned long Line(long x1, long y1, long x2, long y2, DWORD color) { return Line(x1, y1, x2, y2, GetHardwarecolor(color)); }
     SLONG GetXSize() { return Size.x; }
     SLONG GetYSize() { return Size.y; }
     RECT GetClipRect() { return ClipRect; }

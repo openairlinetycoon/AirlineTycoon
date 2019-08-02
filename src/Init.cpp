@@ -116,7 +116,7 @@ do_findcd_main:
    #endif
       {
 do_findcd:
-
+   #ifdef CD_PROTECTION_ANY_TYPE
          while (!CDProtection (&str))
          {
             if (::MessageBox (NULL, "Please insert the Deluxe CD.\n\n"
@@ -124,7 +124,7 @@ do_findcd:
                                     "Veuillez insérer le CD de Deluxe.\n\n" , "Airline Tycoon : Error!",  MB_RETRYCANCEL)==IDCANCEL)
                exit(-1);
          } 
-      
+   #endif
          gCDPath    = str;
          gCDFound   = TRUE;
          gSpawnOnly = FALSE;

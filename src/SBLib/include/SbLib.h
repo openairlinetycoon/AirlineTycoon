@@ -1,13 +1,14 @@
 #pragma once
 
 #include <string>
-#include <vector>
+#include <list>
 
 class SBStr
 {
 public:
     SBStr() : m_str() {}
-    SBStr(std::string str) : m_str(str) {}
+    SBStr(const SBStr& str) : m_str(str.m_str) {}
+    SBStr(std::string& str) : m_str(str) {}
     SBStr(const char* str) : m_str(str) {}
 
     void SetAt(int i, char c) { m_str[i] = c; }
@@ -32,10 +33,10 @@ class SBList
 public:
     SBList() : m_list(), m_it(m_list.end()) {}
 
-    void Add(T elem)
+    T& Add(T elem)
     {
         m_list.push_back(elem);
-        m_it = m_list.end();
+        return m_list.back();
     }
 
     long GetNumberOfElements()
@@ -45,12 +46,20 @@ public:
 
     T& Get(size_t i)
     {
-        return m_list[i];
+        GetFirst();
+        while (--i > 0)
+            GetNext();
+        return GetLastAccessed();
     }
 
     T& GetLastAccessed()
     {
         return *m_it;
+    }
+
+    void RemoveLastAccessed()
+    {
+        m_it = m_list.erase(m_it);
     }
 
     void GetFirst() { m_it = m_list.begin(); }
@@ -59,6 +68,6 @@ public:
     bool IsLast() { return m_it == m_list.end(); }
 
 private:
-    std::vector<T> m_list;
-    std::vector<T>::iterator m_it;
+    std::list<T> m_list;
+    std::list<T>::iterator m_it;
 };

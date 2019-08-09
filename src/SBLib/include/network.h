@@ -1,8 +1,11 @@
 #pragma once
 
+#include <enet/enet.h>
+
 struct SBNetworkPlayer
 {
     unsigned long ID;
+    ENetPeer* peer;
 };
 
 enum
@@ -21,96 +24,33 @@ public:
 class SBNetwork
 {
 public:
-    SBNetwork(bool, GUID)
-    {
-        m_connections.Add("Unknown");
-    }
+    SBNetwork(bool, GUID);
 
-    size_t GetMessageCount()
-    {
-        return 0;
-    }
-
-    bool Connect(SBStr)
-    {
-        return false;
-    }
-
-    bool Connect(SBStr, char*)
-    {
-        return false;
-    }
-
-    void DisConnect()
-    {
-    }
-
-    bool CreateSession(SBStr, SBNetworkCreation*)
-    {
-        return false;
-    }
-
-    void CloseSession()
-    {
-    }
-
-    unsigned long GetLocalPlayerID()
-    {
-        return 0;
-    }
-
-    SBList<SBStr>* GetConnectionList()
-    {
-        return &m_connections;
-    }
-
-    SBList<SBStr>* GetSessionListAsync()
-    {
-        return &m_sessions;
-    }
-
-    bool StartGetSessionListAsync()
-    {
-        return false;
-    }
-
-    GUID* GetProviderGuid(char*)
-    {
-        return NULL;
-    }
-
-    bool IsEnumSessionFinished()
-    {
-        return false;
-    }
-
-    bool IsInSession()
-    {
-        return false;
-    }
-
-    bool Send(struct TEAKFILE::DummyBuffer&, unsigned long, unsigned long, bool)
-    {
-        return false;
-    }
-
-    bool Receive(UBYTE**, unsigned long&)
-    {
-        return false;
-    }
-
-    bool JoinSession(SBStr, SBStr)
-    {
-        return false;
-    }
-
-    SBList<SBNetworkPlayer>* GetAllPlayers()
-    {
-        return &m_players;
-    }
+    long GetMessageCount();
+    bool Connect(SBStr);
+    bool Connect(SBStr, char*);
+    void DisConnect();
+    bool CreateSession(SBStr, SBNetworkCreation*);
+    void CloseSession();
+    unsigned long GetLocalPlayerID();
+    SBList<SBStr>* GetConnectionList();
+    SBList<SBStr>* GetSessionListAsync();
+    bool StartGetSessionListAsync();
+    GUID* GetProviderGuid(char*);
+    bool IsEnumSessionFinished();
+    bool IsInSession();
+    bool Send(BUFFER<UBYTE>&, unsigned long, unsigned long, bool);
+    bool Receive(UBYTE**, unsigned long&);
+    bool JoinSession(SBStr, SBStr);
+    SBList<SBNetworkPlayer>* GetAllPlayers();
 
 private:
-    SBList<SBStr> m_connections;
-    SBList<SBStr> m_sessions;
-    SBList<SBNetworkPlayer> m_players;
+    bool m_InSession;
+    unsigned long m_LocalID;
+    SBList<SBStr> m_Connections;
+    SBList<SBStr> m_Sessions;
+    SBList<SBNetworkPlayer> m_Players;
+
+    ENetHost* m_Host;
+    SBList<ENetPacket*> m_Packets;
 };

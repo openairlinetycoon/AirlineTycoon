@@ -601,7 +601,6 @@ SOURCE=.\SBLib\source\Debug.cpp
 # Begin Source File
 
 SOURCE=.\SBLib\source\Network.cpp
-# PROP Exclude_From_Build 1
 # End Source File
 # Begin Source File
 

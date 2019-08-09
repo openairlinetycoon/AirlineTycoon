@@ -100,6 +100,16 @@ public:
         Size = anz;
     }
 
+    void ReSize(SLONG anz, T* memory)
+    {
+        if (MemPointer)
+            delete[] MemPointer;
+
+        DelPointer = &memory[DelPointer - MemPointer];
+        Size = anz;
+        MemPointer = memory;
+    }
+
     long AnzEntries() const { return Size; }
 
     void FillWith(T value)
@@ -181,13 +191,10 @@ public:
     void WriteLine(char*);
     void Announce(long);
 
+    SLONG Unknown[12];
+    BUFFER<UBYTE> MemBuffer;
     void* MemPointer;
     ULONG MemBufferUsed;
-    struct DummyBuffer
-    {
-        void ReSize(SLONG anz, void* p = NULL) { DebugBreak(); }
-    } MemBuffer;
-    SLONG Unknown[14];
 
     friend TEAKFILE& operator << (TEAKFILE& File, const BOOL& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
     friend TEAKFILE& operator >> (TEAKFILE& File, BOOL& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }

@@ -11,6 +11,10 @@ SBNetwork::SBNetwork(bool, GUID)
     m_LocalID = rand.Rand();
     m_Connections.Add("Unknown");
     m_Sessions.Add("TestSession");
+    SBNetworkPlayer player;
+    player.ID = m_LocalID;
+    player.peer = NULL;
+    m_Players.Add(player);
 }
 
 long SBNetwork::GetMessageCount()

@@ -7,6 +7,7 @@ SBNetwork::SBNetwork(bool, GUID)
     , m_Host(NULL)
 {
     TEAKRAND rand;
+    rand.SRandTime();
     m_LocalID = rand.Rand();
     m_Connections.Add("Unknown");
     m_Sessions.Add("TestSession");

@@ -34,17 +34,16 @@ template <class T>
 class SBList
 {
 public:
-    SBList() : m_list(), m_it(m_list.end()) {}
+    SBList() : mList() { mIt = mList.end(); }
 
-    T& Add(T elem)
+    void Add(const T& elem)
     {
-        m_list.push_back(elem);
-        return m_list.back();
+        mList.push_back(elem);
     }
 
     long GetNumberOfElements()
     {
-        return m_list.size();
+        return mList.size();
     }
 
     T& Get(size_t i)
@@ -57,20 +56,19 @@ public:
 
     T& GetLastAccessed()
     {
-        return *m_it;
+        return *mIt;
     }
 
     void RemoveLastAccessed()
     {
-        m_it = m_list.erase(m_it);
+        mList.erase(mIt);
     }
 
-    void GetFirst() { m_it = m_list.begin(); }
-    void GetLast() { m_it = m_list.end(); }
-    void GetNext() { m_it++; }
-    bool IsLast() { return m_it == m_list.end(); }
+    T& GetFirst() { return *(mIt = mList.begin()); }
+    T& GetNext() { return *(++mIt); }
+    bool IsLast() { return mIt == mList.end(); }
 
 private:
-    std::list<T> m_list;
-    std::list<T>::iterator m_it;
+    std::list<T> mList;
+    std::list<T>::iterator mIt;
 };

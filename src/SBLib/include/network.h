@@ -13,12 +13,18 @@ enum
     SBNETWORK_SESSION_DEFAULT
 };
 
-class SBNetworkCreation
+struct SBNetworkCreation
 {
-public:
     SBStr sessionName;
     long maxPlayers;
     long flags;
+};
+
+struct SBSessionInfo
+{
+    unsigned long hostID;
+    ENetAddress address;
+    char sessionName[26];
 };
 
 class SBNetwork
@@ -45,12 +51,15 @@ public:
     SBList<SBNetworkPlayer>* GetAllPlayers();
 
 private:
-    bool m_InSession;
-    unsigned long m_LocalID;
-    SBList<SBStr> m_Connections;
-    SBList<SBStr> m_Sessions;
-    SBList<SBNetworkPlayer> m_Players;
+    bool mIsHost;
+    bool mIsClient;
+    unsigned long mLocalID;
+    SBList<SBStr> mConnections;
+    SBList<SBStr> mSessions;
+    SBList<SBSessionInfo> mSessionInfo;
+    SBList<SBNetworkPlayer> mPlayers;
 
-    ENetHost* m_Host;
-    SBList<ENetPacket*> m_Packets;
+    ENetHost* mHost;
+    ENetSocket mSocket;
+    SBList<ENetPacket*> mPackets;
 };

@@ -177,7 +177,7 @@ bool SBNetwork::JoinSession(SBStr session, SBStr nickname)
     enet_address_set_host (&address, "localhost");
     address.port = 0xA112;
     /* Initiate the connection, allocating the two channels 0 and 1. */
-    enet_host_connect (m_Host, &address, 2, 0);
+    enet_host_connect (m_Host, &address, 2, m_LocalID);
     return true;
 }
 

@@ -8,9 +8,19 @@ struct SBNetworkPlayer
     ENetPeer* peer;
 };
 
-enum
+struct SBNetworkPeer
 {
-    SBNETWORK_SESSION_DEFAULT
+    unsigned long ID;
+    ENetAddress address;
+};
+
+enum SBSessionEnum
+{
+    SBNETWORK_SESSION_DEFAULT,
+    SBNETWORK_SESSION_SEARCHING,
+    SBNETWORK_SESSION_MASTER,
+    SBNETWORK_SESSION_CLIENT,
+    SBNETWORK_SESSION_FINISHED
 };
 
 struct SBNetworkCreation
@@ -23,8 +33,8 @@ struct SBNetworkCreation
 struct SBSessionInfo
 {
     unsigned long hostID;
-    ENetAddress address;
     char sessionName[26];
+    ENetAddress address;
 };
 
 class SBNetwork
@@ -51,8 +61,7 @@ public:
     SBList<SBNetworkPlayer>* GetAllPlayers();
 
 private:
-    bool mIsHost;
-    bool mIsClient;
+    SBSessionEnum mState;
     unsigned long mLocalID;
     SBList<SBStr> mConnections;
     SBList<SBStr> mSessions;

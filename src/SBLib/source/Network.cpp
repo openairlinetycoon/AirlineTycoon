@@ -275,12 +275,14 @@ bool SBNetwork::JoinSession(SBStr session, SBStr nickname)
         return false;
 
     /* Initiate the connection, allocating the two channels 0 and 1. */
+    ENetEvent event;
     SBNetworkPlayer player;
     player.ID = info->hostID;
     player.peer = enet_host_connect (mHost, &info->address, 2, mLocalID);
     mPlayers.Add(player);
     mState = SBNETWORK_SESSION_CLIENT;
-    return true;
+    return enet_host_service (mHost, &event, 5000) > 0 &&
+        event.type == ENET_EVENT_TYPE_CONNECT;
 }
 
 SBList<SBNetworkPlayer>* SBNetwork::GetAllPlayers()

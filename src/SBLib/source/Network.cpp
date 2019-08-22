@@ -5,6 +5,7 @@
 SBNetwork::SBNetwork(bool, GUID)
     : mState(SBNETWORK_SESSION_FINISHED)
     , mHost(NULL)
+    , mMaster(NULL)
 {
     TEAKRAND rand;
     rand.SRandTime();
@@ -64,16 +65,13 @@ long SBNetwork::GetMessageCount()
         switch (event.type)
         {
         case ENET_EVENT_TYPE_CONNECT:
-            printf ("A new client connected from %x:%u.\n", 
-                    event.peer -> address.host,
-                    event.peer -> address.port);
             /* Store any relevant client information here. */
             if (event.data != 0)
             {
                 SBNetworkPlayer player;
                 player.ID = event.data;
                 player.peer = event.peer;
-                mPlayers.Add(player);
+                player.peer->data = &mPlayers.Add(player);
 
                 if (mState == SBNETWORK_SESSION_MASTER)
                 {
@@ -87,11 +85,6 @@ long SBNetwork::GetMessageCount()
             }
             break;
         case ENET_EVENT_TYPE_RECEIVE:
-            printf ("A packet of length %u containing %s was received from %s on channel %u.\n",
-                    event.packet -> dataLength,
-                    event.packet -> data,
-                    event.peer -> data,
-                    event.channelID);
             if (event.channelID == 1)
             {
                 if (event.packet->dataLength != sizeof(SBNetworkPeer))
@@ -105,7 +98,7 @@ long SBNetwork::GetMessageCount()
                 SBNetworkPlayer player;
                 player.ID = peer->ID;
                 player.peer = enet_host_connect (mHost, &peer->address, 2, mLocalID);
-                mPlayers.Add(player);
+                player.peer->data = &mPlayers.Add(player);
             }
             else
             {
@@ -114,9 +107,52 @@ long SBNetwork::GetMessageCount()
             break;
        
         case ENET_EVENT_TYPE_DISCONNECT:
-            printf ("%s disconnected.\n", event.peer -> data);
+            /* Delete the player and inform the multiplayer code */
+            if (event.peer->data)
+            {
+                SBNetworkPlayer* player = (SBNetworkPlayer*)event.peer->data;
+                DPPacket dp;
+                dp.messageType = DPSYS_DESTROYPLAYERORGROUP;
+                dp.playerType = DPPLAYERTYPE_PLAYER;
+                dp.dpId = player->ID;
+                ENetPacket* packet = enet_packet_create (&dp, sizeof(DPPacket), ENET_PACKET_FLAG_RELIABLE);
+                mPackets.Add(packet);
+
+                for (mPlayers.GetNext(); !mPlayers.IsLast(); mPlayers.GetNext())
+                {
+                    if (mPlayers.GetLastAccessed().ID == player->ID)
+                    {
+                        mPlayers.RemoveLastAccessed();
+                        break;
+                    }
+                }
+            }
+
+            /* Handle host migration and inform the multiplayer code */
+            if (event.peer == mMaster)
+            {
+                SBNetworkPlayer* master = &mPlayers.GetFirst();
+                for (mPlayers.GetNext(); !mPlayers.IsLast(); mPlayers.GetNext())
+                {
+                    if (mPlayers.GetLastAccessed().ID < master->ID)
+                        master = &mPlayers.GetLastAccessed();
+                }
+
+                if (master->ID == mLocalID)
+                {
+                    DPPacket dp;
+                    dp.messageType = DPSYS_HOST;
+                    dp.playerType = DPPLAYERTYPE_PLAYER;
+                    dp.dpId = master->ID;
+                    ENetPacket* packet = enet_packet_create (&dp, sizeof(DPPacket), ENET_PACKET_FLAG_RELIABLE);
+                    mPackets.Add(packet);
+                    mState = SBNETWORK_SESSION_MASTER;
+                }
+
+                mMaster = master->peer;
+            }
+
             /* Reset the peer's client information. */
-            //mPlayers.Remove((SBNetworkPlayer*)event.peer->data);
             event.peer->data = NULL;
         }
     }
@@ -279,7 +315,8 @@ bool SBNetwork::JoinSession(SBStr session, SBStr nickname)
     SBNetworkPlayer player;
     player.ID = info->hostID;
     player.peer = enet_host_connect (mHost, &info->address, 2, mLocalID);
-    mPlayers.Add(player);
+    player.peer->data = &mPlayers.Add(player);
+    mMaster = player.peer;
     mState = SBNETWORK_SESSION_CLIENT;
     return enet_host_service (mHost, &event, 5000) > 0 &&
         event.type == ENET_EVENT_TYPE_CONNECT;

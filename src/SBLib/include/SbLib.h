@@ -36,9 +36,10 @@ class SBList
 public:
     SBList() : mList() { mIt = mList.end(); }
 
-    void Add(const T& elem)
+    T& Add(const T& elem)
     {
         mList.push_back(elem);
+        return mList.back();
     }
 
     long GetNumberOfElements()

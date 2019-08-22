@@ -2,6 +2,13 @@
 
 #include <enet/enet.h>
 
+struct DPPacket
+{
+    ULONG messageType;
+    DWORD playerType;
+    DPID  dpId;
+};
+
 struct SBNetworkPlayer
 {
     unsigned long ID;
@@ -69,6 +76,7 @@ private:
     SBList<SBNetworkPlayer> mPlayers;
 
     ENetHost* mHost;
+    ENetPeer* mMaster;
     ENetSocket mSocket;
     SBList<ENetPacket*> mPackets;
 };

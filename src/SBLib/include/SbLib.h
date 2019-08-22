@@ -14,6 +14,9 @@ public:
     void SetAt(int i, char c) { m_str[i] = c; }
     SBStr& operator=(CString& str) { m_str = str; return *this; }
 
+    bool operator==(SBStr& str) { return m_str == str.m_str; }
+    bool operator==(const char* str) { return m_str == str; }
+
     SBStr Left(int nCount) { return m_str.substr(0,nCount); }
     SBStr Mid(int i, int nCount = std::string::npos) { return m_str.substr(i,nCount); }
     SBStr Right(int i) { return m_str.substr(m_str.size() - i, i); }

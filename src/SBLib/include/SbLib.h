@@ -65,6 +65,11 @@ public:
         mList.erase(mIt);
     }
 
+    void Clear()
+    {
+        mList.clear();
+    }
+
     T& GetFirst() { return *(mIt = mList.begin()); }
     T& GetNext() { return *(++mIt); }
     bool IsLast() { return mIt == mList.end(); }

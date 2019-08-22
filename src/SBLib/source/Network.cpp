@@ -49,9 +49,16 @@ long SBNetwork::GetMessageCount()
 		{
 			if (info.hostID != mLocalID)
 			{
-				info.address.host = address.host;
-				mSessionInfo.Add(info);
-				mSessions.Add(SBStr(info.sessionName));
+                /* Check if we already know about the session */
+                for (mSessionInfo.GetFirst(); !mSessionInfo.IsLast() &&
+                    mSessionInfo.GetLastAccessed().hostID != info.hostID; mSessionInfo.GetNext());
+
+                if (mSessionInfo.IsLast())
+                {
+				    info.address.host = address.host;
+				    mSessionInfo.Add(info);
+				    mSessions.Add(SBStr(info.sessionName));
+                }
 			}
 		}
 	}
@@ -198,6 +205,9 @@ bool SBNetwork::Connect(SBStr medium, char* host)
 
 void SBNetwork::DisConnect()
 {
+    CloseSession();
+    mSessions.Clear();
+    mSessionInfo.Clear();
     enet_host_destroy(mHost);
     enet_deinitialize();
     mHost = NULL;
@@ -237,9 +247,6 @@ SBList<SBStr>* SBNetwork::GetSessionListAsync()
 
 bool SBNetwork::StartGetSessionListAsync()
 {
-    if (mState == SBNETWORK_SESSION_SEARCHING)
-        return true;
-
     ENetBuffer buf;
     buf.data = &mLocalID;
     buf.dataLength = sizeof(mLocalID);

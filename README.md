@@ -13,7 +13,8 @@ It is therefore *not* open-source in the free software sense, for more informati
 
 ## What works?
 
-The singleplayer game is fully playable without issues. Network multiplayer support will be added soon.
+The singleplayer game is fully playable without issues. Network multiplayer support has been reimplemented using
+ENet instead of DirectPlay and might behave differently than the original.
 
 ## Building
 

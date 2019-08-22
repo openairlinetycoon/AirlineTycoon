@@ -60,7 +60,11 @@ long SBNetwork::GetMessageCount()
 				    mSessions.Add(SBStr(info.sessionName));
                 }
 			}
-		}
+        }
+
+        /* Automatically refresh every 5 seconds */
+        if (enet_time_get() - mSearchTime > 5000)
+            StartGetSessionListAsync();
 	}
 
     if (!mHost)
@@ -222,6 +226,7 @@ bool SBNetwork::CreateSession(SBStr name, SBNetworkCreation* create)
     info.address.port = 0xA113;
     mSessionInfo.Add(info);
     mState = SBNETWORK_SESSION_MASTER;
+    mSearchTime = enet_time_get();
     return true;
 }
 
@@ -252,6 +257,7 @@ bool SBNetwork::StartGetSessionListAsync()
     buf.dataLength = sizeof(mLocalID);
     enet_socket_send(mSocket, &mServer, &buf, 1);
     mState = SBNETWORK_SESSION_SEARCHING;
+    mSearchTime = enet_time_get();
     return true;
 }
 

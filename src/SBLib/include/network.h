@@ -75,6 +75,7 @@ private:
     SBList<SBSessionInfo> mSessionInfo;
     SBList<SBNetworkPlayer> mPlayers;
 
+    unsigned int mSearchTime;
     ENetAddress mServer;
     ENetHost* mHost;
     ENetPeer* mMaster;

@@ -75,6 +75,7 @@ private:
     SBList<SBSessionInfo> mSessionInfo;
     SBList<SBNetworkPlayer> mPlayers;
 
+    ENetAddress mServer;
     ENetHost* mHost;
     ENetPeer* mMaster;
     ENetSocket mSocket;

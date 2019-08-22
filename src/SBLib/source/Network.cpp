@@ -172,17 +172,23 @@ bool SBNetwork::Connect(SBStr medium, char* host)
     if (enet_initialize() != 0)
         return false;
 
+    mSocket = enet_socket_create(ENET_SOCKET_TYPE_DATAGRAM);
+    if (mSocket == NULL)
+        return false;
+
+    enet_socket_set_option(mSocket, ENET_SOCKOPT_REUSEADDR, 1);
+    enet_socket_set_option(mSocket, ENET_SOCKOPT_NONBLOCK, 1);
+    if (enet_address_set_host_ip(&mServer, host) < 0)
+    {
+        enet_socket_set_option(mSocket, ENET_SOCKOPT_BROADCAST, 1);
+        mServer.host = ENET_HOST_BROADCAST;
+    }
+    mServer.port = 0xA112;
+
     ENetAddress address;
     address.host = ENET_HOST_ANY;
     address.port = 0xA112;
-
-    mSocket = enet_socket_create(ENET_SOCKET_TYPE_DATAGRAM);
-    enet_socket_set_option(mSocket, ENET_SOCKOPT_REUSEADDR, 1);
-	enet_socket_set_option(mSocket, ENET_SOCKOPT_BROADCAST, 1);
-    enet_socket_set_option(mSocket, ENET_SOCKOPT_NONBLOCK, 1);
     enet_socket_bind(mSocket, &address);
-    if (mSocket == NULL)
-        return false;
 
     address.host = ENET_HOST_ANY;
     address.port = 0xA113;
@@ -235,12 +241,9 @@ bool SBNetwork::StartGetSessionListAsync()
         return true;
 
     ENetBuffer buf;
-    ENetAddress address;
-    address.host = ENET_HOST_BROADCAST;
-    address.port = 0xA112;
     buf.data = &mLocalID;
     buf.dataLength = sizeof(mLocalID);
-    enet_socket_send(mSocket, &address, &buf, 1);
+    enet_socket_send(mSocket, &mServer, &buf, 1);
     mState = SBNETWORK_SESSION_SEARCHING;
     return true;
 }

@@ -489,6 +489,8 @@ BOOL CTakeOffApp::InitInstance()
       if (bConfigNoDigiSound)    Sim.Options.OptionDigiSound = FALSE;
    }
 
+   bFirstClass = !DoesFileExist (CString(AppPath)+"data\\builds.csv") && !DoesFileExist (CString(AppPath)+"data\\relation.csv");
+
    //Schneller Mode zum Debuggen?
    char *Argument = strtok (m_lpCmdLine, " ");
    while (Argument)

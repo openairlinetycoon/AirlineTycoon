@@ -1025,7 +1025,7 @@ void NewGamePopup::OnPaint()
                else if (GridPos.IfIsWithin (1, 12, 20, 12)) SetMouseLook (CURSOR_HOT, 0, ROOM_TITLE, 7);                    //Highscores
             }
 
-            if (GridPos.IfIsWithin (1, 14, 20, 14)) SetMouseLook (CURSOR_EXIT, 0, ROOM_TITLE, 999);
+            if (GridPos.IfIsWithin (1, bFirstClass?13:14, 20, bFirstClass?13:14)) SetMouseLook (CURSOR_EXIT, 0, ROOM_TITLE, 999);
          }
          else if (PageNum==1 || PageNum==2 || PageNum==12 || PageNum==122 || PageNum==14 || PageNum==18)
          {

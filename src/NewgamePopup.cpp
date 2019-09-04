@@ -475,11 +475,36 @@ void NewGamePopup::RefreshKlackerField(void)
    {
       Sim.bAllowCheating  = TRUE;
 
-      if (!bad)
-      {
-         KlackerTafel.PrintAt (0,  0, StandardTexte.GetS (TOKEN_NEWGAME, 500));
-         KlackerTafel.PrintAt (0,  1, "========================");
+      KlackerTafel.PrintAt (0,  0, StandardTexte.GetS (TOKEN_NEWGAME, 500));
+      KlackerTafel.PrintAt (0,  1, "========================");
 
+      if (bFirstClass)
+      {
+         KlackerTafel.PrintAt (1,  2, StandardTexte.GetS (TOKEN_NEWGAME, 502)); //Neues Spiel
+         KlackerTafel.PrintAt (1,  3, StandardTexte.GetS (TOKEN_NEWGAME, 512)); //Nueue Missionen
+#ifndef DEMO
+         KlackerTafel.PrintAt (1,  4, SBStr("# ")+ StandardTexte.GetS (TOKEN_NEWGAME, 501)); //Freies Spiel
+         KlackerTafel.PrintAt (1,  5, StandardTexte.GetS (TOKEN_NEWGAME, 513)); //Netzwerkspiel
+#endif
+         KlackerTafel.PrintAt (1,  6, StandardTexte.GetS (TOKEN_NEWGAME, 506)); //Spiel laden
+
+         KlackerTafel.PrintAt (1,  8, StandardTexte.GetS (TOKEN_NEWGAME, 504)); //Startflughafen
+         KlackerTafel.PrintAt (1,  9, StandardTexte.GetS (TOKEN_NEWGAME, 507)); //Optionen
+
+         KlackerTafel.PrintAt (1, 10, StandardTexte.GetS (TOKEN_NEWGAME, 505)); //Intro
+         KlackerTafel.PrintAt (1, 11, StandardTexte.GetS (TOKEN_NEWGAME, 508)); //Credits
+
+         if (gSpawnOnly) 
+         {
+            KlackerTafel.LineDisabled[2]=true;
+            KlackerTafel.LineDisabled[3]=true;
+            KlackerTafel.LineDisabled[4]=true;
+            KlackerTafel.LineDisabled[6]=true;
+            KlackerTafel.LineDisabled[10]=true;
+         }
+      }
+      else
+      {
 #ifndef DEMO
          KlackerTafel.PrintAt (1,  2, SBStr("# ")+ StandardTexte.GetS (TOKEN_NEWGAME, 501)); //Freies Spiel
 #endif
@@ -500,13 +525,12 @@ void NewGamePopup::RefreshKlackerField(void)
          {
             KlackerTafel.LineDisabled[2]=true;
             KlackerTafel.LineDisabled[3]=true;
-            KlackerTafel.LineDisabled[4]=true;
-            KlackerTafel.LineDisabled[6]=true;
+            KlackerTafel.LineDisabled[5]=true;
             KlackerTafel.LineDisabled[10]=true;
          }
       }
 
-      KlackerTafel.PrintAt (1, 14, StandardTexte.GetS (TOKEN_NEWGAME, 510)); //Beenden
+      KlackerTafel.PrintAt (1, bFirstClass?13:14, StandardTexte.GetS (TOKEN_NEWGAME, 510)); //Beenden
    }
    else if (PageNum==1) //Mission wählen
    {
@@ -971,7 +995,20 @@ void NewGamePopup::OnPaint()
       {
          if (PageNum==0)
          {
-            if (!bad)
+            if (bFirstClass)
+            {
+                    if (!gSpawnOnly && GridPos.IfIsWithin (1,  2, 20,  2)) SetMouseLook (CURSOR_HOT, 0, ROOM_TITLE, 1);     //Neues Spiel
+               else if (!gSpawnOnly && GridPos.IfIsWithin (1,  3, 20,  3)) SetMouseLook (CURSOR_HOT, 0, ROOM_TITLE, 12);    //Missionen
+               else if (!gSpawnOnly && GridPos.IfIsWithin (1,  4, 20,  4)) SetMouseLook (CURSOR_HOT, 0, ROOM_TITLE, 133);   //Freies Spiel
+               else if (GridPos.IfIsWithin (1,  5, 20,  5))                SetMouseLook (CURSOR_HOT, 0, ROOM_TITLE, 13);    //Netz
+               else if (!gSpawnOnly && GridPos.IfIsWithin (1,  6, 20,  6)) SetMouseLook (CURSOR_HOT, 0, ROOM_TITLE, 2);     //Laden
+
+               else if (GridPos.IfIsWithin (1,  8, 20,  8)) SetMouseLook (CURSOR_HOT, 0, ROOM_TITLE, 3);                    //Startflughafen
+               else if (GridPos.IfIsWithin (1,  9, 20,  9)) SetMouseLook (CURSOR_HOT, 0, ROOM_TITLE, 4);                    //Optionen
+               else if (!gSpawnOnly && GridPos.IfIsWithin (1, 10, 20, 10)) SetMouseLook (CURSOR_HOT, 0, ROOM_TITLE, 5);     //Intro
+               else if (GridPos.IfIsWithin (1, 11, 20, 11)) SetMouseLook (CURSOR_HOT, 0, ROOM_TITLE, 6);                    //Credits
+            }
+            else
             {
                     if (!gSpawnOnly && GridPos.IfIsWithin (1,  2, 20,  2)) SetMouseLook (CURSOR_HOT, 0, ROOM_TITLE, 133);   //Freies Spiel
                else if (!gSpawnOnly && GridPos.IfIsWithin (1,  3, 20,  3)) SetMouseLook (CURSOR_HOT, 0, ROOM_TITLE, 150);   //Kampagnen
@@ -1246,6 +1283,34 @@ again_heimatflughafen:
                bLeaveGameLoop=TRUE;
             #endif
          }
+
+         if (bFirstClass)
+         {
+            if (!gSpawnOnly && MouseClickId==1) //"Neues Spiel"
+            {
+               PageNum=1;
+               Sim.Difficulty = UBYTE(Sim.Options.OptionLastMission);
+
+#ifdef DEMO
+               if ((Sim.Difficulty>DIFF_FIRST && Sim.Difficulty<=DIFF_FINAL) || Sim.Difficulty==DIFF_FREEGAME)
+                  Sim.Difficulty=min (DIFF_FIRST, (UBYTE)Sim.MaxDifficulty);
+#endif
+
+               RefreshKlackerField();
+            }
+            else if (!gSpawnOnly && MouseClickId==12) //"Neue Missionen"
+            {
+               Sim.Difficulty = UBYTE(Sim.Options.OptionLastMission2);
+
+#ifdef DEMO
+               if (Sim.Difficulty>DIFF_ADDON02 && Sim.Difficulty<=DIFF_ADDON10)
+                  Sim.Difficulty=min (DIFF_ADDON02, (UBYTE)Sim.MaxDifficulty2);
+#endif
+
+               PageNum=12;
+               RefreshKlackerField();
+            }
+         }
       }
       else if (PageNum==150)
       {
@@ -1303,7 +1368,7 @@ again_heimatflughafen:
             }
             else if (PageNum==1 || PageNum==12 || PageNum==122)
             {
-               PageNum=150;
+               PageNum=bFirstClass?0:150;
                RefreshKlackerField();
                return;
             }

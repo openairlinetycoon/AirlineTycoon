@@ -435,11 +435,14 @@ void BRICKS::UpdateBricks (void)
                }
             }
 
-   for (c=0; c<8; c++)
+   if (!bFirstClass)
    {
-      //Hiermit löschen wir die Smacker-Platzhalter an den Gates. Die dienen beim Editieren als optische Hilfe zur Positionierung, aber im Spiel können wir sie nicht gebrauchen
-      (*this)[SLONG(0x10000000+760+c)].Bitmap[0].FillWith(0);
-      (*this)[SLONG(0x10000000+768+c)].Bitmap[0].FillWith(0);
+      for (c=0; c<8; c++)
+      {
+         //Hiermit löschen wir die Smacker-Platzhalter an den Gates. Die dienen beim Editieren als optische Hilfe zur Positionierung, aber im Spiel können wir sie nicht gebrauchen
+         (*this)[SLONG(0x10000000+760+c)].Bitmap[0].FillWith(0);
+         (*this)[SLONG(0x10000000+768+c)].Bitmap[0].FillWith(0);
+      }
    }
 
    hprintf ("%li Bricks (%li Bytes) out-sourced.", Anz, Bytes);

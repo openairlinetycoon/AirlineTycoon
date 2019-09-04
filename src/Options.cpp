@@ -181,7 +181,7 @@ void Options::RefreshKlackerField(void)
       else
       {
          KlackerTafel.PrintAt (0, 9, StandardTexte.GetS (TOKEN_MISC, 4006));
-         KlackerTafel.PrintAt (0, 11,StandardTexte.GetS (TOKEN_MISC, 4008));
+         KlackerTafel.PrintAt (0, 11,StandardTexte.GetS (TOKEN_MISC, bFirstClass?4007:4008));
       }
 
       //KlackerTafel.PrintAt (0, 15, VersionString);

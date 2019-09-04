@@ -476,10 +476,10 @@ void AirportView::OnPaint()
    SLONG  Fl3IndexMax     = Bricks((SLONG)0x10000000+457);
    SLONG  Kamera1Index    = Bricks((SLONG)0x10000000+337);
    SLONG  Kamera2Index    = Bricks((SLONG)0x10000000+338);
-   SLONG  GateSmackMin    = Bricks((SLONG)0x10000000+774);
-   SLONG  GateSmackMax    = Bricks((SLONG)0x10000000+760);
+   SLONG  GateSmackMin    = bFirstClass ? 0 : Bricks((SLONG)0x10000000+774);
+   SLONG  GateSmackMax    = bFirstClass ? 0 : Bricks((SLONG)0x10000000+760);
    SLONG  DoorIndexMin    = Bricks((SLONG)0x10000000+729);
-   SLONG  DoorIndexMax    = Bricks((SLONG)0x10000000+718);
+   SLONG  DoorIndexMax    = bFirstClass ? Bricks((SLONG)0x10000000+720) : Bricks((SLONG)0x10000000+718);
    SLONG  LogoBarIndex    = Bricks((SLONG)0x10000000+492);  //Der Logobalken über dem CheckIn
    SLONG  CheckInIndex    = Bricks((SLONG)0x10000000+500);  //Der CheckIn-Schalter
    SLONG  AbflugIndex     = Bricks((SLONG)0x10000000+522);  //Der Abflugschalter

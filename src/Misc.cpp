@@ -517,7 +517,7 @@ void InitEinheiten (const CString &Filename)
 
    Einheiten.ReSize (14);
 
-   for (c=0; c<14; c++)
+   for (c=0; c<(bFirstClass?11:14); c++)
    {
       Einheiten[c].Name = ETexte.GetS (1000, 1000+c);
       Einheiten[c].Faktor = atof (ETexte.GetS (1000, 2000+c));

@@ -159,6 +159,7 @@ extern SLONG                   Editor;           //Ist der Flughafeneditor aktiv
 extern BOOL                    gDisablePauseKey; //Pause-Key für Texteingabe abgeschaltet?
 extern BOOL                    bgJustDidLotsOfWork; //Gegen Sprünge nach Load/Save
 extern BOOL                    bLeaveGameLoop;   //Hauptschleife verlassen?
+extern BOOL                    bFirstClass;
 
 //--------------------------------------------------------------------------------------------
 //Das Spiel höchstpersönlich:

@@ -160,6 +160,7 @@ SLONG                   Editor;            //Ist der Flughafeneditor aktiv ? (=0
 BOOL                    gDisablePauseKey;  //Pause-Key für Texteingabe abgeschaltet?
 BOOL                    bgJustDidLotsOfWork=FALSE; //Gegen Sprünge nach Load/Save
 BOOL                    bLeaveGameLoop=FALSE;   //Hauptschleife verlassen?
+BOOL                    bFirstClass=FALSE;
 
 //--------------------------------------------------------------------------------------------
 //Das Spiel höchstpersönlich:

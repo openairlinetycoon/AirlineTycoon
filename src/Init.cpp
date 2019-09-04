@@ -379,7 +379,7 @@ void InitItems (void)
    gStatLineHigh.ReSize (pGLibStd, "TIMEHIGH GELDHIGH");
 
    //Tabellen importieren:
-   if (1)
+   if (!bFirstClass)
    {
       CString str;
 

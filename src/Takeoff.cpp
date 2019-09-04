@@ -495,6 +495,7 @@ BOOL CTakeOffApp::InitInstance()
    {
       gPhysicalCdRomBitlist.Pump();
 
+      if (stricmp (Argument, "/fc")==0) bFirstClass = TRUE;
       if (stricmp (Argument, "/p")==0 || stricmp (Argument, "-p")==0 || stricmp (Argument, "p")==0) return (FALSE);
 #ifndef CD_PROTECTION
 #ifndef CD_PROTECTION_METALOCK

@@ -32,9 +32,9 @@ extern CJumpingVar<ULONG>   gPhysicalCdRomBitlist;
 extern CJumpingVar<CString> gCDPath;
 
 #ifdef _DEBUG
-   char VersionString[] = "VERSION 1.03"; // (pre-release; build 100)";
+   char VersionString[] = "VERSION 1.1"; // (pre-release; build 100)";
 #else
-   char VersionString[] = "VERSION 1.03"; // (pre-release; build 100)";
+   char VersionString[] = "VERSION 1.1"; // (pre-release; build 100)";
 #endif
 
 extern SLONG gLoadGameNumber;

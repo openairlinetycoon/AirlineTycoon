@@ -6660,6 +6660,7 @@ bool RobotUse (SLONG FeatureId)
       //"-." : Disabled
       //"xX" : Enabled
       //"!"  : Enabled, but wasn't enabled in AT 1.0
+      //"?"  : Enabled, but isn't enabled in AT First Class
       //                                            Basisspiel       Addon        FlightSecu      
       //                                                012345   F   0123456789   0123456789 
       case ROBOT_USE_SABOTAGE         : pFeatureDesc = "-XXXXX" "X" "XXXXXXXXXX" "-XXXXXXXXX"; break;
@@ -6708,17 +6709,17 @@ bool RobotUse (SLONG FeatureId)
       case ROBOT_USE_OFTENMECH        : pFeatureDesc = "------" "." "----------" "-X--X--XXX"; break;
       case ROBOT_USE_SHORTFLIGHTS     : pFeatureDesc = "------" "." "----------" "--X-------"; break;
       case ROBOT_USE_EXTREME_SABOTAGE : pFeatureDesc = "------" "." "----------" "---X-X----"; break;
-      case ROBOT_USE_SECURTY_OFFICE   : pFeatureDesc = "------" "X" "----------" "---X-X-X-X"; break;
+      case ROBOT_USE_SECURTY_OFFICE   : pFeatureDesc = "------" "?" "----------" "---X-X-X-X"; break;
       case ROBOT_USE_MAKLER           : pFeatureDesc = "XXXXXX" "!" "XXXXXXXXXX" "XXX-X-XXXX"; break;
       case ROBOT_USE_PETROLAIR        : pFeatureDesc = "XXXXXX" "!" "XXXXXXXXXX" "XXXXX-XX--"; break;
       case ROBOT_USE_MAX20PERCENT     : pFeatureDesc = "XXXXXX" "!" "XXXXXXXXXX" "XXXXX-XXXX"; break;
       case ROBOT_USE_TANKS            : pFeatureDesc = "------" "." "----------" "--------XX"; break;
-      case ROBOT_USE_DESIGNER         : pFeatureDesc = "------" "X" "----------" "---XX-XX--"; break;
+      case ROBOT_USE_DESIGNER         : pFeatureDesc = "------" "?" "----------" "---XX-XX--"; break;
       case ROBOT_USE_DESIGNER_BUY     : pFeatureDesc = "------" "." "----------" "----X--X--"; break;
 
       default:
          TeakLibW_Exception (FNL, ExcNever);
    }
 
-   return (pFeatureDesc[Level]!='-' && pFeatureDesc[Level]!='.');
+   return (pFeatureDesc[Level]!='-' && pFeatureDesc[Level]!='.') && (!bFirstClass || pFeatureDesc[Level]!='?');
 }

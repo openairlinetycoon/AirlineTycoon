@@ -581,10 +581,16 @@ void CPlane::DoOneStep (SLONG PlayerNum)
                            //Und an Bord gehen:
                            if (Sim.Persons[c].Dir==6) Sim.Persons[c].Dir=4;
                            if (Sim.Persons[c].Dir==7) Sim.Persons[c].Dir=1;
-                           //!//Sim.Persons[c].State  = PERSON_BOARDING;
-                           //!//Sim.Persons[c].Target = Airport.GetRandomTypedRune (RUNE_WAIT, (UBYTE)Gate);
-                           Sim.Persons[c].State  = PERSON_2DURCHLEUCHTER;
-                           Sim.Persons[c].Target = Airport.GetRandomTypedRune (RUNE_DURCHLEUCHTER, (UBYTE)Gate);
+                           if (bFirstClass)
+                           {
+                              Sim.Persons[c].State  = PERSON_BOARDING;
+                              Sim.Persons[c].Target = Airport.GetRandomTypedRune (RUNE_WAIT, (UBYTE)Gate);
+                           }
+                           else
+                           {
+                              Sim.Persons[c].State  = PERSON_2DURCHLEUCHTER;
+                              Sim.Persons[c].Target = Airport.GetRandomTypedRune (RUNE_DURCHLEUCHTER, (UBYTE)Gate);
+                           }
                         }
                      }
 

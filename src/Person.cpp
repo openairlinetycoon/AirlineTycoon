@@ -2885,11 +2885,10 @@ void PERSON::PersonReachedTarget (void)
                          Sim.Players.Players[(SLONG)FlightAirline].Planes[FlightPlaneId].AirportPos.x==Sim.Players.Players[(SLONG)FlightAirline].Planes[FlightPlaneId].TargetX)
                      {
                         //Sofort boarden:
-                        //!//State = PERSON_BOARDING;
-                        State = PERSON_2DURCHLEUCHTER; //!//
+                        State = bFirstClass ? PERSON_BOARDING : PERSON_2DURCHLEUCHTER;
                         if (fpe->Gate==-1) State = PERSON_LEAVING;
-                                      else Target= Airport.GetRandomTypedRune (RUNE_DURCHLEUCHTER, (UBYTE)fpe->Gate, false, &PersonalRand); //!//
-                                      //!//else Target= Airport.GetRandomTypedRune (RUNE_WAIT, (UBYTE)fpe->Gate, false, &PersonalRand);
+                                      else if (bFirstClass) Target= Airport.GetRandomTypedRune (RUNE_WAIT, (UBYTE)fpe->Gate, false, &PersonalRand);
+                                      else Target= Airport.GetRandomTypedRune (RUNE_DURCHLEUCHTER, (UBYTE)fpe->Gate, false, &PersonalRand);
                      }
                      else if (fpe==NULL || (fpe->Startzeit==(SLONG)Sim.GetHour() && Sim.GetMinute()>=55) || fpe->Startzeit<(SLONG)Sim.GetHour())
                      {

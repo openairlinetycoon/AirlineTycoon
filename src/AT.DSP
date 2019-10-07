@@ -618,11 +618,11 @@ SOURCE=.\SBLib\source\Tool2.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\TeakLibW\TeakFile.cpp
+SOURCE=.\TeakLibW\Album.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\libs\TeakLibW\Release\Album.obj
+SOURCE=.\TeakLibW\TeakFile.cpp
 # End Source File
 # Begin Source File
 

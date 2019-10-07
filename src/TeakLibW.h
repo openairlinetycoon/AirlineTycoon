@@ -191,9 +191,10 @@ public:
     void WriteLine(char*);
     void Announce(long);
 
-    SLONG Unknown[12];
+    SDL_RWops* Ctx;
+    SLONG Unknown[11];
     BUFFER<UBYTE> MemBuffer;
-    void* MemPointer;
+    long MemPointer;
     ULONG MemBufferUsed;
 
     friend TEAKFILE& operator << (TEAKFILE& File, const BOOL& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
@@ -250,6 +251,31 @@ private:
 };
 
 static_assert<sizeof(TEAKFILE) == 68> TEAKFILE_size_check;
+
+class CRLEReader
+{
+public:
+    CRLEReader(const char* path);
+    ~CRLEReader(void);
+
+    bool Close(void);
+    bool Buffer(void*, long);
+    bool NextSeq(void);
+    bool Read(BYTE*, long, bool);
+
+    long GetSize() { return Size; }
+
+private:
+    SDL_RWops* Ctx;
+    char SeqLength;
+    char SeqUsed;
+    bool IsSeq;
+    BYTE Sequence[132];
+
+    bool IsRLE;
+    long Size;
+    int Key;
+};
 
 template <typename T>
 class FBUFFER : public BUFFER<T>
@@ -951,8 +977,7 @@ private:
 };
 
 extern int DoesFileExist(char const*);
-extern void LoadCompleteFile(char const*, unsigned char*);
-extern BUFFER<unsigned char>* LoadCompleteFile(char const*);
+extern BUFFER<BYTE>* LoadCompleteFile(char const*);
 extern long CalcInertiaVelocity(long, long);
 extern long Calc1nSum(long);
 

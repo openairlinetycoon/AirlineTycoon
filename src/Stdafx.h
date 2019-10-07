@@ -14,6 +14,7 @@ struct static_assert<true> {};
 #include <dplay.h>
 #include <math.h>
 #include <mmsystem.h>
+#include <SDL.h>
 
 #include "Defines.h"
 

@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /MT /W3 /GX /Zi /Ob1 /I "..\enet\include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /MT /W3 /GX /Zi /Ob1 /I "../enet/include" /I "..\enet\include ..\SDL2-2.0.10\include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /Yu"stdafx.h" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x407 /d "NDEBUG"
@@ -70,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /MT /W3 /GX /ZI /Od /I "../enet/include" /D "WIN32" /D "_WINDOWS" /Fr /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /MT /W3 /GX /ZI /Od /I "../enet/include" /I "../SDL2-2.0.10/include" /D "WIN32" /D "_WINDOWS" /Fr /Yu"stdafx.h" /FD /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x407 /d "_DEBUG"
@@ -613,6 +613,74 @@ SOURCE=.\SBLib\source\Tool2.cpp
 # PROP Exclude_From_Build 1
 # End Source File
 # End Group
+# Begin Group "TeakLibW"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\TeakLibW\TeakFile.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\libs\TeakLibW\Release\Album.obj
+# End Source File
+# Begin Source File
+
+SOURCE=..\libs\TeakLibW\Release\Bitmap1.obj
+# End Source File
+# Begin Source File
+
+SOURCE=..\libs\TeakLibW\Release\Bitmap2.obj
+# End Source File
+# Begin Source File
+
+SOURCE=..\libs\TeakLibW\Release\Bitmap3.obj
+# End Source File
+# Begin Source File
+
+SOURCE=..\libs\TeakLibW\Release\Bitmap4.obj
+# End Source File
+# Begin Source File
+
+SOURCE=..\libs\TeakLibW\Release\Bitmap6.obj
+# End Source File
+# Begin Source File
+
+SOURCE=..\libs\TeakLibW\Release\Bitmap7.obj
+# End Source File
+# Begin Source File
+
+SOURCE=..\libs\TeakLibW\Release\Debug.obj
+# End Source File
+# Begin Source File
+
+SOURCE=..\libs\TeakLibW\Release\Math.obj
+# End Source File
+# Begin Source File
+
+SOURCE=..\libs\TeakLibW\Release\Misc.obj
+# End Source File
+# Begin Source File
+
+SOURCE=..\libs\TeakLibW\Release\Register.obj
+# End Source File
+# Begin Source File
+
+SOURCE=..\libs\TeakLibW\Release\TeakLibW.obj
+# End Source File
+# Begin Source File
+
+SOURCE=..\libs\TeakLibW\Release\TeakStr.obj
+# End Source File
+# Begin Source File
+
+SOURCE=..\libs\TeakLibW\Release\TecFBm.obj
+# End Source File
+# Begin Source File
+
+SOURCE=..\libs\TeakLibW\Release\TextRes.obj
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=.\sbl.h
@@ -643,17 +711,7 @@ SOURCE=..\SoundEngine\Dll\Release\SSE.lib
 # End Source File
 # Begin Source File
 
-SOURCE=..\TeakLibW\Release\TeakLibW.lib
-# PROP Exclude_From_Build 1
-# End Source File
-# Begin Source File
-
 SOURCE=..\Sbl\Debug\SBL.lib
-# PROP Exclude_From_Build 1
-# End Source File
-# Begin Source File
-
-SOURCE=..\TeakLibW\Debug\TeakLibW.lib
 # PROP Exclude_From_Build 1
 # End Source File
 # Begin Source File
@@ -666,11 +724,11 @@ SOURCE=..\libs\SSE.lib
 # End Source File
 # Begin Source File
 
-SOURCE=..\libs\TeakLibW.lib
+SOURCE=..\smksdk\SMACKW32.LIB
 # End Source File
 # Begin Source File
 
-SOURCE=..\smksdk\SMACKW32.LIB
+SOURCE="..\SDL2-2.0.10\lib\x86\SDL2.lib"
 # End Source File
 # End Group
 # Begin Group "Räume"

@@ -295,6 +295,8 @@ void RunLengthDeCompression( UCHAR *in, UCHAR *out, ULONG &size );
 //--------------------------------------------------------------------------------------------
 CTakeOffApp::CTakeOffApp()
 {
+   SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO);
+
    _tmain();
 
    /*srand(timeGetTime());

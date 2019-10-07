@@ -784,6 +784,9 @@ public:
 
     friend TEAKFILE& operator<<(TEAKFILE&, XID const&);
     friend TEAKFILE& operator>>(TEAKFILE&, XID&);
+
+    long Value;
+    long Index;
 };
 
 extern void TeakAlbumRemoveT(FBUFFER<unsigned long>&, unsigned long, CString const&, unsigned long);

@@ -626,6 +626,10 @@ SOURCE=.\TeakLibW\TeakFile.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\TeakLibW\TeakStr.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\TeakLibW\TextRes.cpp
 # End Source File
 # Begin Source File
@@ -667,10 +671,6 @@ SOURCE=..\libs\TeakLibW\Release\Misc.obj
 # Begin Source File
 
 SOURCE=..\libs\TeakLibW\Release\TeakLibW.obj
-# End Source File
-# Begin Source File
-
-SOURCE=..\libs\TeakLibW\Release\TeakStr.obj
 # End Source File
 # Begin Source File
 

@@ -16,11 +16,12 @@ extern const char* ExcStrangeMem;
 #define FNL 0, 0
 
 extern long TeakLibW_Exception(char* param_1, long param_2, const char* param_3, ...);
+extern char* TeakStrRemoveCppComment(char*);
 extern char* TeakStrRemoveEndingCodes(char*, char const*);
 extern unsigned char GerToLower(unsigned char);
 extern unsigned char GerToUpper(unsigned char);
 extern unsigned char* RecapizalizeString(unsigned char*);
-extern char* TeakStrRemoveCppComment(char*);
+extern const char* GetSuffix(const char*);
 
 template <typename T>
 class BUFFER

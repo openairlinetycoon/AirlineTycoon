@@ -20,6 +20,7 @@ extern char* TeakStrRemoveEndingCodes(char*, char const*);
 extern unsigned char GerToLower(unsigned char);
 extern unsigned char GerToUpper(unsigned char);
 extern unsigned char* RecapizalizeString(unsigned char*);
+extern char* TeakStrRemoveCppComment(char*);
 
 template <typename T>
 class BUFFER
@@ -111,6 +112,17 @@ public:
     }
 
     long AnzEntries() const { return Size; }
+
+    void Clear()
+    {
+        if (Size > 0)
+        {
+            if (MemPointer)
+                delete [] MemPointer;
+            MemPointer = DelPointer = NULL;
+            Size = 0;
+        }
+    }
 
     void FillWith(T value)
     {
@@ -607,7 +619,7 @@ static_assert<sizeof(PALETTE) == 16> PALETTE_size_check;
 struct TEXTRES_CACHE_ENTRY
 {
     SLONG Group, Id;
-    const char* Text;
+    char* Text;
 };
 
 static_assert<sizeof(TEXTRES_CACHE_ENTRY) == 12> TEXTRES_CACHE_ENTRY_size_check;
@@ -617,7 +629,7 @@ static_assert<sizeof(TEXTRES_CACHE_ENTRY) == 12> TEXTRES_CACHE_ENTRY_size_check;
 class TEXTRES
 {
 public:
-    TEXTRES() { memset(Unknown, 0, sizeof(Unknown)); };
+    TEXTRES();
     TEXTRES(char const*, void*);
     ~TEXTRES(void);
 
@@ -629,7 +641,8 @@ public:
     char* GetS(char const* c, unsigned long i) { return GetS(*(unsigned long*)c, i); }
 
 private:
-    SLONG Unknown[6];
+    BUFFER<char> Path;
+    BUFFER<char> Strings;
     BUFFER<TEXTRES_CACHE_ENTRY> Entries;
 };
 

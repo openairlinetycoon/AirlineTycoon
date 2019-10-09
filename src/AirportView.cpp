@@ -1232,7 +1232,7 @@ void AirportView::OnPaint()
          }
 
          #ifdef _DEBUG
-            if (Registration.GetMode()==1)
+            //if (Registration.GetMode()==1)
             {
                if (Editor==EDITOR_NONE)
                   ; //PrimaryBm.TextOut (0, 20, RGB( 0, 0, 255), RGB( 255, 255, 0), "Shift + E = Editor");
@@ -1250,10 +1250,10 @@ void AirportView::OnPaint()
                   }
                }
             }
-            else
-            {
-                  PrimaryBm.TextOut (0, 20, RGB( 0, 0, 255), RGB( 255, 255, 0), Registration.GetDisplayString());
-            }
+            //else
+            //{
+            //      PrimaryBm.TextOut (0, 20, RGB( 0, 0, 255), RGB( 255, 255, 0), Registration.GetDisplayString());
+            //}
          #endif
 
          //Der Komfort-Cursor:

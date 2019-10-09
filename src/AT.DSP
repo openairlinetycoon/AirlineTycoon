@@ -626,6 +626,10 @@ SOURCE=.\TeakLibW\TeakFile.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\TeakLibW\TextRes.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\libs\TeakLibW\Release\Bitmap1.obj
 # End Source File
 # Begin Source File
@@ -662,10 +666,6 @@ SOURCE=..\libs\TeakLibW\Release\Misc.obj
 # End Source File
 # Begin Source File
 
-SOURCE=..\libs\TeakLibW\Release\Register.obj
-# End Source File
-# Begin Source File
-
 SOURCE=..\libs\TeakLibW\Release\TeakLibW.obj
 # End Source File
 # Begin Source File
@@ -675,10 +675,6 @@ SOURCE=..\libs\TeakLibW\Release\TeakStr.obj
 # Begin Source File
 
 SOURCE=..\libs\TeakLibW\Release\TecFBm.obj
-# End Source File
-# Begin Source File
-
-SOURCE=..\libs\TeakLibW\Release\TextRes.obj
 # End Source File
 # End Group
 # Begin Source File

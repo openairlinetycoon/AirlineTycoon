@@ -622,6 +622,10 @@ SOURCE=.\TeakLibW\Album.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\TeakLibW\Debug.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\TeakLibW\Math.cpp
 # End Source File
 # Begin Source File
@@ -659,10 +663,6 @@ SOURCE=..\libs\TeakLibW\Release\Bitmap6.obj
 # Begin Source File
 
 SOURCE=..\libs\TeakLibW\Release\Bitmap7.obj
-# End Source File
-# Begin Source File
-
-SOURCE=..\libs\TeakLibW\Release\Debug.obj
 # End Source File
 # Begin Source File
 

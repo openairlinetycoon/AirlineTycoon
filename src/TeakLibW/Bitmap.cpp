@@ -133,8 +133,6 @@ PALETTE::PALETTE()
 
 void PALETTE::RefreshPalFromLbm(CString const& path)
 {
-    Pal.Clear();
-
     SDL_RWops* file = SDL_RWFromFile(path, "rb");
     if (!file)
         TeakLibW_Exception(0, 0, ExcPicUnknown, path);
@@ -159,8 +157,6 @@ void PALETTE::RefreshPalFromLbm(CString const& path)
 
 void PALETTE::RefreshPalFromPcx(CString const& path)
 {
-    Pal.Clear();
-
     SDL_RWops* file = SDL_RWFromFile(path, "rb");
     if (!file)
         TeakLibW_Exception(0, 0, ExcPicUnknown, path);

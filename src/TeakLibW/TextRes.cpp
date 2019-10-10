@@ -116,7 +116,7 @@ void TEXTRES::Open(char const* source, void* cached)
             for (j = 0; i + j < FileBuffer.AnzEntries() && String[j] != '\r' && String[j] != '\n' && String[j] != '\x1A'; ++j);
             String[j] = 0;
             TeakStrRemoveCppComment(String);
-            TeakStrRemoveEndingCodes(String, "\r\n\x1A");
+            TeakStrRemoveEndingCodes(String, " ");
             if (String[0] == '>' && String[1] != '>')
             {
                 if (strlen(String + 1) == 4)

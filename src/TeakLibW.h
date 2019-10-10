@@ -205,7 +205,9 @@ public:
     void Announce(long);
 
     SDL_RWops* Ctx;
-    SLONG Unknown[11];
+    SLONG Unknown[3];
+    char* Path;
+    SLONG Unknown1[7];
     BUFFER<UBYTE> MemBuffer;
     long MemPointer;
     ULONG MemBufferUsed;

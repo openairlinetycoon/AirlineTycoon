@@ -1,7 +1,13 @@
 #include "stdafx.h"
 
+const char* ExcOpen     = "Can't open %s!";
+const char* ExcRead     = "Can't read %s!";
+const char* ExcWrite    = "Can't write %s!";
+const char* ExcSeek     = "Can't seek %s at %li!";
+
 TEAKFILE::TEAKFILE()
     : Ctx(NULL)
+    , Path(NULL)
     , MemPointer(0)
     , MemBufferUsed(0)
 
@@ -10,6 +16,7 @@ TEAKFILE::TEAKFILE()
 
 TEAKFILE::TEAKFILE(char const* path, long mode)
     : Ctx(NULL)
+    , Path(NULL)
     , MemPointer(0)
     , MemBufferUsed(0)
 {
@@ -43,7 +50,15 @@ void TEAKFILE::ReadLine(char* buffer, long size)
 
 int TEAKFILE::IsEof() { return SDL_RWtell(Ctx) >= SDL_RWsize(Ctx); }
 
-void TEAKFILE::Close() { if (Ctx) SDL_RWclose(Ctx); }
+void TEAKFILE::Close()
+{
+    if (Ctx)
+        SDL_RWclose(Ctx);
+    Ctx = NULL;
+    if (Path)
+        SDL_free(Path);
+    Path = NULL;
+}
 
 long TEAKFILE::GetFileLength(void) { return (long)SDL_RWsize(Ctx); }
 
@@ -52,6 +67,11 @@ long TEAKFILE::GetPosition(void) { return (long)SDL_RWtell(Ctx); }
 void TEAKFILE::Open(char const* path, long mode)
 {
     Ctx = SDL_RWFromFile(path, mode == TEAKFILE_WRITE ? "wb" : "rb");
+    if (!Ctx)
+        TeakLibW_Exception(0, 0, ExcOpen, Path);
+
+    Path = SDL_strdup(path);
+
 }
 
 int TEAKFILE::IsOpen() { return Ctx != NULL; }
@@ -70,7 +90,8 @@ void TEAKFILE::Read(unsigned char* buffer, long size)
     }
     else
     {
-        SDL_RWread(Ctx, buffer, size, 1);
+        if (SDL_RWread(Ctx, buffer, 1, size) != size)
+            TeakLibW_Exception(0, 0, ExcRead, Path);
     }
 }
 
@@ -89,7 +110,8 @@ void TEAKFILE::Write(unsigned char* buffer, long size)
     }
     else
     {
-        SDL_RWwrite(Ctx, buffer, size, 1);
+        if (SDL_RWwrite(Ctx, buffer, 1, size) != size)
+            TeakLibW_Exception(0, 0, ExcWrite, Path);
     }
 }
 
@@ -106,7 +128,8 @@ void TEAKFILE::WriteTrap(long trap)
 
 void TEAKFILE::SetPosition(long pos)
 {
-    SDL_RWseek(Ctx, pos, RW_SEEK_SET);
+    if (SDL_RWseek(Ctx, pos, RW_SEEK_SET) < 0)
+        TeakLibW_Exception(0, 0, ExcSeek, Path, pos);
 }
 
 void TEAKFILE::Announce(long size)

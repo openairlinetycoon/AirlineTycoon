@@ -732,7 +732,8 @@ public:
     int ParseVertikalSubBitmapNumberXInto(long, TECBM&);
     int ParseHorizontalSubBitmapNumberXInto(long, TECBM&);
 
-    SLONG Unknown[7];
+    SDL_Surface* Surface;
+    SLONG Unknown[6];
 
     XY Size;
 
@@ -750,7 +751,7 @@ public:
     TECBMKEY(TECBM&);
     ~TECBMKEY(void);
 
-    LPDIRECTDRAW lpDD;
+    SDL_Surface* Surface;
     UBYTE* Bitmap;
     SLONG lPitch;
 };
@@ -763,7 +764,7 @@ public:
     TECBMKEYC(const TECBM&);
     ~TECBMKEYC(void);
 
-    LPDIRECTDRAW lpDD;
+    SDL_Surface* Surface;
     const UBYTE* Bitmap;
     SLONG lPitch;
 };

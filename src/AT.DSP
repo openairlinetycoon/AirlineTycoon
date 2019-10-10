@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /MT /W3 /GX /Zi /Ob1 /I "../enet/include" /I "..\enet\include ..\SDL2-2.0.10\include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /MT /W3 /GX /Zi /Ob1 /I "..\enet\include ..\SDL2-2.0.10\include" /I "../enet/include" /I "../SDL2-2.0.10/include" /I "../SDL2_image-2.0.5/include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /Yu"stdafx.h" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x407 /d "NDEBUG"
@@ -70,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /MT /W3 /GX /ZI /Od /I "../enet/include" /I "../SDL2-2.0.10/include" /D "WIN32" /D "_WINDOWS" /Fr /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /MT /W3 /GX /ZI /Od /I "../enet/include" /I "../SDL2-2.0.10/include" /I "../SDL2_image-2.0.5/include" /D "WIN32" /D "_WINDOWS" /Fr /Yu"stdafx.h" /FD /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x407 /d "_DEBUG"
@@ -622,6 +622,10 @@ SOURCE=.\TeakLibW\Album.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\TeakLibW\Bitmap.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\TeakLibW\Debug.cpp
 # End Source File
 # Begin Source File
@@ -639,34 +643,6 @@ SOURCE=.\TeakLibW\TeakStr.cpp
 # Begin Source File
 
 SOURCE=.\TeakLibW\TextRes.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\libs\TeakLibW\Release\Bitmap1.obj
-# End Source File
-# Begin Source File
-
-SOURCE=..\libs\TeakLibW\Release\Bitmap2.obj
-# End Source File
-# Begin Source File
-
-SOURCE=..\libs\TeakLibW\Release\Bitmap3.obj
-# End Source File
-# Begin Source File
-
-SOURCE=..\libs\TeakLibW\Release\Bitmap4.obj
-# End Source File
-# Begin Source File
-
-SOURCE=..\libs\TeakLibW\Release\Bitmap6.obj
-# End Source File
-# Begin Source File
-
-SOURCE=..\libs\TeakLibW\Release\Bitmap7.obj
-# End Source File
-# Begin Source File
-
-SOURCE=..\libs\TeakLibW\Release\TecFBm.obj
 # End Source File
 # End Group
 # Begin Source File
@@ -717,6 +693,10 @@ SOURCE=..\smksdk\SMACKW32.LIB
 # Begin Source File
 
 SOURCE="..\SDL2-2.0.10\lib\x86\SDL2.lib"
+# End Source File
+# Begin Source File
+
+SOURCE="..\SDL2_image-2.0.5\lib\x86\SDL2_image.lib"
 # End Source File
 # End Group
 # Begin Group "Räume"

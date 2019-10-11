@@ -405,7 +405,7 @@ void CStatistik::OnPaint()
 
 
 	// Den wievielte Tag spielen wir gerade?
-   SB_CString output;
+   CString output;
    if (timeGetTime()%6000>3000 && (Sim.Difficulty==DIFF_ADDON03 || Sim.Difficulty==DIFF_ADDON04 || Sim.Difficulty==DIFF_ADDON06))
    {
       SLONG n;
@@ -426,7 +426,7 @@ void CStatistik::OnPaint()
 	   output += StandardTexte.GetS (TOKEN_STAT, 9000);
    }
 	
-	long length = FontDialogPartner.GetWidth((LPSTR)output, output.Length());
+	long length = FontDialogPartner.GetWidth((LPSTR)(LPCSTR)output, output.GetLength());
 	long xPos   = 35 + ((160-35)>>1)	- (length>>1);
 	RoomBm.PrintAt (output, FontDialogPartner, TEC_FONT_LEFT, xPos, 15, xPos + length + 5, 45);
 
@@ -582,7 +582,7 @@ void CStatistik::RepaintGraphWindow (void)
 
 
 	// Ausgabe des Zoom-Faktors in Tage oder Monaten
-	SB_CString output;
+	CString output;
 	if (_days <= 30)
 	{
 		output = _days;
@@ -741,7 +741,7 @@ void CStatistik::RepaintTextWindow (void)
 	for (p = 0 ; p < 4 ; p++)
       if (!Sim.Players.Players[p].IsOut)
 	   {
-		   SB_CString	output;
+		   CString	    output;
 		   __int64		summe = 0;
 		   __int64		differenz = 0;
 

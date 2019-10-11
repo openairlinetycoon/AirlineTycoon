@@ -595,22 +595,39 @@ SOURCE=.\DeltaVid.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\SBLib\source\Debug.cpp
-# PROP Exclude_From_Build 1
-# End Source File
-# Begin Source File
-
 SOURCE=.\SBLib\source\Network.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\SBLib\source\String.cpp
-# PROP Exclude_From_Build 1
+SOURCE=.\SBLib\source\Tool2.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\SBLib\source\Tool2.cpp
-# PROP Exclude_From_Build 1
+SOURCE=..\libs\SBL\Release\SB_CxList.obj
+# End Source File
+# Begin Source File
+
+SOURCE=..\libs\SBL\Release\gfxlib.obj
+# End Source File
+# Begin Source File
+
+SOURCE=..\libs\SBL\Release\CBitmap_Cursor.obj
+# End Source File
+# Begin Source File
+
+SOURCE=..\libs\SBL\Release\CBitmap.obj
+# End Source File
+# Begin Source File
+
+SOURCE=..\libs\SBL\Release\CBitmap_Blit.obj
+# End Source File
+# Begin Source File
+
+SOURCE=..\libs\SBL\Release\CBitmap_Core.obj
+# End Source File
+# Begin Source File
+
+SOURCE=..\libs\SBL\Release\SB_CFont.obj
 # End Source File
 # End Group
 # Begin Group "TeakLibW"
@@ -655,11 +672,6 @@ SOURCE=.\TeakLibW.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\Sbl\Release\SBL.lib
-# PROP Exclude_From_Build 1
-# End Source File
-# Begin Source File
-
 SOURCE=D:\Projekte\Sys\SoundEngine\Dll\Debug\SSE.lib
 # PROP Exclude_From_Build 1
 # End Source File
@@ -677,10 +689,6 @@ SOURCE=..\SoundEngine\Dll\Release\SSE.lib
 
 SOURCE=..\Sbl\Debug\SBL.lib
 # PROP Exclude_From_Build 1
-# End Source File
-# Begin Source File
-
-SOURCE=..\libs\SBL.lib
 # End Source File
 # Begin Source File
 

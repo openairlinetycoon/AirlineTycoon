@@ -72,7 +72,7 @@
    };
 
    extern CBench          Bench;
-   extern LPDIRECTDRAW    lpDD;
+   extern SDL_Renderer   *lpDD;
    extern SB_CBitmapMain *bitmapMain;
    
    XYZ DetectCurrentDisplayResolution (void);

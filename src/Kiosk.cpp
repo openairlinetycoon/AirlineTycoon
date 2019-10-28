@@ -352,12 +352,12 @@ void CKiosk::OnPaint()
             DestRect.right  = long(DestRect.left + Newspapers[c].Size.x*NewspaperZoom[c]/100);
             DestRect.bottom = long(DestRect.top  + Newspapers[c].Size.y*NewspaperZoom[c]/100);
 
-            RoomBm.pBitmap->GetSurface()->Blt (
+            /*RoomBm.pBitmap->GetSurface()->Blt (
                &DestRect,
                Newspapers[c].pBitmap->GetSurface(),
                &SrcRect,
                DDBLTFAST_WAIT,
-               NULL);
+               NULL);*/
          }
       }
    }

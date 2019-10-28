@@ -346,10 +346,10 @@ BOOL SBPRIMARYBM::FlipBlitFromT (SBBM &TecBitmap, XY Target)
    CRect destRect (pt.x, pt.y, pt.x+srcRect.right-srcRect.left, pt.y+srcRect.bottom-srcRect.top);
 
 	// Clippen
-	if (PrimaryBm.FastClip(PrimaryBm.GetClipRect(), &pt, &srcRect))
+	/*if (PrimaryBm.FastClip(PrimaryBm.GetClipRect(), &pt, &srcRect))
 		DD_ERROR (PrimaryBm.GetSurface()->Blt (&destRect, TecBitmap.pBitmap->GetSurface(), &srcRect, DDBLT_DDFX | DDBLT_KEYSRC | DDBLT_WAIT, &DDBltFx));
 
-	return (DD_OK);
+	return (DD_OK);*/
 
    Bench.BlitTime.Stop();
    return (TRUE);
@@ -392,13 +392,13 @@ SLONG SBBM::TryPrintAt (const char *Str, SB_CFont &Font, SLONG Flags, const XY &
 
 BOOL  SBBM::TextOut (SLONG x, SLONG y, COLORREF Back, COLORREF Front, const CString &String)
 {
-   LPDIRECTDRAWSURFACE Surf;
-   HDC                 hdc;
+   SDL_Surface* Surf;
+   HDC          hdc;
 
    /*if (bFullscreen)*/ Surf=PrimaryBm.PrimaryBm.GetSurface();
                /*else Surf=PrimaryBm.Offscreen.pBitmap->GetSurface();*/
 
-   if (Surf->GetDC(&hdc) == DD_OK)
+   /*if (Surf->GetDC(&hdc) == DD_OK)
    {
       SetBkColor (hdc, Back);
       SetTextColor (hdc, Front);
@@ -411,7 +411,7 @@ BOOL  SBBM::TextOut (SLONG x, SLONG y, COLORREF Back, COLORREF Front, const CStr
       DeleteObject (SelectObject (hdc,hFont));
 
       Surf->ReleaseDC(hdc);
-   }
+   }*/
 
    return 0; 
 }
@@ -450,14 +450,14 @@ void SBBM::ReSize (GfxLib* gfxLibrary, CString graphicStr)
 
 BOOL  SBPRIMARYBM::TextOut (SLONG x, SLONG y, COLORREF Back, COLORREF Front, const CString &String)
 {
-   LPDIRECTDRAWSURFACE Surf;
-   HDC                 hdc;
+   SDL_Surface* Surf;
+   HDC          hdc;
 
    /*if (bFullscreen)*/ Surf=PrimaryBm.GetSurface();
                /*else Surf=Offscreen.pBitmap->GetSurface();*/
 
    Bench.TextTime.Start();
-   if (Surf && Surf->GetDC(&hdc) == DD_OK)
+   /*if (Surf && Surf->GetDC(&hdc) == DD_OK)
    {
       SetBkColor (hdc, Back);
       SetTextColor (hdc, Front);
@@ -470,7 +470,7 @@ BOOL  SBPRIMARYBM::TextOut (SLONG x, SLONG y, COLORREF Back, COLORREF Front, con
       DeleteObject (SelectObject (hdc,hFont));
 
       Surf->ReleaseDC(hdc);
-   }
+   }*/
    Bench.TextTime.Stop();
 
    return 0; 
@@ -801,11 +801,11 @@ SBBMS::~SBBMS () {}
 void SBPRIMARYBM::ReSize (HWND &hWnd, BOOL Fullscreen, const XY &Resolution)
 {
    if (MakeVideoPath.GetLength())
-      PrimaryBm.Create(lpDD, hWnd, 0, Resolution.x, Resolution.y, 16, 1);
+      PrimaryBm.Create(&lpDD, hWnd, 0, Resolution.x, Resolution.y, 16, 1);
    else if (Fullscreen)
-      PrimaryBm.Create(lpDD, hWnd, /*CREATE_VIDMEM|*/CREATE_FULLSCREEN, Resolution.x, Resolution.y, 16, 1);
+      PrimaryBm.Create(&lpDD, hWnd, /*CREATE_VIDMEM|*/CREATE_FULLSCREEN, Resolution.x, Resolution.y, 16, 1);
    else
-      PrimaryBm.Create(lpDD, hWnd, CREATE_VIDMEM /*|CREATE_DONTUSECOLORKEY*/, Resolution.x, Resolution.y, 16, 1);
+      PrimaryBm.Create(&lpDD, hWnd, CREATE_VIDMEM /*|CREATE_DONTUSECOLORKEY*/, Resolution.x, Resolution.y, 16, 1);
 
    SBPRIMARYBM::Fullscreen=Fullscreen;
    SBPRIMARYBM::Size.x = PrimaryBm.GetXSize();

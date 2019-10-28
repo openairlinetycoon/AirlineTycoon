@@ -512,9 +512,9 @@ void SB_CColorFX::BlitWhiteTrans (BOOL DoMessagePump, SB_CBitmapCore *SrcBitmap,
    DDSurfaceDesc.dwSize  = sizeof (DDSurfaceDesc);
    DDSurfaceDesc.dwFlags = DDSD_CAPS;
 
-   TgtBitmap->GetSurface()->GetSurfaceDesc (&DDSurfaceDesc);
+   //TgtBitmap->GetSurface()->GetSurfaceDesc (&DDSurfaceDesc);
 
-   bVgaRam = ((DDSurfaceDesc.ddsCaps.dwCaps & DDSCAPS_VIDEOMEMORY)!=0);
+   bVgaRam = TRUE; //((DDSurfaceDesc.ddsCaps.dwCaps & DDSCAPS_VIDEOMEMORY)!=0);
 
    if (Grade!=-1)
    {

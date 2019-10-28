@@ -756,12 +756,12 @@ void CStdRaum::MakeNumberWindow (CString Text)
                   CRect SrcRect (0,0, gNumberTemplate.Size.x,gNumberTemplate.Size.y);
                   CRect DestRect (0,0, NumberBitmap.Size.x,NumberBitmap.Size.y);
 
-                  NumberBitmap.pBitmap->GetSurface()->Blt (
+                  /*NumberBitmap.pBitmap->GetSurface()->Blt (
                      &DestRect,
                      gNumberTemplate.pBitmap->GetSurface(),
                      &SrcRect,
                      DDBLTFAST_WAIT,
-                     NULL);
+                     NULL);*/
 
                   SLONG sizey=NumberBitmap.TryPrintAt (Text, FontDialogPartner, TEC_FONT_LEFT, XY(10,10), NumberBitmap.Size-XY(10,10));
 
@@ -2798,12 +2798,12 @@ void CStdRaum::PostPaint (void)
                   DestRect.bottom = long(DestRect.top  + OnscreenBitmap.Size.y*(MinimumZoom*100+((ZoomCounter*(1.0-MinimumZoom))))/100);
                }
 
-               PrimaryBm.PrimaryBm.GetSurface()->Blt (
+               /*PrimaryBm.PrimaryBm.GetSurface()->Blt (
                   &DestRect,
                   OnscreenBitmap.pBitmap->GetSurface(),
                   &SrcRect,
                   DDBLT_KEYSRC|DDBLTFAST_WAIT,
-                  NULL);
+                  NULL);*/
             }
 
             if (CurrentMenu==MENU_EXTRABLATT) 
@@ -2851,12 +2851,12 @@ void CStdRaum::PostPaint (void)
             DestRect.right  = long(DestRect.left + OnscreenBitmap.Size.x*(MinimumZoom*100+((ZoomCounter*(1.0-MinimumZoom))))/100);
             DestRect.bottom = long(DestRect.top  + OnscreenBitmap.Size.y*(MinimumZoom*100+((ZoomCounter*(1.0-MinimumZoom))))/100);
 
-            PrimaryBm.PrimaryBm.GetSurface()->Blt (
+            /*PrimaryBm.PrimaryBm.GetSurface()->Blt (
                &DestRect,
                OnscreenBitmap.pBitmap->GetSurface(),
                &SrcRect,
                DDBLT_KEYSRC|DDBLTFAST_WAIT,
-               NULL);
+               NULL);*/
          }
       }
 

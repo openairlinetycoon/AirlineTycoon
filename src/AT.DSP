@@ -595,39 +595,34 @@ SOURCE=.\DeltaVid.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\SBLib\source\CBitmap.cpp
+
+!IF  "$(CFG)" == "AT - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "AT - Win32 Debug"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\SBLib\source\CCursor.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SBLib\source\CFont.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SBLib\source\GfxLib.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\SBLib\source\Network.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\SBLib\source\Tool2.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\libs\SBL\Release\SB_CxList.obj
-# End Source File
-# Begin Source File
-
-SOURCE=..\libs\SBL\Release\gfxlib.obj
-# End Source File
-# Begin Source File
-
-SOURCE=..\libs\SBL\Release\CBitmap_Cursor.obj
-# End Source File
-# Begin Source File
-
-SOURCE=..\libs\SBL\Release\CBitmap.obj
-# End Source File
-# Begin Source File
-
-SOURCE=..\libs\SBL\Release\CBitmap_Blit.obj
-# End Source File
-# Begin Source File
-
-SOURCE=..\libs\SBL\Release\CBitmap_Core.obj
-# End Source File
-# Begin Source File
-
-SOURCE=..\libs\SBL\Release\SB_CFont.obj
 # End Source File
 # End Group
 # Begin Group "TeakLibW"

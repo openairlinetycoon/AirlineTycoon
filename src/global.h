@@ -59,7 +59,7 @@ extern SLONG                   gShowAllPools;
 extern SLONG                   gUpdatingPools;
 extern CBench                  Bench;
 extern GameFrame              *FrameWnd;         //Das Rahmenfenster;
-extern LPDIRECTDRAW            lpDD;             //DirectDraw object
+extern SDL_Renderer           *lpDD;             //DirectDraw object
 extern SBPRIMARYBM             PrimaryBm;        //DirectDraw primary & back surface
 extern SB_CCursor             *pCursor;
 extern SLONG                   gRepairPrice[];

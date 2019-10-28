@@ -396,7 +396,7 @@ void BRICKS::UpdateBricks (void)
    for (c=0; c<Bricks.AnzEntries(); c++)
       if (IsInAlbum(c))
          Bricks[c].UpdateBrick ();
-
+#if 0
    for (d=0; d<20; d++)
       for (c=0; c<Bricks.AnzEntries(); c++)
          if (IsInAlbum(c))
@@ -434,7 +434,7 @@ void BRICKS::UpdateBricks (void)
                   return;
                }
             }
-
+#endif
    if (!bFirstClass)
    {
       for (c=0; c<8; c++)
@@ -463,6 +463,7 @@ void BRICKS::Destroy (void)
 //--------------------------------------------------------------------------------------------
 void BRICKS::RestoreBricks ()
 {
+#if 0
    for (SLONG c=0; c<Bricks.AnzEntries(); c++)
       if (IsInAlbum(c))
       {
@@ -480,6 +481,7 @@ void BRICKS::RestoreBricks ()
             }
          }
       }
+#endif
 }
 
 //============================================================================================

@@ -441,12 +441,12 @@ void CLAN::BlitLargeAt (SBBM &Offscreen, SLONG Dir, SLONG Phase, XY ScreenPos)
 
             if (DestRect.top<DestRect.bottom && DestRect.left<DestRect.right)
             {
-               Offscreen.pBitmap->GetSurface()->Blt (
+               /*Offscreen.pBitmap->GetSurface()->Blt (
                   &DestRect,
                   pbm->pBitmap->GetSurface(),
                   &SrcRect,
                   DDBLT_KEYSRC|DDBLTFAST_WAIT,
-                  NULL);
+                  NULL);*/
             }
          }
       }

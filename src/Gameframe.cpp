@@ -166,11 +166,11 @@ GameFrame::GameFrame()
 
    if (lpDD==NULL) { MB(); Sleep(100); MB(); Sleep(100); MB(); }
 
-   if (DetectCurrentDisplayResolution ().z!=16 && !bFullscreen)
+   /*if (DetectCurrentDisplayResolution ().z!=16 && !bFullscreen)
    {
       ::MessageBox (NULL, "Airline Tycoon braucht einen Videomodus mit 65.000 Farben!", "Fehler!", MB_OK );
       exit (-1);
-   }
+   }*/
 
    if (DetectCurrentDisplayResolution().x<=640 || DetectCurrentDisplayResolution().y<=480)
       bFullscreen=TRUE;
@@ -746,7 +746,7 @@ void GameFrame::OnActivateApp(BOOL bActive, HTASK hTask)
          if (gItemBms.AnzEntries()>0)
          {
             //Großalarm, wegen Fullscreen: Zahlreiche Bitmaps müssen restauriert werden:
-            PrimaryBm.PrimaryBm.GetPrimarySurface()->Restore();
+            //PrimaryBm.PrimaryBm.GetPrimarySurface()->Restore();
 
             if (PrimaryBm.PrimaryBm.GetLastPage())
                PrimaryBm.PrimaryBm.GetLastPage()->Restore();
@@ -796,14 +796,14 @@ BOOL GameFrame::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
       //Keinen Cursor anzeigen:
       if (nHitTest == HTCLIENT && bActive)
       {
-         SetCursor(NULL);
+         //SetCursor(NULL);
          //if (!bCursorCaptured) SetCapture();
          bCursorCaptured = TRUE;
          if (pCursor) pCursor->Show(true);
       }
       else
       {
-         SetCursor(LoadCursor(NULL, IDC_ARROW));
+         //SetCursor(LoadCursor(NULL, IDC_ARROW));
          //if (bCursorCaptured) ReleaseCapture();
          bCursorCaptured = FALSE;
 		

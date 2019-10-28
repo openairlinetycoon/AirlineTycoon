@@ -57,7 +57,7 @@ CBench                  Bench;
 SLONG                   gShowAllPools=0;
 SLONG                   gUpdatingPools=0;
 GameFrame              *FrameWnd;         //Das Rahmenfenster;
-LPDIRECTDRAW            lpDD;             //DirectDraw object
+SDL_Renderer           *lpDD;             //DirectDraw object
 SBPRIMARYBM             PrimaryBm;        //DirectDraw primary & back surface
 SB_CCursor             *pCursor=NULL;
 SLONG                   gRepairPrice[] = { 1200, 18000, 48000, 150000 };

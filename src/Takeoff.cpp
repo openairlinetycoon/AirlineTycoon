@@ -747,7 +747,7 @@ BOOL CTakeOffApp::InitInstance()
       else                            LOADING_TEXT("Looking for midi device...");
 
       //Hamma Midi?
-      FrameWnd->Invalidate(); MessagePump(); lpDD->FlipToGDISurface();
+      FrameWnd->Invalidate(); MessagePump(); //lpDD->FlipToGDISurface();
       bMidiAvailable = IsMidiAvailable();
 
            if (gLanguage==LANGUAGE_N) LOADING_TEXT("Initialiseert geluidssysteem...")
@@ -756,7 +756,7 @@ BOOL CTakeOffApp::InitInstance()
 
       if (bMidiAvailable && gpSSE)
       {
-         FrameWnd->Invalidate(); MessagePump(); lpDD->FlipToGDISurface();
+         FrameWnd->Invalidate(); MessagePump(); //lpDD->FlipToGDISurface();
 		   gpSSE->CreateMidi(&gpMidi);
 
          if (gpMidi)
@@ -765,7 +765,7 @@ BOOL CTakeOffApp::InitInstance()
             else if (gLanguage==LANGUAGE_F) LOADING_TEXT("Francais...")
             else                            LOADING_TEXT("Setting midi volume...");
 
-            FrameWnd->Invalidate(); MessagePump(); lpDD->FlipToGDISurface();
+            FrameWnd->Invalidate(); MessagePump(); //lpDD->FlipToGDISurface();
             SetMidiVolume(Sim.Options.OptionMusik);
 
             if (Sim.Options.OptionViewedIntro)
@@ -774,14 +774,14 @@ BOOL CTakeOffApp::InitInstance()
                else if (gLanguage==LANGUAGE_F) LOADING_TEXT("Francais...")
                else                            LOADING_TEXT("Starting first midi...");
 
-               FrameWnd->Invalidate(); MessagePump(); lpDD->FlipToGDISurface();
+               FrameWnd->Invalidate(); MessagePump(); //lpDD->FlipToGDISurface();
                NextMidi ();
 
                     if (gLanguage==LANGUAGE_N) LOADING_TEXT("Herstelt het midi-volume...")
                else if (gLanguage==LANGUAGE_F) LOADING_TEXT("Francais...")
                else                            LOADING_TEXT("Resetting midi volume...");
 
-               FrameWnd->Invalidate(); MessagePump(); lpDD->FlipToGDISurface();
+               FrameWnd->Invalidate(); MessagePump(); //lpDD->FlipToGDISurface();
                SetMidiVolume(Sim.Options.OptionMusik);
             }
          }
@@ -2030,12 +2030,14 @@ void CTakeOffApp::GameLoop(void*)
          }
       }*/
 
+      FrameWnd->OnPaint();
+
       MessagePump();
    }
 
    if (bFullscreen)
    {
-      lpDD->RestoreDisplayMode ();
+      //lpDD->RestoreDisplayMode ();
       ClipCursor (NULL);
    }
 
@@ -2101,7 +2103,7 @@ BOOL InitDirectX (void)
    gPhysicalCdRomBitlist.Pump();
 
    //create the main DirectDraw object:
-   ddrval = DirectDrawCreate (NULL, &lpDD, NULL);
+   /*ddrval = DirectDrawCreate (NULL, &lpDD, NULL);
    if (ddrval != DD_OK)
    {
       ddrval = DirectDrawCreate ((GUID FAR *)DDCREATE_EMULATIONONLY, &lpDD, NULL);
@@ -2110,7 +2112,7 @@ BOOL InitDirectX (void)
          ::MessageBox (NULL, "Can't init DirectDraw! Is DirectX installed?", "ERROR", MB_OK );
          return (FALSE);
       }
-   }
+   }*/
 
    return (TRUE);
 }

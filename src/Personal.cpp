@@ -246,12 +246,12 @@ void CPersonal::OnPaint()
          DestRect.right  = long(DestRect.left + KugelBm.Size.x*Size/100);
          DestRect.bottom = long(DestRect.top  + KugelBm.Size.y*Size/100);
 
-         RoomBm.pBitmap->GetSurface()->Blt (
+         /*RoomBm.pBitmap->GetSurface()->Blt (
             &DestRect,
             KugelBm.pBitmap->GetSurface(),
             &SrcRect,
             DDBLT_KEYSRC|DDBLTFAST_WAIT,
-            NULL);
+            NULL);*/
       }
    }
 

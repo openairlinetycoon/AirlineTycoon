@@ -274,12 +274,12 @@ void CLastMinute::OnPaint()
             DestRect.right  = long(DestRect.left + ZettelBms[c].Size.x*(p+400)/1400);
             DestRect.bottom = long(DestRect.top  + ZettelBms[c].Size.y*(p+400)/1400);
 
-            RoomBm.pBitmap->GetSurface()->Blt (
+            /*RoomBm.pBitmap->GetSurface()->Blt (
                &DestRect,
                ZettelBms[c].pBitmap->GetSurface(),
                &SrcRect,
                DDBLT_KEYSRC|DDBLTFAST_WAIT,
-               NULL);
+               NULL);*/
          }
       }
    }

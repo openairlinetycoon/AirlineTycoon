@@ -1133,9 +1133,9 @@ void AirportView::OnPaint()
                      {
                         HDC hdc;
 
-                        LPDIRECTDRAWSURFACE Surf=PrimaryBm.PrimaryBm.GetSurface();
+                        SDL_Surface* Surf=PrimaryBm.PrimaryBm.GetSurface();
 
-                        if (Surf->GetDC(&hdc) == DD_OK)
+                        /*if (Surf->GetDC(&hdc) == DD_OK)
                         {
                            SetBkColor (hdc, RGB( 0, 0, 255));
                            SetTextColor (hdc, RGB( 255, 255, 0));
@@ -1148,7 +1148,7 @@ void AirportView::OnPaint()
                            DeleteObject (SelectObject (hdc,hFont));
 
                            Surf->ReleaseDC(hdc);
-                        }
+                        }*/
                      }
                   }
 

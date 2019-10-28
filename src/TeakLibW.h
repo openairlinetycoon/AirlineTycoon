@@ -4,7 +4,6 @@ extern void memswap(void*, void*, ULONG);
 extern char* bprintf(char const*, ...);
 extern char* bitoa(long, long = 10);
 extern void here(char*, long);
-extern void ODS(const char *, ...);
 
 extern const char* ExcAssert;
 extern const char* ExcGuardian;

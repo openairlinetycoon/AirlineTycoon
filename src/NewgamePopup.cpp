@@ -1696,7 +1696,7 @@ again_heimatflughafen:
                return;
             }
 
-            lpDD->FlipToGDISurface ();
+            //lpDD->FlipToGDISurface ();
             if (gNetwork.Connect (pNetworkConnections->Get(NetMediumMapper[Selection]+1)))
             {
                Sim.bIsHost=FALSE;
@@ -2270,7 +2270,7 @@ void NewGamePopup::OnTimer(UINT nIDEvent)
    {
       if (gHostIP!=".")
       {
-         lpDD->FlipToGDISurface ();
+         //lpDD->FlipToGDISurface ();
          if (gNetwork.Connect (pNetworkConnections->Get(NetMediumMapper[Selection]+1), (char*)(LPCTSTR)gHostIP))
          {
             Sim.bIsHost=FALSE;

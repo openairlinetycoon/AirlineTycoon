@@ -34,9 +34,9 @@ void SB_CColorFX::ReInit (SB_CColorFXType FXType, SLONG Steps, SB_CBitmapCore *B
    SLONG AnzBBits=0, ShiftB=0, MaskB;
 
    //Bitstruktor ermitteln:
-   MaskR = Bitmap->GetPixelFormat()->redMask;
-   MaskG = Bitmap->GetPixelFormat()->greenMask;
-   MaskB = Bitmap->GetPixelFormat()->blueMask;
+   MaskR = Bitmap->GetPixelFormat()->Rmask;
+   MaskG = Bitmap->GetPixelFormat()->Gmask;
+   MaskB = Bitmap->GetPixelFormat()->Bmask;
 
    for (c=0; c<32; c++)
    {

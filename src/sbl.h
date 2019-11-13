@@ -159,18 +159,6 @@ private:
 class SB_CBitmapCore
 {
 public:
-    class PixelFormat
-    {
-    public:
-        UBYTE bitDepth;
-        UBYTE bytesperPixel;
-        word Unknown0;
-        SLONG redMask, greenMask, blueMask;
-        UBYTE bitDepthAgain;
-        UBYTE bitDepthStatic;
-        word Unknown1;
-    };
-
     unsigned long AddAlphaMsk(void);
     unsigned long AddZBuffer(unsigned long, unsigned long);
     class SB_CHardwarecolorHelper* GetHardwarecolor(unsigned long);
@@ -199,10 +187,9 @@ public:
     SLONG GetYSize() { return Size.y; }
     RECT GetClipRect() { const SDL_Rect& r = lpDDSurface->clip_rect; return CRect(r.x, r.y, r.x + r.w, r.y + r.h); }
     SDL_Surface* GetSurface() { return lpDDSurface; }
-    PixelFormat* GetPixelFormat(void) { return &Format; }
+    SDL_PixelFormat* GetPixelFormat(void) { return lpDDSurface->format; }
 
 protected:
-    void FillPixelFormat(SDL_PixelFormat*);
     virtual long Lock(struct _DDSURFACEDESC*) const;
     virtual long Unlock(struct _DDSURFACEDESC*) const;
 
@@ -212,8 +199,7 @@ protected:
     SDL_Renderer* lpDD;
     SDL_Surface* lpDDSurface;
     SDL_Texture* Texture;
-    PixelFormat Format;
-    dword Unknown1[7];
+    dword Unknown1[12];
     XY Size;
     dword Unknown2[5];
 };

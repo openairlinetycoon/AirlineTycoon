@@ -21,7 +21,6 @@ unsigned long SB_CBitmapMain::CreateBitmap(SB_CBitmapCore** out, GfxLib* lib, __
         core->Texture = SDL_CreateTextureFromSurface(Renderer, core->lpDDSurface);
         core->Size.x = core->lpDDSurface->w;
         core->Size.y = core->lpDDSurface->h;
-        core->FillPixelFormat(core->lpDDSurface->format);
         core->InitClipRect();
     }
     else
@@ -30,7 +29,6 @@ unsigned long SB_CBitmapMain::CreateBitmap(SB_CBitmapCore** out, GfxLib* lib, __
         core->lpDDSurface = NULL;
         core->Size.x = 0;
         core->Size.y = 0;
-        core->FillPixelFormat(NULL);
     }
     *out = core;
     return 0;
@@ -47,7 +45,6 @@ unsigned long SB_CBitmapMain::CreateBitmap(SB_CBitmapCore** out, long w, long h,
     if ( !(flags & CREATE_USEALPHA) )
         core->SetColorKey(0);
     core->InitClipRect();
-    core->FillPixelFormat(core->lpDDSurface->format);
     *out = core;
     return 0;
 }
@@ -56,21 +53,6 @@ unsigned long SB_CBitmapMain::ReleaseBitmap(SB_CBitmapCore* core)
 {
     //SDL_DestroyTexture(core->Texture);
     return 0;
-}
-
-void SB_CBitmapCore::FillPixelFormat(SDL_PixelFormat* format)
-{
-    memset(&Format, 0, sizeof(PixelFormat));
-    if (format)
-    {
-        Format.bitDepth = format->BitsPerPixel;
-        Format.bytesperPixel = format->BytesPerPixel;
-        Format.redMask = format->Rmask;
-        Format.greenMask = format->Gmask;
-        Format.blueMask = format->Bmask;
-        Format.bitDepthAgain = format->BitsPerPixel;
-        Format.bitDepthStatic = 16;
-    }
 }
 
 void SB_CBitmapCore::SetColorKey(unsigned long key)
@@ -275,7 +257,6 @@ long SB_CPrimaryBitmap::Create(SDL_Renderer** out, HWND& hWnd, unsigned short fl
     Size.y = h;
     Cursor = NULL;
     InitClipRect();
-    FillPixelFormat(lpDDSurface->format);
     *out = lpDD;
     return 0;
 }

@@ -1,38 +1,87 @@
 #include "stdafx.h"
 
-SB_CCursor::SB_CCursor(class SB_CPrimaryBitmap* primary, class SB_CBitmapCore* core)
-    : Cursor(NULL)
+SB_CCursor::SB_CCursor(class SB_CPrimaryBitmap* primary, class SB_CBitmapCore* cursor)
+    : Primary(primary)
+    , Cursor(cursor)
+    , Background(NULL)
 {
-    SetImage(core);
+    CreateBackground();
 }
 
 SB_CCursor::~SB_CCursor(void)
 {
-    if (Cursor)
-        SDL_FreeCursor(Cursor);
 }
 
-long SB_CCursor::MoveImage(long, long)
+long SB_CCursor::MoveImage(long x, long y)
 {
+    Position.x = x;
+    Position.y = y;
     return 0;
 }
 
-long SB_CCursor::SetImage(class SB_CBitmapCore* core)
+long SB_CCursor::SetImage(class SB_CBitmapCore* cursor)
 {
-    if (!core)
-        return -1;
-
-    if (Cursor)
-        SDL_FreeCursor(Cursor);
-
-    Surface = core->GetSurface();
-    if (Surface)
-        Cursor = SDL_CreateColorCursor(Surface, 0, 0);
+    Cursor = cursor;
+    CreateBackground();
     return 0;
+}
+
+long SB_CCursor::FlipBegin(void)
+{
+    if (SaveBackground(Background) == 0)
+        return BlitImage(Position.x, Position.y);
+    return -1;
+}
+
+long SB_CCursor::FlipEnd(void)
+{
+    return RestoreBackground(Background);
 }
 
 long SB_CCursor::Show(bool show)
 {
-    SDL_SetCursor(Cursor);
-    return SDL_ShowCursor(show ? SDL_ENABLE : SDL_DISABLE);
+    return SDL_ShowCursor(!show ? SDL_ENABLE : SDL_DISABLE);
+}
+
+long SB_CCursor::BlitImage(long x, long y)
+{
+    return Cursor->Blit(Primary, x, y);
+}
+
+long SB_CCursor::RestoreBackground(struct SDL_Surface* surf)
+{
+    SDL_Rect rect = { Position.x, Position.y, Cursor->GetXSize(), Cursor->GetYSize() };
+    return SDL_BlitSurface(surf, NULL, Primary->GetSurface(), &rect);
+}
+
+long SB_CCursor::SaveBackground(struct SDL_Surface* surf)
+{
+    SDL_Rect src = { Position.x, Position.y, Cursor->GetXSize(), Cursor->GetYSize() };
+    SDL_Rect dst = { 0, 0, Cursor->GetXSize(), Cursor->GetYSize() };
+    return SDL_BlitSurface(Primary->GetSurface(), &src, surf, &dst);
+}
+
+long SB_CCursor::CreateBackground(void)
+{
+    if (!Cursor)
+        return -1;
+
+    long w = Cursor->GetXSize(), h = Cursor->GetYSize();
+    if (!Background)
+    {
+        return CreateSurface(&Background, w, h);
+    }
+    else if (w != Background->w || h != Background->h)
+    {
+        SDL_FreeSurface(Background);
+        return CreateSurface(&Background, w, h);
+    }
+    return 0;
+}
+
+long SB_CCursor::CreateSurface(struct SDL_Surface** out, long w, long h)
+{
+    SDL_PixelFormat* pFormat = Primary->GetPixelFormat();
+    *out = SDL_CreateRGBSurfaceWithFormat(0, w, h, pFormat->BitsPerPixel, pFormat->format);
+    return *out ? 0 : -1;
 }

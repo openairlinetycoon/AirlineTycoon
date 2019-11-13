@@ -239,8 +239,14 @@ SB_CPrimaryBitmap::~SB_CPrimaryBitmap()
 
 long SB_CPrimaryBitmap::Flip()
 {
+    if (Cursor)
+        Cursor->FlipBegin();
+
     //SDL_RenderPresent(lpDD);
     SDL_UpdateWindowSurface(Window);
+
+    if (Cursor)
+        Cursor->FlipEnd();
     return 0;
 }
 

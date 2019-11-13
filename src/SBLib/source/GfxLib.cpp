@@ -147,6 +147,12 @@ long GfxLib::Load(SDL_RWops* file, GfxLibHeader* header)
                 return -4;
             ReadGfxChunk(file, chunk, 0, 0);
             break;
+        case CHUNK_NAME:
+            //DebugBreak();
+            break;
+        case CHUNK_PALETTE:
+            DebugBreak();
+            break;
         }
 
         SDL_RWseek(file, pos + info.Size, RW_SEEK_SET);
@@ -168,15 +174,16 @@ long GfxLib::ReadGfxChunk(SDL_RWops* file, GfxChunkHeader header, long, long)
     word bpp = image.BitDepth / 8;
     char* pixels = new char[image.Size];
     SDL_RWread(file, pixels, 1, image.Size);
-    SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormatFrom(pixels, image.Width, image.Height, image.BitDepth, image.Size / image.Height, SDL_PIXELFORMAT_RGB565);
-#if 0
-    std::string path("dump\\");
-    char filename[10] = { 0 };
-    strncpy(filename, (char*)&header.Id, sizeof(header.Id));
-    strcat(filename, ".bmp");
-    path += filename;
-    SDL_SaveBMP(surf, path.c_str());
-#endif
+    SDL_Surface* surf = SDL_CreateRGBSurfaceFrom(
+        pixels,
+        image.Width,
+        image.Height,
+        image.BitDepth,
+        image.Size / image.Height,
+        image.Rmask,
+        image.Gmask,
+        image.Bmask,
+        0);
     SDL_SetSurfaceRLE(surf, SDL_TRUE);
     Surfaces[header.Id] = surf;
     return 0;

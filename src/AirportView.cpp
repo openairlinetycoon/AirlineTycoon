@@ -1131,24 +1131,19 @@ void AirportView::OnPaint()
                      if (Editor==EDITOR_BUILDS && ((BrickId >=0x10000000+2030 && BrickId<=0x10000000+2035) || BrickId==0x10000000+2045 || BrickId==0x10000000+2001 || BrickId==0x10000000+2003 || BrickId==0x10000000+RUNE_AREALO || BrickId==0x10000000+RUNE_AREARU || BrickId==0x10000000+500 || BrickId==0x10000000+521 || BrickId==0x10000000+522 || BrickId==0x10000000+520 || BrickId==0x10000000+492 || (BrickId>=0x10000000+760 && BrickId<=0x10000000+774) || BrickId==0x10000000+RUNE_WAITPLANE || BrickId==0x10000000+RUNE_DROPSUITCASE || BrickId==0x10000000+RUNE_WAYPOINT || BrickId==0x10000000+RUNE_WAYPOINT_WAIT || BrickId==0x10000000+RUNE_WAYPOINT_START || BrickId==0x10000000+RUNE_WAYPOINT_G || BrickId==0x10000000+RUNE_CONDBLOCK || BrickId==0x10000000+337 || BrickId==0x10000000+338))
                      if (qBuild.ScreenPos.x-ViewPos.x+WinP1.x>-10 && qBuild.ScreenPos.x-ViewPos.x+WinP1.x<650)
                      {
-                        HDC hdc;
-
                         SDL_Surface* Surf=PrimaryBm.PrimaryBm.GetSurface();
 
-                        /*if (Surf->GetDC(&hdc) == DD_OK)
+                        TTF_Font* Font = TTF_OpenFont("arial.ttf", 9); // Arial
+                        if (Font)
                         {
-                           SetBkColor (hdc, RGB( 0, 0, 255));
-                           SetTextColor (hdc, RGB( 255, 255, 0));
-                           HFONT   hFont;
-
-                           hFont = CreateFont(-9, 0, 0, 0, 0, (BYTE)FALSE, 0, 0, 0, 0, 0, 0, FF_SWISS, "Arial");
-                           
-                           hFont = (struct HFONT__ *)SelectObject (hdc,hFont);
-                           ::TextOut (hdc, qBuild.ScreenPos.x-ViewPos.x+WinP1.x+3, qBuild.ScreenPos.y-ViewPos.y+WinP1.y+1, bprintf ("%3li",(long)qBuild.Par), 3);
-                           DeleteObject (SelectObject (hdc,hFont));
-
-                           Surf->ReleaseDC(hdc);
-                        }*/
+                           SDL_Color bg = { 0, 0, 255 };
+                           SDL_Color fg = { 255, 255, 0 };
+                           SDL_Surface* Text = TTF_RenderText_Shaded(Font, bprintf ("%3li",(long)qBuild.Par), fg, bg);
+                           SDL_Rect Dst = { qBuild.ScreenPos.x-ViewPos.x+WinP1.x+3, qBuild.ScreenPos.y-ViewPos.y+WinP1.y+1, Text->w, Text->h };
+                           SDL_BlitSurface(Text, NULL, Surf, &Dst);
+                           SDL_FreeSurface(Text);
+                           TTF_CloseFont(Font);
+                        }
                      }
                   }
 
@@ -1235,7 +1230,7 @@ void AirportView::OnPaint()
             //if (Registration.GetMode()==1)
             {
                if (Editor==EDITOR_NONE)
-                  ; //PrimaryBm.TextOut (0, 20, RGB( 0, 0, 255), RGB( 255, 255, 0), "Shift + E = Editor");
+                  PrimaryBm.TextOut (0, 20, RGB( 0, 0, 255), RGB( 255, 255, 0), "Shift + E = Editor");
                else
                {
                   PrimaryBm.TextOut (140, 0, RGB( 0, 0, 255), RGB( 255, 255, 0), Airport.GetHallFilename());

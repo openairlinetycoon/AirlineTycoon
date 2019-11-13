@@ -174,7 +174,7 @@ long GfxLib::ReadGfxChunk(SDL_RWops* file, GfxChunkHeader header, long, long)
     word bpp = image.BitDepth / 8;
     char* pixels = new char[image.Size];
     SDL_RWread(file, pixels, 1, image.Size);
-    SDL_Surface* surf = SDL_CreateRGBSurfaceFrom(
+    SDL_Surface* surface = SDL_CreateRGBSurfaceFrom(
         pixels,
         image.Width,
         image.Height,
@@ -184,8 +184,9 @@ long GfxLib::ReadGfxChunk(SDL_RWops* file, GfxChunkHeader header, long, long)
         image.Gmask,
         image.Bmask,
         0);
-    SDL_SetSurfaceRLE(surf, SDL_TRUE);
-    Surfaces[header.Id] = surf;
+    SDL_SetSurfaceRLE(surface, SDL_TRUE);
+    Surfaces[header.Id] = SDL_ConvertSurfaceFormat(surface, SDL_PIXELFORMAT_RGB565, 0);
+    SDL_FreeSurface(surface);
     return 0;
 }
 

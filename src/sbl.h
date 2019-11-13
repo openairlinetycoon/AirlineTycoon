@@ -218,19 +218,18 @@ public:
     long FlipEnd(void);
     long Show(bool);
 
-    SDL_Cursor* GetCursor() { return Cursor; }
-    SDL_Surface* GetSurface() { return Surface; }
-
 private:
-    long BlitImage(enum tagEnumBlitImage, long, long);
-    long RestoreBackground(enum tagEnumBlitImage, struct IDirectDrawSurface*, unsigned short);
-    long SaveBackground(enum tagEnumBlitImage, struct IDirectDrawSurface*, unsigned short);
+    long BlitImage(long, long);
+    long RestoreBackground(struct SDL_Surface*);
+    long SaveBackground(struct SDL_Surface*);
     long CreateBackground(void);
-    long CreateSurface(struct IDirectDrawSurface**, long, long);
+    long CreateSurface(struct SDL_Surface**, long, long);
 
-    SDL_Cursor* Cursor;
-    SDL_Surface* Surface;
-    dword Unknown[25];
+    SB_CPrimaryBitmap* Primary;
+    SB_CBitmapCore* Cursor;
+    SDL_Surface* Background;
+    XY Position;
+    dword Unknown[22];
 };
 
 static_assert<sizeof(SB_CCursor) == 0x6Cu> SB_CCursor_size_check;

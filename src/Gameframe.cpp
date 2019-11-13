@@ -799,7 +799,7 @@ BOOL GameFrame::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
          //SetCursor(NULL);
          //if (!bCursorCaptured) SetCapture();
          bCursorCaptured = TRUE;
-         if (pCursor) pCursor->Show(true);
+         //if (pCursor) pCursor->Show(true);
       }
       else
       {
@@ -807,7 +807,7 @@ BOOL GameFrame::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
          //if (bCursorCaptured) ReleaseCapture();
          bCursorCaptured = FALSE;
 		
-		   if (pCursor) pCursor->Show(false);
+		   //if (pCursor) pCursor->Show(false);
       }
    }
    else CFrameWnd::OnSetCursor (pWnd, nHitTest, message);

@@ -70,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /MT /W3 /GX /ZI /Od /I "../enet/include" /I "../SDL2-2.0.10/include" /I "../SDL2_image-2.0.5/include" /I "../SDL2_ttf-2.0.15/include" /D "WIN32" /D "_WINDOWS" /Fr /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /MTd /W3 /GX /ZI /Od /I "../enet/include" /I "../SDL2-2.0.10/include" /I "../SDL2_image-2.0.5/include" /I "../SDL2_ttf-2.0.15/include" /D "WIN32" /D "_WINDOWS" /D "_DEBUG" /Fr /Yu"stdafx.h" /FD /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x407 /d "_DEBUG"

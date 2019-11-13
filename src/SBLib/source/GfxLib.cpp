@@ -115,7 +115,7 @@ GfxLibHeader* GfxLib::LoadHeader(SDL_RWops* file)
 
     GfxLibHeader* header = new GfxLibHeader;
     header->Length = SDL_ReadLE32(file);
-    if (SDL_RWread(file, &header->Unknown0, 1, header->Length) != header->Length)
+    if (SDL_RWread(file, &header->Unknown0, 1, header->Length - 4) != header->Length - 4)
     {
         delete header;
         return NULL;

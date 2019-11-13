@@ -6,6 +6,7 @@ SB_CFont::SB_CFont(void)
     , VarWidth(NULL)
     , VarHeight(NULL)
     , Hidden(false)
+    , Tabulator(NULL)
     , LineSpace(1.5f)
     , Bitmap(NULL)
 {

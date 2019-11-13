@@ -15,6 +15,7 @@ struct static_assert<true> {};
 #include <math.h>
 #include <mmsystem.h>
 #include <SDL.h>
+#include <SDL_ttf.h>
 
 #include "Defines.h"
 

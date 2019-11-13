@@ -393,25 +393,21 @@ SLONG SBBM::TryPrintAt (const char *Str, SB_CFont &Font, SLONG Flags, const XY &
 BOOL  SBBM::TextOut (SLONG x, SLONG y, COLORREF Back, COLORREF Front, const CString &String)
 {
    SDL_Surface* Surf;
-   HDC          hdc;
 
    /*if (bFullscreen)*/ Surf=PrimaryBm.PrimaryBm.GetSurface();
                /*else Surf=PrimaryBm.Offscreen.pBitmap->GetSurface();*/
 
-   /*if (Surf->GetDC(&hdc) == DD_OK)
+   TTF_Font* Font = TTF_OpenFont("arial.ttf", 9);
+   if (Font)
    {
-      SetBkColor (hdc, Back);
-      SetTextColor (hdc, Front);
-      HFONT   hFont;
-
-      hFont = CreateFont(-9, 0, 0, 0, 0, (BYTE)FALSE, 0, 0, 0, 0, 0, 0, FF_SWISS, "Arial");
-      
-      hFont = (struct HFONT__ *)SelectObject (hdc,hFont);
-      ::TextOut (hdc, x, y, String, String.GetLength());
-      DeleteObject (SelectObject (hdc,hFont));
-
-      Surf->ReleaseDC(hdc);
-   }*/
+      SDL_Color bg = { GetRValue(Back), GetGValue(Back), GetBValue(Back) };
+      SDL_Color fg = { GetRValue(Front), GetGValue(Front), GetBValue(Front) };
+      SDL_Surface* Text = TTF_RenderText_Shaded(Font, String, fg, bg);
+      SDL_Rect Dst = { x, y, Text->w, Text->h };
+      SDL_BlitSurface(Text, NULL, Surf, &Dst);
+      SDL_FreeSurface(Text);
+      TTF_CloseFont(Font);
+   }
 
    return 0; 
 }
@@ -451,26 +447,23 @@ void SBBM::ReSize (GfxLib* gfxLibrary, CString graphicStr)
 BOOL  SBPRIMARYBM::TextOut (SLONG x, SLONG y, COLORREF Back, COLORREF Front, const CString &String)
 {
    SDL_Surface* Surf;
-   HDC          hdc;
 
    /*if (bFullscreen)*/ Surf=PrimaryBm.GetSurface();
                /*else Surf=Offscreen.pBitmap->GetSurface();*/
 
    Bench.TextTime.Start();
-   /*if (Surf && Surf->GetDC(&hdc) == DD_OK)
+   
+   TTF_Font* Font = TTF_OpenFont("arial.ttf", 9);
+   if (Font)
    {
-      SetBkColor (hdc, Back);
-      SetTextColor (hdc, Front);
-      HFONT   hFont;
-
-      hFont = CreateFont(-9, 0, 0, 0, 0, (BYTE)FALSE, 0, 0, 0, 0, 0, 0, FF_SWISS, "Arial");
-      
-      hFont = (struct HFONT__ *)SelectObject (hdc,hFont);
-      ::TextOut (hdc, x, y, String, String.GetLength());
-      DeleteObject (SelectObject (hdc,hFont));
-
-      Surf->ReleaseDC(hdc);
-   }*/
+      SDL_Color bg = { GetRValue(Back), GetGValue(Back), GetBValue(Back) };
+      SDL_Color fg = { GetRValue(Front), GetGValue(Front), GetBValue(Front) };
+      SDL_Surface* Text = TTF_RenderText_Shaded(Font, String, fg, bg);
+      SDL_Rect Dst = { x, y, Text->w, Text->h };
+      SDL_BlitSurface(Text, NULL, Surf, &Dst);
+      SDL_FreeSurface(Text);
+      TTF_CloseFont(Font);
+   }
    Bench.TextTime.Stop();
 
    return 0; 

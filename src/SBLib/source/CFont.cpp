@@ -37,9 +37,12 @@ bool SB_CFont::Load(SDL_Renderer* renderer, char* path, struct HPALETTE__*)
     if (SDL_RWread(file, pixels, 1, Header.szPixels) != Header.szPixels)
         return false;
 
-    SDL_Color* colors = new SDL_Color[Header.szColors];
+    SDL_Color* colors = new SDL_Color[Header.NumColors + 1];
     if (SDL_RWread(file, colors, 1, Header.szColors) != Header.szColors)
         return false;
+
+    // Some fonts will refer beyond the palette, set those pixels to transparent
+    memset(colors + Header.NumColors, 0, sizeof(SDL_Color));
 
     VarWidth = new BYTE[0x100];
     if (SDL_RWread(file, VarWidth, 0x100, 1) != 1)
@@ -53,7 +56,7 @@ bool SB_CFont::Load(SDL_Renderer* renderer, char* path, struct HPALETTE__*)
     SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormatFrom(pixels, Header.Width, Header.Height * chars, 8, Header.Width, SDL_PIXELFORMAT_INDEX8);
     for (int i = 0; i < Header.NumColors; i++)
         Swap(colors[i].r, colors[i].b); // Convert BGR to RGB
-    SDL_SetPaletteColors(surf->format->palette, colors, 0, Header.NumColors);
+    SDL_SetPaletteColors(surf->format->palette, colors, 0, Header.NumColors + 1);
     Surface = SDL_ConvertSurfaceFormat(surf, SDL_PIXELFORMAT_RGB565, 0);
     SDL_SetColorKey(Surface, SDL_TRUE, 0);
     SDL_FreeSurface(surf);

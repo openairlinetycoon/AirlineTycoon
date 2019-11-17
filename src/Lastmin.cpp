@@ -266,20 +266,15 @@ void CLastMinute::OnPaint()
 
          //RoomBm.BlitFromT (ZettelBms[c], Pos);
          {
-            CRect SrcRect (0,0,ZettelBms[c].Size.x,ZettelBms[c].Size.y);
-            CRect DestRect;
+            SDL_Rect SrcRect = { 0,0,ZettelBms[c].Size.x,ZettelBms[c].Size.y };
+            SDL_Rect DestRect;
 
-            DestRect.left   = Pos.x;
-            DestRect.top    = Pos.y;
-            DestRect.right  = long(DestRect.left + ZettelBms[c].Size.x*(p+400)/1400);
-            DestRect.bottom = long(DestRect.top  + ZettelBms[c].Size.y*(p+400)/1400);
+            DestRect.x = Pos.x;
+            DestRect.y = Pos.y;
+            DestRect.w = long(ZettelBms[c].Size.x*(p+400)/1400);
+            DestRect.h = long(ZettelBms[c].Size.y*(p+400)/1400);
 
-            /*RoomBm.pBitmap->GetSurface()->Blt (
-               &DestRect,
-               ZettelBms[c].pBitmap->GetSurface(),
-               &SrcRect,
-               DDBLT_KEYSRC|DDBLTFAST_WAIT,
-               NULL);*/
+            SDL_BlitScaled(ZettelBms[c].pBitmap->GetSurface(),&SrcRect,RoomBm.pBitmap->GetSurface(),&DestRect);
          }
       }
    }

@@ -238,20 +238,15 @@ void CPersonal::OnPaint()
 
       if (FlugbahnType>0)
       {
-         CRect SrcRect (0, 0, KugelBm.Size.x, KugelBm.Size.y);
-         CRect DestRect;
+         SDL_Rect SrcRect = { 0, 0, KugelBm.Size.x, KugelBm.Size.y };
+         SDL_Rect DestRect;
 
-         DestRect.left   = Pos.x-(KugelBm.Size.x/2 * Size)/100;
-         DestRect.top    = Pos.y-(KugelBm.Size.y/2 * Size)/100;
-         DestRect.right  = long(DestRect.left + KugelBm.Size.x*Size/100);
-         DestRect.bottom = long(DestRect.top  + KugelBm.Size.y*Size/100);
+         DestRect.x = Pos.x-(KugelBm.Size.x/2 * Size)/100;
+         DestRect.y = Pos.y-(KugelBm.Size.y/2 * Size)/100;
+         DestRect.w = long(KugelBm.Size.x*Size/100);
+         DestRect.h = long(KugelBm.Size.y*Size/100);
 
-         /*RoomBm.pBitmap->GetSurface()->Blt (
-            &DestRect,
-            KugelBm.pBitmap->GetSurface(),
-            &SrcRect,
-            DDBLT_KEYSRC|DDBLTFAST_WAIT,
-            NULL);*/
+         SDL_BlitScaled(KugelBm.pBitmap->GetSurface(), &SrcRect, RoomBm.pBitmap->GetSurface(), &DestRect);
       }
    }
 

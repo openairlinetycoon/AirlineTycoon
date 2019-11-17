@@ -300,7 +300,8 @@ public:
 
 private:
     SDL_Renderer* Renderer;
-    dword Unknown[6];
+    std::list<SB_CBitmapCore> Bitmaps;
+    dword Unknown[3];
 };
 
 static_assert<sizeof(SB_CBitmapMain) == 0x1Cu> SB_CBitmapMain_size_check;

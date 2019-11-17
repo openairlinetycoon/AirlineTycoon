@@ -271,6 +271,7 @@ int _tmain(void)
 	delete [] pEncoded2;
 	delete [] pDecodeBack;
 	delete [] pDecodeBack2;
+	delete [] pDecodeBack3;
 
 	return 0;
 }

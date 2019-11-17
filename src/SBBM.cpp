@@ -328,23 +328,25 @@ BOOL SBPRIMARYBM::FlipBlitFromT (SBBM &TecBitmap, XY Target)
 		return FALSE;
 
 	// Source-Rechteck füllen
-	RECT srcRect;
+	SDL_Rect srcRect;
 
-	srcRect.left	= 0;
-	srcRect.top		= 0;
-	srcRect.right	= TecBitmap.pBitmap->GetXSize();
-	srcRect.bottom = TecBitmap.pBitmap->GetYSize();
+	srcRect.x = 0;
+	srcRect.y = 0;
+	srcRect.w = TecBitmap.pBitmap->GetXSize();
+	srcRect.h = TecBitmap.pBitmap->GetYSize();
 
 	// Zielpunkt füllen
 	POINT pt = {Target.x, Target.y};
 
-   DDBLTFX DDBltFx;
+   /*DDBLTFX DDBltFx;
    memset (&DDBltFx, 0, sizeof(DDBltFx));
    DDBltFx.dwSize = sizeof (DDBltFx);
-   DDBltFx.dwDDFX = DDBLTFX_MIRRORLEFTRIGHT;
+   DDBltFx.dwDDFX = DDBLTFX_MIRRORLEFTRIGHT;*/
 
-   CRect destRect (pt.x, pt.y, pt.x+srcRect.right-srcRect.left, pt.y+srcRect.bottom-srcRect.top);
+   SDL_Rect destRect = { pt.x, pt.y, srcRect.w, srcRect.h };
 
+   // TODO: Mirror the blit
+   SDL_BlitSurface(TecBitmap.pBitmap->GetSurface(), &srcRect, PrimaryBm.GetSurface(), &destRect);
 	// Clippen
 	/*if (PrimaryBm.FastClip(PrimaryBm.GetClipRect(), &pt, &srcRect))
 		DD_ERROR (PrimaryBm.GetSurface()->Blt (&destRect, TecBitmap.pBitmap->GetSurface(), &srcRect, DDBLT_DDFX | DDBLT_KEYSRC | DDBLT_WAIT, &DDBltFx));

@@ -338,8 +338,8 @@ void CKiosk::OnPaint()
       {
          if (NewspaperZoom[c]>0)
          {
-            CRect SrcRect (0,0,Newspapers[c].Size.x,Newspapers[c].Size.y);
-            CRect DestRect;
+            SDL_Rect SrcRect = { 0,0,Newspapers[c].Size.x,Newspapers[c].Size.y };
+            SDL_Rect DestRect;
 
             XY p;
 
@@ -347,17 +347,12 @@ void CKiosk::OnPaint()
             else if (c==1) p=XY(349,246);
             else if (c==2) p=XY(140,185);
 
-            DestRect.left   = long(p.x-Newspapers[c].Size.x/2*NewspaperZoom[c]/100);
-            DestRect.top    = long(p.y-Newspapers[c].Size.x/2*NewspaperZoom[c]/100);
-            DestRect.right  = long(DestRect.left + Newspapers[c].Size.x*NewspaperZoom[c]/100);
-            DestRect.bottom = long(DestRect.top  + Newspapers[c].Size.y*NewspaperZoom[c]/100);
+            DestRect.x = long(p.x-Newspapers[c].Size.x/2*NewspaperZoom[c]/100);
+            DestRect.y = long(p.y-Newspapers[c].Size.x/2*NewspaperZoom[c]/100);
+            DestRect.w = long(Newspapers[c].Size.x*NewspaperZoom[c]/100);
+            DestRect.h = long(Newspapers[c].Size.y*NewspaperZoom[c]/100);
 
-            /*RoomBm.pBitmap->GetSurface()->Blt (
-               &DestRect,
-               Newspapers[c].pBitmap->GetSurface(),
-               &SrcRect,
-               DDBLTFAST_WAIT,
-               NULL);*/
+            SDL_BlitScaled(Newspapers[c].pBitmap->GetSurface(), &SrcRect, RoomBm.pBitmap->GetSurface(), &DestRect);
          }
       }
    }

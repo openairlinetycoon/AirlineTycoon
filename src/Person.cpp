@@ -414,39 +414,34 @@ void CLAN::BlitLargeAt (SBBM &Offscreen, SLONG Dir, SLONG Phase, XY ScreenPos)
          if (ScreenPos.x>-60 && ScreenPos.x<700)
          {
             Size = XY(pbm->Size.x/2, pbm->Size.y-1)*2l;
-            CRect SrcRect (0,0,pbm->pBitmap->GetXSize(),pbm->pBitmap->GetYSize());
-            CRect DestRect (ScreenPos.x-Size.x, ScreenPos.y-pbm->pBitmap->GetYSize()*2, ScreenPos.x-Size.x+pbm->pBitmap->GetXSize()*2, ScreenPos.y);
-            CRect ClipRect = Offscreen.pBitmap->GetClipRect();
+            SDL_Rect SrcRect = { 0,0,pbm->pBitmap->GetXSize(),pbm->pBitmap->GetYSize() };
+            SDL_Rect DestRect = { ScreenPos.x-Size.x, ScreenPos.y-pbm->pBitmap->GetYSize()*2, ScreenPos.x-Size.x+pbm->pBitmap->GetXSize()*2, ScreenPos.y };
+            SDL_Rect ClipRect = Offscreen.pBitmap->GetSurface()->clip_rect;
 
-            if (DestRect.right>ClipRect.right)
+            if (DestRect.w>ClipRect.w)
             {
-               SrcRect.right-=(DestRect.right-ClipRect.right)/2;
-               DestRect.right=ClipRect.right;
+               SrcRect.w-=(DestRect.w-ClipRect.w);
+               DestRect.w=ClipRect.w;
             }
-            if (DestRect.bottom>ClipRect.bottom)
+            if (DestRect.h>ClipRect.h)
             {
-               SrcRect.bottom-=(DestRect.bottom-ClipRect.bottom)/2;
-               DestRect.bottom=ClipRect.bottom;
+               SrcRect.h-=(DestRect.h-ClipRect.h);
+               DestRect.h=ClipRect.h;
             }
-            if (DestRect.left<ClipRect.left)
+            if (DestRect.x<ClipRect.x)
             {
-               SrcRect.left+=(ClipRect.left-DestRect.left)/2;
-               DestRect.left=ClipRect.left;
+               SrcRect.x+=(ClipRect.x-DestRect.x)/2;
+               DestRect.x=ClipRect.x;
             }
-            if (DestRect.top<ClipRect.top)
+            if (DestRect.y<ClipRect.y)
             {
-               SrcRect.top+=(ClipRect.top-DestRect.top)/2;
-               DestRect.top=ClipRect.top;
+               SrcRect.y+=(ClipRect.y-DestRect.y)/2;
+               DestRect.y=ClipRect.y;
             }
 
-            if (DestRect.top<DestRect.bottom && DestRect.left<DestRect.right)
+            if (DestRect.h>0 && DestRect.w>0)
             {
-               /*Offscreen.pBitmap->GetSurface()->Blt (
-                  &DestRect,
-                  pbm->pBitmap->GetSurface(),
-                  &SrcRect,
-                  DDBLT_KEYSRC|DDBLTFAST_WAIT,
-                  NULL);*/
+                SDL_BlitScaled(pbm->pBitmap->GetSurface(), &SrcRect, Offscreen.pBitmap->GetSurface(), &DestRect);
             }
          }
       }

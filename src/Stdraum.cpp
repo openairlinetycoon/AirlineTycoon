@@ -753,15 +753,10 @@ void CStdRaum::MakeNumberWindow (CString Text)
                {
                   NumberBitmap.ReSize (c+20, c*2/3-suby+20);
 
-                  CRect SrcRect (0,0, gNumberTemplate.Size.x,gNumberTemplate.Size.y);
-                  CRect DestRect (0,0, NumberBitmap.Size.x,NumberBitmap.Size.y);
+                  SDL_Rect SrcRect = { 0,0, gNumberTemplate.Size.x,gNumberTemplate.Size.y };
+                  SDL_Rect DestRect = { 0,0, NumberBitmap.Size.x,NumberBitmap.Size.y };
 
-                  /*NumberBitmap.pBitmap->GetSurface()->Blt (
-                     &DestRect,
-                     gNumberTemplate.pBitmap->GetSurface(),
-                     &SrcRect,
-                     DDBLTFAST_WAIT,
-                     NULL);*/
+                  SDL_BlitScaled(gNumberTemplate.pBitmap->GetSurface(), &SrcRect, NumberBitmap.pBitmap->GetSurface(), &DestRect);
 
                   SLONG sizey=NumberBitmap.TryPrintAt (Text, FontDialogPartner, TEC_FONT_LEFT, XY(10,10), NumberBitmap.Size-XY(10,10));
 
@@ -2777,33 +2772,28 @@ void CStdRaum::PostPaint (void)
             }
             else
             {
-               CRect SrcRect (0,0,OnscreenBitmap.Size.x,OnscreenBitmap.Size.y);
-               CRect DestRect;
+               SDL_Rect SrcRect = { 0,0,OnscreenBitmap.Size.x,OnscreenBitmap.Size.y };
+               SDL_Rect DestRect;
 
                XY p=MenuStartPos;
                if (ZoomFromAirport) p-=qPlayer.ViewPos;
 
                if (CurrentMenu==MENU_EXTRABLATT)
                {
-                  DestRect.left   = 320-OnscreenBitmap.Size.x/2*ZoomCounter/100;
-                  DestRect.top    = 220-OnscreenBitmap.Size.y/2*ZoomCounter/100;
-                  DestRect.right  = 320+OnscreenBitmap.Size.x/2*ZoomCounter/100;
-                  DestRect.bottom = 220+OnscreenBitmap.Size.y/2*ZoomCounter/100;
+                  DestRect.x = 320-OnscreenBitmap.Size.x/2*ZoomCounter/100;
+                  DestRect.y = 220-OnscreenBitmap.Size.y/2*ZoomCounter/100;
+                  DestRect.w = OnscreenBitmap.Size.x*ZoomCounter/100;
+                  DestRect.h = OnscreenBitmap.Size.y*ZoomCounter/100;
                }
                else
                {
-                  DestRect.left   = (p.x*(100-ZoomCounter)+MenuPos.x*ZoomCounter)/100;
-                  DestRect.top    = (p.y*(100-ZoomCounter)+MenuPos.y*ZoomCounter)/100;
-                  DestRect.right  = long(DestRect.left + OnscreenBitmap.Size.x*(MinimumZoom*100+((ZoomCounter*(1.0-MinimumZoom))))/100);
-                  DestRect.bottom = long(DestRect.top  + OnscreenBitmap.Size.y*(MinimumZoom*100+((ZoomCounter*(1.0-MinimumZoom))))/100);
+                  DestRect.x = (p.x*(100-ZoomCounter)+MenuPos.x*ZoomCounter)/100;
+                  DestRect.y = (p.y*(100-ZoomCounter)+MenuPos.y*ZoomCounter)/100;
+                  DestRect.w = long(OnscreenBitmap.Size.x*(MinimumZoom*100+((ZoomCounter*(1.0-MinimumZoom))))/100);
+                  DestRect.h = long(OnscreenBitmap.Size.y*(MinimumZoom*100+((ZoomCounter*(1.0-MinimumZoom))))/100);
                }
 
-               /*PrimaryBm.PrimaryBm.GetSurface()->Blt (
-                  &DestRect,
-                  OnscreenBitmap.pBitmap->GetSurface(),
-                  &SrcRect,
-                  DDBLT_KEYSRC|DDBLTFAST_WAIT,
-                  NULL);*/
+               SDL_BlitScaled(OnscreenBitmap.pBitmap->GetSurface(), &SrcRect, PrimaryBm.PrimaryBm.GetSurface(), &DestRect);
             }
 
             if (CurrentMenu==MENU_EXTRABLATT) 
@@ -2838,25 +2828,20 @@ void CStdRaum::PostPaint (void)
 
          if (ZoomCounter>0)
          {
-            CRect SrcRect (0,0,OnscreenBitmap.Size.x,OnscreenBitmap.Size.y);
-            CRect DestRect;
+            SDL_Rect SrcRect = { 0,0,OnscreenBitmap.Size.x,OnscreenBitmap.Size.y };
+            SDL_Rect DestRect;
 
             StatusCount = max (StatusCount, 3);
 
             XY p=MenuStartPos;
             if (ZoomFromAirport) p-=qPlayer.ViewPos;
 
-            DestRect.left   = (p.x*(100-ZoomCounter)+MenuPos.x*ZoomCounter)/100;
-            DestRect.top    = (p.y*(100-ZoomCounter)+MenuPos.y*ZoomCounter)/100;
-            DestRect.right  = long(DestRect.left + OnscreenBitmap.Size.x*(MinimumZoom*100+((ZoomCounter*(1.0-MinimumZoom))))/100);
-            DestRect.bottom = long(DestRect.top  + OnscreenBitmap.Size.y*(MinimumZoom*100+((ZoomCounter*(1.0-MinimumZoom))))/100);
+            DestRect.x = (p.x*(100-ZoomCounter)+MenuPos.x*ZoomCounter)/100;
+            DestRect.y = (p.y*(100-ZoomCounter)+MenuPos.y*ZoomCounter)/100;
+            DestRect.w = long(OnscreenBitmap.Size.x*(MinimumZoom*100+((ZoomCounter*(1.0-MinimumZoom))))/100);
+            DestRect.h = long(OnscreenBitmap.Size.y*(MinimumZoom*100+((ZoomCounter*(1.0-MinimumZoom))))/100);
 
-            /*PrimaryBm.PrimaryBm.GetSurface()->Blt (
-               &DestRect,
-               OnscreenBitmap.pBitmap->GetSurface(),
-               &SrcRect,
-               DDBLT_KEYSRC|DDBLTFAST_WAIT,
-               NULL);*/
+            SDL_BlitScaled(OnscreenBitmap.pBitmap->GetSurface(), &SrcRect, PrimaryBm.PrimaryBm.GetSurface(), &DestRect);
          }
       }
 

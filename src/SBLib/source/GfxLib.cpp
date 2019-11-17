@@ -78,10 +78,6 @@ GfxMain::~GfxMain()
 
 long GfxMain::LoadLib(char* path, class GfxLib** out, long)
 {
-    *out = NULL;
-    if (!DoesFileExist(path))
-        return 0;
-
     Libs.push_back(GfxLib(this, NULL, path, 0, 0, NULL));
     *out = &Libs.back();
     return 0;
@@ -105,13 +101,16 @@ long GfxMain::ReleaseLib(class GfxLib* lib)
 GfxLib::GfxLib(void*, SDL_Renderer*, char* path, long, long, long*)
 {
     SDL_RWops* file = SDL_RWFromFile(path, "rb");
-    struct _GfxLibHeader* header = LoadHeader(file);
-    if (header)
+    if (file)
     {
-        Load(file, header);
-        delete header;
+        struct _GfxLibHeader* header = LoadHeader(file);
+        if (header)
+        {
+            Load(file, header);
+            delete header;
+        }
+        SDL_RWclose(file);
     }
-    SDL_RWclose(file);
 }
 
 GfxLibHeader* GfxLib::LoadHeader(SDL_RWops* file)

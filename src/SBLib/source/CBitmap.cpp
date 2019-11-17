@@ -18,7 +18,7 @@ unsigned long SB_CBitmapMain::CreateBitmap(SB_CBitmapCore** out, GfxLib* lib, __
         if (flags & CREATE_USECOLORKEY)
             core->SetColorKey(0);
         core->lpDD = Renderer;
-        core->Texture = SDL_CreateTextureFromSurface(Renderer, core->lpDDSurface);
+        //core->Texture = SDL_CreateTextureFromSurface(Renderer, core->lpDDSurface);
         core->Size.x = core->lpDDSurface->w;
         core->Size.y = core->lpDDSurface->h;
         core->InitClipRect();
@@ -27,6 +27,7 @@ unsigned long SB_CBitmapMain::CreateBitmap(SB_CBitmapCore** out, GfxLib* lib, __
     {
         core->lpDD = Renderer;
         core->lpDDSurface = NULL;
+        core->Texture = NULL;
         core->Size.x = 0;
         core->Size.y = 0;
     }
@@ -39,7 +40,7 @@ unsigned long SB_CBitmapMain::CreateBitmap(SB_CBitmapCore** out, long w, long h,
     SB_CBitmapCore* core = new SB_CBitmapCore();
     core->lpDD = Renderer;
     core->lpDDSurface = SDL_CreateRGBSurfaceWithFormat(0, w, h, 16, SDL_PIXELFORMAT_RGB565);
-    core->Texture = NULL;
+    //core->Texture = NULL;
     core->Size.x = w;
     core->Size.y = h;
     if ( !(flags & CREATE_USEALPHA) )
@@ -149,8 +150,17 @@ unsigned long SB_CBitmapCore::GetPixel(long x, long y)
     unsigned long pixel;
     if (SDL_RenderReadPixels(lpDD, &rect, SDL_PIXELFORMAT_RGBA8888, &pixel, sizeof(pixel)) == 0)
         return pixel;
-#endif
     return 0;
+#else
+    Uint8 r, g, b, bpp = lpDDSurface->format->BytesPerPixel;
+
+    SDL_LockSurface(lpDDSurface);
+    Uint8 *p = (Uint8 *)lpDDSurface->pixels + y * lpDDSurface->pitch + x * bpp;
+    SDL_GetRGB(*(Uint32*)p, lpDDSurface->format, &r, &g, &b);
+    SDL_UnlockSurface(lpDDSurface);
+
+    return (r << 16) | (g << 8) | b;
+#endif
 }
 
 unsigned long SB_CBitmapCore::Blit(class SB_CBitmapCore* core, long x, long y, const RECT* pRect, unsigned short, unsigned long)

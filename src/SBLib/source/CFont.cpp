@@ -18,11 +18,7 @@ SB_CFont::~SB_CFont(void)
         SDL_DestroyTexture(Texture);
 
     if (Surface)
-    {
-        void* pixels = Surface->pixels;
         SDL_FreeSurface(Surface);
-        delete [] pixels;
-    }
 
     if (VarWidth)
         delete [] VarWidth;
@@ -54,22 +50,15 @@ bool SB_CFont::Load(SDL_Renderer* renderer, char* path, struct HPALETTE__*)
         return false;
 
     word chars = Header.HiChar - Header.LoChar + 1;
-    Surface = SDL_CreateRGBSurfaceWithFormatFrom(pixels, Header.Width, Header.Height * chars, 8, Header.Width, SDL_PIXELFORMAT_INDEX8);
+    SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormatFrom(pixels, Header.Width, Header.Height * chars, 8, Header.Width, SDL_PIXELFORMAT_INDEX8);
     for (int i = 0; i < Header.NumColors; i++)
-    {
         Swap(colors[i].r, colors[i].b); // Convert BGR to RGB
-
-        // Manual color key
-        //if (!colors[i].r && !colors[i].g && !colors[i].b)
-        //    colors[i].a = 0;
-        //else
-        //    colors[i].a = 0xff;
-    }
-    SDL_SetPaletteColors(Surface->format->palette, colors, 0, Header.NumColors);
-    //SDL_SetSurfaceBlendMode(Surface, SDL_BLENDMODE_BLEND);
-    //SDL_SetColorKey(Surface, SDL_TRUE, 0);
-    Texture = SDL_CreateTextureFromSurface(renderer, Surface);
+    SDL_SetPaletteColors(surf->format->palette, colors, 0, Header.NumColors);
+    Surface = SDL_ConvertSurfaceFormat(surf, SDL_PIXELFORMAT_RGB565, 0);
+    SDL_SetColorKey(Surface, SDL_TRUE, 0);
+    SDL_FreeSurface(surf);
     delete [] colors;
+    delete [] pixels;
     return true;
 }
 

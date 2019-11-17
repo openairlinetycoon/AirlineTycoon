@@ -171,14 +171,14 @@ unsigned long SB_CBitmapCore::GetPixel(long x, long y)
         return pixel;
     return 0;
 #else
-    Uint8 r, g, b, bpp = lpDDSurface->format->BytesPerPixel;
+    Uint8 bpp = lpDDSurface->format->BytesPerPixel;
+    Uint8 bits = lpDDSurface->format->BitsPerPixel;
 
     SDL_LockSurface(lpDDSurface);
     Uint8 *p = (Uint8 *)lpDDSurface->pixels + y * lpDDSurface->pitch + x * bpp;
-    SDL_GetRGB(*(Uint32*)p, lpDDSurface->format, &r, &g, &b);
+    dword result = *(Uint32*)p;
     SDL_UnlockSurface(lpDDSurface);
-
-    return (r << 16) | (g << 8) | b;
+    return result & (1 << bits) - 1;
 #endif
 }
 

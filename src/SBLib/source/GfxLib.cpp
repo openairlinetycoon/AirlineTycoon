@@ -195,9 +195,7 @@ long GfxLib::ReadGfxChunk(SDL_RWops* file, GfxChunkHeader header, long, long)
         image.Gmask,
         image.Bmask,
         0);
-    SDL_SetSurfaceRLE(surface, SDL_TRUE);
-    Surfaces[header.Id] = SDL_ConvertSurfaceFormat(surface, SDL_PIXELFORMAT_RGB565, 0);
-    SDL_FreeSurface(surface);
+    Surfaces[header.Id] = surface;
     return 0;
 }
 
@@ -214,6 +212,7 @@ class GfxLib* GfxLib::ReleaseSurface(__int64 name)
     std::map<__int64, SDL_Surface*>::iterator it = Surfaces.find(name);
     if (it != Surfaces.end())
     {
+        delete [] it->second->pixels;
         SDL_FreeSurface(it->second);
         Surfaces.erase(it);
     }
@@ -223,7 +222,10 @@ class GfxLib* GfxLib::ReleaseSurface(__int64 name)
 void GfxLib::Release()
 {
     for (std::map<__int64, SDL_Surface*>::iterator it = Surfaces.begin(); it != Surfaces.end(); ++it)
+    {
+        delete [] it->second->pixels;
         SDL_FreeSurface(it->second);
+    }
     Surfaces.clear();
 }
 

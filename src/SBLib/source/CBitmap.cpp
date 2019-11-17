@@ -7,21 +7,30 @@ SB_CBitmapMain::SB_CBitmapMain(SDL_Renderer* render)
 
 SB_CBitmapMain::~SB_CBitmapMain()
 {
+    for (std::list<SB_CBitmapCore>::iterator it = Bitmaps.begin(); it != Bitmaps.end(); ++it)
+    {
+        SDL_FreeSurface(it->lpDDSurface);
+        //SDL_DestroyTexture(it->Texture);
+    }
 }
 
 unsigned long SB_CBitmapMain::CreateBitmap(SB_CBitmapCore** out, GfxLib* lib, __int64 name, unsigned long flags)
 {
-    SB_CBitmapCore* core = new SB_CBitmapCore();
-    core->lpDDSurface = lib->GetSurface(name);
-    if (core->lpDDSurface)
+    Bitmaps.push_back(SB_CBitmapCore());
+    SB_CBitmapCore* core = &Bitmaps.back();
+    SDL_Surface* surface = lib->GetSurface(name);
+    if (surface)
     {
-        if (flags & CREATE_USECOLORKEY)
-            core->SetColorKey(0);
         core->lpDD = Renderer;
+        core->lpDDSurface = SDL_ConvertSurfaceFormat(surface, SDL_PIXELFORMAT_RGB565, 0);
         //core->Texture = SDL_CreateTextureFromSurface(Renderer, core->lpDDSurface);
         core->Size.x = core->lpDDSurface->w;
         core->Size.y = core->lpDDSurface->h;
         core->InitClipRect();
+
+        if (flags & CREATE_USECOLORKEY)
+            core->SetColorKey(0);
+        SDL_SetSurfaceRLE(core->lpDDSurface, SDL_TRUE);
     }
     else
     {
@@ -37,7 +46,8 @@ unsigned long SB_CBitmapMain::CreateBitmap(SB_CBitmapCore** out, GfxLib* lib, __
 
 unsigned long SB_CBitmapMain::CreateBitmap(SB_CBitmapCore** out, long w, long h, unsigned long, unsigned long flags, unsigned long)
 {
-    SB_CBitmapCore* core = new SB_CBitmapCore();
+    Bitmaps.push_back(SB_CBitmapCore());
+    SB_CBitmapCore* core = &Bitmaps.back();
     core->lpDD = Renderer;
     core->lpDDSurface = SDL_CreateRGBSurfaceWithFormat(0, w, h, 16, SDL_PIXELFORMAT_RGB565);
     //core->Texture = NULL;
@@ -52,7 +62,16 @@ unsigned long SB_CBitmapMain::CreateBitmap(SB_CBitmapCore** out, long w, long h,
 
 unsigned long SB_CBitmapMain::ReleaseBitmap(SB_CBitmapCore* core)
 {
+    SDL_FreeSurface(core->lpDDSurface);
     //SDL_DestroyTexture(core->Texture);
+    for (std::list<SB_CBitmapCore>::iterator it = Bitmaps.begin(); it != Bitmaps.end(); ++it)
+    {
+        if (&*it == core)
+        {
+            Bitmaps.erase(it);
+            break;
+        }
+    }
     return 0;
 }
 

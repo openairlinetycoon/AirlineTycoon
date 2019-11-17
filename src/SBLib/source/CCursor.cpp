@@ -10,6 +10,8 @@ SB_CCursor::SB_CCursor(class SB_CPrimaryBitmap* primary, class SB_CBitmapCore* c
 
 SB_CCursor::~SB_CCursor(void)
 {
+    if (Background)
+        SDL_FreeSurface(Background);
 }
 
 long SB_CCursor::MoveImage(long x, long y)

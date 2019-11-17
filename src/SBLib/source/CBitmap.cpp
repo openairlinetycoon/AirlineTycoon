@@ -200,8 +200,6 @@ unsigned long SB_CBitmapCore::BlitFast(class SB_CBitmapCore* core, long x, long 
 
 unsigned long SB_CBitmapCore::BlitChar(SDL_Surface* font, long x, long y, const RECT* pRect, unsigned short flags)
 {
-    SDL_SetColorKey(font, SDL_FALSE, 0);
-    SDL_SetColorKey(lpDDSurface, SDL_TRUE, 0);
     const CRect& rect = *(const CRect*)pRect;
     SDL_Rect src = { rect.left, rect.top, rect.Width(), rect.Height() };
     SDL_Rect dst = { x, y, rect.Width(), rect.Height() };

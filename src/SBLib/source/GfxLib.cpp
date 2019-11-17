@@ -72,6 +72,8 @@ GfxMain::GfxMain(SDL_Renderer*)
 
 GfxMain::~GfxMain()
 {
+    for (std::list<GfxLib>::iterator it = Libs.begin(); it != Libs.end(); ++it)
+        it->Release();
 }
 
 long GfxMain::LoadLib(char* path, class GfxLib** out, long)
@@ -88,6 +90,15 @@ long GfxMain::LoadLib(char* path, class GfxLib** out, long)
 long GfxMain::ReleaseLib(class GfxLib* lib)
 {
     lib->Release();
+
+    for (std::list<GfxLib>::iterator it = Libs.begin(); it != Libs.end(); ++it)
+    {
+        if (&*it == lib)
+        {
+            Libs.erase(it);
+            break;
+        }
+    }
     return 0;
 }
 
@@ -200,19 +211,20 @@ SDL_Surface* GfxLib::GetSurface(__int64 name)
 
 class GfxLib* GfxLib::ReleaseSurface(__int64 name)
 {
-    SDL_Surface* surface = GetSurface(name);
-    if (surface)
+    std::map<__int64, SDL_Surface*>::iterator it = Surfaces.find(name);
+    if (it != Surfaces.end())
     {
-        void* pixels = surface->pixels;
-        SDL_FreeSurface(surface);
-        delete [] pixels;
+        SDL_FreeSurface(it->second);
+        Surfaces.erase(it);
     }
     return this;
 }
 
 void GfxLib::Release()
 {
-    return;
+    for (std::map<__int64, SDL_Surface*>::iterator it = Surfaces.begin(); it != Surfaces.end(); ++it)
+        SDL_FreeSurface(it->second);
+    Surfaces.clear();
 }
 
 long GfxLib::Restore()

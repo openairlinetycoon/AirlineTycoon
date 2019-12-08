@@ -71,7 +71,7 @@ public:
     }
 
     T& GetFirst() { return *(mIt = mList.begin()); }
-    T& GetNext() { return *(++mIt); }
+    T& GetNext() { return *mIt++; }
     bool IsLast() { return mIt == mList.end(); }
 
 private:

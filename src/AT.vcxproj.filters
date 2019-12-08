@@ -1,0 +1,405 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{bcc2ac13-b03f-489a-b97f-49674b8e8c44}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Doku">
+      <UniqueIdentifier>{586e03e1-1127-431b-8665-5b9de176a750}</UniqueIdentifier>
+      <Extensions>txt</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Diverse">
+      <UniqueIdentifier>{d5eb3c13-973e-4104-a8af-874bd809b722}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Wichtige">
+      <UniqueIdentifier>{7e936d50-15c0-4734-8204-a454537ba7b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Library">
+      <UniqueIdentifier>{39324587-a53e-40f9-b271-9b828cc49e8c}</UniqueIdentifier>
+      <Extensions>coo+</Extensions>
+    </Filter>
+    <Filter Include="Libraries">
+      <UniqueIdentifier>{e7746b8a-5399-477a-9b0c-1faa1309d796}</UniqueIdentifier>
+      <Extensions>lib</Extensions>
+    </Filter>
+    <Filter Include="Libraries\SB-Lib">
+      <UniqueIdentifier>{2d25878b-9a61-4583-96f9-35c667d8f6b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Libraries\TeakLibW">
+      <UniqueIdentifier>{061bec7d-b93e-468c-b735-71eb2ef3a57d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Räume">
+      <UniqueIdentifier>{cc0a7728-42ee-4b21-bc7c-3aba1cfc7744}</UniqueIdentifier>
+      <Extensions>cpp</Extensions>
+    </Filter>
+    <Filter Include="Räume\Normale">
+      <UniqueIdentifier>{7e7ab592-6811-4f98-b69f-8447aa37e66c}</UniqueIdentifier>
+      <Extensions>Cpp</Extensions>
+    </Filter>
+    <Filter Include="Räume\Spezielle">
+      <UniqueIdentifier>{9427dd78-8c5f-40d4-b08f-908605a731b3}</UniqueIdentifier>
+      <Extensions>cpp</Extensions>
+    </Filter>
+    <Filter Include="Ressourcen">
+      <UniqueIdentifier>{0781efba-75f7-4201-b8b9-1c70103da1cd}</UniqueIdentifier>
+      <Extensions>res</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="0_ref.txt">
+      <Filter>Source Files\Doku</Filter>
+    </Text>
+    <Text Include="2do.txt">
+      <Filter>Source Files\Doku</Filter>
+    </Text>
+    <Text Include="_doku.txt">
+      <Filter>Source Files\Doku</Filter>
+    </Text>
+    <Text Include="cipher.txt">
+      <Filter>Source Files\Doku</Filter>
+    </Text>
+    <Text Include="Debug.log" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cd_prot.h">
+      <Filter>Source Files\Doku</Filter>
+    </ClInclude>
+    <ClInclude Include="sbl.h">
+      <Filter>Libraries</Filter>
+    </ClInclude>
+    <ClInclude Include="TeakLibW.h">
+      <Filter>Libraries</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AskBrick.cpp">
+      <Filter>Source Files\Diverse</Filter>
+    </ClCompile>
+    <ClCompile Include="Auftrag.Cpp">
+      <Filter>Source Files\Diverse</Filter>
+    </ClCompile>
+    <ClCompile Include="Block.cpp">
+      <Filter>Source Files\Diverse</Filter>
+    </ClCompile>
+    <ClCompile Include="Brick.Cpp">
+      <Filter>Source Files\Diverse</Filter>
+    </ClCompile>
+    <ClCompile Include="City.Cpp">
+      <Filter>Source Files\Diverse</Filter>
+    </ClCompile>
+    <ClCompile Include="DataTabl.Cpp">
+      <Filter>Source Files\Diverse</Filter>
+    </ClCompile>
+    <ClCompile Include="HallDiskMenu.cpp">
+      <Filter>Source Files\Diverse</Filter>
+    </ClCompile>
+    <ClCompile Include="Klacker.cpp">
+      <Filter>Source Files\Diverse</Filter>
+    </ClCompile>
+    <ClCompile Include="Misc.cpp">
+      <Filter>Source Files\Diverse</Filter>
+    </ClCompile>
+    <ClCompile Include="NewGamePopup.cpp">
+      <Filter>Source Files\Diverse</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaneTyp.Cpp">
+      <Filter>Source Files\Diverse</Filter>
+    </ClCompile>
+    <ClCompile Include="Route.Cpp">
+      <Filter>Source Files\Diverse</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Source Files\Diverse</Filter>
+    </ClCompile>
+    <ClCompile Include="StdAfx.cpp">
+      <Filter>Source Files\Diverse</Filter>
+    </ClCompile>
+    <ClCompile Include="Talker.cpp">
+      <Filter>Source Files\Diverse</Filter>
+    </ClCompile>
+    <ClCompile Include="Tips.Cpp">
+      <Filter>Source Files\Diverse</Filter>
+    </ClCompile>
+    <ClCompile Include="TitlePopup.cpp">
+      <Filter>Source Files\Diverse</Filter>
+    </ClCompile>
+    <ClCompile Include="AtNet.cpp">
+      <Filter>Source Files\Wichtige</Filter>
+    </ClCompile>
+    <ClCompile Include="GameFrame.cpp">
+      <Filter>Source Files\Wichtige</Filter>
+    </ClCompile>
+    <ClCompile Include="Person.cpp">
+      <Filter>Source Files\Wichtige</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files\Wichtige</Filter>
+    </ClCompile>
+    <ClCompile Include="PNet.cpp">
+      <Filter>Source Files\Wichtige</Filter>
+    </ClCompile>
+    <ClCompile Include="Protect.cpp">
+      <Filter>Source Files\Wichtige</Filter>
+    </ClCompile>
+    <ClCompile Include="Sim.cpp">
+      <Filter>Source Files\Wichtige</Filter>
+    </ClCompile>
+    <ClCompile Include="Synthese.cpp">
+      <Filter>Source Files\Wichtige</Filter>
+    </ClCompile>
+    <ClCompile Include="TakeOff.cpp">
+      <Filter>Source Files\Wichtige</Filter>
+    </ClCompile>
+    <ClCompile Include="Checkup.cpp">
+      <Filter>Source Files\Library</Filter>
+    </ClCompile>
+    <ClCompile Include="Colorfx.cpp">
+      <Filter>Source Files\Library</Filter>
+    </ClCompile>
+    <ClCompile Include="global.cpp">
+      <Filter>Source Files\Library</Filter>
+    </ClCompile>
+    <ClCompile Include="HLine.cpp">
+      <Filter>Source Files\Library</Filter>
+    </ClCompile>
+    <ClCompile Include="Init.cpp">
+      <Filter>Source Files\Library</Filter>
+    </ClCompile>
+    <ClCompile Include="SBBM.cpp">
+      <Filter>Source Files\Library</Filter>
+    </ClCompile>
+    <ClCompile Include="SecurityManager.cpp">
+      <Filter>Source Files\Library</Filter>
+    </ClCompile>
+    <ClCompile Include="Smackprs.cpp">
+      <Filter>Source Files\Library</Filter>
+    </ClCompile>
+    <ClCompile Include="DeltaVid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SBLib\source\CBitmap.cpp">
+      <Filter>Libraries\SB-Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="SBLib\source\CCursor.cpp">
+      <Filter>Libraries\SB-Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="SBLib\source\CFont.cpp">
+      <Filter>Libraries\SB-Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="SBLib\source\GfxLib.cpp">
+      <Filter>Libraries\SB-Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="SBLib\source\Network.cpp">
+      <Filter>Libraries\SB-Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="SBLib\source\Tool2.cpp">
+      <Filter>Libraries\SB-Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="TeakLibW\Album.cpp">
+      <Filter>Libraries\TeakLibW</Filter>
+    </ClCompile>
+    <ClCompile Include="TeakLibW\Bitmap.cpp">
+      <Filter>Libraries\TeakLibW</Filter>
+    </ClCompile>
+    <ClCompile Include="TeakLibW\Debug.cpp">
+      <Filter>Libraries\TeakLibW</Filter>
+    </ClCompile>
+    <ClCompile Include="TeakLibW\Math.cpp">
+      <Filter>Libraries\TeakLibW</Filter>
+    </ClCompile>
+    <ClCompile Include="TeakLibW\TeakFile.cpp">
+      <Filter>Libraries\TeakLibW</Filter>
+    </ClCompile>
+    <ClCompile Include="TeakLibW\TeakStr.cpp">
+      <Filter>Libraries\TeakLibW</Filter>
+    </ClCompile>
+    <ClCompile Include="TeakLibW\TextRes.cpp">
+      <Filter>Libraries\TeakLibW</Filter>
+    </ClCompile>
+    <ClCompile Include="ArabAir.cpp">
+      <Filter>Räume\Normale</Filter>
+    </ClCompile>
+    <ClCompile Include="Aufsicht.cpp">
+      <Filter>Räume\Normale</Filter>
+    </ClCompile>
+    <ClCompile Include="Bank.cpp">
+      <Filter>Räume\Normale</Filter>
+    </ClCompile>
+    <ClCompile Include="Buero.Cpp">
+      <Filter>Räume\Normale</Filter>
+    </ClCompile>
+    <ClCompile Include="Designer.cpp">
+      <Filter>Räume\Normale</Filter>
+    </ClCompile>
+    <ClCompile Include="DutyFree.cpp">
+      <Filter>Räume\Normale</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor.cpp">
+      <Filter>Räume\Normale</Filter>
+    </ClCompile>
+    <ClCompile Include="Fracht.cpp">
+      <Filter>Räume\Normale</Filter>
+    </ClCompile>
+    <ClCompile Include="Kiosk.cpp">
+      <Filter>Räume\Normale</Filter>
+    </ClCompile>
+    <ClCompile Include="LastMin.cpp">
+      <Filter>Räume\Normale</Filter>
+    </ClCompile>
+    <ClCompile Include="Makler.cpp">
+      <Filter>Räume\Normale</Filter>
+    </ClCompile>
+    <ClCompile Include="Museum.cpp">
+      <Filter>Räume\Normale</Filter>
+    </ClCompile>
+    <ClCompile Include="Personal.cpp">
+      <Filter>Räume\Normale</Filter>
+    </ClCompile>
+    <ClCompile Include="reise.cpp">
+      <Filter>Räume\Normale</Filter>
+    </ClCompile>
+    <ClCompile Include="Ricks.cpp">
+      <Filter>Räume\Normale</Filter>
+    </ClCompile>
+    <ClCompile Include="RouteBox.cpp">
+      <Filter>Räume\Normale</Filter>
+    </ClCompile>
+    <ClCompile Include="Rushmore.cpp">
+      <Filter>Räume\Normale</Filter>
+    </ClCompile>
+    <ClCompile Include="sabotage.cpp">
+      <Filter>Räume\Normale</Filter>
+    </ClCompile>
+    <ClCompile Include="Security.cpp">
+      <Filter>Räume\Normale</Filter>
+    </ClCompile>
+    <ClCompile Include="Statistk.cpp">
+      <Filter>Räume\Normale</Filter>
+    </ClCompile>
+    <ClCompile Include="Tafel.cpp">
+      <Filter>Räume\Normale</Filter>
+    </ClCompile>
+    <ClCompile Include="WeltAll.cpp">
+      <Filter>Räume\Normale</Filter>
+    </ClCompile>
+    <ClCompile Include="Werbung.cpp">
+      <Filter>Räume\Normale</Filter>
+    </ClCompile>
+    <ClCompile Include="Werkstat.cpp">
+      <Filter>Räume\Normale</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Räume\Normale</Filter>
+    </ClCompile>
+    <ClCompile Include="Abend.cpp">
+      <Filter>Räume\Spezielle</Filter>
+    </ClCompile>
+    <ClCompile Include="AirportView.cpp">
+      <Filter>Räume\Spezielle</Filter>
+    </ClCompile>
+    <ClCompile Include="Credits.cpp">
+      <Filter>Räume\Spezielle</Filter>
+    </ClCompile>
+    <ClCompile Include="Dialog.cpp">
+      <Filter>Räume\Spezielle</Filter>
+    </ClCompile>
+    <ClCompile Include="Globe.cpp">
+      <Filter>Räume\Spezielle</Filter>
+    </ClCompile>
+    <ClCompile Include="Insel.cpp">
+      <Filter>Räume\Spezielle</Filter>
+    </ClCompile>
+    <ClCompile Include="Intro.cpp">
+      <Filter>Räume\Spezielle</Filter>
+    </ClCompile>
+    <ClCompile Include="Laptop.cpp">
+      <Filter>Räume\Spezielle</Filter>
+    </ClCompile>
+    <ClCompile Include="Nasa.cpp">
+      <Filter>Räume\Spezielle</Filter>
+    </ClCompile>
+    <ClCompile Include="Options.cpp">
+      <Filter>Räume\Spezielle</Filter>
+    </ClCompile>
+    <ClCompile Include="Outro.cpp">
+      <Filter>Räume\Spezielle</Filter>
+    </ClCompile>
+    <ClCompile Include="Planer.cpp">
+      <Filter>Räume\Spezielle</Filter>
+    </ClCompile>
+    <ClCompile Include="PlanProp.cpp">
+      <Filter>Räume\Spezielle</Filter>
+    </ClCompile>
+    <ClCompile Include="Schedule.cpp">
+      <Filter>Räume\Spezielle</Filter>
+    </ClCompile>
+    <ClCompile Include="StdRaum.cpp">
+      <Filter>Räume\Spezielle</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res\Script2.rc">
+      <Filter>Source Files\Diverse</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="D:\Projekte\Sys\SoundEngine\Dll\Debug\SSE.lib">
+      <Filter>Libraries</Filter>
+    </Library>
+    <Library Include="D:\Projekte\Sys\SoundEngine\Dll\Release\SSE.lib">
+      <Filter>Libraries</Filter>
+    </Library>
+    <Library Include="..\SoundEngine\Dll\Release\SSE.lib">
+      <Filter>Libraries</Filter>
+    </Library>
+    <Library Include="..\Sbl\Debug\SBL.lib">
+      <Filter>Libraries</Filter>
+    </Library>
+    <Library Include="..\libs\SSE.lib">
+      <Filter>Libraries</Filter>
+    </Library>
+    <Library Include="..\smksdk\SMACKW32.LIB">
+      <Filter>Libraries</Filter>
+    </Library>
+    <Library Include="..\SDL2-2.0.10\lib\x86\SDL2.lib">
+      <Filter>Libraries</Filter>
+    </Library>
+    <Library Include="..\SDL2_image-2.0.5\lib\x86\SDL2_image.lib">
+      <Filter>Libraries</Filter>
+    </Library>
+    <Library Include="..\SDL2_ttf-2.0.15\lib\x86\SDL2_ttf.lib">
+      <Filter>Libraries</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Misc\Dlg_ger.res">
+      <Filter>Ressourcen</Filter>
+    </Resource>
+    <Resource Include="Misc\Ein_ger.res">
+      <Filter>Ressourcen</Filter>
+    </Resource>
+    <Resource Include="Misc\Register.res">
+      <Filter>Ressourcen</Filter>
+    </Resource>
+    <Resource Include="Misc\Std_ger.res">
+      <Filter>Ressourcen</Filter>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Res\16-16.ico" />
+    <Image Include="Res\AtIcone.ico" />
+    <Image Include="Res\ico00001.ico" />
+    <Image Include="Res\ico00002.ico" />
+    <Image Include="res\icon1.ico" />
+    <Image Include="res\idr_main.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\AddOn.doc">
+      <Filter>Source Files\Doku</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\AddOn.xls">
+      <Filter>Source Files\Doku</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

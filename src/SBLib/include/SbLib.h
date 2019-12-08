@@ -67,7 +67,8 @@ public:
 
     void Clear()
     {
-        mList.clear();
+        if (!mList.empty())
+           mList.clear();
     }
 
     T& GetFirst() { return *(mIt = mList.begin()); }
@@ -76,5 +77,5 @@ public:
 
 private:
     std::list<T> mList;
-    std::list<T>::iterator mIt;
+    typename std::list<T>::iterator mIt;
 };

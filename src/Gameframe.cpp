@@ -722,7 +722,11 @@ BOOL GameFrame::OnEraseBkgnd(CDC* pDC)
 //--------------------------------------------------------------------------------------------
 //Wird beim Taskwechsel aufgerufen:
 //--------------------------------------------------------------------------------------------
-void GameFrame::OnActivateApp(BOOL bActive, HTASK hTask) 
+#if _MSC_VER >= 1400
+void GameFrame::OnActivateApp(BOOL bActive, DWORD hTask)
+#else
+void GameFrame::OnActivateApp(BOOL bActive, HTASK hTask)
+#endif
 {
    if (::bActive != bActive)
    {

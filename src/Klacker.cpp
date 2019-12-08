@@ -192,7 +192,7 @@ void KLACKER::PrintAt (SLONG x, SLONG y, const char *Text)
 void KLACKER::PrintVolumeAt (SLONG x, SLONG y, SLONG Maximum, SLONG Current)
 {
    SLONG c;
-   char *p;
+   const char *p;
 
    for (c=0; c+x<24 && c<Maximum; c++)
    {

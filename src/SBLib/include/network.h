@@ -2,6 +2,15 @@
 
 #include <enet/enet.h>
 
+typedef DWORD DPID;
+
+//Direct play identifiers
+#define DPPLAYERTYPE_GROUP          0x0000
+#define DPPLAYERTYPE_PLAYER         0x0001
+#define DPSYS_DESTROYPLAYERORGROUP  0x0005
+#define DPSYS_SESSIONLOST           0x0031
+#define DPSYS_HOST                  0x0101
+
 struct DPPacket
 {
     ULONG messageType;

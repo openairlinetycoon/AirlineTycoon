@@ -62,8 +62,10 @@ unsigned long SB_CBitmapMain::CreateBitmap(SB_CBitmapCore** out, long w, long h,
 
 unsigned long SB_CBitmapMain::ReleaseBitmap(SB_CBitmapCore* core)
 {
-    SDL_FreeSurface(core->lpDDSurface);
-    //SDL_DestroyTexture(core->Texture);
+    if (core->lpDDSurface)
+        SDL_FreeSurface(core->lpDDSurface);
+    //if (core->Texture)
+    //    SDL_DestroyTexture(core->Texture);
     for (std::list<SB_CBitmapCore>::iterator it = Bitmaps.begin(); it != Bitmaps.end(); ++it)
     {
         if (&*it == core)

@@ -421,7 +421,7 @@ void CStatistik::OnPaint()
    }
    else
    {
-	   output = Sim.Date + 1;
+	   output = bitoa(Sim.Date + 1);
 	   output += ". ";
 	   output += StandardTexte.GetS (TOKEN_STAT, 9000);
    }
@@ -480,7 +480,7 @@ void CStatistik::OnPaint()
 
 
 	// Die Werte sollten gelegentlich neu gezeichnet werden
-	static tickers = 0;
+	static int tickers = 0;
 	if (_fRepaint || (GetTickCount() - tickers > 1500 && DropDownSpeed == 0))
 	{
 		tickers = GetTickCount();
@@ -585,13 +585,13 @@ void CStatistik::RepaintGraphWindow (void)
 	CString output;
 	if (_days <= 30)
 	{
-		output = _days;
+		output = bitoa(_days);
 		output += " ";
 		output += StandardTexte.GetS (TOKEN_STAT, 9001);
 	}
 	else
 	{
-		output = _days/30;
+		output = bitoa(_days/30);
 		output += " ";
 		output += StandardTexte.GetS (TOKEN_STAT, 9002);
 	}

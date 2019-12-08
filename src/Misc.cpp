@@ -184,6 +184,7 @@ void DrawChart (SBBM &TipBm, ULONG Color, const FBUFFER<SLONG> &Values, SLONG Mi
 //--------------------------------------------------------------------------------------------
 //Liest den aktuellen Taktzyklenzähler der CPU
 //--------------------------------------------------------------------------------------------
+#if 0
 #pragma warning (disable : 4035)
 SLONG ReadTimeStampCounter (void)
 {
@@ -194,6 +195,7 @@ SLONG ReadTimeStampCounter (void)
    }
 }
 #pragma warning (default : 4035)
+#endif
 
 //--------------------------------------------------------------------------------------------
 //Ja was wohl??? Konvertiert halt!

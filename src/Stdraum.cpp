@@ -91,7 +91,7 @@ static UBYTE HandyRoomRemapper [] =
   ROOM_MAKLER, ROOM_MUSEUM, ROOM_NASA, ROOM_PERSONAL_A, ROOM_PERSONAL_A,
   ROOM_WERBUNG, ROOM_WERKSTATT, 0, 254, ROOM_WORLD, 255};
 
-static RoomTipTable [] =
+static DWORD RoomTipTable [] =
   {
      ROOM_BURO_A,          1,
      ROOM_BURO_B,          1,
@@ -7971,7 +7971,7 @@ void CStdRaum::OnChar(UINT nChar, UINT, UINT)
       {
          if (Optionen[0].GetLength()<20 || CurrentMenu==MENU_BROADCAST || CurrentMenu==MENU_CHAT)
          {
-            Optionen[0]+=nChar;
+            Optionen[0]+=bitoa(nChar);
             MenuRepaint();
          }
       }

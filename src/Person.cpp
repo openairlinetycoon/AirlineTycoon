@@ -217,12 +217,12 @@ void CLANS::ReInit (const CString &TabFilename)
                   {
                      (*pIds)[e]=id;
 
-                     id+=1<<(add*8);
+                     id+=1ull<<(add*8);
 
                      if (((id>>(add*8))&0xff)=='9'+1)
                      {
-                        id-=10<<(add*8);
-                        id+=1<<((add-1)*8);
+                        id-=10ull<<(add*8);
+                        id+=1ull<<((add-1)*8);
                      }
                   }
 

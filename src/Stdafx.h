@@ -3,15 +3,10 @@
 //      are changed infrequently
 //
 
-template<bool>
-struct static_assert;
-
-template<>
-struct static_assert<true> {};
+#define _WIN32_WINNT _WIN32_WINNT_WINXP
 
 #include <afxwin.h>
 #include <ddraw.h>
-#include <dplay.h>
 #include <math.h>
 #include <mmsystem.h>
 #include <SDL.h>

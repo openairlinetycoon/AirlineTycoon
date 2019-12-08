@@ -1901,7 +1901,7 @@ void NewGamePopup::OnRButtonDown(UINT nFlags, CPoint point)
 void NewGamePopup::OnTimer(UINT nIDEvent) 
 {
    SLONG c, l;
-   static counter=0;
+   static int counter=0;
 
    if (!bNewGamePopupIsOpen) return;
 

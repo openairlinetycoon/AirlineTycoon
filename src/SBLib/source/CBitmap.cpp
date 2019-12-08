@@ -353,6 +353,7 @@ long SB_CPrimaryBitmap::Flip()
         Cursor->FlipBegin();
 
     //SDL_RenderPresent(lpDD);
+    SDL_BlitSurface(lpDDSurface, NULL, SDL_GetWindowSurface(Window), NULL);
     SDL_UpdateWindowSurface(Window);
 
     if (Cursor)
@@ -368,7 +369,7 @@ long SB_CPrimaryBitmap::Create(SDL_Renderer** out, HWND& hWnd, unsigned short fl
 {
     Window = SDL_CreateWindowFrom(hWnd);
     //lpDD = SDL_CreateRenderer(Window, -1, SDL_RENDERER_SOFTWARE);
-    lpDDSurface = SDL_GetWindowSurface(Window);
+    lpDDSurface = SDL_CreateRGBSurfaceWithFormat(0, w, h, 16, SDL_PIXELFORMAT_RGB565);
     Size.x = w;
     Size.y = h;
     Cursor = NULL;

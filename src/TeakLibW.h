@@ -264,7 +264,7 @@ private:
     void CodeBlock(unsigned char*, long, long);
 };
 
-static_assert<sizeof(TEAKFILE) == 68> TEAKFILE_size_check;
+//static_assert(sizeof(TEAKFILE) == 68, "TEAKFILE_size_check");
 
 class CRLEReader
 {
@@ -616,7 +616,7 @@ public:
     SLONG Unknown;
 };
 
-static_assert<sizeof(PALETTE) == 16> PALETTE_size_check;
+//static_assert(sizeof(PALETTE) == 16, "PALETTE size check");
 
 struct TEXTRES_CACHE_ENTRY
 {
@@ -624,7 +624,7 @@ struct TEXTRES_CACHE_ENTRY
     char* Text;
 };
 
-static_assert<sizeof(TEXTRES_CACHE_ENTRY) == 12> TEXTRES_CACHE_ENTRY_size_check;
+//static_assert(sizeof(TEXTRES_CACHE_ENTRY) == 12, "TEXTRES_CACHE_ENTRY size check");
 
 #define TEXTRES_CACHED (void*)1
 
@@ -648,7 +648,7 @@ private:
     BUFFER<TEXTRES_CACHE_ENTRY> Entries;
 };
 
-static_assert<sizeof(TEXTRES) == 36> TEXTRES_size_check;
+//static_assert(sizeof(TEXTRES) == 36, "TEXTRES size check");
 
 class CRegistration
 {
@@ -744,7 +744,7 @@ private:
     static long TotalVidMem;
 };
 
-static_assert<sizeof(TECBM) == 40> TECBM_size_check;
+//static_assert(sizeof(TECBM) == 40, "TECBM size check");
 
 class TECBMKEY
 {
@@ -757,7 +757,7 @@ public:
     SLONG lPitch;
 };
 
-static_assert<sizeof(TECBMKEY) == 12> TECBMKEY_size_check;
+//static_assert(sizeof(TECBMKEY) == 12, "TECBMKEY size check");
 
 class TECBMKEYC
 {
@@ -770,7 +770,7 @@ public:
     SLONG lPitch;
 };
 
-static_assert<sizeof(TECBMKEYC) == 12> TECBMKEYC_size_check;
+//static_assert(sizeof(TECBMKEYC) == 12, "TECBMKEYC size check");
 
 
 class HDU
@@ -1031,6 +1031,6 @@ inline const T& Max(const T& a, const T& b)
     return (a < b) ? b : a;
 }
 
-inline ReferTo(...) {}
+inline void ReferTo(...) {}
 
-inline MB() {}
+inline void MB() {}

@@ -243,10 +243,10 @@ ULONG CITIES::GetIdFromName (char *Name)
 //  SMPL: foreacharg (long, Value1, 0)
 //--------------------------------------------------------------------------------------------
 #define foreacharg(type, firstargname, finalvalue) \
-   if (true) \
+   if (va_list va_marker = (va_list)true) \
       for (long arghelper1=0, arghelper2=0, arghelper3=0; arghelper1==0; arghelper1=1) \
          for (type q##type=firstargname; arghelper2==0; arghelper2=1) \
-            for (va_list va_marker = va_start (va_marker, firstargname); q##type!=finalvalue; q##type=va_arg(va_marker, type))
+            for (va_start (va_marker, firstargname); q##type!=finalvalue; q##type=va_arg(va_marker, type))
 
 //--------------------------------------------------------------------------------------------
 //Gibt die Nummer der Stadt mit dem angegebnen Namen zurück:

@@ -32,7 +32,7 @@ void ConvertBitmapTo16Bit (UBYTE *SourcePic, SBBM *pBitmap, UWORD *pPaletteMappe
    SLONG register y;
    SB_CBitmapKey  Key(*pBitmap->pBitmap);
 
-   static _EBP;
+   static int _EBP;
 
    if (Key.Bitmap==NULL) return;
 

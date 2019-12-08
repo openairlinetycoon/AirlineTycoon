@@ -263,7 +263,7 @@ bool SBNetwork::StartGetSessionListAsync()
 
 GUID* SBNetwork::GetProviderGuid(char*)
 {
-    return (GUID*)&DPSPGUID_TCPIP;
+    return (GUID*)&GUID_NULL;
 }
 
 bool SBNetwork::IsEnumSessionFinished()

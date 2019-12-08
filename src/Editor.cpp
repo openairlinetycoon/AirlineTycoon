@@ -70,6 +70,8 @@ CPlaneBuild gPlaneBuilds[37]=
    CPlaneBuild (6004, "L6",  2000000, 30000,  0,     0,     0,       0,      0,         36,    8000),
 };
 
+#undef _C2
+
 static long _B1=GetPlaneBuildIndex("B1");
 static long _B2=GetPlaneBuildIndex("B2");
 static long _B3=GetPlaneBuildIndex("B3");

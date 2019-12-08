@@ -204,7 +204,7 @@ protected:
     dword Unknown2[5];
 };
 
-static_assert<sizeof(SB_CBitmapCore) == 0x5Cu> SB_CBitmapCore_size_check;
+//static_assert(sizeof(SB_CBitmapCore) == 0x5Cu, "SB_CBitmapCore size check");
 
 class SB_CCursor
 {
@@ -232,7 +232,7 @@ private:
     dword Unknown[22];
 };
 
-static_assert<sizeof(SB_CCursor) == 0x6Cu> SB_CCursor_size_check;
+//static_assert(sizeof(SB_CCursor) == 0x6Cu, "SB_CCursor size check");
 
 class SB_CPrimaryBitmap : public SB_CBitmapCore
 {
@@ -285,7 +285,7 @@ private:
     SB_CCursor* Cursor;
 };
 
-static_assert<sizeof(SB_CPrimaryBitmap) == 0x88u> SB_CPrimaryBitmap_size_check;
+//static_assert(sizeof(SB_CPrimaryBitmap) == 0x88u, "SB_CPrimaryBitmap size check");
 
 class SB_CBitmapMain
 {
@@ -304,7 +304,7 @@ private:
     dword Unknown[3];
 };
 
-static_assert<sizeof(SB_CBitmapMain) == 0x1Cu> SB_CBitmapMain_size_check;
+////static_assert(sizeof(SB_CBitmapMain) == 0x1Cu, "SB_CBitmapMain size check");
 
 class SB_CBitmapKey
 {
@@ -318,7 +318,7 @@ public:
     int lPitch;
 };
 
-static_assert<sizeof(SB_CBitmapKey) == 0x78u> SB_CBitmapKey_size_check;
+//static_assert(sizeof(SB_CBitmapKey) == 0x78u, "SB_CBitmapKey size check");
 
 typedef struct
 {
@@ -340,14 +340,14 @@ typedef struct tagTabs
     dword Width;
 } TABS;
 
-static_assert<sizeof(TABS) == 8> TABS_size_check;
+//static_assert(sizeof(TABS) == 8, "TABS size check");
 
 typedef struct tagTextStyle
 {
     dword Unknown[3];
 } TEXT_STYLE;
 
-static_assert<sizeof(TEXT_STYLE) == 12> TEXT_STYLE_size_check;
+//static_assert(sizeof(TEXT_STYLE) == 12, "TEXT_STYLE size check");
 
 class SB_CFont
 {
@@ -418,7 +418,7 @@ private:
     SB_CBitmapCore* Bitmap;
 };
 
-static_assert<sizeof(SB_CFont) == 0x70u> SB_CFont_size_check;
+//static_assert(sizeof(SB_CFont) == 0x70u, "SB_CFont size check");
 
 class SB_CXList
 {
@@ -448,4 +448,4 @@ private:
     dword Unknown[4];
 };
 
-static_assert<sizeof(SB_CXList) == 0x10u> SB_CXList_size_check;
+//static_assert(sizeof(SB_CXList) == 0x10u, "SB_CXList size check");

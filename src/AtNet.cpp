@@ -1877,31 +1877,7 @@ void PumpNetwork (void)
 //--------------------------------------------------------------------------------------------
 SLONG GetMediumIdentifier (GUID guidServiceProvider)
 {
-	// internet TCP/IP service provider
-	if (IsEqualGUID(guidServiceProvider, DPSPGUID_TCPIP))
-	{
-      return NET_MEDIUM_TCPIP;
-	}
-	// IPX service provider
-	else if (IsEqualGUID(guidServiceProvider, DPSPGUID_IPX))
-	{
-      return NET_MEDIUM_IPX;
-	}
-	// modem service provider
-	else if (IsEqualGUID(guidServiceProvider, DPSPGUID_MODEM))
-	{
-      return NET_MEDIUM_MODEM;
-	}
-	// Serial service provider
-	else if (IsEqualGUID(guidServiceProvider, DPSPGUID_SERIAL))
-	{
-      return NET_MEDIUM_SERIAL;
-	}
-	// anything else, let service provider collect settings, if any
-	else
-	{
-      return NET_MEDIUM_UNKNOWN;
-	}
+   return NET_MEDIUM_TCPIP;
 }
 
 //--------------------------------------------------------------------------------------------

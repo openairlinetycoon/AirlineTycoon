@@ -12,7 +12,7 @@ class  CPlane;
 class  CPlaner;
 
 extern SLONG                   MouseWait;
-SLONG  ReadTimeStampCounter (void);
+//SLONG  ReadTimeStampCounter (void);
 
 class /**/CSmoke
 {

@@ -39,7 +39,11 @@ public:
 	//{{AFX_MSG(GameFrame)
 	afx_msg void OnPaint();
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+#if _MSC_VER >= 1400
+	afx_msg void OnActivateApp(BOOL bActive, DWORD hTask);
+#else
 	afx_msg void OnActivateApp(BOOL bActive, HTASK hTask);
+#endif
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
    afx_msg void OnCaptureChanged(CWnd* pWnd);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);

@@ -18,6 +18,10 @@ ENet instead of DirectPlay and might behave differently than the original.
 
 ## Building
 
-This repository can only be successfully built using Visual C++ 6.0, which is a version of Visual Studio from the 90s.
+This repository can be built using Visual Studio 2019 Community. Before building remember to clone the submodules:
+
+```
+git submodule update --init
+```
 
 More build instructions will follow soon.

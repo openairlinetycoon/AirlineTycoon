@@ -362,15 +362,6 @@
     <Library Include="..\smksdk\SMACKW32.LIB">
       <Filter>Libraries</Filter>
     </Library>
-    <Library Include="..\SDL2-2.0.10\lib\x86\SDL2.lib">
-      <Filter>Libraries</Filter>
-    </Library>
-    <Library Include="..\SDL2_image-2.0.5\lib\x86\SDL2_image.lib">
-      <Filter>Libraries</Filter>
-    </Library>
-    <Library Include="..\SDL2_ttf-2.0.15\lib\x86\SDL2_ttf.lib">
-      <Filter>Libraries</Filter>
-    </Library>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Misc\Dlg_ger.res">

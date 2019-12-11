@@ -57,7 +57,7 @@
       <Optimization>Disabled</Optimization>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>../enet/include;../SDL/include;../SDL_image;../SDL_ttf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../libs/enet/include;../libs/SDL/include;../libs/SDL_image;../libs/SDL_ttf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
       <PrecompiledHeaderOutputFile>.\Release\AT.pch</PrecompiledHeaderOutputFile>
@@ -98,7 +98,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>../enet/include;../SDL/include;../SDL_image;../SDL_ttf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../libs/enet/include;../libs/SDL/include;../libs/SDL_image;../libs/SDL_ttf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
       <BrowseInformation>true</BrowseInformation>
@@ -438,16 +438,16 @@
     <Image Include="res\idr_main.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\enet\enet.vcxproj">
+    <ProjectReference Include="..\libs\enet\enet.vcxproj">
       <Project>{136f3a23-0212-42c8-9235-33a622249c54}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\SDL\VisualC\SDL\SDL.vcxproj">
+    <ProjectReference Include="..\libs\SDL\VisualC\SDL\SDL.vcxproj">
       <Project>{81ce8daf-ebb2-4761-8e45-b71abcca8c68}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\SDL_image\VisualC\SDL_image.vcxproj">
+    <ProjectReference Include="..\libs\SDL_image\VisualC\SDL_image.vcxproj">
       <Project>{2bd5534e-00e2-4bea-ac96-d9a92ea24696}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\SDL_ttf\VisualC\SDL_ttf.vcxproj">
+    <ProjectReference Include="..\libs\SDL_ttf\VisualC\SDL_ttf.vcxproj">
       <Project>{dddbd07d-dc76-4af6-8d02-3e2deb6ee255}</Project>
     </ProjectReference>
   </ItemGroup>

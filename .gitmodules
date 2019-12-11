@@ -1,12 +1,12 @@
 [submodule "enet"]
-	path = enet
-	url = https://github.com/Armada651/enet
+	path = libs/enet
+	url = https://github.com/openairlinetycoon/enet
 [submodule "SDL"]
-	path = SDL
-	url = https://github.com/Armada651/SDL.git
+	path = libs/SDL
+	url = https://github.com/openairlinetycoon/SDL.git
 [submodule "SDL_image"]
-	path = SDL_image
-	url = https://github.com/Armada651/SDL_image.git
+	path = libs/SDL_image
+	url = https://github.com/openairlinetycoon/SDL_image.git
 [submodule "SDL_ttf"]
-	path = SDL_ttf
-	url = https://github.com/Armada651/SDL_ttf.git
+	path = libs/SDL_ttf
+	url = https://github.com/openairlinetycoon/SDL_ttf.git

@@ -18,7 +18,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "enet"=.\enet\enet.dsp - Package Owner=<4>
+Project: "enet"=.\libs\enet\enet.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

@@ -35,8 +35,7 @@
 typedef XY CRepeat;
 typedef XY CPostWait;
 
-void  CalculatePalettemapper (UBYTE *pPalette, UWORD *pPaletteMapper);
-void  ConvertBitmapTo16Bit (SBBM *pBitmap, UWORD *pPaletteMapper);
+void  CalculatePalettemapper (const UBYTE *pPalette, SDL_Palette *pPaletteMapper);
 
 //Werte für CSmackerClip.State:
 #define SMACKER_CLIP_INACTIVE   0
@@ -71,10 +70,14 @@ class CSmackerClip
    private: //Dateieigenschaften...
        CString      Filename;
        CString      SoundFilename;
-       UWORD        PaletteMapper [257];    //Tabelle zum Mappen von 8 auf 16 Bit
-       BUFFER<BYTE> SmackPic;               //Das Bild, wie der Smacker es sieht
+       SDL_Palette* PaletteMapper;       //Tabelle zum Mappen von 8 auf 16 Bit
 
-       Smack       *pSmack;
+       smk          pSmack;
+       ULONG        Width;
+       ULONG        Height;
+       ULONG        FrameNum;
+       ULONG        Frames;
+       DWORD        FrameNext;
 
        SLONG        LastFrame;
 

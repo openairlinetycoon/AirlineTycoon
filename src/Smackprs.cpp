@@ -9,146 +9,22 @@ static const char FileId[] = "Smak";
 //--------------------------------------------------------------------------------------------
 //Berechnet eine Remapper-Tabelle anhand einer 256-Farben Palette
 //--------------------------------------------------------------------------------------------
-void CalculatePalettemapper (UBYTE *pPalette, UWORD *pPaletteMapper)
+void CalculatePalettemapper (const UBYTE *pPalette, SDL_Palette *pPaletteMapper)
 {
+   if (!pPalette)
+      return;
+
    SLONG c;
 
-   for (c=0; c<256; c++)
+   for (c = 0; c < 256; c++)
    {
-      pPaletteMapper[c] = (UWORD)gCursorBm.pBitmap->GetHardwarecolor ((pPalette[c*3]<<16)+(pPalette[c*3+1]<<8)+(pPalette[c*3+2]));
-      if (pPaletteMapper[c]==0) pPaletteMapper[c]=1;
+      if (pPalette[c*3] + pPalette[c*3+1] + pPalette[c*3+2] == 0)
+         pPaletteMapper->colors[c] = SDL_Color{ 4, 4, 4, 0xFF };
+      else
+         pPaletteMapper->colors[c] = SDL_Color{ pPalette[c*3], pPalette[c*3+1], pPalette[c*3+2], 0xFF };
    }
 
-   pPaletteMapper[0]=0;
-}
-
-//--------------------------------------------------------------------------------------------
-//Konvertiert eine halb beschriebene 8-Bit Bitmap in eine mit 16-Bit:
-//--------------------------------------------------------------------------------------------
-void ConvertBitmapTo16Bit (UBYTE *SourcePic, SBBM *pBitmap, UWORD *pPaletteMapper, SLONG SmackWidth, SLONG SourceSizeY, XY TargetOffset)
-{
-   if (NULL==pBitmap || NULL==pBitmap->pBitmap) return;
-
-   SLONG register y;
-   SB_CBitmapKey  Key(*pBitmap->pBitmap);
-
-   static int _EBP;
-
-   if (Key.Bitmap==NULL) return;
-
-   UWORD *p = ((UWORD*)Key.Bitmap) + TargetOffset.x + TargetOffset.y*Key.lPitch/2;
-
-   if (SmackWidth<=0 || SmackWidth>32000) return;
-
-   for (y=SourceSizeY; y>0; y--)
-   {
-      _asm
-      {
-         push  esi
-         push  edi
-
-         mov   ecx, SmackWidth
-
-         xor   eax, eax
-         xor   edx, edx
-         mov   esi, pPaletteMapper
-         mov   edi, p
-         mov   _EBP, ebp
-         mov   ebp, SourcePic
-         sub   edi, 2
-         dec   ebp
-
-         cmp   ecx, 16
-         jl    final_loop_entry
-
-      big_loop:
-         ; Pixel 1 & 2
-         mov   al, BYTE PTR [ebp+ecx]
-         mov   ebx, [esi+eax*2-2]
-         mov   dl, BYTE PTR [ebp+ecx-1]
-         mov   bx, [esi+edx*2]
-         mov   [edi+ecx*2-2], ebx
-
-         ; Pixel 2 & 3
-         mov   al, BYTE PTR [ebp+ecx-2]
-         mov   ebx, [esi+eax*2-2]
-         mov   dl, BYTE PTR [ebp+ecx-3]
-         mov   bx, [esi+edx*2]
-         mov   [edi+ecx*2-6], ebx
-
-         ; Pixel 4 & 5
-         mov   al, BYTE PTR [ebp+ecx-4]
-         mov   ebx, [esi+eax*2-2]
-         mov   dl, BYTE PTR [ebp+ecx-5]
-         mov   bx, [esi+edx*2]
-         mov   [edi+ecx*2-10], ebx
-
-         ; Pixel 6 & 7
-         mov   al, BYTE PTR [ebp+ecx-6]
-         mov   ebx, [esi+eax*2-2]
-         mov   dl, BYTE PTR [ebp+ecx-7]
-         mov   bx, [esi+edx*2]
-         mov   [edi+ecx*2-14], ebx
-
-         ; Pixel 8 & 9
-         mov   al, BYTE PTR [ebp+ecx-8]
-         mov   ebx, [esi+eax*2-2]
-         mov   dl, BYTE PTR [ebp+ecx-9]
-         mov   bx, [esi+edx*2]
-         mov   [edi+ecx*2-18], ebx
-
-         ; Pixel 10 & 11
-         mov   al, BYTE PTR [ebp+ecx-10]
-         mov   ebx, [esi+eax*2-2]
-         mov   dl, BYTE PTR [ebp+ecx-11]
-         mov   bx, [esi+edx*2]
-         mov   [edi+ecx*2-22], ebx
-
-         ; Pixel 12 & 13
-         mov   al, BYTE PTR [ebp+ecx-12]
-         mov   ebx, [esi+eax*2-2]
-         mov   dl, BYTE PTR [ebp+ecx-13]
-         mov   bx, [esi+edx*2]
-         mov   [edi+ecx*2-26], ebx
-
-         ; Pixel 14 & 15
-         mov   al, BYTE PTR [ebp+ecx-14]
-         mov   ebx, [esi+eax*2-2]
-         mov   dl, BYTE PTR [ebp+ecx-15]
-         mov   bx, [esi+edx*2]
-         mov   [edi+ecx*2-30], ebx
-
-         sub   ecx, 16
-         cmp   ecx, 16
-         jge   big_loop
-
-      final_loop_entry:
-         cmp   ecx, 0
-         jle   exit_loop
-
-      final_loop:
-         mov   al, BYTE PTR [ebp+ecx]
-         mov   bx, [esi+eax*2]
-         mov   WORD PTR [edi+ecx*2], bx
-
-         dec   ecx
-         jnz   final_loop
-
-      exit_loop:
-         mov   ebp, _EBP
-
-         pop   edi
-         pop   esi
-      }
-
-      /*for (x=SmackWidth-1; x>=0; x--)
-         p[x] = pPaletteMapper[SourcePic[x]]; */
-
-      p+=Key.lPitch/2;
-      SourcePic+=SmackWidth;
-   }
-   //for (c=Anz-1; c>=0; c--)
-   //   ((UWORD*)p)[c] = pPaletteMapper[SourcePic[c]];
+   pPaletteMapper->colors[0] = SDL_Color{ 0 };
 }
 
 //--------------------------------------------------------------------------------------------
@@ -166,7 +42,8 @@ CSmack16::CSmack16 ()
 //--------------------------------------------------------------------------------------------
 CSmack16::~CSmack16 ()
 {
-   if (pSmack) SmackClose (pSmack);
+   SDL_FreePalette(PaletteMapper);
+   if (pSmack) smk_close (pSmack);
    pSmack = NULL;
 }
 
@@ -175,9 +52,13 @@ CSmack16::~CSmack16 ()
 //--------------------------------------------------------------------------------------------
 void CSmack16::Open (CString Filename)
 {
-   pSmack = SmackOpen (FullFilename (Filename, SmackerPath), SMACKTRACKS, SMACKAUTOEXTRA);
-   SmackPic.ReSize (pSmack->Width*pSmack->Height);
-   CalculatePalettemapper (pSmack->Palette, PaletteMapper+1);
+   pSmack = smk_open_file(FullFilename (Filename, SmackerPath), SMK_MODE_MEMORY);
+   smk_enable_video(pSmack, true);
+   smk_info_video(pSmack, &Width, &Height, NULL);
+   FrameNext = 0;
+   State = smk_first(pSmack);
+   PaletteMapper = SDL_AllocPalette(256);
+   CalculatePalettemapper(smk_get_palette(pSmack), PaletteMapper);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -185,22 +66,28 @@ void CSmack16::Open (CString Filename)
 //--------------------------------------------------------------------------------------------
 BOOL CSmack16::Next (SBBM *pTargetBm)
 {
-   if (!SmackWait (pSmack))
+   if (timeGetTime() >= FrameNext && State == SMK_MORE)
    {
       //Take the next frame:
-      SmackToBuffer (pSmack, 0, 0, pSmack->Width, pSmack->Height, (UBYTE*)SmackPic, FALSE);
-      SmackDoFrame (pSmack);
-      SmackNextFrame (pSmack);
+      SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormatFrom((void*)smk_get_video(pSmack), Width, Height, 8, Width, SDL_PIXELFORMAT_INDEX8);
+      SDL_SetSurfacePalette(surf, PaletteMapper);
+      State = smk_next(pSmack);
+
+      double usf;
+      smk_info_all(pSmack, NULL, NULL, &usf);
+      FrameNext = timeGetTime() + (usf / 1000.0);
 
       if (pTargetBm)
       {
-         if (SLONG(pSmack->Width)!=pTargetBm->Size.x || SLONG(pSmack->Height)!=pTargetBm->Size.y)
-            pTargetBm->ReSize (pSmack->Width, pSmack->Height);
-         ConvertBitmapTo16Bit ((UBYTE*)SmackPic, pTargetBm, PaletteMapper+1, pSmack->Width, pSmack->Height, XY(0,0));
+         if (SLONG(Width) != pTargetBm->Size.x || SLONG(Height) != pTargetBm->Size.y)
+            pTargetBm->ReSize(Width, Height);
+         SDL_BlitSurface(surf, NULL, pTargetBm->pBitmap->GetSurface(), NULL);
       }
+
+      SDL_FreeSurface(surf);
    }
 
-   return (pSmack->FrameNum<pSmack->Frames-1);
+   return State == SMK_MORE;
 }
 
 //--------------------------------------------------------------------------------------------
@@ -208,7 +95,7 @@ BOOL CSmack16::Next (SBBM *pTargetBm)
 //--------------------------------------------------------------------------------------------
 void CSmack16::Close (void)
 {
-   if (pSmack) SmackClose (pSmack);
+   if (pSmack) smk_close (pSmack);
    pSmack = NULL;
 }
 
@@ -220,7 +107,9 @@ void CSmack16::Close (void)
 CSmackerClip::CSmackerClip ()
 {
    pSmack = NULL;
+   FrameNext = 0;
    LastFrame = 0;
+   PaletteMapper = SDL_AllocPalette(256);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -228,7 +117,8 @@ CSmackerClip::CSmackerClip ()
 //--------------------------------------------------------------------------------------------
 CSmackerClip::~CSmackerClip ()
 {
-   if (pSmack) SmackClose (pSmack);
+   if (PaletteMapper) SDL_FreePalette(PaletteMapper);
+   if (pSmack) smk_close (pSmack);
    pSmack = NULL;
 }
 
@@ -237,14 +127,17 @@ CSmackerClip::~CSmackerClip ()
 //--------------------------------------------------------------------------------------------
 void CSmackerClip::Start (void)
 {
-   if (pSmack) SmackClose (pSmack);
+   if (pSmack) smk_close (pSmack);
    pSmack = NULL;
 
    if (Filename.GetLength()>0)
    {
-      pSmack = SmackOpen (FullFilename (Filename, SmackerPath), SMACKTRACKS, SMACKAUTOEXTRA);
-      SmackPic.ReSize (pSmack->Width*pSmack->Height);
-      CalculatePalettemapper (pSmack->Palette, PaletteMapper+1);
+      pSmack = smk_open_file(FullFilename (Filename, SmackerPath), SMK_MODE_MEMORY);
+      smk_enable_video(pSmack, true);
+      smk_info_all(pSmack, &FrameNum, &Frames, NULL);
+      smk_info_video(pSmack, &Width, &Height, NULL);
+      smk_first(pSmack);
+      CalculatePalettemapper(smk_get_palette(pSmack), PaletteMapper);
    }
 
    if (!IsFXPlaying)
@@ -282,12 +175,12 @@ void CSmackerClip::Start (void)
 //--------------------------------------------------------------------------------------------
 void CSmackerClip::Stop (void)
 {
-   if (pSmack) SmackClose (pSmack);
+   if (pSmack) smk_close (pSmack);
    pSmack = NULL;
 
    LastFrame = 0;
 
-   SmackPic.ReSize (0);
+   //SmackPic.ReSize (0);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -314,7 +207,7 @@ void CSmackerClip::ReSize (SLONG          ClipId,
 {
    SLONG c;
 
-   if (pSmack) SmackClose (pSmack);
+   if (pSmack) smk_close (pSmack);
 
    CSmackerClip::Filename      = Filename;
    CSmackerClip::SoundFilename = SoundFilename;
@@ -484,7 +377,7 @@ SLONG CSmackerPerson::GetClip (void)
 SLONG CSmackerPerson::GetFrame (void)
 {
    if (ActiveClip!=-1 && Clips[ActiveClip].pSmack)
-      return (Clips[ActiveClip].pSmack->FrameNum);
+      return (Clips[ActiveClip].FrameNum);
    else
       return (NULL);
 }
@@ -521,17 +414,20 @@ void CSmackerPerson::Pump (void)
 
       if (Clips[ActiveClip].pSmack!=NULL && ActiveClip!=-1)
       {
-         Bitmap.ReSize (Clips[ActiveClip].pSmack->Width, Clips[ActiveClip].pSmack->Height);
-         Clips[ActiveClip].SmackPic.ReSize (Clips[ActiveClip].pSmack->Width*Clips[ActiveClip].pSmack->Height);
-         SmackToBuffer (Clips[ActiveClip].pSmack, 0, 0, Bitmap.Size.x, Bitmap.Size.y, (UBYTE*)Clips[ActiveClip].SmackPic, FALSE);
-         SmackDoFrame (Clips[ActiveClip].pSmack);
-         ConvertBitmapTo16Bit ((UBYTE*)Clips[ActiveClip].SmackPic, &Bitmap, Clips[ActiveClip].PaletteMapper+1, Clips[ActiveClip].pSmack->Width, Clips[ActiveClip].pSmack->Height, XY(0,0));
+         Bitmap.ReSize (Clips[ActiveClip].Width, Clips[ActiveClip].Height);
+         SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormatFrom((void*)smk_get_video(Clips[ActiveClip].pSmack), Clips[ActiveClip].Width, Clips[ActiveClip].Height, 8, Clips[ActiveClip].Width, SDL_PIXELFORMAT_INDEX8);
+         SDL_SetSurfacePalette(surf, Clips[ActiveClip].PaletteMapper);
+         SDL_BlitSurface(surf, NULL, Bitmap.pBitmap->GetSurface(), NULL);
+         SDL_FreeSurface(surf);
          BitmapPos = Clips[ActiveClip].ScreenOffset;
 
-         if (Clips[ActiveClip].pSmack->FrameNum==0 && !Clips[ActiveClip].IsFXPlaying)
+         if (Clips[ActiveClip].FrameNum==0 && !Clips[ActiveClip].IsFXPlaying)
             Clips[ActiveClip].PlaySyllable ();
 
-         SmackNextFrame (Clips[ActiveClip].pSmack);
+         double usf;
+         smk_next(Clips[ActiveClip].pSmack);
+         smk_info_all(Clips[ActiveClip].pSmack, &Clips[ActiveClip].FrameNum, &Clips[ActiveClip].Frames, &usf);
+         Clips[ActiveClip].FrameNext = timeGetTime() + (usf / 1000.0);
       }
 
       return;
@@ -549,17 +445,20 @@ void CSmackerPerson::Pump (void)
       if (Clips[ActiveClip].pSmack==NULL)
          return;
 
-      Bitmap.ReSize (Clips[ActiveClip].pSmack->Width, Clips[ActiveClip].pSmack->Height);
-      Clips[ActiveClip].SmackPic.ReSize (Clips[ActiveClip].pSmack->Width*Clips[ActiveClip].pSmack->Height);
-      SmackToBuffer (Clips[ActiveClip].pSmack, 0, 0, Bitmap.Size.x, Bitmap.Size.y, (UBYTE*)Clips[ActiveClip].SmackPic, FALSE);
-      SmackDoFrame (Clips[ActiveClip].pSmack);
-      ConvertBitmapTo16Bit ((UBYTE*)Clips[ActiveClip].SmackPic, &Bitmap, Clips[ActiveClip].PaletteMapper+1, Clips[ActiveClip].pSmack->Width, Clips[ActiveClip].pSmack->Height, XY(0,0));
+      Bitmap.ReSize (Clips[ActiveClip].Width, Clips[ActiveClip].Height);
+      SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormatFrom((void*)smk_get_video(Clips[ActiveClip].pSmack), Clips[ActiveClip].Width, Clips[ActiveClip].Height, 8, Clips[ActiveClip].Width, SDL_PIXELFORMAT_INDEX8);
+      SDL_SetSurfacePalette(surf, Clips[ActiveClip].PaletteMapper);
+      SDL_BlitSurface(surf, NULL, Bitmap.pBitmap->GetSurface(), NULL);
+      SDL_FreeSurface(surf);
       BitmapPos = Clips[ActiveClip].ScreenOffset;
 
-      if (Clips[ActiveClip].pSmack->FrameNum==0 && !Clips[ActiveClip].IsFXPlaying)
+      if (Clips[ActiveClip].FrameNum==0 && !Clips[ActiveClip].IsFXPlaying)
          Clips[ActiveClip].PlaySyllable ();
 
-      SmackNextFrame (Clips[ActiveClip].pSmack);
+      double usf;
+      smk_next(Clips[ActiveClip].pSmack);
+      smk_info_all(Clips[ActiveClip].pSmack, &Clips[ActiveClip].FrameNum, &Clips[ActiveClip].Frames, &usf);
+      Clips[ActiveClip].FrameNext = timeGetTime() + (usf / 1000.0);
    }
 
    if (Clips[ActiveClip].CanCancelClip && (CurrentMood!=DesiredMood || (Clips[ActiveClip].DecisionVar && Clips[ActiveClip].DecisionVar[0]!=-1)))
@@ -573,20 +472,20 @@ void CSmackerPerson::Pump (void)
 
    if (Clips[ActiveClip].State==SMACKER_CLIP_PLAYING)
    {
-      if (!SmackWait (Clips[ActiveClip].pSmack))
+      if (timeGetTime() >= Clips[ActiveClip].FrameNext)
       {
          //Take the next frame:
-         Bitmap.ReSize (Clips[ActiveClip].pSmack->Width, Clips[ActiveClip].pSmack->Height);
-         Clips[ActiveClip].SmackPic.ReSize (Clips[ActiveClip].pSmack->Width*Clips[ActiveClip].pSmack->Height);
-         SmackToBuffer (Clips[ActiveClip].pSmack, 0, 0, Bitmap.Size.x, Bitmap.Size.y, (UBYTE*)Clips[ActiveClip].SmackPic, FALSE);
-         SmackDoFrame (Clips[ActiveClip].pSmack);
-         ConvertBitmapTo16Bit ((UBYTE*)Clips[ActiveClip].SmackPic, &Bitmap, Clips[ActiveClip].PaletteMapper+1, Clips[ActiveClip].pSmack->Width, Clips[ActiveClip].pSmack->Height, XY(0,0));
+         Bitmap.ReSize (Clips[ActiveClip].Width, Clips[ActiveClip].Height);
+         SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormatFrom((void*)smk_get_video(Clips[ActiveClip].pSmack), Clips[ActiveClip].Width, Clips[ActiveClip].Height, 8, Clips[ActiveClip].Width, SDL_PIXELFORMAT_INDEX8);
+         SDL_SetSurfacePalette(surf, Clips[ActiveClip].PaletteMapper);
+         SDL_BlitSurface(surf, NULL, Bitmap.pBitmap->GetSurface(), NULL);
+         SDL_FreeSurface(surf);
          BitmapPos = Clips[ActiveClip].ScreenOffset;
 
          //Variablenveränderung, während der Film läuft?
          if (Clips[ActiveClip].PostVar && (Clips[ActiveClip].PostOperation&SMACKER_CLIP_FRAME)) //Variablen-Messageing:
          {
-            if (Clips[ActiveClip].pSmack->FrameNum >= ULONG(Clips[ActiveClip].PostOperation>>13) &&
+            if (Clips[ActiveClip].FrameNum >= ULONG(Clips[ActiveClip].PostOperation>>13) &&
                 Clips[ActiveClip].LastFrame < (Clips[ActiveClip].PostOperation>>13))
 
             switch (Clips[ActiveClip].PostOperation&1023)
@@ -598,9 +497,9 @@ void CSmackerPerson::Pump (void)
             }
          }
 
-         Clips[ActiveClip].LastFrame = Clips[ActiveClip].pSmack->FrameNum;
+         Clips[ActiveClip].LastFrame = Clips[ActiveClip].FrameNum;
 
-         if (Clips[ActiveClip].pSmack->FrameNum >= Clips[ActiveClip].pSmack->Frames-1)
+         if (Clips[ActiveClip].FrameNum >= Clips[ActiveClip].Frames-1)
          {
             Clips[ActiveClip].RepeatCount--;
 
@@ -633,10 +532,13 @@ void CSmackerPerson::Pump (void)
          }
          else
          {
-            if (Clips[ActiveClip].pSmack->FrameNum==0 && !Clips[ActiveClip].IsFXPlaying)
+            if (Clips[ActiveClip].FrameNum==0 && !Clips[ActiveClip].IsFXPlaying)
                Clips[ActiveClip].PlaySyllable ();
 
-            SmackNextFrame (Clips[ActiveClip].pSmack);
+            double usf;
+            smk_next(Clips[ActiveClip].pSmack);
+            smk_info_all(Clips[ActiveClip].pSmack, &Clips[ActiveClip].FrameNum, &Clips[ActiveClip].Frames, &usf);
+            Clips[ActiveClip].FrameNext = timeGetTime() + (usf / 1000.0);
          }
       }
    }

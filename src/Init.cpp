@@ -271,9 +271,6 @@ void InitSoundSystem (HWND &AppWnd)
       gMovePaper.Play();
       gMovePaper.Stop();
 
-      if (gpSSE && Sim.Options.OptionDigiSound && gpSSE->GetDD())
-         SmackSoundUseDirectSound(gpSSE->GetDD());
-
       //Die Ambiente-Sounds:
       AmbientManager.AmbientFx.ReSize (3);
       AmbientManager.SetFx (AMBIENT_PEOPLE,      "Raunen.raw");

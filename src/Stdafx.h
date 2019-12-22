@@ -11,6 +11,7 @@
 #include <mmsystem.h>
 #include <SDL.h>
 #include <SDL_ttf.h>
+#include <smacker.h>
 
 #include "Defines.h"
 

@@ -25,6 +25,7 @@ CIntro::CIntro (BOOL bHandy, SLONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "",
    PrimaryBm.BlitFrom (RoomBm);
 
    FrameNum        = 0;
+   FrameNext       = 0;
    bWasIntroPlayed = false;
 
    StopMidi ();
@@ -38,18 +39,27 @@ CIntro::CIntro (BOOL bHandy, SLONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "",
 
    if (IntroPath.GetLength()!=0)
    {
-      pSmack = SmackOpen (FullFilename ("intro.smk", IntroPath), SMACKTRACKS|SMACKNOSKIP, SMACKAUTOEXTRA);
+      pSmack = smk_open_file(FullFilename ("intro.smk", IntroPath), SMK_MODE_DISK);
+      smk_enable_video(pSmack, true);
+      smk_info_video(pSmack, &Width, &Height, NULL);
+      Height *= 2;
+      State = smk_first(pSmack);
 
       if (pSmack) bWasIntroPlayed=true;
 
-      SmackPic.ReSize (pSmack->Width*pSmack->Height);
-      CalculatePalettemapper (pSmack->Palette, PaletteMapper+1);
+      Bitmap.ReSize(Width, Height);
+      SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormatFrom((void*)smk_get_video(pSmack), Width, Height / 2, 8, Width, SDL_PIXELFORMAT_INDEX8);
+      SDL_Palette* pal = SDL_AllocPalette(256);
+      CalculatePalettemapper(smk_get_palette(pSmack), pal);
+      SDL_SetSurfacePalette(surf, pal);
+      State = smk_next(pSmack);
 
-      Bitmap.ReSize (pSmack->Width, pSmack->Height);
-      SmackToBuffer (pSmack, 0, 0, Bitmap.Size.x, Bitmap.Size.y, (UBYTE*)SmackPic, FALSE);
-      SmackDoFrame (pSmack);
-      SmackNextFrame (pSmack);
-      ConvertBitmapTo16Bit ((UBYTE*)SmackPic, &Bitmap, PaletteMapper+1, pSmack->Width, pSmack->Height, XY(0, 0));
+      SDL_Surface* scaleSurf = SDL_ConvertSurfaceFormat(surf, SDL_PIXELFORMAT_RGB565, 0);
+      SDL_FreeSurface(surf);
+
+      SDL_BlitScaled(scaleSurf, NULL, Bitmap.pBitmap->GetSurface(), NULL);
+      SDL_FreePalette(pal);
+      SDL_FreeSurface(scaleSurf);
    }
    else
    {
@@ -77,7 +87,7 @@ CIntro::~CIntro()
       pRoomLib=NULL;
    }
 
-   if (pSmack) SmackClose (pSmack);
+   if (pSmack) smk_close(pSmack);
    pSmack = NULL;
 
    gMouseStartup = FALSE;
@@ -116,31 +126,39 @@ void CIntro::OnPaint()
    
    if (pSmack)
    {
-      if (!SmackWait (pSmack) && pSmack->FrameNum<pSmack->Frames-1)
+      if (timeGetTime() >= FrameNext && State == SMK_MORE)
       {
          //Take the next frame:
-         Bitmap.ReSize (pSmack->Width, pSmack->Height);
-         SmackToBuffer (pSmack, 0, 0, Bitmap.Size.x, Bitmap.Size.y, (UBYTE*)SmackPic, FALSE);
+         Bitmap.ReSize(Width, Height);
+         SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormatFrom((void*)smk_get_video(pSmack), Width, Height / 2, 8, Width, SDL_PIXELFORMAT_INDEX8);
+         SDL_Palette* pal = SDL_AllocPalette(256);
+         CalculatePalettemapper(smk_get_palette(pSmack), pal);
+         SDL_SetSurfacePalette(surf, pal);
+         State = smk_next(pSmack);
 
-         if (pSmack->NewPalette) CalculatePalettemapper (pSmack->Palette, PaletteMapper+1);
+         SDL_Surface* scaleSurf = SDL_ConvertSurfaceFormat(surf, SDL_PIXELFORMAT_RGB565, 0);
+         SDL_FreeSurface(surf);
 
-         SmackDoFrame (pSmack);
-         SmackNextFrame (pSmack);
+         SDL_BlitScaled(scaleSurf, NULL, Bitmap.pBitmap->GetSurface(), NULL);
+         SDL_FreePalette(pal);
+         SDL_FreeSurface(scaleSurf);
 
-         ConvertBitmapTo16Bit ((UBYTE*)SmackPic, &Bitmap, PaletteMapper+1, pSmack->Width, pSmack->Height, XY(0, 0));
+         double usf;
+         smk_info_all(pSmack, NULL, NULL, &usf);
+         FrameNext = timeGetTime() + (usf / 1000.0);
       }
 
-      PrimaryBm.BlitFrom (Bitmap, 320-pSmack->Width/2, 240-pSmack->Height/2);
+      PrimaryBm.BlitFrom (Bitmap, 320-Width/2, 240-Height/2);
 
-      if (pSmack->FrameNum >= pSmack->Frames-1)
+      if (State != SMK_MORE)
       {
          if (Sim.Options.OptionViewedIntro==0)
          {
-            FadeFrom.BlitFrom (Bitmap, 320-pSmack->Width/2, 240-pSmack->Height/2);
+            FadeFrom.BlitFrom (Bitmap, 320-Width/2, 240-Height/2);
 
             FadeCount=timeGetTime();
 
-            SmackClose (pSmack); pSmack=0;
+            smk_close(pSmack); pSmack=0;
          }
          else
             Sim.Gamestate = GAMESTATE_BOOT;
@@ -170,11 +188,11 @@ void CIntro::OnLButtonDown(UINT, CPoint)
 {
    if (pSmack && Sim.Options.OptionViewedIntro==0)
    {
-      FadeFrom.BlitFrom (Bitmap, 320-pSmack->Width/2, 240-pSmack->Height/2);
+      FadeFrom.BlitFrom (Bitmap, 320-Width/2, 240-Height/2);
 
       FadeCount=timeGetTime();
 
-      SmackClose (pSmack); pSmack=0;
+      smk_close(pSmack); pSmack=0;
    }
    else
    {
@@ -191,11 +209,11 @@ void CIntro::OnRButtonDown(UINT, CPoint)
 
    if (pSmack && Sim.Options.OptionViewedIntro==0)
    {
-      FadeFrom.BlitFrom (Bitmap, 320-pSmack->Width/2, 240-pSmack->Height/2);
+      FadeFrom.BlitFrom (Bitmap, 320-Width/2, 240-Height/2);
 
       FadeCount=timeGetTime();
 
-      SmackClose (pSmack); pSmack=0;
+      smk_close(pSmack); pSmack=0;
    }
    else
    {
@@ -228,11 +246,11 @@ void CIntro::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
    {
       if (pSmack && Sim.Options.OptionViewedIntro==0)
       {
-         FadeFrom.BlitFrom (Bitmap, 320-pSmack->Width/2, 240-pSmack->Height/2);
+         FadeFrom.BlitFrom (Bitmap, 320-Width/2, 240-Height/2);
 
          FadeCount=timeGetTime();
 
-         SmackClose (pSmack); pSmack=0;
+         smk_close(pSmack); pSmack=0;
       }
       else
       {

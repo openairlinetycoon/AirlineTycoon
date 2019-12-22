@@ -11,9 +11,8 @@ public:
 
 // Attributes
 public:
-    UWORD        PaletteMapper [257];    //Tabelle zum Mappen von 8 auf 16 Bit
-    BUFFER<BYTE> SmackPic;               //Das Bild, wie der Smacker es sieht
-    Smack       *pSmack;
+    smk          pSmack;
+	 char         State;
     SBBM         Bitmap;
 
     SBBM         FadeFrom;
@@ -24,6 +23,9 @@ public:
 
     SLONG        FrameNum;
     SLONG        FadeCount;
+    DWORD        FrameNext;
+    ULONG        Width;
+    ULONG        Height;
 
 // Overrides
 	// ClassWizard generated virtual function overrides

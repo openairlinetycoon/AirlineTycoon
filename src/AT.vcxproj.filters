@@ -359,9 +359,6 @@
     <Library Include="..\libs\SSE.lib">
       <Filter>Libraries</Filter>
     </Library>
-    <Library Include="..\smksdk\SMACKW32.LIB">
-      <Filter>Libraries</Filter>
-    </Library>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Misc\Dlg_ger.res">

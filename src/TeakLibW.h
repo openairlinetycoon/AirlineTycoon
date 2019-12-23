@@ -340,7 +340,7 @@ public:
     bool operator!=(const TXY& b) const
     {
         return x != b.x
-            && y != b.y;
+            || y != b.y;
     }
 
     bool operator<(const TXY& b) const
@@ -477,8 +477,8 @@ public:
     bool operator!=(const TXYZ& b) const
     {
         return x != b.x
-            && y != b.y
-            && z != b.z;
+            || y != b.y
+            || z != b.z;
     }
 
     bool operator<(const TXYZ& b) const

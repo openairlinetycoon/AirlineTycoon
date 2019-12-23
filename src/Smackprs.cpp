@@ -177,7 +177,7 @@ void CSmackerClip::Stop (void)
 {
    if (pSmack) smk_close (pSmack);
    pSmack = NULL;
-
+   FrameNext = 0;
    LastFrame = 0;
 
    //SmackPic.ReSize (0);
@@ -211,8 +211,13 @@ void CSmackerClip::ReSize (SLONG          ClipId,
 
    CSmackerClip::Filename      = Filename;
    CSmackerClip::SoundFilename = SoundFilename;
-   CSmackerClip::pSmack    = NULL;
-   CSmackerClip::LastFrame = 0;
+   CSmackerClip::pSmack        = NULL;
+   CSmackerClip::LastFrame     = 0;
+   CSmackerClip::Width         = 0;
+   CSmackerClip::Height        = 0;
+   CSmackerClip::FrameNum      = 0;
+   CSmackerClip::Frames        = 0;
+   CSmackerClip::FrameNext     = 0;
 
    //Statische Eigenschaften...
    CSmackerClip::ClipId        = ClipId;

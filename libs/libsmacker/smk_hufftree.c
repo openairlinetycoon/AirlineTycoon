@@ -147,7 +147,7 @@ struct smk_huff8_t* _smk_huff8_build(struct smk_bit_t* bs)
 	{
 		/* Got a bit, but it was not 1. In theory, there could be a smk file
 			without this particular tree. */
-		fputs("libsmacker::_smk_huff8_build(bs) - Warning: initial get_bit returned 0\n", stderr);
+		fputs("libsmacker::_smk_huff8_build(bs) - ERROR: initial get_bit returned 0\n", stderr);
 		goto error;
 	}
 
@@ -281,22 +281,22 @@ struct smk_huff16_t* _smk_huff16_build(struct smk_bit_t* bs)
 	/* sanity check */
 	smk_assert(bs);
 
+	/* Everything looks OK so far. Time to malloc structure. */
+	smk_malloc(big, sizeof(struct smk_huff16_t));
+
 	/* Smacker huff trees begin with a set-bit. */
 	smk_bs_read_1(bs, bit);
 
 	if (!bit)
 	{
-		fputs("libsmacker::smk_huff16_build(bs) - ERROR: initial get_bit returned 0\n", stderr);
-		goto error;
+		/* Got a bit, but it was not 1. Some smacker files do not have any hufftrees. */
+		return big;
 	}
 
 	/* build low-8-bits tree */
 	smk_huff8_build(bs, low8);
 	/* build hi-8-bits tree */
 	smk_huff8_build(bs, hi8);
-
-	/* Everything looks OK so far. Time to malloc structure. */
-	smk_malloc(big, sizeof(struct smk_huff16_t));
 
 	/* Init the escape code cache. */
 	for (i = 0; i < 3; i ++)

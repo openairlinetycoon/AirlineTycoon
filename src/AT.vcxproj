@@ -57,7 +57,7 @@
       <Optimization>Disabled</Optimization>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>../libs/libsmacker;../libs/enet/include;../libs/SDL/include;../libs/SDL_image;../libs/SDL_ttf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../libs/libsmacker;../libs/enet/include;../libs/SDL/include;../libs/SDL_image;../libs/SDL_ttf;../libs/SDL_mixer/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
       <PrecompiledHeaderOutputFile>.\Release\AT.pch</PrecompiledHeaderOutputFile>
@@ -98,7 +98,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>../libs/libsmacker;../libs/enet/include;../libs/SDL/include;../libs/SDL_image;../libs/SDL_ttf;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../libs/libsmacker;../libs/enet/include;../libs/SDL/include;../libs/SDL_image;../libs/SDL_ttf;../libs/SDL_mixer/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
       <BrowseInformation>true</BrowseInformation>
@@ -151,6 +151,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="sbl.h" />
+    <ClInclude Include="SSE.h" />
     <ClInclude Include="TeakLibW.h" />
   </ItemGroup>
   <ItemGroup>
@@ -336,6 +337,7 @@
     <ClCompile Include="Sound.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Disabled</Optimization>
     </ClCompile>
+    <ClCompile Include="SSE\SSE.cpp" />
     <ClCompile Include="Statistk.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Disabled</Optimization>
     </ClCompile>
@@ -392,25 +394,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\libs\SSE.lib" />
-    <Library Include="..\Sbl\Debug\SBL.lib">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </Library>
-    <Library Include="..\SoundEngine\Dll\Release\SSE.lib">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </Library>
-    <Library Include="D:\Projekte\Sys\SoundEngine\Dll\Debug\SSE.lib">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </Library>
-    <Library Include="D:\Projekte\Sys\SoundEngine\Dll\Release\SSE.lib">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </Library>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Misc\Dlg_ger.res">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -448,6 +431,9 @@
     </ProjectReference>
     <ProjectReference Include="..\libs\SDL_image\VisualC\SDL_image.vcxproj">
       <Project>{2bd5534e-00e2-4bea-ac96-d9a92ea24696}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\libs\SDL_mixer\VisualC\SDL_mixer.vcxproj">
+      <Project>{f7e944b3-0815-40cd-b3e4-90b2a15b0e33}</Project>
     </ProjectReference>
     <ProjectReference Include="..\libs\SDL_ttf\VisualC\SDL_ttf.vcxproj">
       <Project>{dddbd07d-dc76-4af6-8d02-3e2deb6ee255}</Project>

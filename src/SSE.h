@@ -11,19 +11,23 @@
 #ifndef _SSE_
 #define _SSE_
 
-#include "dsound.h"
+#include <list>
+#include <string>
 
 #define DllExport
 
 #define	MAX_FX_BUFFER			(4)
 #define	EVENTS					(2)
 
-#define	IDSB	IDirectSoundBuffer
+#define	IDSB					Mix_Chunk
+
+#define _FACDS  0x878			/* DirectSound's facility code */
+#define MAKE_DSHRESULT(code)	MAKE_HRESULT(1, _FACDS, code)
 
 #define	SSE_OK					NOERROR
 #define	SSE_DSOUND_NOINIT		MAKE_DSHRESULT(1000)
 #define	SSE_NOTCREATED			MAKE_DSHRESULT(1010)
-#define	SSE_ALREADYCREATED	MAKE_DSHRESULT(1020)
+#define	SSE_ALREADYCREATED		MAKE_DSHRESULT(1020)
 #define	SSE_NOFILENAME			MAKE_DSHRESULT(1030)
 #define	SSE_CANNOTLOAD			MAKE_DSHRESULT(1040)
 #define	SSE_CANNOTREAD			MAKE_DSHRESULT(1050)
@@ -53,7 +57,14 @@
 #define	DSBPLAY_PRIORITY		(0x01000000)
 #define	DSBPLAY_HIGHPRIORITY	(0x02000000)
 #define	DSBPLAY_NOSTOP			(0x04000000)
-//#define	DSBPLAY_LOOPING		(0x08000000)
+#define	DSBPLAY_LOOPING			(0x08000000)
+
+#define DSBSTATUS_PLAYING		(0x00000001)
+#define DSBSTATUS_BUFFERLOST	(0x00000002)
+#define DSBSTATUS_LOOPING		(0x00000004)
+#define DSBSTATUS_LOCHARDWARE	(0x00000008)
+#define DSBSTATUS_LOCSOFTWARE	(0x00000010)
+#define DSBSTATUS_TERMINATED	(0x00000020)
 
 class FX;
 class MIDI;
@@ -82,18 +93,18 @@ class SSE;
 
 typedef struct _DigitalData
 {
-	SB_CString	file;
-	SSE*		   pSSE;
-	word		   state;
-	bool		   fNoStop;
-	dword		   time;
+	std::string		file;
+	SSE*			pSSE;
+	word			state;
+	bool			fNoStop;
+	dword			time;
 } DigitalData;	
 
 typedef struct _FXData
 {
 	IDSB*		pBuffer[MAX_FX_BUFFER];	// Secondary buffer(s)
 	word		ref;
-	dword		bufferSize;					// Die aktuelle Größe des DSBuffers
+	size_t		bufferSize;					// Die aktuelle Größe des DSBuffers
 
 	dword		samplesPerSec;	// Primary buffer frequency
 	word		channels;			// Kanäle
@@ -105,7 +116,7 @@ typedef struct _FXData
 	
 typedef struct _MusicData
 {
-	SB_CString	file;
+	std::string		file;
 	SSE*			pSSE;
 	word			state;
 	bool			fNoStop;
@@ -115,8 +126,8 @@ typedef struct _MusicData
 	
 typedef struct _DigiMusicData
 {
-	IDirectSoundBuffer *		pBuffer;			// Der Sound-Puffer
-	IDirectSoundNotify *		pNotify;			// Das Notify-Objekt
+	//IDirectSoundBuffer *		pBuffer;			// Der Sound-Puffer
+	//IDirectSoundNotify *		pNotify;			// Das Notify-Objekt
 	dword						bufferSize;			// Die Größe des Buffers
 	dword						bufferSecs;			// Wieviele Sekunden werden im Puffer gehalten
 	dword						triggerSecs;		// Nach wieviel gespielten Sekunden wird neu geladen
@@ -127,7 +138,7 @@ typedef struct _DigiMusicData
 	dword						initialFilePos;		// (Nach Pause) Startposition im File
 
 	dword						cNotifyStructs;		// Anzahl der zu setzenden Notifies
-	DSBPOSITIONNOTIFY	*		pNotifyStructs;		// Die Notify-Strukturen
+	//DSBPOSITIONNOTIFY	*		pNotifyStructs;		// Die Notify-Strukturen
 	HANDLE						hEvent[EVENTS];		// Die Events, die bei den Notifies generiert werden
 
 	unsigned long				hThread;			// Das Handle des Hilfsthreads
@@ -177,13 +188,13 @@ class SSE
 		DllExport HRESULT	CreateDigimusic (DIGIMUSIC** ppDigimusic, char* file = 0, dword bufferSecs = 4, dword samplesPerSec = 0, word channels = 0, word bitsPerSample = 0);
 
 		DllExport void		Activate(bool fActivate, bool fPlayAgain = true);
-		DllExport bool		IsDSInit() { return (_pDS != 0); }
-		DllExport IDirectSound* GetDD() { return _pDS; }
+		//DllExport bool		IsDSInit() { return (_pDS != 0); }
+		//DllExport IDirectSound* GetDD() { return _pDS; }
 		DllExport IDSB*	GetPrimaryBuffer() { return _pBuffer; }
 
 		DllExport dword	GetFrequency() { return _samplesPerSec; }
 
-		DllExport HRESULT GetCaps(DSCAPS* pDSCaps);
+		//DllExport HRESULT GetCaps(DSCAPS* pDSCaps);
 
 		DllExport HRESULT	EnableSound (bool fSoundEnabled);
 		DllExport bool		IsSoundEnabled() { return _fSoundEnabled; }
@@ -219,7 +230,7 @@ class SSE
 		DllExport HWND		GetWindow()						{ return _hWnd; }
 
 	protected:
-		SB_CString	GetNextFileFromPlaylist();
+		std::string	GetNextFileFromPlaylist();
 		HRESULT	   CreateSoundBuffer (IDSB** ppBuffer, dword size, dword samplesPerSecond, word channels, word bitsPerSample, dword flags);
 		HRESULT	   DuplicateSoundBuffer (IDSB* lpDsbOriginal, IDSB** lplpDsbDuplicate);
 
@@ -231,18 +242,18 @@ class SSE
 		word		_maxSound;			// Anz. der Samples, die gleichzeitig gespielt werden dürfen
 		bool		_swapChannels;
 
-		IDirectSound* _pDS;			// DirectSound-Object
+		//IDirectSound* _pDS;			// DirectSound-Object
 		IDSB*		_pBuffer;			// Primary buffer
 	
-		SB_CXList	_soundObjList;		// Liste der FX-Objekte
-		SB_CXList	_musicObjList;		// Liste der Midi-Objekte
+		std::list<Mix_Chunk>	_soundObjList;		// Liste der FX-Objekte
+		std::list<Mix_Chunk>	_musicObjList;		// Liste der Midi-Objekte
 
 		bool		_fSoundEnabled;
 		bool		_fMusicEnabled;
 
 		MUSIC*	_playingMusicObj;	// Das aktuell gespielte Music-Objekt
 
-		SB_CString	_musicListPath;	// Pfad auf Musik-Dateien
+		std::string	_musicListPath;	// Pfad auf Musik-Dateien
 		char*		   _pMusicListFiles;	// Liste der Musik-Dateien (00-terminiert)
 		char*		   _pMusicListPos;	// Ptr. auf den aktuellen Eintrag in der Musik-Liste
 };
@@ -273,7 +284,7 @@ class DIGITAL
 		virtual	HRESULT SetVolume (long volume) = 0;
 		virtual	HRESULT GetPan (long* pPan) = 0;
 		virtual	HRESULT SetPan (long pan) = 0;
-		virtual	HRESULT Load (char* file = NULL) = 0;
+		virtual	HRESULT Load (const char* file = NULL) = 0;
 		virtual	HRESULT Free () = 0;
 
 		virtual	HRESULT GetStatus(dword* pStatus) = 0;
@@ -308,7 +319,7 @@ class FX : public DIGITAL
 		virtual	HRESULT SetVolume (long volume);
 		virtual	HRESULT GetPan (long* pPan);
 		virtual	HRESULT SetPan (long pan);
-		virtual	HRESULT Load (char* file = NULL);
+		virtual	HRESULT Load (const char* file = NULL);
 		virtual	HRESULT Fusion (const FX **Fx, long NumFx);
 		virtual	HRESULT Fusion (const FX *Fx, long *Von, long *Bis, long NumFx);
 		virtual	HRESULT Tokenize (__int64 Token, long *Von, long *Bis, long &rcAnzahl);
@@ -351,7 +362,7 @@ class MUSIC
 		virtual	HRESULT SetVolume (long volume) = 0;
 		virtual	HRESULT GetPan (long* pPan) = 0;
 		virtual	HRESULT SetPan (long pan) = 0;
-		virtual	HRESULT Load (char* file = NULL) = 0;
+		virtual	HRESULT Load (const char* file = NULL) = 0;
 		virtual	HRESULT Free () = 0;
 
 		virtual	HRESULT GetStatus(dword* pStatus) = 0;
@@ -385,14 +396,14 @@ class MIDI : public MUSIC
 		virtual	HRESULT SetVolume (long volume);
 		virtual	HRESULT GetPan (long* pPan);
 		virtual	HRESULT SetPan (long pan);
-		virtual	HRESULT Load (char* file = NULL);
+		virtual	HRESULT Load (const char* file = NULL);
 		virtual	HRESULT Free ();
 
 		virtual	HRESULT GetStatus(dword* pStatus);
 		virtual	word	CountPlaying();
 
 	protected:
-		dword		_deviceId;
+		Mix_Music*		_music;
 };
 /******************************************************************************\
 *
@@ -427,7 +438,7 @@ class DIGIMUSIC : public DIGITAL,public MUSIC
 		virtual	HRESULT SetVolume (long volume);
 		virtual	HRESULT GetPan (long* pPan);
 		virtual	HRESULT SetPan (long pan);
-		virtual	HRESULT Load (char* file = NULL);
+		virtual	HRESULT Load (const char* file = NULL);
 		virtual	HRESULT Free ();
 
 		virtual	HRESULT GetStatus(dword* pStatus);

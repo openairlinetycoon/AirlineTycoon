@@ -45,6 +45,9 @@
       <UniqueIdentifier>{0781efba-75f7-4201-b8b9-1c70103da1cd}</UniqueIdentifier>
       <Extensions>res</Extensions>
     </Filter>
+    <Filter Include="Libraries\SSE">
+      <UniqueIdentifier>{e4915aa8-e0b4-4cd0-8f3b-1d81b5de4b42}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="0_ref.txt">
@@ -69,6 +72,9 @@
       <Filter>Libraries</Filter>
     </ClInclude>
     <ClInclude Include="TeakLibW.h">
+      <Filter>Libraries</Filter>
+    </ClInclude>
+    <ClInclude Include="SSE.h">
       <Filter>Libraries</Filter>
     </ClInclude>
   </ItemGroup>
@@ -337,28 +343,14 @@
     <ClCompile Include="StdRaum.cpp">
       <Filter>Räume\Spezielle</Filter>
     </ClCompile>
+    <ClCompile Include="SSE\SSE.cpp">
+      <Filter>Libraries\SSE</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="res\Script2.rc">
       <Filter>Source Files\Diverse</Filter>
     </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="D:\Projekte\Sys\SoundEngine\Dll\Debug\SSE.lib">
-      <Filter>Libraries</Filter>
-    </Library>
-    <Library Include="D:\Projekte\Sys\SoundEngine\Dll\Release\SSE.lib">
-      <Filter>Libraries</Filter>
-    </Library>
-    <Library Include="..\SoundEngine\Dll\Release\SSE.lib">
-      <Filter>Libraries</Filter>
-    </Library>
-    <Library Include="..\Sbl\Debug\SBL.lib">
-      <Filter>Libraries</Filter>
-    </Library>
-    <Library Include="..\libs\SSE.lib">
-      <Filter>Libraries</Filter>
-    </Library>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Misc\Dlg_ger.res">

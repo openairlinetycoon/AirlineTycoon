@@ -280,7 +280,7 @@ void InitSoundSystem (HWND &AppWnd)
       SetWaveVolume(Sim.Options.OptionMasterVolume);
    }
 
-   if (gpSSE==NULL || gpSSE->GetDD()==NULL)
+   if (gpSSE==NULL)
       Sim.Options.OptionMasterVolume=0;
 }
 

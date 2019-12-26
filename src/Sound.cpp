@@ -134,7 +134,7 @@ BOOL CreateSpeechSBFX (CString String, SBFX *pFx, SLONG PlayerNum, BOOL *bAnyMis
    SLONG         c, m, n;
    BOOL          UndoWait=FALSE;
 
-   if (gpSSE==NULL || gpSSE->GetDD()==NULL) return (0);
+   if (gpSSE==NULL) return (0);
 
    for (n=0; n<50; n++)
       Effects[n]=NULL;
@@ -323,7 +323,7 @@ SLONG CVoiceScheduler::AnzEntries(void)
 //--------------------------------------------------------------------------------------------
 BOOL CVoiceScheduler::IsVoicePlaying (void)
 {
-   if (gpSSE==NULL || gpSSE->GetDD()==NULL) return (0);
+   if (gpSSE==NULL) return (0);
 
    if (AnzEntries()>0 && CurrentVoice.pFX)
    {

@@ -10,3 +10,6 @@
 [submodule "SDL_ttf"]
 	path = libs/SDL_ttf
 	url = https://github.com/openairlinetycoon/SDL_ttf.git
+[submodule "libs/SDL_mixer"]
+	path = libs/SDL_mixer
+	url = https://github.com/openairlinetycoon/SDL_mixer.git

@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <io.h>
 #include <dinput.h>
+#include <dsound.h>
 #include "Checkup.h"
 
 void GetDXVersion(LPDWORD pdwDXVersion, LPDWORD pdwDXPlatform);

@@ -296,8 +296,20 @@ void RunLengthDeCompression( UCHAR *in, UCHAR *out, ULONG &size );
 //--------------------------------------------------------------------------------------------
 CTakeOffApp::CTakeOffApp()
 {
-   SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO);
-   TTF_Init();
+   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
+   {
+      printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
+   }
+
+   if (TTF_Init() < 0)
+   {
+      printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+   }
+
+   if (Mix_Init(MIX_INIT_OGG) < 0)
+   {
+       printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", TTF_GetError());
+   }
 
    _tmain();
 

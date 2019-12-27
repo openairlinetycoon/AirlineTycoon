@@ -79,6 +79,10 @@ long FX::Release()
 
 HRESULT FX::Play(dword dwFlags, long pan)
 {
+    // TODO: Panning
+    if (dwFlags & DSBPLAY_SETPAN)
+        SetPan(pan);
+
     return Mix_PlayChannel(-1, _fxData.pBuffer[0], 0) < 0 ? SSE_CANNOTPLAY : SSE_OK;
 }
 
@@ -94,16 +98,30 @@ HRESULT FX::Resume()
 
 HRESULT FX::GetVolume(long* pVolume)
 {
+    if (!pVolume)
+        return SSE_INVALIDPARAM;
+
+    if (!_fxData.pBuffer[0])
+        return SSE_NOSOUNDLOADED;
+
+    *pVolume = Mix_VolumeChunk(_fxData.pBuffer[0], -1);
     return SSE_OK;
 }
 
 HRESULT FX::SetVolume(long volume)
 {
+    if (!_fxData.pBuffer[0])
+        return SSE_NOSOUNDLOADED;
+
+    Mix_VolumeChunk(_fxData.pBuffer[0], volume);
     return SSE_OK;
 }
 
 HRESULT FX::GetPan(long* pPan)
 {
+    if (!pPan)
+        return SSE_INVALIDPARAM;
+
     return SSE_OK;
 }
 

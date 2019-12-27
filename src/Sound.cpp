@@ -376,7 +376,8 @@ SLONG Prozent2Dezibel (SLONG Prozent)
    if (Prozent>100) Prozent=100;
 
    //Quadratische Gleichung 2. Grades:
-   rc = float(-(Prozent-100)*(Prozent-100)*(Prozent-100)*(Prozent-100)/10000*(Prozent-100)*(Prozent-100)/10000);
+   //rc = float(-(Prozent-100)*(Prozent-100)*(Prozent-100)*(Prozent-100)/10000*(Prozent-100)*(Prozent-100)/10000);
+   rc = (Prozent * 128) / 100;
 
    return (SLONG(rc));
 }

@@ -224,7 +224,7 @@ class SSE
 		DllExport bool		SetMusicList(char* path, char* files);
 		DllExport void		ClearMusicList();
 
-		DllExport void		SwapChannels(bool fSwap)	{ _swapChannels = fSwap; }
+		DllExport void		SwapChannels(bool fSwap)	{ Mix_SetReverseStereo(-1, _swapChannels = fSwap); }
 		DllExport bool		IsSwapChannels()				{ return _swapChannels; }
 
 		DllExport HWND		GetWindow()						{ return _hWnd; }

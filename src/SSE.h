@@ -245,8 +245,8 @@ class SSE
 		//IDirectSound* _pDS;			// DirectSound-Object
 		IDSB*		_pBuffer;			// Primary buffer
 	
-		std::list<Mix_Chunk>	_soundObjList;		// Liste der FX-Objekte
-		std::list<Mix_Chunk>	_musicObjList;		// Liste der Midi-Objekte
+		std::list<FX>	_soundObjList;		// Liste der FX-Objekte
+		std::list<MIDI>	_musicObjList;		// Liste der Midi-Objekte
 
 		bool		_fSoundEnabled;
 		bool		_fMusicEnabled;
@@ -270,11 +270,11 @@ class DIGITAL
 
 	protected:
 		DIGITAL() { ZeroMemory(&_digitalData,sizeof(_digitalData)); }
-		virtual	~DIGITAL() {};
 		virtual word GetInternalState() { return _digitalData.state; }
 		virtual	bool	StopPriority (dword flags) = 0;
 
 	public:
+		virtual	~DIGITAL() {};
 		virtual  long Release() = 0;
 		virtual	HRESULT Play(dword dwFlags = 0, long pan = 0) = 0;
 		virtual	HRESULT Stop() = 0;
@@ -306,11 +306,11 @@ class FX : public DIGITAL
 
 	protected:
 		FX();
-		virtual	~FX();
 		HRESULT	Create(SSE* pSSE, char* file, dword samplesPerSec, word channels, word bitsPerSample);
 		virtual	bool	StopPriority (dword flags);
 
 	public:
+		virtual	~FX();
 		virtual  long Release();
 		virtual	HRESULT Play(dword dwFlags = 0, long pan = 0);
 		virtual	HRESULT Stop();
@@ -348,11 +348,11 @@ class MUSIC
 
 	protected:
 		MUSIC() { ZeroMemory(&_musicData,sizeof(_musicData)); }
-		virtual	~MUSIC() {};
 		virtual word GetInternalState() { return _musicData.state; }
 		virtual	bool	StopPriority (dword flags) = 0;
 
 	public:
+		virtual	~MUSIC() {};
 		virtual  long Release() = 0;
 		DllExport virtual	HRESULT Play(dword dwFlags = 0, long pan = 0) = 0;
 		virtual	HRESULT Stop() = 0;
@@ -383,11 +383,11 @@ class MIDI : public MUSIC
 
 	protected:
 		MIDI();
-		virtual	~MIDI();
 		HRESULT	Create(SSE* pSSE, char* file);
 		virtual	bool	StopPriority (dword flags);
 
 	public:
+		virtual	~MIDI();
 		virtual  long Release();
 		DllExport virtual	HRESULT Play(dword dwFlags = 0, long pan = 0);
 		virtual	HRESULT Stop();
@@ -421,7 +421,6 @@ class DIGIMUSIC : public DIGITAL,public MUSIC
 	protected:
 		DIGIMUSIC() { ZeroMemory(&_dmData,sizeof(_dmData)); }
 
-		virtual	~DIGIMUSIC();
 		HRESULT	Create(SSE* pSSE, char* file,dword buffersSecs,dword samplesPerSec, word channels, word bitsPerSample);
 		HRESULT DIGIMUSIC::CompatibleModeRequired();
 
@@ -429,6 +428,7 @@ class DIGIMUSIC : public DIGITAL,public MUSIC
 		virtual	bool	StopPriority (dword flags);
 
 	public:
+		virtual	~DIGIMUSIC();
 		virtual  long Release();
 		DllExport virtual	HRESULT Play(dword dwFlags = 0, long pan = 0);
 		virtual	HRESULT Stop();

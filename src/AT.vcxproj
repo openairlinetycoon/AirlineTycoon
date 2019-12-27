@@ -57,7 +57,7 @@
       <Optimization>Disabled</Optimization>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>../libs/libsmacker;../libs/enet/include;../libs/SDL/include;../libs/SDL_image;../libs/SDL_ttf;../libs/SDL_mixer/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../libs/libsmacker;../libs/enet/include;../libs/SDL/include;../libs/SDL_image;../libs/SDL_ttf;../libs/SDL_mixer/include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
       <PrecompiledHeaderOutputFile>.\Release\AT.pch</PrecompiledHeaderOutputFile>
@@ -98,7 +98,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>../libs/libsmacker;../libs/enet/include;../libs/SDL/include;../libs/SDL_image;../libs/SDL_ttf;../libs/SDL_mixer/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../libs/libsmacker;../libs/enet/include;../libs/SDL/include;../libs/SDL_image;../libs/SDL_ttf;../libs/SDL_mixer/include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
       <BrowseInformation>true</BrowseInformation>

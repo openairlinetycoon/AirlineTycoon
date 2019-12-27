@@ -24,7 +24,8 @@ HRESULT SSE::CreateFX(FX** ppFX, char* file, dword samplesPerSec, word channels,
     if (!ppFX)
         return SSE_INVALIDPARAM;
 
-    *ppFX = new FX();
+    _soundObjList.emplace_back(FX());
+    *ppFX = &_soundObjList.back();
     return (*ppFX)->Create(this, file, samplesPerSec, channels, bitsPerSample);
 }
 
@@ -33,7 +34,8 @@ HRESULT SSE::CreateMidi(MIDI** ppMidi, char* file)
     if (!ppMidi)
         return SSE_INVALIDPARAM;
 
-    *ppMidi = new MIDI();
+    _musicObjList.emplace_back(MIDI());
+    *ppMidi = &_musicObjList.back();
     return (*ppMidi)->Create(this, file);
 }
 
@@ -54,6 +56,7 @@ FX::FX()
 
 FX::~FX()
 {
+    Free();
 }
 
 HRESULT	FX::Create(SSE* pSSE, char* file, dword samplesPerSec, word channels, word bitsPerSample)
@@ -161,6 +164,12 @@ FX** FX::Tokenize(__int64 Token, long& rcAnzahl)
 
 HRESULT FX::Free()
 {
+    if (_fxData.pBuffer[0])
+    {
+        void* buf = _fxData.pBuffer[0]->abuf;
+        Mix_FreeChunk(_fxData.pBuffer[0]);
+        SDL_free(buf);
+    }
     return SSE_OK;
 }
 
@@ -205,6 +214,7 @@ MIDI::MIDI()
 
 MIDI::~MIDI()
 {
+    Free();
 }
 
 HRESULT MIDI::Create(SSE* pSSE, char* file)

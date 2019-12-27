@@ -558,7 +558,7 @@ void PauseMidi (void)
 
    if (IsMidiAvailable())
    {
-      if (gpMidi) gpMidi->Stop();
+      if (gpMidi) gpMidi->Pause();
    }
 }
 
@@ -779,7 +779,7 @@ void CAmbienteManager::Pause (void)
 {
    for (SLONG c=0; c<AmbientFx.AnzEntries(); c++)
       if (AmbientFx[c].Soundeffekt.pFX)
-         if (AmbientFx[c].CurrentVolume==0) AmbientFx[c].Soundeffekt.pFX->Stop();
+         if (AmbientFx[c].CurrentVolume==0) AmbientFx[c].Soundeffekt.pFX->Pause();
 }
 
 //--------------------------------------------------------------------------------------------

@@ -82,20 +82,50 @@ long FX::Release()
 
 HRESULT FX::Play(dword dwFlags, long pan)
 {
+    if (!_fxData.pBuffer[0])
+        return SSE_NOSOUNDLOADED;
+
     // TODO: Panning
     if (dwFlags & DSBPLAY_SETPAN)
         SetPan(pan);
 
-    return Mix_PlayChannel(-1, _fxData.pBuffer[0], 0) < 0 ? SSE_CANNOTPLAY : SSE_OK;
+    if (_digitalData.fNoStop && Mix_Playing(_digitalData.channel) &&
+        Mix_GetChunk(_digitalData.channel) == _fxData.pBuffer[0])
+        return SSE_OK;
+
+    _digitalData.fNoStop = (dwFlags & DSBPLAY_NOSTOP);
+    _digitalData.channel = Mix_PlayChannel(-1, _fxData.pBuffer[0], dwFlags & DSBPLAY_LOOPING ? -1 : 0);
+    _digitalData.time = timeGetTime();
+    return _digitalData.channel < 0 ? SSE_CANNOTPLAY : SSE_OK;
 }
 
 HRESULT FX::Stop()
 {
+    if (!_fxData.pBuffer[0])
+        return SSE_NOSOUNDLOADED;
+
+    if (Mix_GetChunk(_digitalData.channel) == _fxData.pBuffer[0])
+        Mix_HaltChannel(_digitalData.channel);
+    return SSE_OK;
+}
+
+HRESULT FX::Pause()
+{
+    if (!_fxData.pBuffer[0])
+        return SSE_NOSOUNDLOADED;
+
+    if (Mix_GetChunk(_digitalData.channel) == _fxData.pBuffer[0])
+        Mix_Pause(_digitalData.channel);
     return SSE_OK;
 }
 
 HRESULT FX::Resume()
 {
+    if (!_fxData.pBuffer[0])
+        return SSE_NOSOUNDLOADED;
+
+    if (Mix_GetChunk(_digitalData.channel) == _fxData.pBuffer[0])
+        Mix_Resume(_digitalData.channel);
     return SSE_OK;
 }
 
@@ -137,13 +167,25 @@ HRESULT FX::Load(const char* file)
 {
     _digitalData.file = file;
 
-    void* buf = SDL_LoadFile(file, &_fxData.bufferSize);
-    _fxData.pBuffer[0] = Mix_QuickLoad_RAW((Uint8*)buf, _fxData.bufferSize);
+    Uint8* buf = (Uint8*)SDL_LoadFile(file, &_fxData.bufferSize);
+    _fxData.pBuffer[0] = Mix_QuickLoad_RAW(buf, _fxData.bufferSize);
     return SSE_OK;
 }
 
 HRESULT FX::Fusion(const FX** Fx, long NumFx)
 {
+    _fxData.bufferSize = 0;
+    for (long i = 0; i < NumFx; i++)
+        _fxData.bufferSize += Fx[i]->_fxData.bufferSize;
+
+    Uint8* buf = (Uint8*)SDL_malloc(_fxData.bufferSize);
+    size_t pos = 0;
+    for (long i = 0; i < NumFx; i++)
+    {
+        memcpy(buf + pos, Fx[i]->_fxData.pBuffer[0]->abuf, Fx[i]->_fxData.bufferSize);
+        pos += Fx[i]->_fxData.bufferSize;
+    }
+    _fxData.pBuffer[0] = Mix_QuickLoad_RAW(buf, _fxData.bufferSize);
     return SSE_OK;
 }
 
@@ -175,12 +217,48 @@ HRESULT FX::Free()
 
 HRESULT FX::GetStatus(dword* pStatus)
 {
+    if (!pStatus)
+        return SSE_INVALIDPARAM;
+
+    if (!_fxData.pBuffer[0])
+        return SSE_NOSOUNDLOADED;
+
+    *pStatus = 0;
+    if (Mix_Playing(_digitalData.channel) && Mix_GetChunk(_digitalData.channel) == _fxData.pBuffer[0])
+    {
+        *pStatus |= DSBSTATUS_PLAYING;
+
+        if (_digitalData.fNoStop)
+            *pStatus |= DSBSTATUS_LOOPING;
+    }
+
     return SSE_OK;
 }
 
-HRESULT FX::IsMouthOpen(long PreTime)
+bool FX::IsMouthOpen(long PreTime)
 {
-    return SSE_OK;
+    if (!_fxData.pBuffer[0])
+        return false;
+
+    if (!Mix_Playing(_digitalData.channel) ||
+        Mix_GetChunk(_digitalData.channel) != _fxData.pBuffer[0])
+        return false;
+
+    dword pos = 22050 * (timeGetTime() - _digitalData.time + PreTime) / 1000;
+    if (pos * sizeof(Uint16) + 2000 >= _fxData.bufferSize)
+        return false;
+
+    Uint16* sampleBuf = ((Uint16*)_fxData.pBuffer[0]->abuf) + pos;
+    return abs(*sampleBuf) > 512
+        || abs(sampleBuf[100]) > 512
+        || abs(sampleBuf[200]) > 512
+        || abs(sampleBuf[400]) > 512
+        || abs(sampleBuf[560]) > 512
+        || abs(sampleBuf[620]) > 512
+        || abs(sampleBuf[700]) > 512
+        || abs(sampleBuf[800]) > 512
+        || abs(sampleBuf[900]) > 512
+        || abs(sampleBuf[999]) > 512;
 }
 
 word FX::CountPlaying()
@@ -244,21 +322,30 @@ HRESULT MIDI::Play(dword dwFlags, long pan)
 
 HRESULT MIDI::Stop()
 {
+    return Mix_HaltMusic() < 0 ? SSE_CANNOTPLAY : SSE_OK;
+}
+
+HRESULT MIDI::Pause()
+{
+    Mix_PauseMusic();
     return SSE_OK;
 }
 
 HRESULT MIDI::Resume()
 {
+    Mix_ResumeMusic();
     return SSE_OK;
 }
 
 HRESULT MIDI::GetVolume(long* pVolume)
 {
+    *pVolume = Mix_VolumeMusic(-1);
     return SSE_OK;
 }
 
 HRESULT MIDI::SetVolume(long volume)
 {
+    Mix_VolumeMusic(volume);
     return SSE_OK;
 }
 
@@ -300,5 +387,5 @@ HRESULT MIDI::GetStatus(dword* pStatus)
 
 word MIDI::CountPlaying()
 {
-    return 0;
+    return Mix_PlayingMusic();
 }

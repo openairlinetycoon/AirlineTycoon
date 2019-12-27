@@ -98,6 +98,7 @@ typedef struct _DigitalData
 	word			state;
 	bool			fNoStop;
 	dword			time;
+	long			channel;
 } DigitalData;	
 
 typedef struct _FXData
@@ -314,6 +315,7 @@ class FX : public DIGITAL
 		virtual  long Release();
 		virtual	HRESULT Play(dword dwFlags = 0, long pan = 0);
 		virtual	HRESULT Stop();
+		virtual	HRESULT Pause();
 		virtual	HRESULT Resume();
 		virtual	HRESULT GetVolume (long* pVolume);
 		virtual	HRESULT SetVolume (long volume);
@@ -327,7 +329,7 @@ class FX : public DIGITAL
 		virtual	HRESULT Free ();
 
 		virtual	HRESULT GetStatus(dword* pStatus);
-		virtual	HRESULT IsMouthOpen(long PreTime);
+		virtual	bool	IsMouthOpen(long PreTime);
 		virtual	word	CountPlaying();
 		virtual	void	SetFormat (dword samplesPerSec = 0, word channels = 0, word bitsPerSample = 0);
       long  GetByteLength (void) { return (_fxData.bufferSize); }
@@ -391,6 +393,7 @@ class MIDI : public MUSIC
 		virtual  long Release();
 		DllExport virtual	HRESULT Play(dword dwFlags = 0, long pan = 0);
 		virtual	HRESULT Stop();
+		virtual	HRESULT Pause();
 		virtual	HRESULT Resume();
 		virtual	HRESULT GetVolume (long* pVolume);
 		virtual	HRESULT SetVolume (long volume);

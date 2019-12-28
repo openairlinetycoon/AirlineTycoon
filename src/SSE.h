@@ -220,7 +220,7 @@ class SSE
 		DllExport HRESULT	GetMixerVolume(char * device, long* pVolume, MIXERBOUNDS* pMB = NULL);
 
 
-		DllExport void		MusicCallback(WPARAM wParam, LPARAM lParam);
+		DllExport void		SetMusicCallback(void (*callback)());
 
 		DllExport bool		SetMusicList(char* path, char* files);
 		DllExport void		ClearMusicList();

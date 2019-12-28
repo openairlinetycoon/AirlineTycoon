@@ -253,6 +253,8 @@ GameFrame::GameFrame()
    } */
 
    MouseLook = CURSOR_NORMAL;
+
+   gpSSE->SetMusicCallback(NextMidi);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -260,6 +262,7 @@ GameFrame::GameFrame()
 //--------------------------------------------------------------------------------------------
 GameFrame::~GameFrame()
 {
+   gpSSE->SetMusicCallback(NULL);
    ClipCursor (NULL);
 
    if (pCursor)
@@ -385,7 +388,6 @@ void GameFrame::RePostClick (SLONG PlayerNum, UINT message, WPARAM wParam, LPARA
 //MESSAGE_MAP(GameFrame, CWnd):
 //--------------------------------------------------------------------------------------------
 BEGIN_MESSAGE_MAP(GameFrame, CFrameWnd)
-   ON_MESSAGE(MM_MCINOTIFY, GameFrame::OnMciNotify)
 	//{{AFX_MSG_MAP(GameFrame)
 	ON_WM_PAINT()
 	ON_WM_ERASEBKGND()
@@ -428,30 +430,6 @@ void GameFrame::OnSysKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
    if (nChar!=VK_MENU && nChar!=VK_F10)
       CFrameWnd::OnSysKeyUp(nChar, nRepCnt, nFlags);
-}
-
-//--------------------------------------------------------------------------------------------
-//Wird vom Multimedia-Interface aufgerufen, wenn der Midi-Song fertig ist:
-//--------------------------------------------------------------------------------------------
-afx_msg LONG GameFrame::OnMciNotify(WPARAM wParam, LPARAM lParam)
-{
-	/*if (gpSSE)
-	{
-		if (wParam == MCI_NOTIFY_SUCCESSFUL)
-		{
-			gpSSE->MusicCallback(wParam, lParam);
-		}
-	}*/
-
-   switch (wParam)
-   {
-      case MCI_NOTIFY_SUCCESSFUL:
-         NextMidi();
-         break;
-   }
-
-   ReferTo (lParam);
-   return (NULL);
 }
 
 //--------------------------------------------------------------------------------------------

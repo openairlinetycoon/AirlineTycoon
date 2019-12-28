@@ -50,6 +50,11 @@ HRESULT SSE::DisableDS()
     return SSE_OK;
 }
 
+void SSE::SetMusicCallback(void (*callback)())
+{
+    Mix_HookMusicFinished(callback);
+}
+
 FX::FX()
 {
     memset(&_fxData, 0, sizeof(_fxData));
@@ -383,6 +388,10 @@ long MIDI::Release()
 
 HRESULT MIDI::Play(dword dwFlags, long pan)
 {
+    // TODO: Panning
+    if (dwFlags & DSBPLAY_SETPAN)
+        SetPan(pan);
+
     return Mix_PlayMusic(_music, 0) < 0 ? SSE_CANNOTPLAY : SSE_OK;
 }
 

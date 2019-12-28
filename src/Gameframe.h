@@ -35,7 +35,6 @@ public:
 	virtual ~GameFrame();
 
 	// Generated message map functions
-   afx_msg LONG OnMciNotify(WPARAM wParam, LPARAM lParam);
 	//{{AFX_MSG(GameFrame)
 	afx_msg void OnPaint();
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);

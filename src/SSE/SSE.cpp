@@ -197,6 +197,21 @@ HRESULT FX::Fusion(const FX** Fx, long NumFx)
 
 HRESULT FX::Fusion(const FX* Fx, long* Von, long* Bis, long NumFx)
 {
+    if (!Fx || !Fx->_fxData.pBuffer[0])
+        return SSE_INVALIDPARAM;
+
+    Free();
+
+    for (long i = 0; i < NumFx; i++)
+        _fxData.bufferSize += Bis[i] - Von[i];
+    Uint8* buf = (Uint8*)SDL_malloc(_fxData.bufferSize);
+    size_t pos = 0;
+    for (long i = 0; i < NumFx; i++)
+    {
+        memcpy(buf + pos, Fx->_fxData.pBuffer[0]->abuf + Von[i], Bis[i] - Von[i]);
+        pos += Bis[i] - Von[i];
+    }
+    _fxData.pBuffer[0] = Mix_QuickLoad_RAW(buf, _fxData.bufferSize);
     return SSE_OK;
 }
 
@@ -218,6 +233,7 @@ HRESULT FX::Free()
         Mix_FreeChunk(_fxData.pBuffer[0]);
         SDL_free(buf);
     }
+    _digitalData.file.clear();
     _fxData.bufferSize = 0;
     return SSE_OK;
 }

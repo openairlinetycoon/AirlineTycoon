@@ -1,5 +1,7 @@
 #include "stdafx.h"
+
 #include <vector>
+#include <algorithm>
 
 SSE::SSE(void* hWnd, dword samplesPerSec, word channels, word bitsPerSample, word maxFX)
     : _hWnd((HWND)hWnd)
@@ -68,7 +70,6 @@ FX::FX()
 
 FX::~FX()
 {
-    Free();
 }
 
 HRESULT	FX::Create(SSE* pSSE, char* file, dword samplesPerSec, word channels, word bitsPerSample)
@@ -114,6 +115,15 @@ bool FX::StopPriority(dword flags)
 
 long FX::Release()
 {
+    Free();
+
+    if (_digitalData.pSSE)
+    {
+        std::list<FX>& list = _digitalData.pSSE->_soundObjList;
+        auto it = std::find_if(list.begin(), list.end(), [this](const FX& fx) { return &fx == this; });
+        if (it != list.end())
+            list.erase(it);
+    }
     return 0;
 }
 
@@ -224,8 +234,10 @@ HRESULT FX::SetPan(long pan)
 
 HRESULT FX::Load(const char* file)
 {
-    _digitalData.file = file;
+    if (_fxData.pBuffer)
+        Free();
 
+    _digitalData.file = file;
     Uint8* buf = (Uint8*)SDL_LoadFile(file, &_fxData.bufferSize);
     _fxData.pBuffer = Mix_QuickLoad_RAW(buf, _fxData.bufferSize);
     return SSE_OK;
@@ -330,6 +342,7 @@ HRESULT FX::Free()
 {
     if (_fxData.pBuffer)
     {
+        Stop();
         void* buf = _fxData.pBuffer->abuf;
         Mix_FreeChunk(_fxData.pBuffer);
         SDL_free(buf);
@@ -413,7 +426,6 @@ MIDI::MIDI()
 
 MIDI::~MIDI()
 {
-    Free();
 }
 
 HRESULT MIDI::Create(SSE* pSSE, char* file)
@@ -433,6 +445,15 @@ bool MIDI::StopPriority(dword flags)
 
 long MIDI::Release()
 {
+    Free();
+
+    if (_musicData.pSSE)
+    {
+        std::list<MIDI>& list = _musicData.pSSE->_musicObjList;
+        auto it = std::find_if(list.begin(), list.end(), [this](const MIDI& mid) { return &mid == this; });
+        if (it != list.end())
+            list.erase(it);
+    }
     return 0;
 }
 

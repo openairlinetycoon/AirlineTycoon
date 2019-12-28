@@ -4127,7 +4127,7 @@ void COptions::WriteOptions (void)
    reg.WriteRegistryKey (&OptionFax);
    reg.WriteRegistryKey (&OptionRoundNumber);
 
-   if (gpSSE)
+   if (gpSSE && gpSSE->IsSoundEnabled())
       reg.WriteRegistryKey (&OptionMasterVolume);
 
 //Den Intro-Eintrag nur schreiben, wenn wir keine Demo haben. Sonst schaut sich jemand eine

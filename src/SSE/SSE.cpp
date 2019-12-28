@@ -18,6 +18,7 @@ SSE::SSE(void* hWnd, dword samplesPerSec, word channels, word bitsPerSample, wor
 
 SSE::~SSE()
 {
+    Mix_CloseAudio();
 }
 
 HRESULT SSE::CreateFX(FX** ppFX, char* file, dword samplesPerSec, word channels, word bitsPerSample)

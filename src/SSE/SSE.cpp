@@ -174,10 +174,16 @@ HRESULT FX::Load(const char* file)
 
 HRESULT FX::Fusion(const FX** Fx, long NumFx)
 {
-    _fxData.bufferSize = 0;
+    for (long i = 0; i < NumFx; i++)
+    {
+        if (!Fx[i] || !Fx[i]->_fxData.pBuffer[0])
+            return SSE_INVALIDPARAM;
+    }
+
+    Free();
+
     for (long i = 0; i < NumFx; i++)
         _fxData.bufferSize += Fx[i]->_fxData.bufferSize;
-
     Uint8* buf = (Uint8*)SDL_malloc(_fxData.bufferSize);
     size_t pos = 0;
     for (long i = 0; i < NumFx; i++)
@@ -212,6 +218,7 @@ HRESULT FX::Free()
         Mix_FreeChunk(_fxData.pBuffer[0]);
         SDL_free(buf);
     }
+    _fxData.bufferSize = 0;
     return SSE_OK;
 }
 

@@ -45,8 +45,6 @@ COutro::COutro (BOOL bHandy, SLONG PlayerNum, CString SmackName) : CStdRaum (bHa
    desired.userdata = NULL;
    audioDevice = SDL_OpenAudioDevice(NULL, 0, &desired, NULL, 0);
 
-   SDL_PauseAudioDevice(audioDevice, 0);
-
    State = smk_first(pSmack);
    Bitmap.ReSize (Width, Height);
    SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormatFrom((void*)smk_get_video(pSmack), Width, Height / 2, 8, Width, SDL_PIXELFORMAT_INDEX8);
@@ -54,13 +52,13 @@ COutro::COutro (BOOL bHandy, SLONG PlayerNum, CString SmackName) : CStdRaum (bHa
    CalculatePalettemapper(smk_get_palette(pSmack), pal);
    SDL_SetSurfacePalette(surf, pal);
    SDL_QueueAudio(audioDevice, smk_get_audio(pSmack, 0), smk_get_audio_size(pSmack, 0));
-   State = smk_next(pSmack);
 
    SDL_Surface* scaleSurf = SDL_ConvertSurfaceFormat(surf, SDL_PIXELFORMAT_RGB565, 0);
+   SDL_FreePalette(pal);
    SDL_FreeSurface(surf);
 
+   State = smk_next(pSmack);
    SDL_BlitScaled(scaleSurf, NULL, Bitmap.pBitmap->GetSurface(), NULL);
-   SDL_FreePalette(pal);
    SDL_FreeSurface(scaleSurf);
 
    ShowWindow(SW_SHOW);
@@ -106,6 +104,8 @@ void COutro::OnPaint()
 
    //Die Standard Paint-Sachen kann der Basisraum erledigen
    CStdRaum::OnPaint ();
+
+   SDL_PauseAudioDevice(audioDevice, 0);
    
    if (FrameNum++<2) PrimaryBm.BlitFrom (RoomBm);
 
@@ -118,13 +118,13 @@ void COutro::OnPaint()
       CalculatePalettemapper(smk_get_palette(pSmack), pal);
       SDL_SetSurfacePalette(surf, pal);
       SDL_QueueAudio(audioDevice, smk_get_audio(pSmack, 0), smk_get_audio_size(pSmack, 0));
-      State = smk_next(pSmack);
 
       SDL_Surface* scaleSurf = SDL_ConvertSurfaceFormat(surf, SDL_PIXELFORMAT_RGB565, 0);
+      SDL_FreePalette(pal);
       SDL_FreeSurface(surf);
 
+      State = smk_next(pSmack);
       SDL_BlitScaled(scaleSurf, NULL, Bitmap.pBitmap->GetSurface(), NULL);
-      SDL_FreePalette(pal);
       SDL_FreeSurface(scaleSurf);
 
       double usf;

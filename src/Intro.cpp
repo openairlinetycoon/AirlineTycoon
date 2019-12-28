@@ -11,8 +11,6 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-void ConvertBitmapTo16Bit (UBYTE *SourcePic, SBBM *pBitmap, UWORD *pPaletteMapper, SLONG SmackWidth, SLONG SourceSizeY, XY TargetOffset);
-
 extern SB_CColorFX ColorFX;
 
 //--------------------------------------------------------------------------------------------
@@ -58,8 +56,6 @@ CIntro::CIntro (BOOL bHandy, SLONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "",
       desired.userdata = NULL;
       audioDevice = SDL_OpenAudioDevice(NULL, 0, &desired, NULL, 0);
 
-      SDL_PauseAudioDevice(audioDevice, 0);
-
       if (pSmack) bWasIntroPlayed=true;
 
       State = smk_first(pSmack);
@@ -69,13 +65,13 @@ CIntro::CIntro (BOOL bHandy, SLONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "",
       CalculatePalettemapper(smk_get_palette(pSmack), pal);
       SDL_SetSurfacePalette(surf, pal);
       SDL_QueueAudio(audioDevice, smk_get_audio(pSmack, 0), smk_get_audio_size(pSmack, 0));
-      State = smk_next(pSmack);
 
       SDL_Surface* scaleSurf = SDL_ConvertSurfaceFormat(surf, SDL_PIXELFORMAT_RGB565, 0);
+      SDL_FreePalette(pal);
       SDL_FreeSurface(surf);
 
+      State = smk_next(pSmack);
       SDL_BlitScaled(scaleSurf, NULL, Bitmap.pBitmap->GetSurface(), NULL);
-      SDL_FreePalette(pal);
       SDL_FreeSurface(scaleSurf);
    }
    else
@@ -144,6 +140,8 @@ void CIntro::OnPaint()
 
    //Die Standard Paint-Sachen kann der Basisraum erledigen
    CStdRaum::OnPaint ();
+
+   SDL_PauseAudioDevice(audioDevice, 0);
    
    if (pSmack)
    {
@@ -156,13 +154,13 @@ void CIntro::OnPaint()
          CalculatePalettemapper(smk_get_palette(pSmack), pal);
          SDL_SetSurfacePalette(surf, pal);
          SDL_QueueAudio(audioDevice, smk_get_audio(pSmack, 0), smk_get_audio_size(pSmack, 0));
-         State = smk_next(pSmack);
 
          SDL_Surface* scaleSurf = SDL_ConvertSurfaceFormat(surf, SDL_PIXELFORMAT_RGB565, 0);
          SDL_FreeSurface(surf);
-
-         SDL_BlitScaled(scaleSurf, NULL, Bitmap.pBitmap->GetSurface(), NULL);
          SDL_FreePalette(pal);
+
+         State = smk_next(pSmack);
+         SDL_BlitScaled(scaleSurf, NULL, Bitmap.pBitmap->GetSurface(), NULL);
          SDL_FreeSurface(scaleSurf);
 
          double usf;

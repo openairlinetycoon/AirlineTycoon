@@ -26,7 +26,7 @@ CIntro::CIntro (BOOL bHandy, SLONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "",
    FrameNext       = 0;
    bWasIntroPlayed = false;
 
-   StopMidi ();
+   gpSSE->EnableMusic(false);
 
    gMouseStartup = TRUE;
 
@@ -42,8 +42,8 @@ CIntro::CIntro (BOOL bHandy, SLONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "",
       smk_info_video(pSmack, &Width, &Height, NULL);
       Height *= 2;
 
-      unsigned char	tracks, channels[7], depth[7];
-      unsigned long	rate[7];
+      unsigned char tracks, channels[7], depth[7];
+      unsigned long rate[7];
       smk_enable_audio(pSmack, 0, true);
       smk_info_audio(pSmack, &tracks, channels, depth, rate);
 
@@ -110,6 +110,7 @@ CIntro::~CIntro()
    gMouseStartup = FALSE;
    pCursor->SetImage (gCursorBm.pBitmap);
 
+   gpSSE->EnableMusic(true);
    if (Sim.Options.OptionEnableMidi) NextMidi ();
    SetMidiVolume(Sim.Options.OptionMusik);
 }

@@ -22,7 +22,7 @@ COutro::COutro (BOOL bHandy, SLONG PlayerNum, CString SmackName) : CStdRaum (bHa
    FrameNum=0;
    FrameNext=0;
 
-   StopMidi ();
+   gpSSE->EnableMusic(false);
 
    gMouseStartup = TRUE;
 
@@ -31,8 +31,8 @@ COutro::COutro (BOOL bHandy, SLONG PlayerNum, CString SmackName) : CStdRaum (bHa
    smk_info_video(pSmack, &Width, &Height, NULL);
    Height *= 2;
 
-   unsigned char	tracks, channels[7], depth[7];
-   unsigned long	rate[7];
+   unsigned char tracks, channels[7], depth[7];
+   unsigned long rate[7];
    smk_enable_audio(pSmack, 0, true);
    smk_info_audio(pSmack, &tracks, channels, depth, rate);
 
@@ -76,6 +76,7 @@ COutro::~COutro()
    gMouseStartup = FALSE;
    pCursor->SetImage (gCursorBm.pBitmap);
 
+   gpSSE->EnableMusic(true);
    if (Sim.Options.OptionEnableMidi) NextMidi ();
    SetMidiVolume(Sim.Options.OptionMusik);
 }

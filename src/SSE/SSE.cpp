@@ -77,6 +77,36 @@ void SSE::StopMusic()
         mid.Stop();
 }
 
+HRESULT SSE::SetMusicVolume(long volume)
+{
+    Mix_VolumeMusic(volume);
+    return SSE_OK;
+}
+
+HRESULT SSE::GetMusicVolume(long* pVolume)
+{
+    if (!pVolume)
+        return SSE_INVALIDPARAM;
+
+    *pVolume = Mix_VolumeMusic(-1);
+    return SSE_OK;
+}
+
+HRESULT SSE::SetSoundVolume(long volume)
+{
+    Mix_Volume(-1, volume);
+    return SSE_OK;
+}
+
+HRESULT SSE::GetSoundVolume(long* pVolume)
+{
+    if (!pVolume)
+        return SSE_INVALIDPARAM;
+
+    *pVolume = Mix_Volume(-1, -1);
+    return SSE_OK;
+}
+
 void SSE::SetMusicCallback(void (*callback)())
 {
     Mix_HookMusicFinished(callback);

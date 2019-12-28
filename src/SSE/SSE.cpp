@@ -55,6 +55,11 @@ void SSE::SetMusicCallback(void (*callback)())
     Mix_HookMusicFinished(callback);
 }
 
+word SSE::GetSoundPlaying()
+{
+    return Mix_Playing(-1);
+}
+
 FX::FX()
 {
     memset(&_fxData, 0, sizeof(_fxData));
@@ -78,6 +83,31 @@ HRESULT	FX::Create(SSE* pSSE, char* file, dword samplesPerSec, word channels, wo
 
 bool FX::StopPriority(dword flags)
 {
+    if (!(flags & DSBPLAY_PRIORITY) && !(flags & DSBPLAY_HIGHPRIORITY))
+        return false;
+
+    FX* playing = nullptr;
+    for (FX& fx : _digitalData.pSSE->_soundObjList)
+    {
+        dword status;
+        fx.GetStatus(&status);
+        if (status & DSBSTATUS_PLAYING)
+        {
+            if (!fx._digitalData.fNoStop)
+            {
+                fx.Stop();
+                return true;
+            }
+            if (!playing)
+                playing = &fx;
+        }
+    }
+
+    if (playing && flags & DSBPLAY_HIGHPRIORITY)
+    {
+        playing->Stop();
+        return true;
+    }
     return false;
 }
 
@@ -95,14 +125,24 @@ HRESULT FX::Play(dword dwFlags, long pan)
     if (dwFlags & DSBPLAY_SETPAN)
         SetPan(pan);
 
-    if (_digitalData.fNoStop && Mix_Playing(_digitalData.channel) &&
-        Mix_GetChunk(_digitalData.channel) == _fxData.pBuffer[0])
-        return SSE_OK;
+    if (Mix_Playing(-1) >= _digitalData.pSSE->_maxSound
+        && !StopPriority(dwFlags))
+        return SSE_MAXFXREACHED;
 
+    if (_digitalData.fNoStop)
+    {
+        dword status;
+        GetStatus(&status);
+        if (status & DSBSTATUS_PLAYING)
+            return SSE_OK;
+    }
     _digitalData.fNoStop = (dwFlags & DSBPLAY_NOSTOP);
-    _digitalData.channel = Mix_PlayChannel(-1, _fxData.pBuffer[0], dwFlags & DSBPLAY_LOOPING ? -1 : 0);
+
+    if (!(dwFlags & DSBPLAY_FIRE))
+        Stop();
+
     _digitalData.time = timeGetTime();
-    return _digitalData.channel < 0 ? SSE_CANNOTPLAY : SSE_OK;
+    return Mix_PlayChannel(-1, _fxData.pBuffer[0], dwFlags & DSBPLAY_LOOPING ? -1 : 0) < 0 ? SSE_CANNOTPLAY : SSE_OK;
 }
 
 HRESULT FX::Stop()
@@ -110,8 +150,12 @@ HRESULT FX::Stop()
     if (!_fxData.pBuffer[0])
         return SSE_NOSOUNDLOADED;
 
-    if (Mix_GetChunk(_digitalData.channel) == _fxData.pBuffer[0])
-        Mix_HaltChannel(_digitalData.channel);
+    for (int i = 0; i < _digitalData.pSSE->_maxSound; i++)
+    {
+        if (Mix_GetChunk(i) == _fxData.pBuffer[0])
+            Mix_HaltChannel(i);
+    }
+    _digitalData.time = 0;
     return SSE_OK;
 }
 
@@ -120,8 +164,12 @@ HRESULT FX::Pause()
     if (!_fxData.pBuffer[0])
         return SSE_NOSOUNDLOADED;
 
-    if (Mix_GetChunk(_digitalData.channel) == _fxData.pBuffer[0])
-        Mix_Pause(_digitalData.channel);
+    for (int i = 0; i < _digitalData.pSSE->_maxSound; i++)
+    {
+        if (Mix_GetChunk(i) == _fxData.pBuffer[0])
+            Mix_Pause(i);
+    }
+    _digitalData.time = timeGetTime() - _digitalData.time;
     return SSE_OK;
 }
 
@@ -130,8 +178,12 @@ HRESULT FX::Resume()
     if (!_fxData.pBuffer[0])
         return SSE_NOSOUNDLOADED;
 
-    if (Mix_GetChunk(_digitalData.channel) == _fxData.pBuffer[0])
-        Mix_Resume(_digitalData.channel);
+    for (int i = 0; i < _digitalData.pSSE->_maxSound; i++)
+    {
+        if (Mix_GetChunk(i) == _fxData.pBuffer[0])
+            Mix_Resume(i);
+    }
+    _digitalData.time = timeGetTime() - _digitalData.time;
     return SSE_OK;
 }
 
@@ -295,12 +347,13 @@ HRESULT FX::GetStatus(dword* pStatus)
         return SSE_NOSOUNDLOADED;
 
     *pStatus = 0;
-    if (Mix_Playing(_digitalData.channel) && Mix_GetChunk(_digitalData.channel) == _fxData.pBuffer[0])
+    for (int i = 0; i < _digitalData.pSSE->_maxSound; i++)
     {
-        *pStatus |= DSBSTATUS_PLAYING;
-
-        if (_digitalData.fNoStop)
-            *pStatus |= DSBSTATUS_LOOPING;
+        if (Mix_GetChunk(i) == _fxData.pBuffer[0])
+        {
+            if (Mix_Playing(i))
+                *pStatus |= DSBSTATUS_PLAYING;
+        }
     }
 
     return SSE_OK;
@@ -308,11 +361,7 @@ HRESULT FX::GetStatus(dword* pStatus)
 
 bool FX::IsMouthOpen(long PreTime)
 {
-    if (!_fxData.pBuffer[0])
-        return false;
-
-    if (!Mix_Playing(_digitalData.channel) ||
-        Mix_GetChunk(_digitalData.channel) != _fxData.pBuffer[0])
+    if (!_fxData.pBuffer[0] || !_digitalData.time)
         return false;
 
     dword pos = 22050 * (timeGetTime() - _digitalData.time + PreTime) / 1000;

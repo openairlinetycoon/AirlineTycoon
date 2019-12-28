@@ -98,7 +98,6 @@ typedef struct _DigitalData
 	word			state;
 	bool			fNoStop;
 	dword			time;
-	long			channel;
 } DigitalData;	
 
 typedef struct _FXData

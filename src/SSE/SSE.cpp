@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <vector>
 
 SSE::SSE(void* hWnd, dword samplesPerSec, word channels, word bitsPerSample, word maxFX)
     : _hWnd((HWND)hWnd)
@@ -217,12 +218,54 @@ HRESULT FX::Fusion(const FX* Fx, long* Von, long* Bis, long NumFx)
 
 HRESULT FX::Tokenize(__int64 Token, long* Von, long* Bis, long& rcAnzahl)
 {
+    if (!_fxData.pBuffer[0] || _fxData.bufferSize < sizeof(__int64))
+        return SSE_NOSOUNDLOADED;
+
+    size_t count = 0;
+    Von[count++] = 0;
+    Uint8* ptr = _fxData.pBuffer[0]->abuf;
+    for (size_t i = 0; i < _fxData.bufferSize - 7; i++)
+    {
+        if (*(__int64*)ptr == Token)
+        {
+            Bis[count - 1] = ((i - 1) & 0xFFFFFE) + 2;
+            Von[count++] = (i + 8) & 0xFFFFFE;
+        }
+    }
+    Bis[count - 1] = (i - 1);
+    rcAnzahl = count;
     return SSE_OK;
 }
 
 FX** FX::Tokenize(__int64 Token, long& rcAnzahl)
 {
-    return NULL;
+    if (!_fxData.pBuffer[0] || _fxData.bufferSize < sizeof(__int64))
+        return nullptr;
+
+    std::vector<size_t> slices;
+    Uint8* ptr = _fxData.pBuffer[0]->abuf;
+    for (size_t i = 0; i < _fxData.bufferSize - 7; i++)
+    {
+        if (*(__int64*)ptr == Token)
+            slices.push_back(i);
+    }
+    slices.push_back(_fxData.bufferSize);
+
+    FX** pFX = new FX*[slices.size()];
+    size_t pos = 0;
+    for (size_t i = 0; i < slices.size(); i++)
+    {
+        _digitalData.pSSE->CreateFX(&pFX[i]);
+
+        size_t size = slices[i] - pos;
+        Uint8* buf = (Uint8*)SDL_malloc(size);
+        memcpy(buf, _fxData.pBuffer[0]->abuf + pos, size);
+        pFX[i]->_fxData.bufferSize = size;
+        pFX[i]->_fxData.pBuffer[0] = Mix_QuickLoad_RAW(buf, size);
+        pos = slices[i];
+    }
+    rcAnzahl = slices.size();
+    return pFX;
 }
 
 HRESULT FX::Free()

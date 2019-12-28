@@ -119,7 +119,7 @@ long FX::Release()
 
 HRESULT FX::Play(dword dwFlags, long pan)
 {
-    if (!_fxData.pBuffer[0])
+    if (!_fxData.pBuffer)
         return SSE_NOSOUNDLOADED;
 
     // TODO: Panning
@@ -143,17 +143,17 @@ HRESULT FX::Play(dword dwFlags, long pan)
         Stop();
 
     _digitalData.time = timeGetTime();
-    return Mix_PlayChannel(-1, _fxData.pBuffer[0], dwFlags & DSBPLAY_LOOPING ? -1 : 0) < 0 ? SSE_CANNOTPLAY : SSE_OK;
+    return Mix_PlayChannel(-1, _fxData.pBuffer, dwFlags & DSBPLAY_LOOPING ? -1 : 0) < 0 ? SSE_CANNOTPLAY : SSE_OK;
 }
 
 HRESULT FX::Stop()
 {
-    if (!_fxData.pBuffer[0])
+    if (!_fxData.pBuffer)
         return SSE_NOSOUNDLOADED;
 
     for (int i = 0; i < _digitalData.pSSE->_maxSound; i++)
     {
-        if (Mix_GetChunk(i) == _fxData.pBuffer[0])
+        if (Mix_GetChunk(i) == _fxData.pBuffer)
             Mix_HaltChannel(i);
     }
     _digitalData.time = 0;
@@ -162,12 +162,12 @@ HRESULT FX::Stop()
 
 HRESULT FX::Pause()
 {
-    if (!_fxData.pBuffer[0])
+    if (!_fxData.pBuffer)
         return SSE_NOSOUNDLOADED;
 
     for (int i = 0; i < _digitalData.pSSE->_maxSound; i++)
     {
-        if (Mix_GetChunk(i) == _fxData.pBuffer[0])
+        if (Mix_GetChunk(i) == _fxData.pBuffer)
             Mix_Pause(i);
     }
     _digitalData.time = timeGetTime() - _digitalData.time;
@@ -176,12 +176,12 @@ HRESULT FX::Pause()
 
 HRESULT FX::Resume()
 {
-    if (!_fxData.pBuffer[0])
+    if (!_fxData.pBuffer)
         return SSE_NOSOUNDLOADED;
 
     for (int i = 0; i < _digitalData.pSSE->_maxSound; i++)
     {
-        if (Mix_GetChunk(i) == _fxData.pBuffer[0])
+        if (Mix_GetChunk(i) == _fxData.pBuffer)
             Mix_Resume(i);
     }
     _digitalData.time = timeGetTime() - _digitalData.time;
@@ -193,19 +193,19 @@ HRESULT FX::GetVolume(long* pVolume)
     if (!pVolume)
         return SSE_INVALIDPARAM;
 
-    if (!_fxData.pBuffer[0])
+    if (!_fxData.pBuffer)
         return SSE_NOSOUNDLOADED;
 
-    *pVolume = Mix_VolumeChunk(_fxData.pBuffer[0], -1);
+    *pVolume = Mix_VolumeChunk(_fxData.pBuffer, -1);
     return SSE_OK;
 }
 
 HRESULT FX::SetVolume(long volume)
 {
-    if (!_fxData.pBuffer[0])
+    if (!_fxData.pBuffer)
         return SSE_NOSOUNDLOADED;
 
-    Mix_VolumeChunk(_fxData.pBuffer[0], volume);
+    Mix_VolumeChunk(_fxData.pBuffer, volume);
     return SSE_OK;
 }
 
@@ -227,7 +227,7 @@ HRESULT FX::Load(const char* file)
     _digitalData.file = file;
 
     Uint8* buf = (Uint8*)SDL_LoadFile(file, &_fxData.bufferSize);
-    _fxData.pBuffer[0] = Mix_QuickLoad_RAW(buf, _fxData.bufferSize);
+    _fxData.pBuffer = Mix_QuickLoad_RAW(buf, _fxData.bufferSize);
     return SSE_OK;
 }
 
@@ -235,7 +235,7 @@ HRESULT FX::Fusion(const FX** Fx, long NumFx)
 {
     for (long i = 0; i < NumFx; i++)
     {
-        if (!Fx[i] || !Fx[i]->_fxData.pBuffer[0])
+        if (!Fx[i] || !Fx[i]->_fxData.pBuffer)
             return SSE_INVALIDPARAM;
     }
 
@@ -247,16 +247,16 @@ HRESULT FX::Fusion(const FX** Fx, long NumFx)
     size_t pos = 0;
     for (long i = 0; i < NumFx; i++)
     {
-        memcpy(buf + pos, Fx[i]->_fxData.pBuffer[0]->abuf, Fx[i]->_fxData.bufferSize);
+        memcpy(buf + pos, Fx[i]->_fxData.pBuffer->abuf, Fx[i]->_fxData.bufferSize);
         pos += Fx[i]->_fxData.bufferSize;
     }
-    _fxData.pBuffer[0] = Mix_QuickLoad_RAW(buf, _fxData.bufferSize);
+    _fxData.pBuffer = Mix_QuickLoad_RAW(buf, _fxData.bufferSize);
     return SSE_OK;
 }
 
 HRESULT FX::Fusion(const FX* Fx, long* Von, long* Bis, long NumFx)
 {
-    if (!Fx || !Fx->_fxData.pBuffer[0])
+    if (!Fx || !Fx->_fxData.pBuffer)
         return SSE_INVALIDPARAM;
 
     Free();
@@ -267,21 +267,21 @@ HRESULT FX::Fusion(const FX* Fx, long* Von, long* Bis, long NumFx)
     size_t pos = 0;
     for (long i = 0; i < NumFx; i++)
     {
-        memcpy(buf + pos, Fx->_fxData.pBuffer[0]->abuf + Von[i], Bis[i] - Von[i]);
+        memcpy(buf + pos, Fx->_fxData.pBuffer->abuf + Von[i], Bis[i] - Von[i]);
         pos += Bis[i] - Von[i];
     }
-    _fxData.pBuffer[0] = Mix_QuickLoad_RAW(buf, _fxData.bufferSize);
+    _fxData.pBuffer = Mix_QuickLoad_RAW(buf, _fxData.bufferSize);
     return SSE_OK;
 }
 
 HRESULT FX::Tokenize(__int64 Token, long* Von, long* Bis, long& rcAnzahl)
 {
-    if (!_fxData.pBuffer[0] || _fxData.bufferSize < sizeof(__int64))
+    if (!_fxData.pBuffer || _fxData.bufferSize < sizeof(__int64))
         return SSE_NOSOUNDLOADED;
 
     size_t count = 0;
     Von[count++] = 0;
-    Uint8* ptr = _fxData.pBuffer[0]->abuf;
+    Uint8* ptr = _fxData.pBuffer->abuf;
     for (size_t i = 0; i < _fxData.bufferSize - 7; i++)
     {
         if (*(__int64*)ptr == Token)
@@ -297,11 +297,11 @@ HRESULT FX::Tokenize(__int64 Token, long* Von, long* Bis, long& rcAnzahl)
 
 FX** FX::Tokenize(__int64 Token, long& rcAnzahl)
 {
-    if (!_fxData.pBuffer[0] || _fxData.bufferSize < sizeof(__int64))
+    if (!_fxData.pBuffer || _fxData.bufferSize < sizeof(__int64))
         return nullptr;
 
     std::vector<size_t> slices;
-    Uint8* ptr = _fxData.pBuffer[0]->abuf;
+    Uint8* ptr = _fxData.pBuffer->abuf;
     for (size_t i = 0; i < _fxData.bufferSize - 7; i++)
     {
         if (*(__int64*)ptr == Token)
@@ -317,9 +317,9 @@ FX** FX::Tokenize(__int64 Token, long& rcAnzahl)
 
         size_t size = slices[i] - pos;
         Uint8* buf = (Uint8*)SDL_malloc(size);
-        memcpy(buf, _fxData.pBuffer[0]->abuf + pos, size);
+        memcpy(buf, _fxData.pBuffer->abuf + pos, size);
         pFX[i]->_fxData.bufferSize = size;
-        pFX[i]->_fxData.pBuffer[0] = Mix_QuickLoad_RAW(buf, size);
+        pFX[i]->_fxData.pBuffer = Mix_QuickLoad_RAW(buf, size);
         pos = slices[i];
     }
     rcAnzahl = slices.size();
@@ -328,10 +328,10 @@ FX** FX::Tokenize(__int64 Token, long& rcAnzahl)
 
 HRESULT FX::Free()
 {
-    if (_fxData.pBuffer[0])
+    if (_fxData.pBuffer)
     {
-        void* buf = _fxData.pBuffer[0]->abuf;
-        Mix_FreeChunk(_fxData.pBuffer[0]);
+        void* buf = _fxData.pBuffer->abuf;
+        Mix_FreeChunk(_fxData.pBuffer);
         SDL_free(buf);
     }
     _digitalData.file.clear();
@@ -344,13 +344,13 @@ HRESULT FX::GetStatus(dword* pStatus)
     if (!pStatus)
         return SSE_INVALIDPARAM;
 
-    if (!_fxData.pBuffer[0])
+    if (!_fxData.pBuffer)
         return SSE_NOSOUNDLOADED;
 
     *pStatus = 0;
     for (int i = 0; i < _digitalData.pSSE->_maxSound; i++)
     {
-        if (Mix_GetChunk(i) == _fxData.pBuffer[0])
+        if (Mix_GetChunk(i) == _fxData.pBuffer)
         {
             if (Mix_Playing(i))
                 *pStatus |= DSBSTATUS_PLAYING;
@@ -362,14 +362,14 @@ HRESULT FX::GetStatus(dword* pStatus)
 
 bool FX::IsMouthOpen(long PreTime)
 {
-    if (!_fxData.pBuffer[0] || !_digitalData.time)
+    if (!_fxData.pBuffer || !_digitalData.time)
         return false;
 
     dword pos = 22050 * (timeGetTime() - _digitalData.time + PreTime) / 1000;
     if (pos * sizeof(Uint16) + 2000 >= _fxData.bufferSize)
         return false;
 
-    Uint16* sampleBuf = ((Uint16*)_fxData.pBuffer[0]->abuf) + pos;
+    Uint16* sampleBuf = ((Uint16*)_fxData.pBuffer->abuf) + pos;
     return abs(*sampleBuf) > 512
         || abs(sampleBuf[100]) > 512
         || abs(sampleBuf[200]) > 512
@@ -397,7 +397,7 @@ void FX::SetFormat(dword samplesPerSec, word channels, word bitsPerSample)
     _fxData.channels = channels ? channels : 1;
     _fxData.bitsPerSample = bitsPerSample ? bitsPerSample : _digitalData.pSSE->_bitsPerSample;
 
-    if (_fxData.pBuffer[0] && (_fxData.samplesPerSec != lastSamplesPerSec ||
+    if (_fxData.pBuffer && (_fxData.samplesPerSec != lastSamplesPerSec ||
         _fxData.channels != lastChannels || _fxData.bitsPerSample != lastBitsPerSample))
     {
         Free();

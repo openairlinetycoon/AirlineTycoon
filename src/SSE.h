@@ -19,8 +19,6 @@
 #define	MAX_FX_BUFFER			(4)
 #define	EVENTS					(2)
 
-#define	IDSB					Mix_Chunk
-
 #define _FACDS  0x878			/* DirectSound's facility code */
 #define MAKE_DSHRESULT(code)	MAKE_HRESULT(1, _FACDS, code)
 
@@ -102,7 +100,7 @@ typedef struct _DigitalData
 
 typedef struct _FXData
 {
-	IDSB*		pBuffer[MAX_FX_BUFFER];	// Secondary buffer(s)
+	Mix_Chunk*	pBuffer;
 	word		ref;
 	size_t		bufferSize;					// Die aktuelle Größe des DSBuffers
 
@@ -190,7 +188,7 @@ class SSE
 		DllExport void		Activate(bool fActivate, bool fPlayAgain = true);
 		//DllExport bool		IsDSInit() { return (_pDS != 0); }
 		//DllExport IDirectSound* GetDD() { return _pDS; }
-		DllExport IDSB*	GetPrimaryBuffer() { return _pBuffer; }
+		//DllExport IDSB*	GetPrimaryBuffer() { return _pBuffer; }
 
 		DllExport dword	GetFrequency() { return _samplesPerSec; }
 
@@ -231,8 +229,8 @@ class SSE
 
 	protected:
 		std::string	GetNextFileFromPlaylist();
-		HRESULT	   CreateSoundBuffer (IDSB** ppBuffer, dword size, dword samplesPerSecond, word channels, word bitsPerSample, dword flags);
-		HRESULT	   DuplicateSoundBuffer (IDSB* lpDsbOriginal, IDSB** lplpDsbDuplicate);
+		//HRESULT	   CreateSoundBuffer (IDSB** ppBuffer, dword size, dword samplesPerSecond, word channels, word bitsPerSample, dword flags);
+		//HRESULT	   DuplicateSoundBuffer (IDSB* lpDsbOriginal, IDSB** lplpDsbDuplicate);
 
 	protected:
 		HWND		_hWnd;
@@ -243,7 +241,7 @@ class SSE
 		bool		_swapChannels;
 
 		//IDirectSound* _pDS;			// DirectSound-Object
-		IDSB*		_pBuffer;			// Primary buffer
+		//IDSB*		_pBuffer;			// Primary buffer
 	
 		std::list<FX>	_soundObjList;		// Liste der FX-Objekte
 		std::list<MIDI>	_musicObjList;		// Liste der Midi-Objekte

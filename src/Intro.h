@@ -12,7 +12,7 @@ public:
 // Attributes
 public:
     smk          pSmack;
-	 char         State;
+    char         State;
     SBBM         Bitmap;
 
     SBBM         FadeFrom;
@@ -47,6 +47,9 @@ public:
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+
+private:
+	SDL_AudioDeviceID audioDevice;
 };
 
 /////////////////////////////////////////////////////////////////////////////

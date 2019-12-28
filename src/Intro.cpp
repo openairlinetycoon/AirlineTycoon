@@ -43,15 +43,32 @@ CIntro::CIntro (BOOL bHandy, SLONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "",
       smk_enable_video(pSmack, true);
       smk_info_video(pSmack, &Width, &Height, NULL);
       Height *= 2;
-      State = smk_first(pSmack);
+
+      unsigned char	tracks, channels[7], depth[7];
+      unsigned long	rate[7];
+      smk_enable_audio(pSmack, 0, true);
+      smk_info_audio(pSmack, &tracks, channels, depth, rate);
+
+      SDL_AudioSpec desired;
+      desired.freq = rate[0];
+      desired.format = SDL_AUDIO_MASK_SIGNED | (depth[0] & SDL_AUDIO_MASK_BITSIZE);
+      desired.channels = channels[0];
+      desired.samples = 2048;
+      desired.callback = NULL;
+      desired.userdata = NULL;
+      audioDevice = SDL_OpenAudioDevice(NULL, 0, &desired, NULL, 0);
+
+      SDL_PauseAudioDevice(audioDevice, 0);
 
       if (pSmack) bWasIntroPlayed=true;
 
+      State = smk_first(pSmack);
       Bitmap.ReSize(Width, Height);
       SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormatFrom((void*)smk_get_video(pSmack), Width, Height / 2, 8, Width, SDL_PIXELFORMAT_INDEX8);
       SDL_Palette* pal = SDL_AllocPalette(256);
       CalculatePalettemapper(smk_get_palette(pSmack), pal);
       SDL_SetSurfacePalette(surf, pal);
+      SDL_QueueAudio(audioDevice, smk_get_audio(pSmack, 0), smk_get_audio_size(pSmack, 0));
       State = smk_next(pSmack);
 
       SDL_Surface* scaleSurf = SDL_ConvertSurfaceFormat(surf, SDL_PIXELFORMAT_RGB565, 0);
@@ -63,6 +80,7 @@ CIntro::CIntro (BOOL bHandy, SLONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "",
    }
    else
    {
+      audioDevice   = 0;
       pSmack        = NULL;
       Sim.Gamestate = GAMESTATE_BOOT;
    }
@@ -86,6 +104,9 @@ CIntro::~CIntro()
       pGfxMain->ReleaseLib (pRoomLib);
       pRoomLib=NULL;
    }
+
+   if (audioDevice) SDL_CloseAudioDevice(audioDevice);
+   audioDevice = 0;
 
    if (pSmack) smk_close(pSmack);
    pSmack = NULL;
@@ -134,6 +155,7 @@ void CIntro::OnPaint()
          SDL_Palette* pal = SDL_AllocPalette(256);
          CalculatePalettemapper(smk_get_palette(pSmack), pal);
          SDL_SetSurfacePalette(surf, pal);
+         SDL_QueueAudio(audioDevice, smk_get_audio(pSmack, 0), smk_get_audio_size(pSmack, 0));
          State = smk_next(pSmack);
 
          SDL_Surface* scaleSurf = SDL_ConvertSurfaceFormat(surf, SDL_PIXELFORMAT_RGB565, 0);

@@ -122,7 +122,7 @@ typedef struct _MusicData
 	char			alias[9];
 } MusicData;
 	
-typedef struct _DigiMusicData
+/*typedef struct _DigiMusicData
 {
 	//IDirectSoundBuffer *		pBuffer;			// Der Sound-Puffer
 	//IDirectSoundNotify *		pNotify;			// Das Notify-Objekt
@@ -158,7 +158,7 @@ typedef struct _DigiMusicData
 	long						pan;				// Pan-Wert
 	long						volume;				// gemerkte Lautstärke
 
-} DigiMusicData;
+} DigiMusicData;*/
 
 /******************************************************************************\
 *
@@ -183,9 +183,9 @@ class SSE
 		//DllExport HRESULT	DisableDS ();
 		DllExport HRESULT	CreateFX (FX** ppFX, char* file = 0, dword samplesPerSec = 0, word channels = 0, word bitsPerSample = 0);
 		DllExport HRESULT	CreateMidi (MIDI** ppMidi, char* file = 0);
-		DllExport HRESULT	CreateDigimusic (DIGIMUSIC** ppDigimusic, char* file = 0, dword bufferSecs = 4, dword samplesPerSec = 0, word channels = 0, word bitsPerSample = 0);
+		//DllExport HRESULT	CreateDigimusic (DIGIMUSIC** ppDigimusic, char* file = 0, dword bufferSecs = 4, dword samplesPerSec = 0, word channels = 0, word bitsPerSample = 0);
 
-		DllExport void		Activate(bool fActivate, bool fPlayAgain = true);
+		//DllExport void		Activate(bool fActivate, bool fPlayAgain = true);
 		//DllExport bool		IsDSInit() { return (_pDS != 0); }
 		//DllExport IDirectSound* GetDD() { return _pDS; }
 		//DllExport IDSB*	GetPrimaryBuffer() { return _pBuffer; }
@@ -196,7 +196,7 @@ class SSE
 
 		DllExport HRESULT	EnableSound (bool fSoundEnabled);
 		DllExport bool		IsSoundEnabled() { return _fSoundEnabled; }
-		DllExport void		SetMaxSound(word fx) { Mix_AllocateChannels(fx - _maxSound); _maxSound = fx; }
+		DllExport void		SetMaxSound(word fx) { _maxSound = Mix_AllocateChannels(fx - _maxSound); }
 		DllExport word		GetMaxSound()		{ return _maxSound; }
 		DllExport word		GetSoundPlaying();
 		DllExport void		StopSound();
@@ -213,14 +213,14 @@ class SSE
 		DllExport HRESULT	SetSoundVolume(long volume);
 		DllExport HRESULT	GetSoundVolume(long* pVolume);
 
-		DllExport HRESULT	SetMixerVolume (char * device, long volume);
-		DllExport HRESULT	GetMixerVolume(char * device, long* pVolume, MIXERBOUNDS* pMB = NULL);
+		//DllExport HRESULT	SetMixerVolume (char * device, long volume);
+		//DllExport HRESULT	GetMixerVolume(char * device, long* pVolume, MIXERBOUNDS* pMB = NULL);
 
 
 		DllExport void		SetMusicCallback(void (*callback)());
 
-		DllExport bool		SetMusicList(char* path, char* files);
-		DllExport void		ClearMusicList();
+		//DllExport bool		SetMusicList(char* path, char* files);
+		//DllExport void		ClearMusicList();
 
 		DllExport void		SwapChannels(bool fSwap)	{ Mix_SetReverseStereo(-1, _swapChannels = fSwap); }
 		DllExport bool		IsSwapChannels()				{ return _swapChannels; }
@@ -228,7 +228,7 @@ class SSE
 		DllExport HWND		GetWindow()						{ return _hWnd; }
 
 	protected:
-		std::string	GetNextFileFromPlaylist();
+		//std::string	GetNextFileFromPlaylist();
 		//HRESULT	   CreateSoundBuffer (IDSB** ppBuffer, dword size, dword samplesPerSecond, word channels, word bitsPerSample, dword flags);
 		//HRESULT	   DuplicateSoundBuffer (IDSB* lpDsbOriginal, IDSB** lplpDsbDuplicate);
 
@@ -251,9 +251,9 @@ class SSE
 
 		MUSIC*	_playingMusicObj;	// Das aktuell gespielte Music-Objekt
 
-		std::string	_musicListPath;	// Pfad auf Musik-Dateien
-		char*		   _pMusicListFiles;	// Liste der Musik-Dateien (00-terminiert)
-		char*		   _pMusicListPos;	// Ptr. auf den aktuellen Eintrag in der Musik-Liste
+		//std::string	_musicListPath;	// Pfad auf Musik-Dateien
+		//char*		   _pMusicListFiles;	// Liste der Musik-Dateien (00-terminiert)
+		//char*		   _pMusicListPos;	// Ptr. auf den aktuellen Eintrag in der Musik-Liste
 };
 
 /******************************************************************************\
@@ -411,7 +411,7 @@ class MIDI : public MUSIC
 *
 \******************************************************************************/
 
-class DIGIMUSIC : public DIGITAL,public MUSIC
+/*class DIGIMUSIC : public DIGITAL,public MUSIC
 {
 	friend SSE;
 	friend unsigned int WINAPI HandleNotifications(void * lParam); 
@@ -454,6 +454,6 @@ class DIGIMUSIC : public DIGITAL,public MUSIC
 
 	protected:
 		DigiMusicData	_dmData;
-};
+};*/
 
 #endif

@@ -589,6 +589,8 @@ HRESULT MIDI::Load(const char* file)
     if (!_music)
         _musicData.file.replace(_musicData.file.size() - 3, 3, "ogg");
     _music = Mix_LoadMUS(file);
+
+    _musicData.pSSE->_playingMusicObj = this;
     return SSE_OK;
 }
 

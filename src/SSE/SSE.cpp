@@ -397,7 +397,16 @@ bool FX::IsMouthOpen(long PreTime)
 
 word FX::CountPlaying()
 {
-    return Mix_Playing(-1);
+    word count = 0;
+    for (int i = 0; i < _digitalData.pSSE->_maxSound; i++)
+    {
+        if (Mix_GetChunk(i) == _fxData.pBuffer)
+        {
+            if (Mix_Playing(i))
+                count++;
+        }
+    }
+    return count;
 }
 
 void FX::SetFormat(dword samplesPerSec, word channels, word bitsPerSample)

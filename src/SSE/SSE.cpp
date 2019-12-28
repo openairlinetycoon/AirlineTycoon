@@ -9,6 +9,8 @@ SSE::SSE(void* hWnd, dword samplesPerSec, word channels, word bitsPerSample, wor
     , _channels(channels)
     , _bitsPerSample(bitsPerSample)
     , _maxSound(maxFX)
+    , _fSoundEnabled(true)
+    , _fMusicEnabled(true)
 {
     if (Mix_OpenAudioDevice(samplesPerSec, SDL_AUDIO_MASK_SIGNED | (bitsPerSample & SDL_AUDIO_MASK_BITSIZE), channels, 1024, nullptr, 0) < 0)
     {
@@ -43,14 +45,36 @@ HRESULT SSE::CreateMidi(MIDI** ppMidi, char* file)
     return (*ppMidi)->Create(this, file);
 }
 
-HRESULT SSE::EnableDS()
+HRESULT SSE::EnableSound(bool fSoundEnabled)
 {
+    if (fSoundEnabled == _fSoundEnabled)
+        return SSE_OK;
+    _fSoundEnabled = fSoundEnabled;
+    if (!_fSoundEnabled)
+        StopSound();
     return SSE_OK;
 }
 
-HRESULT SSE::DisableDS()
+void SSE::StopSound()
 {
+    for (FX& fx : _soundObjList)
+        fx.Stop();
+}
+
+HRESULT SSE::EnableMusic(bool fMusicEnabled)
+{
+    if (fMusicEnabled == _fMusicEnabled)
+        return SSE_OK;
+    _fMusicEnabled = fMusicEnabled;
+    if (!_fMusicEnabled)
+        StopMusic();
     return SSE_OK;
+}
+
+void SSE::StopMusic()
+{
+    for (MIDI& mid : _musicObjList)
+        mid.Stop();
 }
 
 void SSE::SetMusicCallback(void (*callback)())
@@ -129,6 +153,9 @@ long FX::Release()
 
 HRESULT FX::Play(dword dwFlags, long pan)
 {
+    if (!_digitalData.pSSE->IsSoundEnabled())
+        return SSE_SOUNDDISABLED;
+
     if (!_fxData.pBuffer)
         return SSE_NOSOUNDLOADED;
 
@@ -468,6 +495,12 @@ long MIDI::Release()
 
 HRESULT MIDI::Play(dword dwFlags, long pan)
 {
+    if (!_musicData.pSSE->IsMusicEnabled())
+        return SSE_MUSICDISABLED;
+
+    if (!_music)
+        return SSE_NOMUSICLOADED;
+
     // TODO: Panning
     if (dwFlags & DSBPLAY_SETPAN)
         SetPan(pan);

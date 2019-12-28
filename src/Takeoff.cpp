@@ -393,7 +393,7 @@ CTakeOffApp::~CTakeOffApp()
 
    if (gpSSE)
    {
-      gpSSE->DisableDS();
+      gpSSE->EnableSound(false);
       delete gpSSE;
       gpSSE=NULL;
    }

@@ -179,8 +179,8 @@ class SSE
 		DllExport SSE(void *hWnd, dword samplesPerSec = 22050, word channels = 2, word bitsPerSample = 16, word maxFX = 8);
 		DllExport ~SSE();
 
-		DllExport HRESULT	EnableDS ();
-		DllExport HRESULT	DisableDS ();
+		//DllExport HRESULT	EnableDS ();
+		//DllExport HRESULT	DisableDS ();
 		DllExport HRESULT	CreateFX (FX** ppFX, char* file = 0, dword samplesPerSec = 0, word channels = 0, word bitsPerSample = 0);
 		DllExport HRESULT	CreateMidi (MIDI** ppMidi, char* file = 0);
 		DllExport HRESULT	CreateDigimusic (DIGIMUSIC** ppDigimusic, char* file = 0, dword bufferSecs = 4, dword samplesPerSec = 0, word channels = 0, word bitsPerSample = 0);
@@ -196,7 +196,7 @@ class SSE
 
 		DllExport HRESULT	EnableSound (bool fSoundEnabled);
 		DllExport bool		IsSoundEnabled() { return _fSoundEnabled; }
-		DllExport void		SetMaxSound(word fx) { _maxSound = fx; }
+		DllExport void		SetMaxSound(word fx) { Mix_AllocateChannels(fx - _maxSound); _maxSound = fx; }
 		DllExport word		GetMaxSound()		{ return _maxSound; }
 		DllExport word		GetSoundPlaying();
 		DllExport void		StopSound();

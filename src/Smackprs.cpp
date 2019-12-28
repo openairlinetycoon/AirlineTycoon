@@ -541,7 +541,10 @@ void CSmackerPerson::Pump (void)
                Clips[ActiveClip].PlaySyllable ();
 
             double usf;
-            smk_next(Clips[ActiveClip].pSmack);
+            if (Clips[ActiveClip].FrameNum >= Clips[ActiveClip].Frames - 1)
+               smk_first(Clips[ActiveClip].pSmack);
+            else
+               smk_next(Clips[ActiveClip].pSmack);
             smk_info_all(Clips[ActiveClip].pSmack, &Clips[ActiveClip].FrameNum, &Clips[ActiveClip].Frames, &usf);
             Clips[ActiveClip].FrameNext = timeGetTime() + (usf / 1000.0);
          }

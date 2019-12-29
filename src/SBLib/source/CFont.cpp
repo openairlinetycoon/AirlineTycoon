@@ -280,7 +280,7 @@ long SB_CFont::GetWordLength(char* str, long offset)
     dword length = 0;
     while (offset != 0) {
         switch(str[length]) {
-        case 0xb5:
+        case -0x4b:
         case '\0':
         case '\t':
         case '\n':
@@ -314,7 +314,7 @@ long SB_CFont::GetWidth(char* str, long offset)
     {
         switch(*str)
         {
-        case 0xb5:
+        case -0x4b:
         case '\0':
         case '\t':
         case '\n':
@@ -355,7 +355,7 @@ bool SB_CFont::DrawWord(char* str, long offset)
         if (offset == 0) {
             return true;
         }
-        if (*str == 0xb5) {
+        if (*str == -0x4b) {
             this->Pos.y = this->Pos.y + long(this->Header.Height * LineSpace);
             this->Pos.x = this->Start.x;
         }

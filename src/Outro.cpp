@@ -22,7 +22,7 @@ COutro::COutro (BOOL bHandy, SLONG PlayerNum, CString SmackName) : CStdRaum (bHa
    FrameNum=0;
    FrameNext=0;
 
-   gpSSE->EnableMusic(false);
+   StopMidi ();
 
    gMouseStartup = TRUE;
 
@@ -76,7 +76,6 @@ COutro::~COutro()
    gMouseStartup = FALSE;
    pCursor->SetImage (gCursorBm.pBitmap);
 
-   gpSSE->EnableMusic(true);
    if (Sim.Options.OptionEnableMidi) NextMidi ();
    SetMidiVolume(Sim.Options.OptionMusik);
 }

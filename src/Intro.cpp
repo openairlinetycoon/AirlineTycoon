@@ -26,7 +26,7 @@ CIntro::CIntro (BOOL bHandy, SLONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "",
    FrameNext       = 0;
    bWasIntroPlayed = false;
 
-   gpSSE->EnableMusic(false);
+   StopMidi ();
 
    gMouseStartup = TRUE;
 
@@ -110,7 +110,6 @@ CIntro::~CIntro()
    gMouseStartup = FALSE;
    pCursor->SetImage (gCursorBm.pBitmap);
 
-   gpSSE->EnableMusic(true);
    if (Sim.Options.OptionEnableMidi) NextMidi ();
    SetMidiVolume(Sim.Options.OptionMusik);
 }

@@ -51,5 +51,5 @@ protected:
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnPaint();
 	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+	//DECLARE_MESSAGE_MAP()
 };

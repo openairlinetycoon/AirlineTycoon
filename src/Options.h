@@ -17,6 +17,7 @@ public:
    KLACKER        KlackerTafel;  //Die Tafel auf der alles angezeigt wird
    ULONG          PlayerNum;
 
+   SDL_TimerID     TimerId;
    SB_CFont        VersionFont;
 
    SLONG           CursorX;
@@ -59,7 +60,7 @@ protected:
 	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+	//DECLARE_MESSAGE_MAP()
 };
 
 /////////////////////////////////////////////////////////////////////////////

@@ -85,8 +85,8 @@ CDesigner::CDesigner(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum
                                NULL, SMACKER_CLIP_SET, 0, NULL,  //Warten
                                "A9A2", 1, 0);
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 
    //Hintergrundsounds:
    if (Sim.Options.OptionEffekte)
@@ -106,18 +106,6 @@ CDesigner::~CDesigner()
    Talkers.Talkers[TALKER_DESIGNER].DecreaseReference ();
 }
 
-//--------------------------------------------------------------------------------------------
-//Die Bank wird eröffnet:
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CDesigner, CStdRaum)
-	//{{AFX_MSG_MAP(CDesigner)
-	ON_WM_LBUTTONDOWN()
-	ON_WM_PAINT()
-	ON_WM_RBUTTONDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////
 // CDesigner message handlers
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,8 +116,6 @@ END_MESSAGE_MAP()
 void CDesigner::OnPaint()
 {
    SLONG   NewTip;
-
-   { CPaintDC dc(this); }
 
    if (!bHandy) SetMouseLook (CURSOR_NORMAL, 0, ROOM_DESIGNER, 0);
 
@@ -213,7 +199,6 @@ void CDesigner::OnRButtonDown(UINT nFlags, CPoint point)
    //Außerhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y)
    {
-      CWnd::OnRButtonDown(nFlags, point);
       return;
    }
    else

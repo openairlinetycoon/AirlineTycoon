@@ -57,8 +57,8 @@ CWorld::CWorld(BOOL bHandy, ULONG PlayerNum, SLONG CityId) : CStdRaum (bHandy, P
       if (Sim.Players.Players[(SLONG)PlayerNum].Planes.IsInAlbum(c))
          Sim.Players.Players[(SLONG)PlayerNum].Planes[c].UpdateGlobePos (0);
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -69,18 +69,6 @@ CWorld::~CWorld()
    Sim.Players.Players[(SLONG)Sim.localPlayer].Messages.AddMessage (BERATERTYP_AUFTRAG, "", MESSAGE_COMMENT);
 }
 
-//--------------------------------------------------------------------------------------------
-//Die Bank wird eröffnet:
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CWorld, CStdRaum)
-	//{{AFX_MSG_MAP(CWorld)
-	ON_WM_LBUTTONDOWN()
-	ON_WM_PAINT()
-	ON_WM_RBUTTONDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////
 // CWorld message handlers
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,8 +78,6 @@ END_MESSAGE_MAP()
 //--------------------------------------------------------------------------------------------
 void CWorld::OnPaint()
 {
-   { CPaintDC dc(this); }
-
    if (Sim.Gamestate==GAMESTATE_BOOT) return;
 
    //Die Standard Paint-Sachen kann der Basisraum erledigen
@@ -134,7 +120,6 @@ void CWorld::OnRButtonDown(UINT nFlags, CPoint point)
    //Außerhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y)
    {
-	   CWnd::OnRButtonDown(nFlags, point);
       return;
    }
    else

@@ -360,11 +360,11 @@ CStdRaum::CStdRaum (BOOL bHandy, ULONG PlayerNum, CString GfxLibName, __int64 gr
       Sim.Players.Players[(SLONG)PlayerNum].WinP2 = WinP2;
    }
 
-   if (!Create(NULL, "PlayerWin", WS_VISIBLE|WS_CHILD, WindowRect, FrameWnd, NumPlayerWins++))
-      TeakLibW_Exception (FNL, ExcCreateWindow);
-   if (bFullscreen) SetWindowPos (&wndTopMost, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOREDRAW|SWP_NOSIZE);
+   //if (!Create(NULL, "PlayerWin", WS_VISIBLE|WS_CHILD, WindowRect, FrameWnd, NumPlayerWins++))
+   //   TeakLibW_Exception (FNL, ExcCreateWindow);
+   //if (bFullscreen) SetWindowPos (&wndTopMost, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOREDRAW|SWP_NOSIZE);
 
-   SetActiveWindow();
+   //SetActiveWindow();
 
    for (SLONG c=0; c<3; c++)
       BackgroundWait[c]=-1;
@@ -422,6 +422,45 @@ CStdRaum::~CStdRaum()
    {
       pGfxMain->ReleaseLib (pRoomLib);
       pRoomLib=NULL;
+   }
+}
+
+void CStdRaum::ProcessEvent(const SDL_Event& event)
+{
+   switch (event.type)
+   {
+   case SDL_MOUSEMOTION:
+   {
+      OnMouseMove(0, CPoint(event.motion.x, event.motion.y));
+   }
+   break;
+   case SDL_KEYDOWN:
+   {
+      OnKeyDown(toupper(event.key.keysym.sym), event.key.repeat, 0);
+      OnChar(toupper(event.key.keysym.sym), event.key.repeat, 0);
+   }
+   break;
+   case SDL_MOUSEBUTTONDOWN:
+   {
+      if (event.button.button == SDL_BUTTON_LEFT)
+      {
+         if (event.button.clicks > 1)
+            OnLButtonDblClk(0, CPoint(event.button.x, event.button.y));
+         else
+            OnLButtonDown(0, CPoint(event.button.x, event.button.y));
+      }
+      else if (event.button.button == SDL_BUTTON_RIGHT)
+         OnRButtonDown(0, CPoint(event.button.x, event.button.y));
+   }
+   break;
+   case SDL_MOUSEBUTTONUP:
+   {
+      if (event.button.button == SDL_BUTTON_LEFT)
+         OnLButtonUp(0, CPoint(event.button.x, event.button.y));
+      else if (event.button.button == SDL_BUTTON_RIGHT)
+         OnRButtonUp(0, CPoint(event.button.x, event.button.y));
+   }
+   break;
    }
 }
 
@@ -2448,7 +2487,6 @@ void CStdRaum::PostPaint (void)
 
    if (bLeaveGameLoop) return;
    if (this==NULL) return;
-   if (!GetSafeHwnd()) return;
    if (PlayerNum<0 || PlayerNum>3) return;
 
    PLAYER &qPlayer = Sim.Players.Players[(SLONG)PlayerNum];
@@ -2575,7 +2613,6 @@ void CStdRaum::PostPaint (void)
    if (bDestructorCalledInMeantime) return;
    if (bLeaveGameLoop) return;
    if (this==NULL) return;
-   if (!GetSafeHwnd()) return;
    if (PlayerNum<0 || PlayerNum>3) return;
 
    if (IgnoreNextPostPaintPump>0) IgnoreNextPostPaintPump--;
@@ -2916,7 +2953,7 @@ void CStdRaum::PostPaint (void)
       static SLONG LastTime=0;
 
       if (CheatTestGame==2 && Sim.GetHour()==9 && Sim.GetMinute()==0 && rand()%30==0)
-         FrameWnd->SendMessage (WM_RBUTTONDOWN, 0, gMousePosition.x+gMousePosition.y*65536);
+         FrameWnd->OnRButtonDown (WM_RBUTTONDOWN, gMousePosition.x+gMousePosition.y*65536);
 
       if (Sim.Time-LastTime>255 && Sim.Persons[Sim.Persons.GetPlayerIndex(Sim.localPlayer)].Dir>=8 && Sim.GetHour()<17 && Sim.GetHour()>9)
       {
@@ -2927,24 +2964,23 @@ void CStdRaum::PostPaint (void)
 
          if (rand()%10==1)
          {
-            CRect rcWindow;
+            TXY<int> rcWindow;
 
             gMousePosition=XY(rand()%640, rand()%480);
 
-            FrameWnd->GetClientRect(&rcWindow);
-            FrameWnd->ClientToScreen((LPPOINT)&rcWindow);
+            SDL_GetWindowPosition(FrameWnd->m_hWnd, &rcWindow.x, &rcWindow.y);
 
-            SetCursorPos (rcWindow.left+gMousePosition.x, rcWindow.top+gMousePosition.y);
+            SetCursorPos (rcWindow.x+gMousePosition.x, rcWindow.y+gMousePosition.y);
          }
          else if ((LastCursor==gMousePosition && rand()%2==0) || rand()%10!=0)
          {
             if (rand()%5==0) gMousePosition=XY(rand()%640, rand()%480);
-            FrameWnd->SendMessage (WM_LBUTTONDOWN, 0, gMousePosition.x+gMousePosition.y*65536);
+            FrameWnd->OnLButtonDown (WM_LBUTTONDOWN, gMousePosition.x+gMousePosition.y*65536);
          }
          else if ((LastCursor==gMousePosition && rand()%2==0) || rand()%10<5)
          {
             if (rand()%5==0) gMousePosition=XY(rand()%640, rand()%480);
-            FrameWnd->SendMessage (WM_RBUTTONDOWN, 0, gMousePosition.x+gMousePosition.y*65536);
+            FrameWnd->OnRButtonDown (WM_RBUTTONDOWN, gMousePosition.x+gMousePosition.y*65536);
          }
          else
          {
@@ -3066,26 +3102,6 @@ void CStdRaum::CheckHighlight (CPoint point)
       }
    }
 }
-
-//--------------------------------------------------------------------------------------------
-//BEGIN_MESSAGE_MAP(CStdRaum, CWnd)
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CStdRaum, CWnd)
-	//{{AFX_MSG_MAP(CStdRaum)
-	ON_WM_LBUTTONDOWN()
-	ON_WM_LBUTTONUP()
-	ON_WM_PAINT()
-	ON_WM_RBUTTONDOWN()
-	ON_WM_RBUTTONUP()
-	ON_WM_MBUTTONDOWN()
-	ON_WM_KEYDOWN()
-	ON_WM_CHAR()
-	ON_WM_SETCURSOR()
-	ON_WM_MOUSEMOVE()
-   ON_WM_LBUTTONDBLCLK()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
 
 /////////////////////////////////////////////////////////////////////////////
 // CStdRaum message handlers
@@ -3761,7 +3777,6 @@ void CStdRaum::OnRButtonDown(UINT nFlags, CPoint point)
       MenuStop ();
       RepaintText (TRUE);
    }
-   else CWnd::OnRButtonDown(nFlags, point);
 }
 
 
@@ -5834,7 +5849,7 @@ void CStdRaum::MenuLeftClick (XY Pos)
          break;
 
       case MENU_QUITMESSAGE:
-         PostMessage(WM_QUIT);
+         SDL_Quit();
          Sim.Gamestate = GAMESTATE_QUIT;
          bLeaveGameLoop=TRUE;
          break;
@@ -7619,7 +7634,7 @@ void CStdRaum::MenuStop (void)
 
    if (CurrentMenu==MENU_QUITMESSAGE)
    {
-      PostMessage(WM_QUIT);
+      SDL_Quit();
       Sim.Gamestate = GAMESTATE_QUIT;
       bLeaveGameLoop=TRUE;
       return;
@@ -8122,4 +8137,14 @@ void CStdRaum::OnMouseMove(UINT nFlags, CPoint point)
 void CStdRaum::KeepRoomLib (void)
 {
    pRoomLibStatic = pRoomLib;
+}
+
+void CStdRaum::OnTimer(UINT nIDEvent)
+{
+}
+
+Uint32 CStdRaum::TimerFunc(Uint32 interval, void* param)
+{
+   ((CStdRaum*)param)->OnTimer(1);
+   return interval;
 }

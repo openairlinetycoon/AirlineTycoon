@@ -110,8 +110,8 @@ CMakler::CMakler(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "m
       MenuSetZoomStuff (XY(320,220), 0.17, FALSE);
    #endif
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -127,25 +127,12 @@ CMakler::~CMakler()
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 //--------------------------------------------------------------------------------------------
-//BEGIN_MESSAGE_MAP(CMakler, CStdRaum)
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CMakler, CStdRaum)
-	//{{AFX_MSG_MAP(CMakler)
-	ON_WM_PAINT()
-	ON_WM_LBUTTONDOWN()
-	ON_WM_RBUTTONDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-//--------------------------------------------------------------------------------------------
 //void CMakler::OnPaint()
 //--------------------------------------------------------------------------------------------
 void CMakler::OnPaint()
 {
    SLONG   NewTip;
    PLAYER &qPlayer = Sim.Players.Players[(SLONG)PlayerNum];
-
-   { CPaintDC dc(this); } // device context for painting
 
    if (Sim.Date>5) Sim.GiveHint (HINT_FLUGZEUGMAKLER);
 
@@ -330,7 +317,6 @@ void CMakler::OnRButtonDown(UINT nFlags, CPoint point)
    //Auﬂerhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y)
    {
-      CWnd::OnRButtonDown(nFlags, point);
       return;
    }
    else

@@ -513,7 +513,7 @@ void PlayMidi (const CString &Filename)
 //--------------------------------------------------------------------------------------------
 //Spielt das angegebne Midi-Files ab der Stelle x:
 //--------------------------------------------------------------------------------------------
-void PlayMidiFrom (const CString &Filename, SLONG StartPosition)
+/*void PlayMidiFrom (const CString &Filename, SLONG StartPosition)
 {
    //CDebugEntryExit ("PlayMidiFrom");
 
@@ -534,7 +534,7 @@ void PlayMidiFrom (const CString &Filename, SLONG StartPosition)
       LastMidiPosition = StartPosition;
       LastMidiFilename = Filename;
    }
-}
+}*/
 
 //--------------------------------------------------------------------------------------------
 //Bricht das Spielen des aktuellen Midi-Files ab:

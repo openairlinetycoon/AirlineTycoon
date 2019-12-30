@@ -269,8 +269,8 @@ PUTSTARTMARK;
 
    VersionFont.Load (lpDD, (char*)(LPCTSTR)FullFilename ("stat_1.mcf", MiscPath));
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 
    //Versteckter Kopierschutz:
    #ifdef CD_PROTECTION_METALOCK
@@ -394,8 +394,9 @@ PUTSTARTMARK;
    SetMouseLook (CURSOR_NORMAL, 0, ROOM_TITLE, 0);
 
    //Create a timer to 'klacker'
-   if (!SetTimer (1, 50, NULL)) TimerFailure = 1;
-                           else TimerFailure = 0;
+   TimerId = SDL_AddTimer(50, TimerFunc, this);
+   if (!TimerId) TimerFailure = 1;
+            else TimerFailure = 0;
 
    DumpAASeedSum (2000);
 }
@@ -406,6 +407,7 @@ PUTSTARTMARK;
 NewGamePopup::~NewGamePopup()
 {
    SLONG c;
+   if (TimerId) SDL_RemoveTimer(TimerId);
 
    bNewGamePopupIsOpen=false;
 
@@ -830,23 +832,6 @@ void NewGamePopup::CheckNames (void)
    if (d!=1) NamesOK = FALSE;
 }
 
-//--------------------------------------------------------------------------------------------
-//MESSAGE_MAP(NewGamePopup, CWnd)
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(NewGamePopup, CWnd)
-	//{{AFX_MSG_MAP(NewGamePopup)
-	ON_WM_PAINT()
-	ON_WM_LBUTTONDOWN()
-	ON_WM_TIMER()
-	ON_WM_RBUTTONDOWN()
-	ON_WM_CHAR()
-	ON_WM_KEYDOWN()
-	ON_WM_SETCURSOR()
-	ON_WM_MOUSEMOVE()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-
 /////////////////////////////////////////////////////////////////////////////
 // NewGamePopup message handlers
 
@@ -867,9 +852,6 @@ void NewGamePopup::OnPaint()
    {
       KlackerTafel.Klack ();  //Tafel notfalls asynchron aktualisieren
    }
-
-   { CPaintDC dc(this); }
-   if (!GetSafeHwnd()) return;
 
    //Die Standard Paint-Sachen kann der Basisraum erledigen
    CStdRaum::OnPaint ();
@@ -1278,7 +1260,7 @@ again_heimatflughafen:
             #ifdef DEMO
                MenuStart (MENU_QUITMESSAGE);
             #else
-               PostMessage(WM_QUIT);
+               SDL_Quit();
                Sim.Gamestate = GAMESTATE_QUIT;
                bLeaveGameLoop=TRUE;
             #endif
@@ -1869,8 +1851,6 @@ again_heimatflughafen:
             //==>+<==
          }
       }
-
-	   CWnd::OnLButtonDown(nFlags, point);
    }
 }
 

@@ -61,8 +61,8 @@ COutro::COutro (BOOL bHandy, SLONG PlayerNum, CString SmackName) : CStdRaum (bHa
    SDL_BlitScaled(scaleSurf, NULL, Bitmap.pBitmap->GetSurface(), NULL);
    SDL_FreeSurface(scaleSurf);
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -81,18 +81,6 @@ COutro::~COutro()
    SetMidiVolume(Sim.Options.OptionMusik);
 }
 
-//--------------------------------------------------------------------------------------------
-//BEGIN_MESSAGE_MAP(COutro, CWnd)
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(COutro, CWnd)
-	//{{AFX_MSG_MAP(COutro)
-	ON_WM_LBUTTONDOWN()
-	ON_WM_PAINT()
-	ON_WM_RBUTTONDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-
 /////////////////////////////////////////////////////////////////////////////
 // COutro message handlers
 
@@ -101,8 +89,6 @@ END_MESSAGE_MAP()
 //--------------------------------------------------------------------------------------------
 void COutro::OnPaint() 
 {
-   { CPaintDC dc(this); }
-
    //Die Standard Paint-Sachen kann der Basisraum erledigen
    CStdRaum::OnPaint ();
 

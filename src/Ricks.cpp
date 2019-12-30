@@ -99,8 +99,8 @@ CRicks::CRicks(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "ric
       SetBackgroundFx (2, "toilet.raw",  120000, 80000, 40);
    }
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -111,18 +111,6 @@ CRicks::~CRicks()
    Talkers.Talkers[TALKER_RICK].DecreaseReference ();
 }
 
-//--------------------------------------------------------------------------------------------
-//Die Bank wird erˆffnet:
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CRicks, CStdRaum)
-	//{{AFX_MSG_MAP(CRicks)
-	ON_WM_LBUTTONDOWN()
-	ON_WM_PAINT()
-	ON_WM_RBUTTONDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////
 // CRicks message handlers
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -132,8 +120,6 @@ END_MESSAGE_MAP()
 //--------------------------------------------------------------------------------------------
 void CRicks::OnPaint()
 {
-   { CPaintDC dc(this); }
-
    if (!bHandy) SetMouseLook (CURSOR_NORMAL, 0, ROOM_RICKS, 0);
 
    if (Sim.Date>4) Sim.GiveHint (HINT_RICKS);
@@ -198,7 +184,6 @@ void CRicks::OnRButtonDown(UINT nFlags, CPoint point)
    //Auﬂerhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y)
    {
-      CWnd::OnRButtonDown(nFlags, point);
       return;
    }
    else

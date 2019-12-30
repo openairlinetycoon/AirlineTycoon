@@ -20,7 +20,7 @@ static const char FileId[] = "Hall";
 //--------------------------------------------------------------------------------------------
 // HallDiskMenu
 //--------------------------------------------------------------------------------------------
-HallDiskMenu::HallDiskMenu(CWnd *ParentWnd)
+HallDiskMenu::HallDiskMenu(BOOL bHandy, SLONG PlayerNum) : CStdRaum(bHandy, PlayerNum, "", NULL)
 {
    SLONG c, d;
 
@@ -29,12 +29,12 @@ HallDiskMenu::HallDiskMenu(CWnd *ParentWnd)
    pGfxMain->LoadLib ((char*)(LPCTSTR)FullFilename ("HallDisk.gli", GliPath), &pMenuLib, L_LOCMEM);
    MenuBm.ReSize (pMenuLib, "HALLDISK");
 
-   if (!Create(NULL, "HallDiskMenu", WS_VISIBLE|WS_CHILD, rect, ParentWnd, 42))
+   /*if (!Create(NULL, "HallDiskMenu", WS_VISIBLE|WS_CHILD, rect, ParentWnd, 42))
    {
       ::MessageBox (NULL, "Create failed", "ERROR", MB_OK );
       return;
    }
-   if (bFullscreen) SetWindowPos (&wndTopMost, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOREDRAW|SWP_NOSIZE);
+   if (bFullscreen) SetWindowPos (&wndTopMost, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOREDRAW|SWP_NOSIZE);*/
 
    memset (bFiles, 0, sizeof (bFiles));
 
@@ -46,11 +46,8 @@ HallDiskMenu::HallDiskMenu(CWnd *ParentWnd)
          if (DoesFileExist (FullFilename (HallFilenames [c+1], MiscPath, 100*difflevel+d)))
             bFiles[c+d*10]=1;
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
-   SetActiveWindow();
-
-   ParentWnd->EnableWindow (0);
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -60,23 +57,7 @@ HallDiskMenu::~HallDiskMenu()
 {
    MenuBm.Destroy();
    if (pMenuLib && pGfxMain) pGfxMain->ReleaseLib (pMenuLib);
-
-   //Altes Fenster wieder aktiv schalten:
-   GetParent()->EnableWindow (1);
 }
-
-
-BEGIN_MESSAGE_MAP(HallDiskMenu, CWnd)
-	//{{AFX_MSG_MAP(HallDiskMenu)
-	ON_WM_PAINT()
-	ON_WM_CLOSE()
-	ON_WM_LBUTTONDOWN()
-	ON_WM_RBUTTONDOWN()
-	ON_WM_SETCURSOR()
-	ON_WM_MOUSEMOVE()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
 
 /////////////////////////////////////////////////////////////////////////////
 // HallDiskMenu message handlers
@@ -86,8 +67,6 @@ END_MESSAGE_MAP()
 //--------------------------------------------------------------------------------------------
 void HallDiskMenu::OnPaint() 
 {
-   CPaintDC dc(this); // device context for painting
-
    SLONG xOffset []= {79, 104, 126, 155, 187, 225, 255, 301, 350, 386, 446 };
    SLONG c, d, e;
 
@@ -169,8 +148,6 @@ void HallDiskMenu::OnLButtonDown(UINT nFlags, CPoint point)
             Editor=FALSE;
             Airport.LoadAirport (n, n, n, n, n, n, n, n, n, n);
          }
-
-         PostMessage (WM_CLOSE);
       }
    }
 	//Im unteren Click-Bereich?
@@ -190,8 +167,6 @@ void HallDiskMenu::OnLButtonDown(UINT nFlags, CPoint point)
          localLevel[x]=n;
          Airport.LoadAirport (localLevel[0], localLevel[1], localLevel[2], localLevel[3], localLevel[4],
                               localLevel[5], localLevel[6], localLevel[7], localLevel[8], localLevel[9]);
-
-         PostMessage (WM_CLOSE);
       }
    }
 
@@ -233,8 +208,6 @@ void HallDiskMenu::OnLButtonDown(UINT nFlags, CPoint point)
 //--------------------------------------------------------------------------------------------
 void HallDiskMenu::OnRButtonDown(UINT nFlags, CPoint point) 
 {
-   PostMessage (WM_CLOSE);
-
    ReferTo (nFlags);
    ReferTo (point);
 }

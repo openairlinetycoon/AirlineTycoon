@@ -222,9 +222,9 @@
       public:
          SBPRIMARYBM () { }
          ~SBPRIMARYBM () { }
-         void ReSize (HWND &hWnd, BOOL Fullscreen, const XY &Resolution);
+         void ReSize (SDL_Window *Wnd, BOOL Fullscreen, const XY &Resolution);
 
-         void ReSizePartB (HWND &hWnd, BOOL Fullscreen, const XY &Resolution)
+         void ReSizePartB (SDL_Window *Wnd, BOOL Fullscreen, const XY &Resolution)
          {
             //if (!Fullscreen) Offscreen.ReSize (Resolution);
          }

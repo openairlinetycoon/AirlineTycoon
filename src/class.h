@@ -1983,8 +1983,8 @@ class PLAYER
       XY             ViewPos;    //SichtPosition im Flughafen
       XY             IslandViewPos; //SichtPosition für die Inseln
       XY             CameraSpeed;   //Trägheitssteuerung. Dies ist die Geschw. der Kamera
-      CWnd          *LocationWin;//Pointer auf offenes Sub-Fenster (Raum)
-      CWnd          *DialogWin;  //Pointer auf offenes Dialog-Sub-Fenster
+      CStdRaum      *LocationWin;//Pointer auf offenes Sub-Fenster (Raum)
+      CStdRaum      *DialogWin;  //Pointer auf offenes Dialog-Sub-Fenster
       UBYTE          NewDir;     //Flag, falls die Laufrichtung geändert wurde
       XY             WinP1;      //Die Position des ViewFensters im GameFrame Fenster
       XY             WinP2;

@@ -61,8 +61,8 @@ CTafel::CTafel (BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "ta
                               &KommVar, SMACKER_CLIP_SET|SMACKER_CLIP_PRE, -1, NULL,
                               "A9", 0);
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -96,18 +96,6 @@ void CTafel::ReloadBitmaps (void)
 {
 }
 
-//--------------------------------------------------------------------------------------------
-//BEGIN_MESSAGE_MAP(CTafel, CStdRaum)
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CTafel, CStdRaum)
-	//{{AFX_MSG_MAP(CTafel)
-	ON_WM_LBUTTONDOWN()
-	ON_WM_PAINT()
-	ON_WM_RBUTTONDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////
 // CTafel message handlers
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,8 +108,6 @@ void CTafel::OnPaint()
    SLONG   c;
    BOOL    OnTip=FALSE;
    PLAYER &qPlayer = Sim.Players.Players[(SLONG)PlayerNum];
-
-   { CPaintDC dc(this); }
 
    if (!bHandy) SetMouseLook (CURSOR_NORMAL, 0, ROOM_ARAB_AIR, 0);
 
@@ -382,7 +368,6 @@ void CTafel::OnRButtonDown(UINT nFlags, CPoint point)
    //Auﬂerhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y)
    {
-      CWnd::OnRButtonDown(nFlags, point);
       return;
    }
 

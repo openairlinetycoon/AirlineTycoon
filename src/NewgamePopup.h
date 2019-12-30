@@ -22,6 +22,7 @@ private:
    ULONG           PlayerReadyAt;
    ULONG           UnselectedNetworkIDs[4];
 
+   SDL_TimerID     TimerId;
    SB_CFont        VersionFont;
 
    SLONG           CursorX, CursorY; //Der blinkende Eingabecursor; -1 = kein Cursor sichtbar
@@ -76,7 +77,7 @@ protected:
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+	//DECLARE_MESSAGE_MAP()
 };
 
 /////////////////////////////////////////////////////////////////////////////

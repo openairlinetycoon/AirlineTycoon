@@ -4,11 +4,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // CCredits window
 
-class CCredits : public CWnd
+class CCredits : public CStdRaum
 {
 // Construction
 public:
-	CCredits();
+	CCredits(BOOL bHandy, SLONG PlayerNum);
 
 // Attributes
 private:
@@ -46,7 +46,7 @@ protected:
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+	//DECLARE_MESSAGE_MAP()
 };
 
 /////////////////////////////////////////////////////////////////////////////

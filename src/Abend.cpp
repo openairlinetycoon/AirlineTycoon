@@ -86,8 +86,8 @@ CAbend::CAbend(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum, CStr
 
    StartSeason = Sim.GetSeason();
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -130,19 +130,6 @@ void CAbend::DoOneStep (void)
       }
    }*/
 }
-    
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Bank message handlers
-//////////////////////////////////////////////////////////////////////////////////////////////
-BEGIN_MESSAGE_MAP(CAbend, CWnd)
-	//{{AFX_MSG_MAP(CAbend)
-	ON_WM_PAINT()
-	ON_WM_RBUTTONDOWN()
-	ON_WM_KEYDOWN()
-	ON_WM_LBUTTONDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
 
 //--------------------------------------------------------------------------------------------
 //void CAbend::OnPaint()
@@ -240,10 +227,6 @@ void CAbend::OnPaint()
       }
    }
 
-
-   //Painting:
-   { CPaintDC dc(this); }
-
    //Die Standard Paint-Sachen kann der Basisraum erledigen
    CStdRaum::OnPaint ();
 
@@ -277,10 +260,9 @@ void CAbend::OnRButtonDown(UINT nFlags, CPoint point)
 {
    DefaultOnRButtonDown ();
 
-   //Auﬂerhalb geklickt? Dann Default-Handler!
+   //Au√üerhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y)
    {
-      CWnd::OnRButtonDown(nFlags, point);
       return;
    }
 

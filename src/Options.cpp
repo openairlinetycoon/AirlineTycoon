@@ -69,12 +69,13 @@ Options::Options (BOOL bHandy, SLONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "
 
    RefreshKlackerField();
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 
    //Create a timer to 'klacker'
-   if (!SetTimer (1, 50, NULL)) TimerFailure = 1;
-                           else TimerFailure = 0;
+   TimerId = SDL_AddTimer(50, TimerFunc, this);
+   if (!TimerId) TimerFailure = 1;
+            else TimerFailure = 0;
 }
 
 //--------------------------------------------------------------------------------------------
@@ -83,6 +84,7 @@ Options::Options (BOOL bHandy, SLONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "
 Options::~Options()
 {
    SLONG c;
+   if (TimerId) SDL_RemoveTimer(TimerId);
 
    nLocalOptionsOption--;
 
@@ -278,21 +280,6 @@ void Options::RefreshKlackerField(void)
    }
 }
 
-//--------------------------------------------------------------------------------------------
-//BEGIN_MESSAGE_MAP(Options, CStdRaum)
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(Options, CStdRaum)
-	//{{AFX_MSG_MAP(Options)
-	ON_WM_LBUTTONDOWN()
-	ON_WM_PAINT()
-	ON_WM_RBUTTONDOWN()
-	ON_WM_TIMER()
-	ON_WM_CHAR()
-	ON_WM_KEYDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-
 /////////////////////////////////////////////////////////////////////////////
 // Options message handlers
 
@@ -338,9 +325,6 @@ void Options::OnPaint()
          KlackerTafel.Warp ();
       }
    }
-
-   { CPaintDC dc(this); }
-   if (!GetSafeHwnd()) return;
 
    if (TimerFailure) KlackerTafel.Klack ();  //Tafel notfalls asynchron aktualisieren
 
@@ -720,8 +704,6 @@ void Options::OnLButtonDown(UINT nFlags, CPoint point)
             break;
       }
    }
-
-	CWnd::OnLButtonDown(nFlags, point);
 }
 
 //--------------------------------------------------------------------------------------------

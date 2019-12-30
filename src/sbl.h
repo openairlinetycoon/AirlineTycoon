@@ -240,7 +240,7 @@ public:
     SB_CPrimaryBitmap(void);
     ~SB_CPrimaryBitmap(void);
 
-    long Create(SDL_Renderer**, HWND&, unsigned short, long, long, unsigned char, unsigned short);
+    long Create(SDL_Renderer**, SDL_Window*, unsigned short, long, long, unsigned char, unsigned short);
     virtual unsigned long Release(void);
     long Flip(void);
     void SetPos(struct tagPOINT&);

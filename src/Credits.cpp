@@ -18,7 +18,7 @@ SLONG MaxCredits;
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Credits
 //////////////////////////////////////////////////////////////////////////////////////////////
-CCredits::CCredits()
+CCredits::CCredits(BOOL bHandy, SLONG PlayerNum) : CStdRaum(bHandy, PlayerNum, "", NULL)
 {
    SLONG c;
    CRect rect (0,0,640,480);
@@ -37,12 +37,12 @@ CCredits::CCredits()
       TextLines[c].Clear (0);
    }
 
-   if (!Create(NULL, "CCredits", WS_VISIBLE|WS_CHILD, rect, theApp.m_pMainWnd, 42))
+   /*if (!Create(NULL, "CCredits", WS_VISIBLE|WS_CHILD, rect, theApp.m_pMainWnd, 42))
    {
       ::MessageBox (NULL, "Create failed", "ERROR", MB_OK );
       return;
    }
-   if (bFullscreen) SetWindowPos (&wndTopMost, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOREDRAW|SWP_NOSIZE);
+   if (bFullscreen) SetWindowPos (&wndTopMost, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOREDRAW|SWP_NOSIZE);*/
 
    ScrollPos=-2;
 
@@ -53,8 +53,8 @@ CCredits::CCredits()
          break;
       }
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -77,23 +77,6 @@ void CCredits::ReloadBitmap(void)
 {
 }
 
-//--------------------------------------------------------------------------------------------
-//MESSAGE_MAP(CCredits, CWnd)
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CCredits, CWnd)
-	//{{AFX_MSG_MAP(CCredits)
-	ON_WM_PAINT()
-	ON_WM_LBUTTONDOWN()
-	ON_WM_TIMER()
-	ON_WM_RBUTTONDOWN()
-	ON_WM_CHAR()
-	ON_WM_KEYDOWN()
-	ON_WM_SETCURSOR()
-	ON_WM_MOUSEMOVE()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-
 /////////////////////////////////////////////////////////////////////////////
 // CCredits message handlers
 
@@ -111,8 +94,6 @@ void CCredits::OnPaint()
                                         else LastTime+=60;
       OnTimer(0);
    }
-
-   { CPaintDC dc(this); }
 
    if (bActive)
    {

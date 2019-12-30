@@ -367,9 +367,9 @@ void SB_CPrimaryBitmap::SetPos(struct tagPOINT&)
 {
 }
 
-long SB_CPrimaryBitmap::Create(SDL_Renderer** out, HWND& hWnd, unsigned short flags, long w, long h, unsigned char, unsigned short)
+long SB_CPrimaryBitmap::Create(SDL_Renderer** out, SDL_Window* Wnd, unsigned short flags, long w, long h, unsigned char, unsigned short)
 {
-    Window = SDL_CreateWindowFrom(hWnd);
+    Window = Wnd;
     //lpDD = SDL_CreateRenderer(Window, -1, SDL_RENDERER_SOFTWARE);
     lpDDSurface = SDL_CreateRGBSurfaceWithFormat(0, w, h, 16, SDL_PIXELFORMAT_RGB565);
     Size.x = w;

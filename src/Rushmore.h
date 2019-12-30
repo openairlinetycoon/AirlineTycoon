@@ -30,7 +30,7 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+	//DECLARE_MESSAGE_MAP()
 };
 
 /////////////////////////////////////////////////////////////////////////////

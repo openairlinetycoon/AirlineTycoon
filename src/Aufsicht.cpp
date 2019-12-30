@@ -422,8 +422,8 @@ CAufsicht::CAufsicht (BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNu
       MouseWait--;
 
    KonstruktorFinished = 1;
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -686,18 +686,6 @@ CAufsicht::~CAufsicht()
    }
 }
 
-//--------------------------------------------------------------------------------------------
-//BEGIN_MESSAGE_MAP(CAufsicht, CStdRaum)
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CAufsicht, CStdRaum)
-	//{{AFX_MSG_MAP(CAufsicht)
-	ON_WM_PAINT()
-	ON_WM_LBUTTONDOWN()
-	ON_WM_RBUTTONDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////
 // CAufsicht message handlers
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -709,8 +697,6 @@ void CAufsicht::OnPaint()
 {
    PLAYER &qPlayer = Sim.Players.Players[Sim.localPlayer];
    UBYTE   Painted = 0;
-
-   { CPaintDC dc(this); }
 
    if (bExitASAP && Sim.Time>9*60000 && Sim.bWatchForReady==0)
    {
@@ -979,7 +965,6 @@ void CAufsicht::OnRButtonDown(UINT nFlags, CPoint point)
    //Auﬂerhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y)
    {
-      CWnd::OnRButtonDown(nFlags, point);
       return;
    }
    else

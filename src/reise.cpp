@@ -173,8 +173,8 @@ CReisebuero::CReisebuero(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, Playe
    for (c=ReisebueroAuftraege.AnzEntries()-1; c>=0; c--)
       RepaintZettel (c);
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -206,17 +206,6 @@ CReisebuero::~CReisebuero()
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 //--------------------------------------------------------------------------------------------
-//BEGIN_MESSAGE_MAP(CReisebuero, CStdRaum)
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CReisebuero, CStdRaum)
-	//{{AFX_MSG_MAP(CReisebuero)
-	ON_WM_LBUTTONDOWN()
-	ON_WM_RBUTTONDOWN()
-	ON_WM_PAINT()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-//--------------------------------------------------------------------------------------------
 //void CReisebuero::OnPaint()
 //--------------------------------------------------------------------------------------------
 void CReisebuero::OnPaint()
@@ -235,8 +224,6 @@ void CReisebuero::OnPaint()
 
    //Koordinaten für kleine Fenster konvertieren:
    ConvertMousePosition (point, &RoomPos);
-
-   { CPaintDC dc(this); }
 
    if (!bHandy) SetMouseLook (CURSOR_NORMAL, 0, ROOM_REISEBUERO, 0);
 
@@ -445,7 +432,6 @@ void CReisebuero::OnRButtonDown(UINT nFlags, CPoint point)
    //Außerhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y)
    {
-	   CWnd::OnRButtonDown(nFlags, point);
       return;
    }
    else

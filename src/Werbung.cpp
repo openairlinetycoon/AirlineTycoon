@@ -86,8 +86,8 @@ CWerbung::CWerbung(BOOL qHandy, ULONG PlayerNum) : CStdRaum (qHandy, PlayerNum, 
       MenuSetZoomStuff (XY(320,220), 0.17, FALSE);
    #endif
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -101,18 +101,6 @@ CWerbung::~CWerbung()
    Talkers.Talkers[TALKER_WERBUNG].DecreaseReference ();
 }
 
-//--------------------------------------------------------------------------------------------
-//Die Bank wird erˆffnet:
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CWerbung, CStdRaum)
-	//{{AFX_MSG_MAP(CWerbung)
-	ON_WM_LBUTTONDOWN()
-	ON_WM_PAINT()
-	ON_WM_RBUTTONDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////
 // CWerbung message handlers
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,8 +112,6 @@ void CWerbung::OnPaint()
 {
    SLONG   NewTip;
    PLAYER &qPlayer = Sim.Players.Players[(SLONG)PlayerNum];
-
-   { CPaintDC dc(this); }
 
    if (Sim.Date>4) Sim.GiveHint (HINT_WERBUNG);
 
@@ -260,7 +246,6 @@ void CWerbung::OnRButtonDown(UINT nFlags, CPoint point)
    //Auﬂerhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y)
    {
-	   CWnd::OnRButtonDown(nFlags, point);
       return;
    }
    else

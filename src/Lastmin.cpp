@@ -122,8 +122,8 @@ CLastMinute::CLastMinute(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, Playe
       MenuSetZoomStuff (XY(320,220), 0.17, FALSE);
    #endif
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -155,17 +155,6 @@ CLastMinute::~CLastMinute()
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 //--------------------------------------------------------------------------------------------
-//BEGIN_MESSAGE_MAP(CLastMinute, CStdRaum)
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CLastMinute, CStdRaum)
-	//{{AFX_MSG_MAP(CLastMinute)
-	ON_WM_LBUTTONDOWN()
-	ON_WM_RBUTTONDOWN()
-	ON_WM_PAINT()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-//--------------------------------------------------------------------------------------------
 //void CLastMinute::OnPaint()
 //--------------------------------------------------------------------------------------------
 void CLastMinute::OnPaint()
@@ -184,8 +173,6 @@ void CLastMinute::OnPaint()
 
    //Koordinaten f¸r kleine Fenster konvertieren:
    ConvertMousePosition (point, &RoomPos);
-
-   { CPaintDC dc(this); }
 
    if (SLONG(Sim.Time)>=timeLastClose) Sim.Players.Players[(SLONG)PlayerNum].LeaveRoom();
 
@@ -392,7 +379,6 @@ void CLastMinute::OnRButtonDown(UINT nFlags, CPoint point)
    //Auﬂerhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y)
    {
-      CWnd::OnRButtonDown(nFlags, point);
       return;
    }
    else

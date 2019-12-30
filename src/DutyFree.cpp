@@ -84,8 +84,8 @@ CDutyFree::CDutyFree(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum
       StartupFX.Play(DSBPLAY_NOSTOP, Sim.Options.OptionEffekte*100/7);
    }
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -105,22 +105,10 @@ CDutyFree::~CDutyFree()
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 //--------------------------------------------------------------------------------------------
-//Konstruktor:
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CDutyFree, CStdRaum)
-	//{{AFX_MSG_MAP(CDutyFree)
-	ON_WM_LBUTTONDOWN()
-	ON_WM_PAINT()
-	ON_WM_RBUTTONDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-//--------------------------------------------------------------------------------------------
 //void CDutyFree::OnPaint():
 //--------------------------------------------------------------------------------------------
 void CDutyFree::OnPaint()
 {
-   { CPaintDC dc(this); }
    SLONG    NewTip;
    PLAYER  &qPlayer = Sim.Players.Players[(SLONG)PlayerNum];
    SLONG    lasty=600;
@@ -384,7 +372,6 @@ void CDutyFree::OnRButtonDown(UINT nFlags, CPoint point)
    //Auﬂerhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y)
    {
-      CWnd::OnRButtonDown(nFlags, point);
       return;
    }
    else

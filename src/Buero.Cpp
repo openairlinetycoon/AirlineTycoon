@@ -127,8 +127,8 @@ CBuero::CBuero(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "", 
                                NULL, SMACKER_CLIP_SET, 0, NULL,
                                "A1", 0);
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -145,18 +145,6 @@ CBuero::~CBuero()
    if (pGLibDark && pGfxMain) pGfxMain->ReleaseLib (pGLibDark);
    pGLibDark=NULL;
 }
-  
-//--------------------------------------------------------------------------------------------
-//BEGIN_MESSAGE_MAP(CBuero, CStdRaum)
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CBuero, CStdRaum)
-	//{{AFX_MSG_MAP(CBuero)
-	ON_WM_LBUTTONDOWN()
-	ON_WM_PAINT()
-	ON_WM_RBUTTONDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // CBuero message handlers
@@ -180,8 +168,6 @@ void CBuero::OnPaint()
       DarkBm.ReSize (pGLibDark, "BUERO");
    }
    else pGLibDark=NULL;
-
-   { CPaintDC dc(this); }
 
    //Die Standard Paint-Sachen kann der Basisraum erledigen
    CStdRaum::OnPaint ();
@@ -353,7 +339,6 @@ void CBuero::OnRButtonDown(UINT nFlags, CPoint point)
    //Auﬂerhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y)
    {
-      CWnd::OnRButtonDown(nFlags, point);
       return;
    }
    else

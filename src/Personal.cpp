@@ -133,8 +133,8 @@ CPersonal::CPersonal(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum
 
    Sim.Players.Players[(SLONG)PlayerNum].UpdatePersonalberater (3);
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -153,23 +153,10 @@ CPersonal::~CPersonal()
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 //--------------------------------------------------------------------------------------------
-//BEGIN_MESSAGE_MAP(CMakler, CStdRaum)
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CPersonal, CStdRaum)
-	//{{AFX_MSG_MAP(CPersonal)
-	ON_WM_LBUTTONDOWN()
-	ON_WM_PAINT()
-	ON_WM_RBUTTONDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-//--------------------------------------------------------------------------------------------
 //void CPersonal::OnPaint()
 //--------------------------------------------------------------------------------------------
 void CPersonal::OnPaint()
 {
-   { CPaintDC dc(this); }
-
    //Die Standard Paint-Sachen kann der Basisraum erledigen
    CStdRaum::OnPaint ();
 
@@ -298,7 +285,6 @@ void CPersonal::OnRButtonDown(UINT nFlags, CPoint point)
    //Auﬂerhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y)
    {
-      CWnd::OnRButtonDown(nFlags, point);
       return;
    }
    else

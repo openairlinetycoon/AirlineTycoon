@@ -95,8 +95,8 @@ CSabotage::CSabotage(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum
    Talkers.Talkers[TALKER_SABOTAGE].IncreaseReference ();
    DefaultDialogPartner=TALKER_SABOTAGE;
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 
    #ifdef DEMO
       MenuStart (MENU_REQUEST, MENU_REQUEST_NO_SABOTAGE);
@@ -120,18 +120,6 @@ CSabotage::~CSabotage()
       Sim.Players.Players[Sim.localPlayer].EnterRoom (ROOM_WORLD);
 }
 
-//--------------------------------------------------------------------------------------------
-//Die Bank wird eröffnet:
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CSabotage, CStdRaum)
-	//{{AFX_MSG_MAP(CSabotage)
-	ON_WM_LBUTTONDOWN()
-	ON_WM_PAINT()
-	ON_WM_RBUTTONDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////
 // CSabotage message handlers
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -143,8 +131,6 @@ void CSabotage::OnPaint()
 {
    SLONG   NewTip;
    PLAYER &qPlayer = Sim.Players.Players[(SLONG)PlayerNum];
-
-   { CPaintDC dc(this); }
 
    if (!bHandy) SetMouseLook (CURSOR_NORMAL, 0, ROOM_SABOTAGE, 0);
 
@@ -286,7 +272,6 @@ void CSabotage::OnRButtonDown(UINT nFlags, CPoint point)
    //Außerhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y)
    {
-	   CWnd::OnRButtonDown(nFlags, point);
       return;
    }
    else

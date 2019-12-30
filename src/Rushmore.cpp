@@ -34,8 +34,8 @@ CRushmore::CRushmore(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum
 
    //LogoBms initialisieren
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -45,18 +45,6 @@ CRushmore::~CRushmore()
 {
    LogoBms.Destroy();
 }
-
-//--------------------------------------------------------------------------------------------
-//Die Bank wird eröffnet:
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CRushmore, CStdRaum)
-	//{{AFX_MSG_MAP(CRushmore)
-	ON_WM_LBUTTONDOWN()
-	ON_WM_PAINT()
-	ON_WM_RBUTTONDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // CRushmore message handlers
@@ -71,8 +59,6 @@ void CRushmore::OnPaint()
    SLONG Remapper[4];
    SLONG Ratings[4];
    SLONG RatingsB[4];
-
-   { CPaintDC dc(this); }
 
    if (!bHandy) SetMouseLook (CURSOR_NORMAL, 0, ROOM_SABOTAGE, 0);
 
@@ -165,7 +151,6 @@ void CRushmore::OnRButtonDown(UINT nFlags, CPoint point)
    //Außerhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y)
    {
-      CWnd::OnRButtonDown(nFlags, point);
       return;
    }
    else

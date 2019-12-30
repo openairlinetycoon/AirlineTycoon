@@ -4,11 +4,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // AskBrick window
 
-class AskBrick : public CWnd
+class AskBrick : public CStdRaum
 {
 // Construction
 public:
-	AskBrick(CWnd *ParentWnd, ULONG Group, ULONG *rc1);
+	AskBrick(BOOL bHandy, SLONG PlayerNum, ULONG Group, ULONG *rc1);
 
 // Attributes
 public:
@@ -42,7 +42,7 @@ protected:
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+	//DECLARE_MESSAGE_MAP()
 };
 
 /////////////////////////////////////////////////////////////////////////////

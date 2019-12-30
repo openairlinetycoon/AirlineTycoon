@@ -18,7 +18,7 @@ static char THIS_FILE[] = __FILE__;
 //--------------------------------------------------------------------------------------------
 // AskBrick
 //--------------------------------------------------------------------------------------------
-AskBrick::AskBrick(CWnd *ParentWnd, ULONG Group, ULONG *rc1)
+AskBrick::AskBrick(BOOL bHandy, SLONG PlayerNum, ULONG Group, ULONG *rc1) : CStdRaum(bHandy, PlayerNum, "", NULL)
 {
    RECT rect;
 
@@ -30,21 +30,18 @@ AskBrick::AskBrick(CWnd *ParentWnd, ULONG Group, ULONG *rc1)
    AskBrick::rc1 = rc1;
    AskBrick::Group = Group;
 
-   if (!Create(NULL, "AskBrick", WS_VISIBLE|WS_CHILD, rect, ParentWnd, 42))
+   /*if (!Create(NULL, "AskBrick", WS_VISIBLE|WS_CHILD, rect, ParentWnd, 42))
    {
       ::MessageBox (NULL, "Create failed", "ERROR", MB_OK );
       return;
    }
-   if (bFullscreen) SetWindowPos (&wndTopMost, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOREDRAW|SWP_NOSIZE);
+   if (bFullscreen) SetWindowPos (&wndTopMost, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOREDRAW|SWP_NOSIZE);*/
 
    pGfxMain->LoadLib ((char*)(LPCTSTR)FullFilename ("Askbrick.gli", GliPath), &pMenuLib, L_LOCMEM);
    AskBrickBm.ReSize (pMenuLib, "ASKBRICK");
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
-   SetActiveWindow();
-
-   ParentWnd->EnableWindow (0);
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -56,24 +53,7 @@ AskBrick::~AskBrick()
    if (pGfxMain && pMenuLib) pGfxMain->ReleaseLib (pMenuLib);
 
    TopWin = NULL;
-
-   //Altes Fenster wieder aktiv schalten:
-   GetParent()->EnableWindow (1);
 }
-
-
-BEGIN_MESSAGE_MAP(AskBrick, CWnd)
-	//{{AFX_MSG_MAP(AskBrick)
-	ON_WM_PAINT()
-	ON_WM_RBUTTONDOWN()
-	ON_WM_LBUTTONDOWN()
-	ON_WM_CLOSE()
-	ON_WM_KEYDOWN()
-	ON_WM_SETCURSOR()
-	ON_WM_MOUSEMOVE()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // AskBrick message handlers
@@ -82,8 +62,6 @@ END_MESSAGE_MAP()
 void AskBrick::OnPaint() 
 {
    SLONG g, x, y;
-
-   CPaintDC dc(this); // device context for painting
 
    if (bActive)
    {
@@ -138,7 +116,6 @@ void AskBrick::OnLButtonDown(UINT nFlags, CPoint point)
             if (point.x>=124*x+10 && point.x<=124*(x+1)+10 && point.y>=112*y+10 && point.y<=112*(y+1)+10)
             {
                *rc1 = g;
-               PostMessage (WM_CLOSE);
             }
 
          g++;
@@ -150,7 +127,6 @@ void AskBrick::OnLButtonDown(UINT nFlags, CPoint point)
 
 void AskBrick::OnRButtonDown(UINT nFlags, CPoint point) 
 {
-   PostMessage (WM_CLOSE);
    ReferTo (nFlags);
    ReferTo (point);
 }

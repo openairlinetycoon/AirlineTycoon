@@ -793,14 +793,14 @@ void SBBMS::ReSize (GfxLib* gfxLibrary, const CString &graphicstr, SLONG Anzahl)
 
 SBBMS::~SBBMS () {}
 
-void SBPRIMARYBM::ReSize (HWND &hWnd, BOOL Fullscreen, const XY &Resolution)
+void SBPRIMARYBM::ReSize (SDL_Window *Wnd, BOOL Fullscreen, const XY &Resolution)
 {
    if (MakeVideoPath.GetLength())
-      PrimaryBm.Create(&lpDD, hWnd, 0, Resolution.x, Resolution.y, 16, 1);
+      PrimaryBm.Create(&lpDD, Wnd, 0, Resolution.x, Resolution.y, 16, 1);
    else if (Fullscreen)
-      PrimaryBm.Create(&lpDD, hWnd, /*CREATE_VIDMEM|*/CREATE_FULLSCREEN, Resolution.x, Resolution.y, 16, 1);
+      PrimaryBm.Create(&lpDD, Wnd, /*CREATE_VIDMEM|*/CREATE_FULLSCREEN, Resolution.x, Resolution.y, 16, 1);
    else
-      PrimaryBm.Create(&lpDD, hWnd, CREATE_VIDMEM /*|CREATE_DONTUSECOLORKEY*/, Resolution.x, Resolution.y, 16, 1);
+      PrimaryBm.Create(&lpDD, Wnd, CREATE_VIDMEM /*|CREATE_DONTUSECOLORKEY*/, Resolution.x, Resolution.y, 16, 1);
 
    SBPRIMARYBM::Fullscreen=Fullscreen;
    SBPRIMARYBM::Size.x = PrimaryBm.GetXSize();

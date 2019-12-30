@@ -74,8 +74,8 @@ AirportView::AirportView (BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, Play
    if (Sim.GetMinute()==0 && Sim.GetHour()==9 && Sim.FocusPerson==-1)
       CenterCameraOnPlayer ();
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 
    if (Sim.ShowExtrablatt!=-1)
    {
@@ -434,23 +434,6 @@ void AirportView::CenterCameraOnPlayer (void)
    }
 }
 
-//--------------------------------------------------------------------------------------------
-//MESSAGE_MAP(AirportView, CStdRaum):
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(AirportView, CStdRaum)
-	//{{AFX_MSG_MAP(AirportView)
-	ON_WM_PAINT()
-	ON_WM_LBUTTONDOWN()
-	ON_WM_KEYDOWN()
-	ON_WM_CHAR()
-	ON_WM_RBUTTONDOWN()
-	ON_WM_SYSCHAR()
-	ON_WM_LBUTTONDBLCLK()
-	ON_WM_LBUTTONUP()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-
 /////////////////////////////////////////////////////////////////////////////
 // AirportView message handlers
 
@@ -496,8 +479,6 @@ void AirportView::OnPaint()
    static SLONG LastAnzElements=-2;
    static SLONG LastViewPosX=ViewPos.x;
    SLONG  AnzElements=0;
-
-   { CPaintDC dc(this); }
 
    long cnt=0;
    for (c=0; c<(ULONG)Sim.AirportSmacks.AnzEntries(); c++)
@@ -1252,7 +1233,7 @@ void AirportView::OnPaint()
          #endif
 
          //Der Komfort-Cursor:
-         if (IsWindowEnabled())
+         //if (IsWindowEnabled())
          {
            if (Editor==EDITOR_BUILDS && bCursorCaptured && EditObject!=0xffffffff && Bricks.IsInAlbum (EditObject))
               Bricks[EditObject].BlitAt (PrimaryBm, 0, Bricks[EditObject].GetIntelligentPosition (gMousePosition.x+ViewPos.x, gMousePosition.y+ViewPos.y)-ViewPos, 0);
@@ -1362,7 +1343,7 @@ void AirportView::OnLButtonDown(UINT nFlags, CPoint point)
       point.x-=WinP1.x;
       point.y-=WinP1.y;
 
-      if (IsWindowEnabled())
+      //if (IsWindowEnabled())
       {
          //Change Editor Mode:
          if (Editor)
@@ -1633,12 +1614,6 @@ void AirportView::OnLButtonDown(UINT nFlags, CPoint point)
             CStdRaum::OnLButtonDown(nFlags, point);
             return;
          }
-         else
-         {
-            //Klcik außerhalb ==> An alle direkten Sub-Windows schicken:
-            const MSG *Mess = GetCurrentMessage();
-            SendMessageToDescendants (Mess->message, Mess->wParam, Mess->lParam, FALSE, FALSE);
-         }
       }
    }
 }
@@ -1679,12 +1654,6 @@ void AirportView::OnLButtonUp(UINT nFlags, CPoint point)
          //gMouseScroll=0;
          Sim.Players.Players[PlayerNum].WalkToMouseClick (gMousePosition+Sim.Players.Players[PlayerNum].ViewPos);
       }
-   }
-   else
-   {
-      //An alle direkten Sub-Windows schicken:
-      const MSG *Mess = GetCurrentMessage();
-      SendMessageToDescendants (Mess->message, Mess->wParam, Mess->lParam, FALSE, FALSE);
    }
 }
 
@@ -1784,7 +1753,7 @@ void AirportView::OnRButtonDown(UINT nFlags, CPoint point)
    }
    else
    {
-      if (IsWindowEnabled() && Sim.Players.Players[(SLONG)PlayerNum].GetRoom()==ROOM_AIRPORT)
+      if (/*IsWindowEnabled() &&*/ Sim.Players.Players[(SLONG)PlayerNum].GetRoom()==ROOM_AIRPORT)
       {
          if (Editor==EDITOR_BUILDS) //Bei RMB das Objekt vom Cursor abwerfen:
             EditObject = 0xffffffff;
@@ -1800,12 +1769,6 @@ void AirportView::OnRButtonDown(UINT nFlags, CPoint point)
                MenuRightClick (point);
             }
          }
-      }
-      else
-      {
-         //An alle direkten Sub-Windows schicken:
-         const MSG *Mess = GetCurrentMessage();
-         SendMessageToDescendants (Mess->message, Mess->wParam, Mess->lParam, FALSE, FALSE);
       }
    }
 }
@@ -1827,15 +1790,15 @@ void AirportView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
          switch (nChar)
          {
             //Neues, autonomes & selbstzerstörendes Fenster erzeuges:
-            case VK_F2:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (this, 550+0x10000000, &EditObject); else CStdRaum::OnKeyDown(nChar, nRepCnt, nFlags); break;
-            case VK_F3:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (this, 618+0x10000000, &EditObject); break;
-            case VK_F4:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (this, 664+0x10000000, &EditObject); break;
-            case VK_F5:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (this, 700+0x10000000, &EditObject); break;
-            case VK_F6:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (this, 740+0x10000000, &EditObject); break;
-            case VK_F7:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (this, 800+0x10000000, &EditObject); break;
-            case VK_F8:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (this,  00+0x10000000, &EditObject); break;
-            case VK_F9:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (this,  00+0x10000000, &EditObject); break;
-            case VK_F11: if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (this, 2030+0x10000000, &EditObject); break;
+            case VK_F2:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (bHandy, PlayerNum, 550+0x10000000, &EditObject); else CStdRaum::OnKeyDown(nChar, nRepCnt, nFlags); break;
+            case VK_F3:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (bHandy, PlayerNum, 618+0x10000000, &EditObject); break;
+            case VK_F4:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (bHandy, PlayerNum, 664+0x10000000, &EditObject); break;
+            case VK_F5:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (bHandy, PlayerNum, 700+0x10000000, &EditObject); break;
+            case VK_F6:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (bHandy, PlayerNum, 740+0x10000000, &EditObject); break;
+            case VK_F7:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (bHandy, PlayerNum, 800+0x10000000, &EditObject); break;
+            case VK_F8:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (bHandy, PlayerNum,  00+0x10000000, &EditObject); break;
+            case VK_F9:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (bHandy, PlayerNum,  00+0x10000000, &EditObject); break;
+            case VK_F11: if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (bHandy, PlayerNum, 2030+0x10000000, &EditObject); break;
 
             case VK_LEFT:
                if (Editor) ViewPos.x-=50;
@@ -1854,16 +1817,16 @@ void AirportView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
          switch (nChar)
          {
             //Neues, autonomes & selbstzerstörendes Fenster erzeuges:
-            case VK_F2:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (this, 100+0x10000000, &EditObject); break;
-            case VK_F3:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (this, 140+0x10000000, &EditObject); break;
-            case VK_F4:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (this, 250+0x10000000, &EditObject); break;
-            case VK_F5:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (this, 300+0x10000000, &EditObject); break;
-            case VK_F6:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (this, 330+0x10000000, &EditObject); break;
-            case VK_F7:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (this, 400+0x10000000, &EditObject); break;
-            case VK_F8:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (this, 450+0x10000000, &EditObject); break;
-            case VK_F9:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (this, 500+0x10000000, &EditObject); break;
-            case VK_F11: if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (this, 2000+0x10000000, &EditObject); break;
-            case VK_F12: if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (this, 2050+0x10000000, &EditObject); break;
+            case VK_F2:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (bHandy, PlayerNum, 100+0x10000000, &EditObject); break;
+            case VK_F3:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (bHandy, PlayerNum, 140+0x10000000, &EditObject); break;
+            case VK_F4:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (bHandy, PlayerNum, 250+0x10000000, &EditObject); break;
+            case VK_F5:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (bHandy, PlayerNum, 300+0x10000000, &EditObject); break;
+            case VK_F6:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (bHandy, PlayerNum, 330+0x10000000, &EditObject); break;
+            case VK_F7:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (bHandy, PlayerNum, 400+0x10000000, &EditObject); break;
+            case VK_F8:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (bHandy, PlayerNum, 450+0x10000000, &EditObject); break;
+            case VK_F9:  if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (bHandy, PlayerNum, 500+0x10000000, &EditObject); break;
+            case VK_F11: if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (bHandy, PlayerNum, 2000+0x10000000, &EditObject); break;
+            case VK_F12: if (Editor==EDITOR_BUILDS) TopWin=new AskBrick (bHandy, PlayerNum, 2050+0x10000000, &EditObject); break;
 
             case VK_INSERT:
                if (Editor==EDITOR_BUILDS)
@@ -1924,12 +1887,6 @@ void AirportView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
          }
       }
    }
-
-   if (TopWin && Editor)
-   {
-      const MSG *Mess = GetCurrentMessage();
-      SendMessageToDescendants (Mess->message, Mess->wParam, Mess->lParam, FALSE, FALSE);
-   }
 }
 
 //--------------------------------------------------------------------------------------------
@@ -1989,7 +1946,7 @@ void AirportView::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 
          case 'L':
             //if (Registration.GetMode()==1)
-               if (Editor) TopWin = new HallDiskMenu (this);
+               if (Editor) TopWin = new HallDiskMenu (bHandy, PlayerNum);
             break;
       }
 #endif
@@ -2003,7 +1960,7 @@ void AirportView::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 //--------------------------------------------------------------------------------------------
 void AirportView::OnSysChar(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-   CStdRaum::OnSysChar(nChar, nRepCnt, nFlags);
+   //CStdRaum::OnSysChar(nChar, nRepCnt, nFlags);
 }
 
 //--------------------------------------------------------------------------------------------

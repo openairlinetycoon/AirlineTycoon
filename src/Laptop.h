@@ -87,5 +87,5 @@ class CLaptop : public CPlaner
 	   afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
       afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 	   //}}AFX_MSG
-	   DECLARE_MESSAGE_MAP()
+	   //DECLARE_MESSAGE_MAP()
 };

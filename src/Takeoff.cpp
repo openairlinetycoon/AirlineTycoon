@@ -276,18 +276,6 @@ int _tmain(void)
 	return 0;
 }
 
-
-//--------------------------------------------------------------------------------------------
-//BEGIN_MESSAGE_MAP(CTakeOffApp, CWinApp):
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CTakeOffApp, CWinApp)
-	//{{AFX_MSG_MAP(CTakeOffApp)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG
-	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
-END_MESSAGE_MAP()
-
 void RunLengthCompression( UCHAR *in, UCHAR *out, ULONG &size );
 void RunLengthDeCompression( UCHAR *in, UCHAR *out, ULONG &size );
 
@@ -296,7 +284,7 @@ void RunLengthDeCompression( UCHAR *in, UCHAR *out, ULONG &size );
 //--------------------------------------------------------------------------------------------
 CTakeOffApp::CTakeOffApp()
 {
-   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
+   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0)
    {
       printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
    }
@@ -561,7 +549,6 @@ BOOL CTakeOffApp::InitInstance()
 
          if (!InitDirectX()) return (FALSE);
          FrameWnd = new GameFrame;
-         m_pMainWnd = FrameWnd;
 
          gUpdatingPools = TRUE;
 
@@ -628,7 +615,6 @@ BOOL CTakeOffApp::InitInstance()
    #endif
 
    FrameWnd = new GameFrame;
-   m_pMainWnd = FrameWnd;
 
    if (MakeVideoPath.GetLength() && MakeVideoPath[0]==':')
    {
@@ -724,8 +710,8 @@ BOOL CTakeOffApp::InitInstance()
       InitEinheiten (FullFilename ("ein_ger.res", MiscPath));
 
       //Großes und kleines Icon setzen:
-      FrameWnd->SetIcon (m_hBigIcon = LoadIcon(IDR_MAINFRAME1), 1);
-      FrameWnd->SetIcon (m_hSmallIcon = LoadIcon(IDR_MAINFRAME), 0);
+      //FrameWnd->SetIcon (m_hBigIcon = LoadIcon(IDR_MAINFRAME1), 1);
+      //FrameWnd->SetIcon (m_hSmallIcon = LoadIcon(IDR_MAINFRAME), 0);
 
            if (gLanguage==LANGUAGE_N) LOADING_TEXT("Initialiseren...")
       else if (gLanguage==LANGUAGE_F) LOADING_TEXT("Francais...")
@@ -965,7 +951,7 @@ void CTakeOffApp::GameLoop(void*)
             if (Sim.Options.OptionViewedIntro || IntroPath.GetLength()==0)
             {
                Sim.Gamestate = GAMESTATE_TITLE | GAMESTATE_WORKING;
-               TopWin = new TitlePopup;
+               TopWin = new TitlePopup(FALSE, 0);
             }
             else
             {
@@ -977,7 +963,7 @@ void CTakeOffApp::GameLoop(void*)
          if (Sim.Gamestate==(GAMESTATE_TITLE | GAMESTATE_DONE))
          {
             //New Game -> Abfragen für Spielmodus:
-            CWnd *TmpWin = TopWin; TopWin=NULL;
+            CStdRaum *TmpWin = TopWin; TopWin=NULL;
             delete TmpWin; 
 
             Sim.Gamestate = GAMESTATE_INIT | GAMESTATE_WORKING;
@@ -985,19 +971,19 @@ void CTakeOffApp::GameLoop(void*)
          }
          else if (Sim.Gamestate==(GAMESTATE_CREDITS))
          {
-            CWnd *TmpWin = TopWin; TopWin=NULL; delete TmpWin; 
+            CStdRaum *TmpWin = TopWin; TopWin=NULL; delete TmpWin; 
             Sim.Gamestate = GAMESTATE_INIT | GAMESTATE_WORKING;
-            TopWin = new CCredits;
+            TopWin = new CCredits(FALSE, 0);
          }
          else if (Sim.Gamestate==(GAMESTATE_OPTIONS))
          {
-            CWnd *TmpWin = TopWin; TopWin=NULL; delete TmpWin; 
+            CStdRaum *TmpWin = TopWin; TopWin=NULL; delete TmpWin; 
             Sim.Gamestate = GAMESTATE_INIT | GAMESTATE_WORKING;
             TopWin = new Options(FALSE, 0);
          }
          else if (Sim.Gamestate==GAMESTATE_INTRO)
          {
-            CWnd *TmpWin = TopWin; TopWin=NULL; delete TmpWin; 
+            CStdRaum *TmpWin = TopWin; TopWin=NULL; delete TmpWin; 
             Sim.Gamestate = GAMESTATE_INTRO | GAMESTATE_WORKING;
             TopWin = new CIntro(FALSE, 0);
          }
@@ -1017,7 +1003,7 @@ void CTakeOffApp::GameLoop(void*)
                }
             }
 
-            CWnd *TmpWin = TopWin; TopWin=NULL; delete TmpWin; 
+            CStdRaum *TmpWin = TopWin; TopWin=NULL; delete TmpWin; 
             Sim.Gamestate |= GAMESTATE_WORKING;
 
             if ((Sim.Gamestate & (~GAMESTATE_WORKING))==GAMESTATE_OUTRO)
@@ -1028,7 +1014,7 @@ void CTakeOffApp::GameLoop(void*)
          else if (Sim.Gamestate==(GAMESTATE_INIT | GAMESTATE_DONE))
          {
             //Das Spielfenster mit Flughafensicht
-            CWnd *TmpWin = TopWin; TopWin=NULL;
+            CStdRaum *TmpWin = TopWin; TopWin=NULL;
             delete TmpWin; 
 
             if (gLoadGameNumber>-1)
@@ -2044,8 +2030,6 @@ void CTakeOffApp::GameLoop(void*)
          }
       }*/
 
-      FrameWnd->OnPaint();
-
       MessagePump();
    }
 
@@ -2058,7 +2042,7 @@ void CTakeOffApp::GameLoop(void*)
    //Shutdown:
    if (TopWin)
    {
-      CWnd *TmpWin = TopWin; TopWin=NULL; delete TmpWin;
+      CStdRaum *TmpWin = TopWin; TopWin=NULL; delete TmpWin;
    }
 
    if (Sim.Players.Players.AnzEntries()>0)

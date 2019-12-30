@@ -4,7 +4,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Das Standard Raum Template
 
-class CStdRaum : public CWnd
+class CStdRaum
 {
 // Construction
 public:
@@ -220,12 +220,15 @@ public:
 public:
 	virtual ~CStdRaum();
 
+   void ProcessEvent(const SDL_Event& event);
+
 	// Generated message map functions
 protected:
 	//{{AFX_MSG(CStdRaum)
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnPaint();
+   afx_msg void OnTimer(UINT nIDEvent);
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
@@ -234,8 +237,10 @@ protected:
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
    afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
 
+   static Uint32 TimerFunc(Uint32 interval, void* param);
+   
+   friend void MessagePump (void);
    friend void PumpNetwork (void);
 
    friend class CMessages;

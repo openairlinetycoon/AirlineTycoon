@@ -253,7 +253,7 @@ skip_search_demo_cd:
 //--------------------------------------------------------------------------------------------
 //Initialisiert die Digital-Sache:
 //--------------------------------------------------------------------------------------------
-void InitSoundSystem (HWND &AppWnd)
+void InitSoundSystem (SDL_Window *AppWnd)
 {
    gpSSE = new SSE((PVOID)AppWnd, 22050, 1, 16);
    gpSSE->EnableSound(Sim.Options.OptionEnableDigi);

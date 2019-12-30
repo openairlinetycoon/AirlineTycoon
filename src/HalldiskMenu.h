@@ -4,11 +4,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // HallDiskMenu window
 
-class HallDiskMenu : public CWnd
+class HallDiskMenu : public CStdRaum
 {
 // Construction
 public:
-	HallDiskMenu(CWnd *ParentWnd);
+	HallDiskMenu(BOOL bHandy, SLONG PlayerNum);
 
 // Attributes
 public:
@@ -38,7 +38,7 @@ protected:
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+	//DECLARE_MESSAGE_MAP()
 };
 
 /////////////////////////////////////////////////////////////////////////////

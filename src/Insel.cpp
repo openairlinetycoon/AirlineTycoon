@@ -331,8 +331,8 @@ CInsel::CInsel(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "", 
 
    KonstruktorFinished=TRUE;
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 #endif
 }
 
@@ -357,18 +357,6 @@ CInsel::~CInsel()
    ShipWaveBms.Destroy();
 }
 
-//--------------------------------------------------------------------------------------------
-//Die Bank wird eröffnet:
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CInsel, CStdRaum)
-	//{{AFX_MSG_MAP(CInsel)
-	ON_WM_LBUTTONDOWN()
-	ON_WM_PAINT()
-	ON_WM_RBUTTONDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////
 // CInsel message handlers
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -380,8 +368,6 @@ void CInsel::OnPaint()
 {
 #ifndef DEMO
    SLONG c, d;
-
-   { CPaintDC dc(this); }
 
    if (!KonstruktorFinished) return;
 
@@ -590,7 +576,7 @@ void CInsel::OnRButtonDown(UINT nFlags, CPoint point)
    //Außerhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y)
    {
-      CWnd::OnRButtonDown(nFlags, point);
+      //CWnd::OnRButtonDown(nFlags, point);
       return;
    }
    else

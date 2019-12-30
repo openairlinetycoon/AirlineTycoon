@@ -170,8 +170,8 @@ Bank::Bank (BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "bank.g
       }
    }
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -192,18 +192,6 @@ Bank::~Bank()
 void Bank::ReloadBitmaps ()
 {
 }
-
-//--------------------------------------------------------------------------------------------
-//BEGIN_MESSAGE_MAP(Bank, CStdRaum)
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(Bank, CStdRaum)
-	//{{AFX_MSG_MAP(Bank)
-	ON_WM_LBUTTONDOWN()
-	ON_WM_PAINT()
-	ON_WM_RBUTTONDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // Bank message handlers
@@ -241,8 +229,6 @@ void Bank::OnPaint()
  
    //°m≤ß∫ÿ°–Ø}√µ¶”•X°n
    {
-      CPaintDC dc(this);
-
       CFont f;
       f.CreateFont (-20,   //Height
                     0,           //Width
@@ -273,8 +259,6 @@ void Bank::OnPaint()
 
       dc.SelectObject(pOldFont);
    }
-#else
-   CPaintDC dc(this);
 #endif
 
    if (Sim.Date>5) Sim.GiveHint (HINT_BANK);
@@ -381,7 +365,6 @@ void Bank::OnLButtonDown(UINT nFlags, CPoint point)
 
    if (!ConvertMousePosition (point, &RoomPos))
    {
-	   CWnd::OnLButtonDown(nFlags, point);
       return;
    }
 
@@ -414,7 +397,6 @@ void Bank::OnRButtonDown(UINT nFlags, CPoint point)
    //Auﬂerhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y)
    {
-      CWnd::OnRButtonDown(nFlags, point);
       return;
    }
    else

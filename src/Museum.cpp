@@ -135,8 +135,8 @@ CMuseum::CMuseum(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "m
 
    ReloadBitmaps();
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -196,24 +196,11 @@ CMuseum::~CMuseum()
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 //--------------------------------------------------------------------------------------------
-//BEGIN_MESSAGE_MAP(CMuseum, CStdRaum)
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CMuseum, CStdRaum)
-   //{{AFX_MSG_MAP(CMuseum)
-	ON_WM_PAINT()
-	ON_WM_LBUTTONDOWN()
-	ON_WM_RBUTTONDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-//--------------------------------------------------------------------------------------------
 //void CMuseum::OnPaint()
 //--------------------------------------------------------------------------------------------
 void CMuseum::OnPaint()
 {
    SLONG  c, NewTip;
-
-   { CPaintDC dc(this); }
 
    //Die Standard Paint-Sachen kann der Basisraum erledigen
    CStdRaum::OnPaint ();
@@ -366,7 +353,6 @@ void CMuseum::OnRButtonDown(UINT nFlags, CPoint point)
    //Auﬂerhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y-StatusLineSizeY)
    {
-      CWnd::OnRButtonDown(nFlags, point);
       return;
    }
 

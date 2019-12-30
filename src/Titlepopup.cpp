@@ -16,7 +16,7 @@ static const char FileId[] = "Titl";
 /////////////////////////////////////////////////////////////////////////////
 // TitlePopup
 
-TitlePopup::TitlePopup()
+TitlePopup::TitlePopup (BOOL bHandy, SLONG PlayerNum) : CStdRaum(bHandy, PlayerNum, "", NULL)
 {
    Sim.Gamestate = UBYTE((Sim.Gamestate & (~GAMESTATE_WORKING)) | GAMESTATE_DONE);
 }
@@ -24,15 +24,6 @@ TitlePopup::TitlePopup()
 TitlePopup::~TitlePopup()
 {
 }
-
-
-BEGIN_MESSAGE_MAP(TitlePopup, CWnd)
-	//{{AFX_MSG_MAP(TitlePopup)
-	ON_WM_PAINT()
-	ON_WM_LBUTTONDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
 
 /////////////////////////////////////////////////////////////////////////////
 // TitlePopup message handlers

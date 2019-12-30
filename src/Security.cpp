@@ -280,8 +280,8 @@ CSecurity::CSecurity(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum
                                 NULL, SMACKER_CLIP_SET, 0, NULL,  //Warten
                                 "A9", 0);*/
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 
    //Hintergrundsounds:
    if (Sim.Options.OptionEffekte)
@@ -301,18 +301,6 @@ CSecurity::~CSecurity()
    Talkers.Talkers[TALKER_SECURITY].DecreaseReference ();
 }
 
-//--------------------------------------------------------------------------------------------
-//Die Bank wird eröffnet:
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CSecurity, CStdRaum)
-	//{{AFX_MSG_MAP(CSecurity)
-	ON_WM_LBUTTONDOWN()
-	ON_WM_PAINT()
-	ON_WM_RBUTTONDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////
 // CSecurity message handlers
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -322,8 +310,6 @@ END_MESSAGE_MAP()
 //--------------------------------------------------------------------------------------------
 void CSecurity::OnPaint()
 {
-   { CPaintDC dc(this); }
-
    if (!bHandy) SetMouseLook (CURSOR_NORMAL, 0, ROOM_SECURITY, 0);
 
    //Die Standard Paint-Sachen kann der Basisraum erledigen
@@ -405,7 +391,6 @@ void CSecurity::OnRButtonDown(UINT nFlags, CPoint point)
    //Außerhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y)
    {
-      CWnd::OnRButtonDown(nFlags, point);
       return;
    }
    else

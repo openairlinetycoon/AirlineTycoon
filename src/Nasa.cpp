@@ -106,8 +106,8 @@ CNasa::CNasa(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "nasa.
                             &KommAlien, SMACKER_CLIP_SET|SMACKER_CLIP_PRE, -1, NULL,
                             "A9", 0);
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 
    StartDialog (TALKER_NASA, MEDIUM_AIR, 0);
 #endif
@@ -121,18 +121,6 @@ CNasa::~CNasa()
    Talkers.Talkers[TALKER_NASA].DecreaseReference ();
 }
 
-//--------------------------------------------------------------------------------------------
-//Die Bank wird erˆffnet:
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CNasa, CStdRaum)
-	//{{AFX_MSG_MAP(CNasa)
-	ON_WM_LBUTTONDOWN()
-	ON_WM_PAINT()
-	ON_WM_RBUTTONDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////
 // CNasa message handlers
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -143,8 +131,6 @@ END_MESSAGE_MAP()
 void CNasa::OnPaint()
 {
 #ifndef DEMO
-   { CPaintDC dc(this); }
-
    if (!bHandy) SetMouseLook (CURSOR_NORMAL, 0, ROOM_SABOTAGE, 0);
 
    if (Sim.Date>5) Sim.GiveHint (HINT_NASA);
@@ -216,7 +202,6 @@ void CNasa::OnRButtonDown(UINT nFlags, CPoint point)
    //Auﬂerhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y)
    {
-      CWnd::OnRButtonDown(nFlags, point);
       return;
    }
    else

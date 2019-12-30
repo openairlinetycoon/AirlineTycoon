@@ -14,6 +14,9 @@
 #include <SDL_mixer.h>
 #include <smacker.h>
 
+#undef afx_msg
+#define afx_msg virtual
+
 #include "Defines.h"
 
 #include "TeakLibW.H"

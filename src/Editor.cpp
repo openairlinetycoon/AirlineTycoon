@@ -755,8 +755,8 @@ CEditor::CEditor(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "E
    MaskenBms.ReSize (pRoomLib, "MASKE_O MASKE_U");
 
    CheckUnusablePart (1);
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 
    Hdu.HercPrintf (0, "stat_3.mcf");
    FontNormalRed.Load (lpDD, (char*)(LPCTSTR)FullFilename ("stat_3.mcf", MiscPath));
@@ -806,20 +806,6 @@ void CEditor::UpdateButtonState(void)
       }
 }
 
-//--------------------------------------------------------------------------------------------
-//Die Bank wird eröffnet:
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CEditor, CStdRaum)
-	//{{AFX_MSG_MAP(CEditor)
-	ON_WM_LBUTTONDOWN()
-   ON_WM_LBUTTONDBLCLK()
-	ON_WM_LBUTTONUP()
-   ON_WM_PAINT()
-	ON_WM_RBUTTONDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////
 // CEditor message handlers
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -830,8 +816,6 @@ END_MESSAGE_MAP()
 void CEditor::OnPaint()
 {
    long c, d;
-
-   { CPaintDC dc(this); }
 
    if (!bHandy) SetMouseLook (CURSOR_NORMAL, 0, ROOM_EDITOR, 0);
 
@@ -1493,7 +1477,6 @@ void CEditor::OnRButtonDown(UINT nFlags, CPoint point)
    //Außerhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y)
    {
-      CWnd::OnRButtonDown(nFlags, point);
       return;
    }
    else

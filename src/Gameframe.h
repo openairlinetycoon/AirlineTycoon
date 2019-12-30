@@ -4,9 +4,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // GameFrame frame
 
-class GameFrame : public CFrameWnd
+class GameFrame
 {
-	DECLARE_DYNCREATE(GameFrame)
 public:
 	GameFrame();           // protected constructor used by dynamic creation
 
@@ -16,8 +15,12 @@ public:
    SBBM     PauseBm;
    SLONG    PauseFade;
 
+   SDL_Event Mess;
+   SDL_Window *m_hWnd;
+
 // Operations
 public:
+   void Invalidate (void);
    void RePostMessage (CPoint point);
    void RePostClick (SLONG PlayerNum, UINT message, WPARAM wParam, LPARAM lParam);
    void PrepareFade (void);
@@ -33,6 +36,8 @@ public:
 // Implementation
 public:
 	virtual ~GameFrame();
+
+	void ProcessEvent(const SDL_Event& event);
 
 	// Generated message map functions
 	//{{AFX_MSG(GameFrame)
@@ -56,9 +61,8 @@ public:
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
    afx_msg BOOL OnHelpInfo(HELPINFO* lpHelpInfo);
 	//}}AFX_MSG
-   afx_msg void OnSysKeyDown( UINT, UINT, UINT ); 
-   afx_msg void OnSysKeyUp( UINT, UINT, UINT ); 
-	DECLARE_MESSAGE_MAP()
+   afx_msg void OnSysKeyDown( UINT, UINT, UINT );
+   afx_msg void OnSysKeyUp( UINT, UINT, UINT );
 
    friend class CStdRaum;
 };

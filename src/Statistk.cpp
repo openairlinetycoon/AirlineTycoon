@@ -203,8 +203,8 @@ CStatistik::CStatistik (BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, Player
    if (DropDownPos.y>0)
       RepaintGraphWindow();
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+	SDL_ShowWindow(FrameWnd->m_hWnd);
+	SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -251,18 +251,6 @@ CStatistik::~CStatistik()
    StatusCount=20;
 }
 
-//--------------------------------------------------------------------------------------------
-//BEGIN_MESSAGE_MAP(CStatistik, CStdRaum)
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CStatistik, CStdRaum)
-	//{{AFX_MSG_MAP(CStatistik)
-	ON_WM_LBUTTONDOWN()
-	ON_WM_PAINT()
-	ON_WM_RBUTTONDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////
 // CStatistik message handlers
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -279,8 +267,6 @@ void CStatistik::OnPaint()
 
    if (((++RefreshStatistics)&7)==0)
       Sim.Players.UpdateStatistics ();
-
-   { CPaintDC dc(this); }
 
    //Die Standard Paint-Sachen kann der Basisraum erledigen
    CStdRaum::OnPaint ();
@@ -994,7 +980,6 @@ void CStatistik::OnRButtonDown(UINT nFlags, CPoint point)
    //Auﬂerhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y)
    {
-      CWnd::OnRButtonDown(nFlags, point);
       return;
    }
    else

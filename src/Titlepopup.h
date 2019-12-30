@@ -4,11 +4,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // TitlePopup window
 
-class TitlePopup : public CWnd
+class TitlePopup : public CStdRaum
 {
 // Construction
 public:
-	TitlePopup();
+	TitlePopup(BOOL bHandy, SLONG PlayerNum);
 
 // Attributes
 private:
@@ -35,7 +35,7 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+	//DECLARE_MESSAGE_MAP()
 };
 
 /////////////////////////////////////////////////////////////////////////////

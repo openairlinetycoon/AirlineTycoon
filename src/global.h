@@ -49,7 +49,7 @@ extern SLONG                   MissionKeys3[];  //Die Schlüsselwerte für die Reg
 //--------------------------------------------------------------------------------------------
 //Pointer auf Fenster:
 //--------------------------------------------------------------------------------------------
-extern CWnd                   *TopWin;          //Übergeordnetes Fenster, z.B. load Airport
+extern CStdRaum               *TopWin;          //Übergeordnetes Fenster, z.B. load Airport
 
 //--------------------------------------------------------------------------------------------
 //Einige *WIRKLICH* globale Ressourcen:

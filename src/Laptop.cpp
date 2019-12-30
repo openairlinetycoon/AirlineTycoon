@@ -167,7 +167,7 @@ CLaptop::CLaptop (BOOL bHandy, ULONG PlayerNum) : CPlaner (bHandy, PlayerNum, Si
    LockBm.ReSize (pRoomLib, "LOCK");
 
    KonstruktorFinished = 1;
-   ShowWindow(SW_SHOW);
+   SDL_ShowWindow(FrameWnd->m_hWnd);
    FrameWnd->Invalidate(); MessagePump();
    FrameWnd->Invalidate(); MessagePump();
 
@@ -299,8 +299,8 @@ CLaptop::CLaptop (BOOL bHandy, ULONG PlayerNum) : CPlaner (bHandy, PlayerNum, Si
 
    PaintGlobe ();
    PaintGlobeRoutes ();
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -351,26 +351,6 @@ CLaptop::~CLaptop()
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-// Windows Stuff
-//////////////////////////////////////////////////////////////////////////////////////////////
-     
-//--------------------------------------------------------------------------------------------
-//BEGIN_MESSAGE_MAP(CLaptop, CWnd)
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CLaptop, CStdRaum)
-	//{{AFX_MSG_MAP(CLaptop)
-	ON_WM_LBUTTONDOWN()
-	ON_WM_LBUTTONUP()
-	ON_WM_PAINT()
-	ON_WM_RBUTTONUP()
-	ON_WM_RBUTTONDOWN()
-	ON_WM_KEYDOWN()
-	ON_WM_CHAR()
-   ON_WM_LBUTTONDBLCLK()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-//////////////////////////////////////////////////////////////////////////////////////////////
 // Globe message handlers
 //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -390,8 +370,6 @@ void CLaptop::OnPaint()
 
    if (KonstruktorFinished!=2)
    {
-      CPaintDC dc(this);
-
       if (KonstruktorFinished==1)
       {
          CStdRaum::OnPaint ();
@@ -478,8 +456,6 @@ void CLaptop::OnPaint()
    }
 
    if (UsedToRotate==2) UsedToRotate=1;
-
-   { CPaintDC dc(this); }
 
    //Die Standard Paint-Sachen kann der Basisraum erledigen
    CStdRaum::OnPaint ();
@@ -971,7 +947,6 @@ void CLaptop::OnLButtonDown(UINT nFlags, CPoint point)
 
    if (!ConvertMousePosition (point, &RoomPos))
    {
-      CWnd::OnLButtonDown(nFlags, point);
       return;
    }
 

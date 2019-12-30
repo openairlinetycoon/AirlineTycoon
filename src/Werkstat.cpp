@@ -376,8 +376,8 @@ CWerkstatt::CWerkstatt(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerN
       MenuSetZoomStuff (XY(320,220), 0.17, FALSE);
    #endif
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -387,18 +387,6 @@ CWerkstatt::~CWerkstatt()
 {
    Talkers.Talkers[TALKER_MECHANIKER].DecreaseReference ();
 }
-
-//--------------------------------------------------------------------------------------------
-//Die Bank wird eröffnet:
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CWerkstatt, CStdRaum)
-	//{{AFX_MSG_MAP(CWerkstatt)
-	ON_WM_LBUTTONDOWN()
-	ON_WM_PAINT()
-	ON_WM_RBUTTONDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // CWerkstatt message handlers
@@ -410,8 +398,6 @@ END_MESSAGE_MAP()
 void CWerkstatt::OnPaint()
 {
    SLONG NewTip;
-
-   { CPaintDC dc(this); }
 
    if (!bHandy) SetMouseLook (CURSOR_NORMAL, 0, ROOM_ARAB_AIR, 0);
 
@@ -555,7 +541,6 @@ void CWerkstatt::OnRButtonDown(UINT nFlags, CPoint point)
    //Außerhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y)
    {
-	   CWnd::OnRButtonDown(nFlags, point);
       return;
    }
    else

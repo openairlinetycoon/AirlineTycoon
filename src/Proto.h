@@ -43,7 +43,7 @@ void UpdateHLinePool (void);
 //--------------------------------------------------------------------------------------------
 //Init.Cpp:
 //--------------------------------------------------------------------------------------------
-void InitSoundSystem (HWND &AppWnd);
+void InitSoundSystem (SDL_Window *AppWnd);
 void PaintStarAt (SBBM &Bitmap, XY Pos);
 void InitPathVars (void);
 void InitFonts (void);

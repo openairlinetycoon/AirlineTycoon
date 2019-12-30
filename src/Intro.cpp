@@ -81,8 +81,8 @@ CIntro::CIntro (BOOL bHandy, SLONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "",
       Sim.Gamestate = GAMESTATE_BOOT;
    }
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -115,18 +115,6 @@ CIntro::~CIntro()
    SetMidiVolume(Sim.Options.OptionMusik);
 }
 
-//--------------------------------------------------------------------------------------------
-//BEGIN_MESSAGE_MAP(CIntro, CWnd)
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CIntro, CWnd)
-	//{{AFX_MSG_MAP(CIntro)
-	ON_WM_LBUTTONDOWN()
-	ON_WM_PAINT()
-	ON_WM_RBUTTONDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-
 /////////////////////////////////////////////////////////////////////////////
 // CIntro message handlers
 
@@ -135,8 +123,6 @@ END_MESSAGE_MAP()
 //--------------------------------------------------------------------------------------------
 void CIntro::OnPaint() 
 {
-   { CPaintDC dc(this); }
-
    if (FrameNum++<2) PrimaryBm.BlitFrom (RoomBm);
 
    //Die Standard Paint-Sachen kann der Basisraum erledigen

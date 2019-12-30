@@ -119,8 +119,8 @@ CKiosk::CKiosk(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "kio
 
    SetRoomVisited (PlayerNum, ROOM_KIOSK);
 
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -300,25 +300,12 @@ void CKiosk::RepaintTip (void)
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 //--------------------------------------------------------------------------------------------
-//BEGIN_MESSAGE_MAP(CKiosk, CStdRaum)
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(CKiosk, CStdRaum)
-	//{{AFX_MSG_MAP(CKiosk)
-	ON_WM_RBUTTONDOWN()
-	ON_WM_PAINT()
-	ON_WM_LBUTTONDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-//--------------------------------------------------------------------------------------------
 //void CKiosk::OnPaint()
 //--------------------------------------------------------------------------------------------
 void CKiosk::OnPaint()
 {
    SLONG NewTip=-1;
    SLONG c;
-
-   { CPaintDC dc(this); }
 
    //Die Standard Paint-Sachen kann der Basisraum erledigen
    CStdRaum::OnPaint ();
@@ -484,7 +471,6 @@ void CKiosk::OnRButtonDown(UINT nFlags, CPoint point)
    //Auﬂerhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y)
    {
-      CWnd::OnRButtonDown(nFlags, point);
       return;
    }
    else

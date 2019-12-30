@@ -72,7 +72,6 @@ extern CTakeOffApp *pTakeOffApp;
 /////////////////////////////////////////////////////////////////////////////////////////////
 // GameFrame
 /////////////////////////////////////////////////////////////////////////////////////////////
-IMPLEMENT_DYNCREATE(GameFrame, CFrameWnd)
 
 void CheatSound (void)
 {
@@ -112,12 +111,8 @@ void CheatSound (void)
 
 void MessagePump (void)
 {
-   MSG msg;
-   while (PeekMessage ((LPMSG)&msg, NULL, 0, 0, PM_REMOVE))
-   {
-      TranslateMessage (&msg);
-      DispatchMessage (&msg);
-   }
+   while (SDL_PollEvent(&FrameWnd->Mess))
+      FrameWnd->ProcessEvent(FrameWnd->Mess);
 }
 
 LPDIRECTDRAWSURFACE FrontSurf=NULL;
@@ -166,39 +161,18 @@ GameFrame::GameFrame()
 
    if (lpDD==NULL) { MB(); Sleep(100); MB(); Sleep(100); MB(); }
 
-   /*if (DetectCurrentDisplayResolution ().z!=16 && !bFullscreen)
-   {
-      ::MessageBox (NULL, "Airline Tycoon braucht einen Videomodus mit 65.000 Farben!", "Fehler!", MB_OK );
-      exit (-1);
-   }*/
-
    if (DetectCurrentDisplayResolution().x<=640 || DetectCurrentDisplayResolution().y<=480)
       bFullscreen=TRUE;
 
-   // CreateWindowEx
-   if (bFullscreen)
+   SDL_Window* h = SDL_CreateWindow("Airline Tycoon", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, rect.Width(), rect.Height(), bFullscreen ? SDL_WINDOW_FULLSCREEN : 0);
+   if (!h)
    {
-      if (!Create(NULL, "Airline Tycoon", WS_POPUP|WS_VISIBLE|WS_SYSMENU, rect, this))
-      {
-         ::MessageBox (NULL, "Create failed", "ERROR", MB_OK );
-         return;
-      }
-      if (bFullscreen) SetWindowPos (&wndTopMost, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOREDRAW|SWP_NOSIZE);
+      ::MessageBox(NULL, "CreateWindow failed", "ERROR", MB_OK);
+      return;
    }
-   else
-   {
-      AdjustWindowRectEx (&rect, WS_POPUPWINDOW|WS_CAPTION|WS_VISIBLE, 0, WS_EX_CLIENTEDGE);
-      //if (!Create(NULL, "Airline Tycoon", WS_POPUPWINDOW|WS_CAPTION|WS_VISIBLE, rect, this, NULL, WS_EX_CLIENTEDGE))
-      if (!Create(NULL, "Airline Tycoon", WS_POPUPWINDOW|WS_CAPTION|WS_MINIMIZEBOX|WS_VISIBLE, rect, this, NULL, WS_EX_CLIENTEDGE))
-      {
-         ::MessageBox (NULL, "Create failed", "ERROR", MB_OK );
-         return;
-      }
-      CenterWindow();
-   }
-
-   ShowWindow(SW_SHOW);
-   UpdateWindow();
+   SDL_ShowWindow(h);
+   SDL_UpdateWindowSurface(h);
+   m_hWnd = h;
 
    pGfxMain  = new GfxMain (lpDD);
 
@@ -215,7 +189,6 @@ GameFrame::GameFrame()
    SLONG x= DDCAPS_BLT ;
    SLONG y= DDCAPS_COLORKEY;*/
 
-   HWND h=GetSafeHwnd();
    PrimaryBm.ReSize (h, bFullscreen, XY(640,480));
    PrimaryBm.ReSizePartB (h, bFullscreen, XY(640,480));
    pCursor=new SB_CCursor(&PrimaryBm.PrimaryBm);
@@ -344,6 +317,90 @@ GameFrame::~GameFrame()
    Hdu.HercPrintf (0, "logging ends..");
 }
 
+void GameFrame::ProcessEvent(const SDL_Event& event)
+{
+   switch (event.type)
+   {
+   case SDL_WINDOWEVENT:
+   {
+      if (event.window.windowID == SDL_GetWindowID(FrameWnd->m_hWnd))
+      {
+         if (event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED)
+            FrameWnd->OnActivateApp(TRUE, 0);
+         else if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST)
+            FrameWnd->OnActivateApp(FALSE, 0);
+         else if (event.window.event == SDL_WINDOWEVENT_ENTER)
+            FrameWnd->OnSetCursor(NULL, HTCLIENT, 0);
+         else if (event.window.event == SDL_WINDOWEVENT_LEAVE)
+            FrameWnd->OnSetCursor(NULL, HTNOWHERE, 0);
+      }
+   }
+   break;
+   case SDL_MOUSEMOTION:
+   {
+      FrameWnd->OnMouseMove(0, CPoint(event.motion.x, event.motion.y));
+   }
+   break;
+   case SDL_KEYDOWN:
+   {
+      FrameWnd->OnKeyDown(toupper(event.key.keysym.sym), event.key.repeat, 0);
+      FrameWnd->OnChar(toupper(event.key.keysym.sym), event.key.repeat, 0);
+   }
+   break;
+   case SDL_MOUSEBUTTONDOWN:
+   {
+      if (event.button.button == SDL_BUTTON_LEFT)
+      {
+         if (event.button.clicks > 1)
+            FrameWnd->OnLButtonDblClk(0, CPoint(event.button.x, event.button.y));
+         else
+            FrameWnd->OnLButtonDown(0, CPoint(event.button.x, event.button.y));
+      }
+      else if (event.button.button == SDL_BUTTON_RIGHT)
+         FrameWnd->OnRButtonDown(0, CPoint(event.button.x, event.button.y));
+   }
+   break;
+   case SDL_KEYUP:
+   {
+      FrameWnd->OnKeyUp(event.key.keysym.sym, event.key.repeat, 0);
+   }
+   case SDL_MOUSEBUTTONUP:
+   {
+      if (event.button.button == SDL_BUTTON_LEFT)
+         FrameWnd->OnLButtonUp(0, CPoint(event.button.x, event.button.y));
+      else if (event.button.button == SDL_BUTTON_RIGHT)
+         FrameWnd->OnRButtonUp(0, CPoint(event.button.x, event.button.y));
+   }
+   break;
+   }
+}
+
+void GameFrame::Invalidate(void)
+{
+   CStdRaum* w;
+   SLONG     c;
+
+   if (TopWin)
+   {
+      TopWin->OnPaint();
+   }
+   else
+   {
+      for (c = 0; c < Sim.Players.AnzPlayers; c++)
+      {
+         w = Sim.Players.Players[c].LocationWin;
+
+         if (w)
+         {
+            //if (XY(point).IfIsWithin (w->WinP1.x, w->WinP1.y, w->WinP2.x, w->WinP2.y))
+            w->OnPaint();
+         }
+      }
+   }
+
+   OnPaint();
+}
+
 //--------------------------------------------------------------------------------------------
 //Die Nachricht an alle Sub-Fenster weiterleiten::
 //--------------------------------------------------------------------------------------------
@@ -351,25 +408,22 @@ void GameFrame::RePostMessage (CPoint)
 {
    CStdRaum *w;    
    SLONG     c;
-   const     MSG *Mess = GetCurrentMessage();
 
    //An alle direkten Sub-Windows schicken:
    if (TopWin)
    {
-      if (TopWin->m_hWnd)
-         TopWin->SendMessage (Mess->message, Mess->wParam, Mess->lParam);
+      TopWin->ProcessEvent(Mess);
    }
    else 
    {
       for (c=0; c<Sim.Players.AnzPlayers; c++)
       {
-         w=(CStdRaum *)Sim.Players.Players[c].LocationWin;
+         w=Sim.Players.Players[c].LocationWin;
 
          if (w)
          {
             //if (XY(point).IfIsWithin (w->WinP1.x, w->WinP1.y, w->WinP2.x, w->WinP2.y))
-               w->SendMessage (Mess->message, Mess->wParam, Mess->lParam);
-               MessagePump();
+               w->ProcessEvent(Mess);
          }
       }
    }
@@ -380,35 +434,9 @@ void GameFrame::RePostMessage (CPoint)
 //--------------------------------------------------------------------------------------------
 void GameFrame::RePostClick (SLONG PlayerNum, UINT message, WPARAM wParam, LPARAM lParam)
 {
-   if (Sim.Players.Players[PlayerNum].LocationWin)
-      Sim.Players.Players[PlayerNum].LocationWin->SendMessage (message, wParam, lParam);
+   //if (Sim.Players.Players[PlayerNum].LocationWin)
+   //   Sim.Players.Players[PlayerNum].LocationWin->SendMessage (message, wParam, lParam);
 }
-
-//--------------------------------------------------------------------------------------------
-//MESSAGE_MAP(GameFrame, CWnd):
-//--------------------------------------------------------------------------------------------
-BEGIN_MESSAGE_MAP(GameFrame, CFrameWnd)
-	//{{AFX_MSG_MAP(GameFrame)
-	ON_WM_PAINT()
-	ON_WM_ERASEBKGND()
-	ON_WM_ACTIVATEAPP()
-	ON_WM_SETCURSOR()
-   ON_WM_CAPTURECHANGED()
-	ON_WM_MOUSEMOVE()
-	ON_WM_QUERYNEWPALETTE()
-	ON_WM_KEYDOWN()
-	ON_WM_LBUTTONDOWN()
-	ON_WM_CHAR()
-	ON_WM_RBUTTONDOWN()
-	ON_WM_LBUTTONDBLCLK()
-	ON_WM_LBUTTONUP()
-	ON_WM_KEYUP()
-	ON_WM_HELPINFO()
-	ON_WM_RBUTTONUP()
-   ON_WM_SYSKEYUP()
-   ON_WM_SYSKEYDOWN()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 // GameFrame message handlers
@@ -419,8 +447,6 @@ END_MESSAGE_MAP()
 //--------------------------------------------------------------------------------------------
 void GameFrame::OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-   if (nChar!=VK_MENU && nChar!=VK_F10)
-      CFrameWnd::OnSysKeyDown(nChar, nRepCnt, nFlags);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -428,8 +454,6 @@ void GameFrame::OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 //--------------------------------------------------------------------------------------------
 void GameFrame::OnSysKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-   if (nChar!=VK_MENU && nChar!=VK_F10)
-      CFrameWnd::OnSysKeyUp(nChar, nRepCnt, nFlags);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -480,11 +504,9 @@ void GameFrame::OnPaint()
       LastTime = Time;
    }
 
-   CPaintDC dc(this); // device context for painting
-
    if (bActive && (!Sim.bPause || PauseFade==0))
    {
-      RECT rcWindow;
+      TXY<int> rcWindow;
 
       if (bCursorCaptured)
       {
@@ -632,14 +654,12 @@ void GameFrame::OnPaint()
          }
       }
 
-      GetClientRect(&rcWindow);
-      ClientToScreen((LPPOINT)&rcWindow);
-
-      PrimaryBm.Flip (rcWindow.left, rcWindow.top, TRUE);
+      SDL_GetWindowPosition(m_hWnd, &rcWindow.x, &rcWindow.y);
+      PrimaryBm.Flip (rcWindow.x, rcWindow.y, TRUE);
    }
    if (bActive && Sim.bPause)
    {
-      RECT rcWindow;
+      TXY<int> rcWindow;
 
       if (pGLibPause == NULL)
       {
@@ -682,9 +702,8 @@ void GameFrame::OnPaint()
       }
       else PrimaryBm.BlitFrom (PauseBm);
 
-      GetClientRect(&rcWindow);
-      ClientToScreen((LPPOINT)&rcWindow);
-      PrimaryBm.Flip (rcWindow.left, rcWindow.top, TRUE);
+      SDL_GetWindowPosition(m_hWnd, &rcWindow.x, &rcWindow.y);
+      PrimaryBm.Flip (rcWindow.x, rcWindow.y, TRUE);
    }
 }
 
@@ -745,7 +764,7 @@ void GameFrame::OnActivateApp(BOOL bActive, HTASK hTask)
             ((CStdRaum*)Sim.Players.Players[Sim.localPlayer].LocationWin)->StatusCount=3;
 
 		   Pause(false);	// AG:
-         SetForegroundWindow ();
+         SDL_RaiseWindow(m_hWnd);
 
          Invalidate();
       }
@@ -764,8 +783,6 @@ void GameFrame::OnActivateApp(BOOL bActive, HTASK hTask)
 		   Pause(true);	// AG:
       }
    }
-
-	CFrameWnd::OnActivateApp(bActive, hTask);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -792,7 +809,6 @@ BOOL GameFrame::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 		   //if (pCursor) pCursor->Show(false);
       }
    }
-   else CFrameWnd::OnSetCursor (pWnd, nHitTest, message);
 
    ReferTo (message, pWnd);
    return TRUE;
@@ -816,8 +832,6 @@ void GameFrame::OnMouseMove(UINT nFlags, CPoint point)
 
    if (!gUseWindowsMouse)
       if (bActive && pCursor && bNoQuickMouse==FALSE) pCursor->MoveImage(gMousePosition.x-MouseCursorOffset.x, gMousePosition.y-MouseCursorOffset.y);
-   else
-	   CFrameWnd::OnMouseMove(nFlags, point);
 }
 
 void GameFrame::OnCaptureChanged (CWnd*)
@@ -827,7 +841,7 @@ void GameFrame::OnCaptureChanged (CWnd*)
 //--------------------------------------------------------------------------------------------
 //user pressed F1
 //--------------------------------------------------------------------------------------------
-afx_msg BOOL GameFrame::OnHelpInfo (HELPINFO*)
+BOOL GameFrame::OnHelpInfo (HELPINFO*)
 {
    ToolTipState=FALSE;
    
@@ -985,10 +999,9 @@ void GameFrame::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
    {
       BOOL doRun=FALSE;
 
-      const MSG *pMessage=GetCurrentMessage( );
-      if (TypeBuffer[29]==(char)nChar && pMessage->time-LastKeyTime<300) doRun=TRUE;
+      if (TypeBuffer[29]==(char)nChar && timeGetTime()-LastKeyTime<300) doRun=TRUE;
 
-      LastKeyTime=pMessage->time;
+      LastKeyTime=timeGetTime();
 
       SLONG StatePar = Sim.Persons[Sim.Persons.GetPlayerIndex (Sim.localPlayer)].StatePar;
 
@@ -2229,9 +2242,7 @@ void GameFrame::OnChar(UINT nChar, UINT, UINT)
 //--------------------------------------------------------------------------------------------
 BOOL GameFrame::OnCommand(WPARAM wParam, LPARAM lParam) 
 {
-   const MSG *Mess = GetCurrentMessage();
-   SendMessageToDescendants (Mess->message, Mess->wParam, Mess->lParam, FALSE, FALSE);
-	return CFrameWnd::OnCommand(wParam, lParam);
+   return FALSE;
 }
 
 //--------------------------------------------------------------------------------------------

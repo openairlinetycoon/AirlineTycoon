@@ -507,6 +507,7 @@ void PlayMidi (const CString &Filename)
       if (gpMidi) gpMidi->Stop();
       if (gpMidi) gpMidi->Load (bprintf ("%s\0", (LPCTSTR)ShortFilename));
       if (gpMidi) gpMidi->Play();
+      gpSSE->SetMusicCallback(NextMidi);
    }
 }
 
@@ -545,6 +546,7 @@ void StopMidi (void)
 
    if (IsMidiAvailable())
    {
+      gpSSE->SetMusicCallback(NULL);
       if (gpMidi) gpMidi->Stop();
    }
 }

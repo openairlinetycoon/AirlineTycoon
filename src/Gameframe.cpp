@@ -226,8 +226,6 @@ GameFrame::GameFrame()
    } */
 
    MouseLook = CURSOR_NORMAL;
-
-   gpSSE->SetMusicCallback(NextMidi);
 }
 
 //--------------------------------------------------------------------------------------------

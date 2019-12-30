@@ -22,6 +22,7 @@ SSE::SSE(void* hWnd, dword samplesPerSec, word channels, word bitsPerSample, wor
 
 SSE::~SSE()
 {
+    Mix_HookMusicFinished(nullptr);
     Mix_CloseAudio();
 }
 

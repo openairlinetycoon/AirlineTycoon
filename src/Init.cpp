@@ -5,6 +5,7 @@
 #include "Checkup.h"
 #include "cd_prot.h"
 #include "Editor.h"
+#include <fstream>
 
 extern SLONG IconsPos[];  //Referenziert globe.cpp
 
@@ -381,13 +382,13 @@ void InitItems (void)
 
       //Relations:
       {
-         CStdioFile file(FullFilename ("relation.csv", ExcelPath), CFile::modeRead);
+         std::ifstream file(FullFilename ("relation.csv", ExcelPath), std::ios_base::in);
 
-         file.ReadString (str);
+         file >> str;
 
          for (long c=0; c<sizeof(gPlanePartRelations)/sizeof(gPlanePartRelations[0]); c++)
          {
-            file.ReadString (str);
+            file >> str;
             long id=atol(str);
 
             if (gPlanePartRelations[c].Id!=id) hprintf (0, "Id mismatch: %li vs %li!", gPlanePartRelations[c].Id, id);
@@ -397,13 +398,13 @@ void InitItems (void)
 
       //Planebuilds:
       {
-         CStdioFile file(FullFilename ("builds.csv", ExcelPath), CFile::modeRead);
+         std::ifstream file(FullFilename ("builds.csv", ExcelPath), std::ios_base::in);
 
-         file.ReadString (str);
+         file >> str;
 
          for (long c=0; c<sizeof(gPlaneBuilds)/sizeof(gPlaneBuilds[0]); c++)
          {
-            file.ReadString (str);
+            file >> str;
             long id=atol(str);
 
             if (gPlaneBuilds[c].Id!=id) hprintf (0, "Id mismatch: %li vs %li!", gPlaneBuilds[c].Id, id);

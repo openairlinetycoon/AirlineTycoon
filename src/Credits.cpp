@@ -169,7 +169,7 @@ void CCredits::OnKeyDown(UINT key, UINT, UINT)
 //--------------------------------------------------------------------------------------------
 //BOOL CStdRaum::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) : AG:
 //--------------------------------------------------------------------------------------------
-BOOL CCredits::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) 
+BOOL CCredits::OnSetCursor(void* pWnd, UINT nHitTest, UINT message) 
 {
 	return (FrameWnd->OnSetCursor(pWnd, nHitTest, message));
 }

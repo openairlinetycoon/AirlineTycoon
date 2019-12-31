@@ -180,9 +180,13 @@ unsigned long SB_CBitmapCore::Line(long x1, long y1, long x2, long y2, class SB_
 
 void SB_CBitmapCore::SetClipRect(const RECT* pRect)
 {
-    const CRect& rect = *(const CRect*)pRect;
-    SDL_Rect clip = { rect.left, rect.top, rect.Width(), rect.Height() };
-    SDL_SetClipRect(lpDDSurface, &clip);
+    SetClipRect(*(const CRect*)pRect);
+}
+
+void SB_CBitmapCore::SetClipRect(const CRect& rect)
+{
+   SDL_Rect clip = { rect.left, rect.top, rect.Width(), rect.Height() };
+   SDL_SetClipRect(lpDDSurface, &clip);
 }
 
 class SB_CHardwarecolorHelper* SB_CBitmapCore::GetHardwarecolor(unsigned long color)

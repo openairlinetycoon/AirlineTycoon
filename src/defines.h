@@ -25,6 +25,81 @@ typedef   signed short SWORD;
 typedef unsigned char UBYTE;
 typedef   signed char SBYTE;
 
+class CPoint : public tagPOINT
+{
+public:
+   CPoint()
+   {
+      x = y = 0;
+   }
+
+   CPoint(const POINT& initPoint)
+   {
+      x = initPoint.x;
+      y = initPoint.y;
+   }
+
+   CPoint(LONG initX, LONG initY)
+   {
+      x = initX;
+      y = initY;
+   }
+
+   CPoint(LPARAM dwPoint)
+   {
+      x = LOWORD(dwPoint);
+      y = HIWORD(dwPoint);
+   }
+};
+
+class CRect : public tagRECT
+{
+public:
+   CRect()
+   {
+      left = top = right = bottom = 0;
+   }
+
+   CRect(const RECT& srcRect)
+   {
+      left   = srcRect.left;
+      top    = srcRect.top;
+      right  = srcRect.right;
+      bottom = srcRect.bottom;
+   }
+
+   CRect(LONG l, LONG t, LONG r, LONG b)
+   {
+      left   = l;
+      top    = t;
+      right  = r;
+      bottom = b;
+   }
+
+   LONG Width() const { return right - left; }
+   LONG Height() const { return bottom - top; }
+};
+
+inline CRect operator+(CRect r, const CPoint& p)
+{
+   return CRect(r.left + p.x, r.top + p.y, r.right + p.x, r.bottom + p.y);
+}
+
+inline CRect operator-(CRect r, const CPoint& p)
+{
+   return CRect(r.left - p.x, r.top - p.y, r.right - p.x, r.bottom - p.y);
+}
+
+inline bool operator==(const CPoint& lhs, const CPoint& rhs)
+{
+   return lhs.x == rhs.x && lhs.y == lhs.y;
+}
+
+inline bool operator!=(const CPoint& lhs, const CPoint& rhs)
+{
+   return !(lhs == rhs);
+}
+
 //Was wohl:
 #define FEMALE 0
 #define MALE   1

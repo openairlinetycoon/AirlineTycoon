@@ -216,7 +216,7 @@ void HallDiskMenu::OnRButtonDown(UINT nFlags, CPoint point)
 //--------------------------------------------------------------------------------------------
 //BOOL CStdRaum::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) : AG:
 //--------------------------------------------------------------------------------------------
-BOOL HallDiskMenu::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) 
+BOOL HallDiskMenu::OnSetCursor(void* pWnd, UINT nHitTest, UINT message) 
 {
 	return (FrameWnd->OnSetCursor(pWnd, nHitTest, message));
 }

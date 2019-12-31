@@ -144,7 +144,7 @@ void COutro::OnRButtonDown(UINT, CPoint)
 //--------------------------------------------------------------------------------------------
 //BOOL CStdRaum::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) : AG:
 //--------------------------------------------------------------------------------------------
-BOOL COutro::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) 
+BOOL COutro::OnSetCursor(void* pWnd, UINT nHitTest, UINT message) 
 {
 	return (FrameWnd->OnSetCursor(pWnd, nHitTest, message));
 }

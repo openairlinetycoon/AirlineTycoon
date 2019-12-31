@@ -2,10 +2,6 @@
 // TakeOff.h : main header file for the TAKEOFF application
 //============================================================================================
 
-#ifndef __AFXWIN_H__
-	#error include 'stdafx.h' before including this file for PCH
-#endif
-
 /*#include "resource.h"		// main symbols
 #include "mainfrm.h"
 #include "global.h"
@@ -16,7 +12,7 @@
 // See TakeOff.cpp for the implementation of this class
 //
 
-class CTakeOffApp : public CWinApp
+class CTakeOffApp
 {
 public:
 	CTakeOffApp();

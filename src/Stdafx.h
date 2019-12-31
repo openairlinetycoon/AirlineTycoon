@@ -3,9 +3,7 @@
 //      are changed infrequently
 //
 
-#define _WIN32_WINNT _WIN32_WINNT_WINXP
-
-#include <afxwin.h>
+#include <enet/enet.h>
 #include <math.h>
 #include <SDL.h>
 #include <SDL_ttf.h>
@@ -14,6 +12,9 @@
 
 #undef afx_msg
 #define afx_msg virtual
+
+#include "stdstring.h"
+typedef CStdStringA CString;
 
 #include "Defines.h"
 

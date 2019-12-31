@@ -3,9 +3,9 @@
 //============================================================================================
 #include "stdafx.h"
 #include <chrono>
+#include <filesystem>
 
 #ifdef _DEBUG
-#define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
@@ -1912,17 +1912,17 @@ TEAKFILE& operator >> (TEAKFILE &File, TEAKRAND &r)
 //--------------------------------------------------------------------------------------------
 long CountMatchingFilelist (CString DirAndWildcards)
 {
-   CFileFind finder;
+   int Pos = DirAndWildcards.Find('*');
+   CString Dir = DirAndWildcards.Left(Pos);
+   CString Ext = DirAndWildcards.Right(Pos);
 
    long n=0;
 
    //Liste holen:
-   BOOL bWorking = finder.FindFile(DirAndWildcards);
-   while (bWorking)
+   for (auto& file : std::filesystem::directory_iterator((std::string)Dir))
    {
-      bWorking = finder.FindNextFile();
-
-      if (!finder.IsDirectory())
+      std::filesystem::path path = file.path();
+      if (!file.is_directory() && path.extension() == (std::string)Ext)
          n++;
    }
 
@@ -1934,20 +1934,20 @@ long CountMatchingFilelist (CString DirAndWildcards)
 //--------------------------------------------------------------------------------------------
 void GetMatchingFilelist (CString DirAndWildcards, BUFFER<CString> &Array)
 {
-   CFileFind finder;
+   int Pos = DirAndWildcards.Find('*');
+   CString Dir = DirAndWildcards.Left(Pos);
+   CString Ext = DirAndWildcards.Right(Pos);
 
    Array.ReSize (0);
 
    //Liste holen:
-   BOOL bWorking = finder.FindFile(DirAndWildcards);
-   while (bWorking)
+   for (auto& file : std::filesystem::directory_iterator((std::string)Dir))
    {
-      bWorking = finder.FindNextFile();
-
-      if (!finder.IsDirectory())
+      std::filesystem::path path = file.path();
+      if (!file.is_directory() && path.extension() == (std::string)Ext)
       {
-         Array.ReSize (Array.AnzEntries()+1);
-         Array[Array.AnzEntries()-1] = finder.GetFileName();
+         Array.ReSize(Array.AnzEntries() + 1);
+         Array[Array.AnzEntries() - 1] = path.filename();
       }
    }
 
@@ -2034,8 +2034,8 @@ CString RemoveAccents (CString str)
 //--------------------------------------------------------------------------------------------
 // timeGetTime replacement:
 //--------------------------------------------------------------------------------------------
-DWORD   timeGetTime(void)
+/*DWORD   timeGetTime(void)
 {
    std::chrono::nanoseconds now = std::chrono::steady_clock::now().time_since_epoch();
    return std::chrono::duration_cast<std::chrono::milliseconds>(now).count();
-}
+}*/

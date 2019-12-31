@@ -16,7 +16,6 @@
 #include <stdio.h>
 
 #ifdef _DEBUG
-#define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
@@ -2451,7 +2450,7 @@ void NewGamePopup::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 //--------------------------------------------------------------------------------------------
 //BOOL CStdRaum::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) : AG:
 //--------------------------------------------------------------------------------------------
-BOOL NewGamePopup::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) 
+BOOL NewGamePopup::OnSetCursor(void* pWnd, UINT nHitTest, UINT message) 
 {
 	return (FrameWnd->OnSetCursor(pWnd, nHitTest, message));
 }

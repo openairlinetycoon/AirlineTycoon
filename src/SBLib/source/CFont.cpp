@@ -257,6 +257,18 @@ long SB_CFont::PreviewTextBlock(class SB_CBitmapCore * bmp, RECT * block, char* 
     }
 }
 
+long SB_CFont::DrawTextBlock(class SB_CBitmapCore* bmp, long l, long t, long r, long b, char* str, long length, long offset, bool hidden)
+{
+   RECT rect{ l, t, r, b };
+   return DrawTextBlock(bmp, &rect, str, length, offset, hidden);
+}
+
+long SB_CFont::PreviewTextBlock(class SB_CBitmapCore* bmp, long l, long t, long r, long b, char* str, long length, long offset, bool hidden)
+{
+   RECT rect{ l, t, r, b };
+   return PreviewTextBlock(bmp, &rect, str, length, offset, hidden);
+}
+
 long SB_CFont::GetWidthAt(char* str, long offset, char ch)
 {
     int i = 0;

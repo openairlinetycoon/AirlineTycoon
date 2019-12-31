@@ -11,6 +11,7 @@
 #include <sys/stat.h>
 #include <io.h>
 #include <stdio.h>
+#include <time.h>
 #include "Abend.h"
 #include "ArabAir.h"
 #include "Aufsicht.h"
@@ -55,7 +56,6 @@ extern SBNetwork gNetwork;
 CHLPool HLPool;
 
 #ifdef _DEBUG
-#define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
@@ -245,8 +245,10 @@ void protectedValue::SetScrambled( const int iValue )
 	mcharintScore.acValue[3] = pcharintVar->acValue[2] ^ mcharintScore.acValue[2];
 	mcharintScore.acValue[1] = pcharintVar->acValue[3] ^ mcharintScore.acValue[0];
 }
-
-int _tmain(void)
+#ifdef __cplusplus
+extern "C"
+#endif
+int main(int argc, char* argv[])
 {
    protectedValue v;
 
@@ -273,6 +275,7 @@ int _tmain(void)
 	delete [] pDecodeBack2;
 	delete [] pDecodeBack3;
 
+	theApp.InitInstance();
 	return 0;
 }
 
@@ -299,7 +302,7 @@ CTakeOffApp::CTakeOffApp()
        printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", TTF_GetError());
    }
 
-   _tmain();
+   //_tmain();
 
    /*srand(timeGetTime());
 
@@ -394,10 +397,10 @@ CTakeOffApp::~CTakeOffApp()
 #define LOADING_TEXT(text) \
 { \
    PrimaryBm.BlitFrom (TitleBitmap); \
-   FontBigWhite.DrawTextBlock(&PrimaryBm.PrimaryBm, CRect (2,450+8,640,480), text); \
+   FontBigWhite.DrawTextBlock(&PrimaryBm.PrimaryBm, 2,450+8,640,480, text); \
    FrameWnd->Invalidate(); MessagePump(); \
    PrimaryBm.BlitFrom (TitleBitmap); \
-   FontBigWhite.DrawTextBlock(&PrimaryBm.PrimaryBm, CRect (2,450+8,640,480), text); \
+   FontBigWhite.DrawTextBlock(&PrimaryBm.PrimaryBm, 2,450+8,640,480, text); \
    FrameWnd->Invalidate(); \
    MessagePump(); \
 }
@@ -419,13 +422,14 @@ BOOL CTakeOffApp::InitInstance()
    strcpy (localVersionString, VersionString);
 
    //Hdu.Disable();
+   time_t t = time(NULL);
    Hdu.HercPrintf (0, "Airline Tycoon Deluxe logfile");
    Hdu.HercPrintf (0, VersionString);
    Hdu.HercPrintf (0, "===============================================================================");
    Hdu.HercPrintf (0, "Copyright (C) 2002 Spellbound Software");
    Hdu.HercPrintf (0, "TakeOff.Cpp was compiled at %s at %s", __DATE__, __TIME__);
    Hdu.HercPrintf (0, "===============================================================================");
-   Hdu.HercPrintf (0, "logging starts %s", CTime::GetCurrentTime().Format( "%#c"));
+   Hdu.HercPrintf (0, "logging starts %s", asctime(localtime(&t)));
    gCDPath.Pump();
 
    gPhysicalCdRomBitlist=GetPhysicalCdRomBitlist ();
@@ -496,7 +500,7 @@ BOOL CTakeOffApp::InitInstance()
    bFirstClass = !DoesFileExist (CString(AppPath)+"data\\builds.csv") && !DoesFileExist (CString(AppPath)+"data\\relation.csv");
 
    //Schneller Mode zum Debuggen?
-   char *Argument = strtok (m_lpCmdLine, " ");
+   char *Argument = strtok (GetCommandLine(), " ");
    while (Argument)
    {
       gPhysicalCdRomBitlist.Pump();

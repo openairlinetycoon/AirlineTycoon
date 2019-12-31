@@ -5,6 +5,7 @@
 #include "cd_prot.h"
 #include "SecurityManager.h"
 #include "fillfile.h"
+#include <chrono>
 
 extern SLONG IconsPos[];  //Referenziert globe.cpp
 
@@ -768,8 +769,8 @@ void GetProtectionString (const CString &TabFilename, SLONG *pPageAndWord, CStri
 
    TEAKRAND r;
 
-   CTime t    = CTime::GetCurrentTime();
-   long  days = t.GetDay()+t.GetMonth()+t.GetYear();
+   auto t    = std::chrono::system_clock::now().time_since_epoch();
+   long  days = std::chrono::duration_cast<std::chrono::duration<long, std::ratio<86400>>>(t).count();
    r.SRandTime();
    Count = days%(Count-(Count/8))+r.Rand(Count/8);
 

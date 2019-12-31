@@ -90,7 +90,7 @@ CString GetMatchingNext (CString DirAndWildcards, CString CurrentFilename, long 
 long    CountMatchingFilelist (CString DirAndWildcards);
 CString CreateNumeratedFreeFilename (CString DirAndFilename);
 CString GetFilenameFromFullFilename (CString FullFilename);
-DWORD   timeGetTime(void);
+//DWORD   timeGetTime(void);
 
 //--------------------------------------------------------------------------------------------
 //Planer.Cpp:

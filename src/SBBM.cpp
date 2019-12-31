@@ -378,7 +378,7 @@ SLONG SBBM::PrintAt (const char *Str, SB_CFont &Font, SLONG Flags, const XY &p1,
    }
    else
    {
-      SLONG rc=Font.DrawTextBlock(pBitmap, CRect (p1.x, p1.y, p2.x, p2.y), (char*)Str);
+      SLONG rc=Font.DrawTextBlock(pBitmap, p1.x, p1.y, p2.x, p2.y, (char*)Str);
       Bench.TextTime.Stop();
       return (rc);
    }
@@ -387,7 +387,7 @@ SLONG SBBM::PrintAt (const char *Str, SB_CFont &Font, SLONG Flags, const XY &p1,
 SLONG SBBM::TryPrintAt (const char *Str, SB_CFont &Font, SLONG Flags, const XY &p1, const XY &p2)
 {
    Bench.TextTime.Start();
-   SLONG rc=Font.PreviewTextBlock(pBitmap, CRect (p1.x, p1.y, p2.x, p2.y), (char*)Str);
+   SLONG rc=Font.PreviewTextBlock(pBitmap, p1.x, p1.y, p2.x, p2.y, (char*)Str);
    Bench.TextTime.Stop();
    return (rc);
 }

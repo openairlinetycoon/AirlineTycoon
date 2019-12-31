@@ -170,7 +170,7 @@ void AskBrick::OnKeyDown(UINT nChar, UINT, UINT)
 //--------------------------------------------------------------------------------------------
 //BOOL CStdRaum::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) : AG:
 //--------------------------------------------------------------------------------------------
-BOOL AskBrick::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) 
+BOOL AskBrick::OnSetCursor(void* pWnd, UINT nHitTest, UINT message) 
 {
 	return (FrameWnd->OnSetCursor(pWnd, nHitTest, message));
 }

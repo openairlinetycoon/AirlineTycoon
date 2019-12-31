@@ -170,6 +170,7 @@ public:
     unsigned long Rectangle(const RECT*, class SB_CHardwarecolorHelper*);
     void InitClipRect(void);
     void SetClipRect(const RECT*);
+    void SetClipRect(const CRect&);
     void SetColorKey(unsigned long);
     virtual unsigned long Release(void);
     unsigned long BlitFast(class SB_CBitmapCore*, long, long, const RECT* = NULL, unsigned short = 0);
@@ -381,6 +382,8 @@ public:
     void DrawTextWithTabs(class SB_CBitmapCore*, long, long, char*, long = 0, bool = false);
     long DrawTextBlock(class SB_CBitmapCore*, struct tagRECT*, char*, long = 0, long = 0, bool = false);
     long PreviewTextBlock(class SB_CBitmapCore*, struct tagRECT*, char*, long = 0, long = 0, bool = false);
+    long DrawTextBlock(class SB_CBitmapCore*, long, long, long, long, char*, long = 0, long = 0, bool = false);
+    long PreviewTextBlock(class SB_CBitmapCore*, long, long, long, long, char*, long = 0, long = 0, bool = false);
     long GetWidthAt(char*, long, char);
     long GetWordLength(char*, long);
     long GetWidth(char*, long);

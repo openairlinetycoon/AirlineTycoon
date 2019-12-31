@@ -5,10 +5,11 @@
 #include "Editor.h"
 #include "glEditor.h"
 #include "atnet.h"
-#include <direct.h>
+#include <string>
+#include <fstream>
+#include <filesystem>
 
 #ifdef _DEBUG
-#define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
@@ -646,33 +647,33 @@ CEditor::CEditor(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "E
    //Tabellen exportieren:
    if (0)
    {
-      CString str;
+      std::string str;
 
       //Relations:
       {
-         CStdioFile file(FullFilename ("relation.csv", ExcelPath), CFile::modeCreate|CFile::modeWrite);
+         std::ofstream file(FullFilename ("relation.csv", ExcelPath), std::ios_base::trunc|std::ios_base::out);
 
          str="Id;From;To;Offset2dX;Offset2dY;Offset3dX;Offset3dY;Note1;Note2;Note3;Noise";
-         file.WriteString (str+"\n");
+         file << str << std::endl;
 
          for (long c=0; c<sizeof(gPlanePartRelations)/sizeof(gPlanePartRelations[0]); c++)
          {
             str = gPlanePartRelations[c].ToString ();
-            file.WriteString (str+"\n");
+            file << str << std::endl;
          }
       }
 
       //Planebuilds:
       {
-         CStdioFile file(FullFilename ("builds.csv", ExcelPath), CFile::modeCreate|CFile::modeWrite);
+         std::ofstream file(FullFilename ("builds.csv", ExcelPath), std::ios_base::trunc | std::ios_base::out);
 
          str="Id;ShortName;Cost;Weight;Power;Noise;Wartung;Passagiere;Verbrauch";
-         file.WriteString (str+"\n");
+         file << str << std::endl;
 
          for (long c=0; c<sizeof(gPlaneBuilds)/sizeof(gPlaneBuilds[0]); c++)
          {
             str = gPlaneBuilds[c].ToString ();
-            file.WriteString (str+"\n");
+            file << str << std::endl;
          }
       }
    }
@@ -680,18 +681,18 @@ CEditor::CEditor(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "E
    //Tabellen importieren:
    if (1)
    {
-      CString str;
+      std::string str;
 
       //Relations:
       {
-         CStdioFile file(FullFilename ("relation.csv", ExcelPath), CFile::modeRead);
+         std::ifstream file(FullFilename ("relation.csv", ExcelPath), std::ios_base::in);
 
-         file.ReadString (str);
+         file >> str;
 
          for (long c=0; c<sizeof(gPlanePartRelations)/sizeof(gPlanePartRelations[0]); c++)
          {
-            file.ReadString (str);
-            long id=atol(str);
+            file >> str;
+            long id=atol(str.c_str());
 
             if (gPlanePartRelations[c].Id!=id) hprintf (0, "Id mismatch: %li vs %li!", gPlanePartRelations[c].Id, id);
             gPlanePartRelations[c].FromString (str);
@@ -700,14 +701,14 @@ CEditor::CEditor(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "E
 
       //Planebuilds:
       {
-         CStdioFile file(FullFilename ("builds.csv", ExcelPath), CFile::modeRead);
+         std::ifstream file(FullFilename ("builds.csv", ExcelPath), std::ios_base::in);
 
-         file.ReadString (str);
+         file >> str;
 
          for (long c=0; c<sizeof(gPlaneBuilds)/sizeof(gPlaneBuilds[0]); c++)
          {
-            file.ReadString (str);
-            long id=atol(str);
+            file >> str;
+            long id = atol(str.c_str());
 
             if (gPlaneBuilds[c].Id!=id) hprintf (0, "Id mismatch: %li vs %li!", gPlaneBuilds[c].Id, id);
             gPlaneBuilds[c].FromString (str);
@@ -729,7 +730,9 @@ CEditor::CEditor(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "E
 
    Plane.Name = StandardTexte.GetS (TOKEN_MISC, 8210);
 
-   _mkdir (AppPath+MyPlanePath.Left(MyPlanePath.GetLength()-3));
+   std::filesystem::path App((std::string)AppPath);
+   std::filesystem::path MyPlane((std::string)MyPlanePath);
+   std::filesystem::create_directory (App / MyPlane.parent_path() / MyPlane.stem());
    PlaneFilename = FullFilename ("data.plane", MyPlanePath);
    if (DoesFileExist (PlaneFilename)) Plane.Load(PlaneFilename);
 

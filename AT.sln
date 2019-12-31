@@ -21,6 +21,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "timidity", "libs\SDL_mixer\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "native_midi", "libs\SDL_mixer\VisualC\native_midi\native_midi.vcxproj", "{EBDA67CA-4A23-4F22-BFBC-B8DBE0580D4F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SDL2main", "libs\SDL\VisualC\SDLmain\SDLmain.vcxproj", "{DA956FD3-E142-46F2-9DD5-C78BEBB56B7A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -135,6 +137,18 @@ Global
 		{EBDA67CA-4A23-4F22-BFBC-B8DBE0580D4F}.Template|x64.Build.0 = Release|x64
 		{EBDA67CA-4A23-4F22-BFBC-B8DBE0580D4F}.Template|x86.ActiveCfg = Release|Win32
 		{EBDA67CA-4A23-4F22-BFBC-B8DBE0580D4F}.Template|x86.Build.0 = Release|Win32
+		{DA956FD3-E142-46F2-9DD5-C78BEBB56B7A}.Debug|x64.ActiveCfg = Debug|x64
+		{DA956FD3-E142-46F2-9DD5-C78BEBB56B7A}.Debug|x64.Build.0 = Debug|x64
+		{DA956FD3-E142-46F2-9DD5-C78BEBB56B7A}.Debug|x86.ActiveCfg = Debug|Win32
+		{DA956FD3-E142-46F2-9DD5-C78BEBB56B7A}.Debug|x86.Build.0 = Debug|Win32
+		{DA956FD3-E142-46F2-9DD5-C78BEBB56B7A}.Release|x64.ActiveCfg = Release|x64
+		{DA956FD3-E142-46F2-9DD5-C78BEBB56B7A}.Release|x64.Build.0 = Release|x64
+		{DA956FD3-E142-46F2-9DD5-C78BEBB56B7A}.Release|x86.ActiveCfg = Release|Win32
+		{DA956FD3-E142-46F2-9DD5-C78BEBB56B7A}.Release|x86.Build.0 = Release|Win32
+		{DA956FD3-E142-46F2-9DD5-C78BEBB56B7A}.Template|x64.ActiveCfg = Release|x64
+		{DA956FD3-E142-46F2-9DD5-C78BEBB56B7A}.Template|x64.Build.0 = Release|x64
+		{DA956FD3-E142-46F2-9DD5-C78BEBB56B7A}.Template|x86.ActiveCfg = Release|Win32
+		{DA956FD3-E142-46F2-9DD5-C78BEBB56B7A}.Template|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

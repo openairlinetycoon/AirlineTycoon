@@ -1415,14 +1415,14 @@ void CPlaner::DoPostPaintPollingStuff (XY FlightPlanPos)
             //if (MinPass>PlaneTypes[qPlayer.Planes[ActivePlane].TypeId].Passagiere)
             if (MinPass>qPlayer.Planes[ActivePlane].ptPassagiere)
             {
-               RemapColor (RoomBm.pBitmap, &HighRect, ColorOfFontBlack, ColorOfFontGrey);
-               RemapColor (RoomBm.pBitmap, &HighRect, ColorOfFontRed, ColorOfFontGrey);
+               RemapColor (RoomBm.pBitmap, HighRect, ColorOfFontBlack, ColorOfFontGrey);
+               RemapColor (RoomBm.pBitmap, HighRect, ColorOfFontRed, ColorOfFontGrey);
             }
             //else if (Cities.CalcDistance (CheckVonCityId, CheckNachCityId)>PlaneTypes[qPlayer.Planes[ActivePlane].TypeId].Reichweite*1000)
             else if (Cities.CalcDistance (CheckVonCityId, CheckNachCityId)>qPlayer.Planes[ActivePlane].ptReichweite*1000)
             {
-               RemapColor (RoomBm.pBitmap, &HighRect, ColorOfFontBlack, ColorOfFontGrey);
-               RemapColor (RoomBm.pBitmap, &HighRect, ColorOfFontRed, ColorOfFontGrey);
+               RemapColor (RoomBm.pBitmap, HighRect, ColorOfFontBlack, ColorOfFontGrey);
+               RemapColor (RoomBm.pBitmap, HighRect, ColorOfFontRed, ColorOfFontGrey);
             }
             else
             {
@@ -1433,8 +1433,8 @@ void CPlaner::DoPostPaintPollingStuff (XY FlightPlanPos)
 
                if (Dauer>=24)
                {
-                  RemapColor (RoomBm.pBitmap, &HighRect, ColorOfFontBlack, ColorOfFontGrey);
-                  RemapColor (RoomBm.pBitmap, &HighRect, ColorOfFontRed, ColorOfFontGrey);
+                  RemapColor (RoomBm.pBitmap, HighRect, ColorOfFontBlack, ColorOfFontGrey);
+                  RemapColor (RoomBm.pBitmap, HighRect, ColorOfFontRed, ColorOfFontGrey);
                }
             }
          }

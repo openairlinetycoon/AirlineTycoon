@@ -17,7 +17,6 @@
 extern SBNetwork gNetwork;
 
 #ifdef _DEBUG
-#define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
@@ -726,7 +725,7 @@ void GameFrame::OnPaint()
 //--------------------------------------------------------------------------------------------
 //GameFrame::OnEraseBkgnd(CDC* pDC):
 //--------------------------------------------------------------------------------------------
-BOOL GameFrame::OnEraseBkgnd(CDC* pDC) 
+BOOL GameFrame::OnEraseBkgnd(void* pDC) 
 {
    ReferTo (pDC);
    return FALSE;
@@ -804,7 +803,7 @@ void GameFrame::OnActivateApp(BOOL bActive, HTASK hTask)
 //--------------------------------------------------------------------------------------------
 //BOOL GameFrame::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) :
 //--------------------------------------------------------------------------------------------
-BOOL GameFrame::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) 
+BOOL GameFrame::OnSetCursor(void* pWnd, UINT nHitTest, UINT message)
 {
    if (!gUseWindowsMouse)
    {
@@ -848,7 +847,7 @@ void GameFrame::OnMouseMove(UINT nFlags, CPoint point)
       if (bActive && pCursor && bNoQuickMouse==FALSE) pCursor->MoveImage(gMousePosition.x-MouseCursorOffset.x, gMousePosition.y-MouseCursorOffset.y);
 }
 
-void GameFrame::OnCaptureChanged (CWnd*)
+void GameFrame::OnCaptureChanged (void*)
 {
 }
 

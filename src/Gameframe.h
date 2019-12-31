@@ -42,14 +42,14 @@ public:
 	// Generated message map functions
 	//{{AFX_MSG(GameFrame)
 	afx_msg void OnPaint();
-	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+	afx_msg BOOL OnEraseBkgnd(void* pDC);
 #if _MSC_VER >= 1400
 	afx_msg void OnActivateApp(BOOL bActive, DWORD hTask);
 #else
 	afx_msg void OnActivateApp(BOOL bActive, HTASK hTask);
 #endif
-	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
-   afx_msg void OnCaptureChanged(CWnd* pWnd);
+   afx_msg BOOL OnSetCursor(void* pWnd, UINT nHitTest, UINT message);
+   afx_msg void OnCaptureChanged(void* pWnd);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);

@@ -30,7 +30,6 @@
 #include "sblib\include\network.h"
 
 #ifdef _DEBUG
-#define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
@@ -4008,7 +4007,7 @@ void CStdRaum::RepaintTip (void)
 //--------------------------------------------------------------------------------------------
 //Konvertiert die Koordinaten auf einheitlich 640x440, FALSE wenn außerhalb
 //--------------------------------------------------------------------------------------------
-BOOL CStdRaum::ConvertMousePosition (const CPoint &WindowsBased, XY *RoomBased)
+BOOL CStdRaum::ConvertMousePosition (const XY &WindowsBased, XY *RoomBased)
 {
    //Koordinaten für kleine Fenster konvertieren:
    *RoomBased = WindowsBased + CPoint(-WinP1.x, -WinP1.y);
@@ -8123,7 +8122,7 @@ void CStdRaum::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 //--------------------------------------------------------------------------------------------
 //BOOL CStdRaum::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) : AG:
 //--------------------------------------------------------------------------------------------
-BOOL CStdRaum::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) 
+BOOL CStdRaum::OnSetCursor(void* pWnd, UINT nHitTest, UINT message) 
 {
 	return (FrameWnd->OnSetCursor(pWnd, nHitTest, message));
 }

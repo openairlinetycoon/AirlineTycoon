@@ -230,7 +230,7 @@ void CIntro::OnRButtonDown(UINT, CPoint)
 //--------------------------------------------------------------------------------------------
 //BOOL CStdRaum::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) : AG:
 //--------------------------------------------------------------------------------------------
-BOOL CIntro::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) 
+BOOL CIntro::OnSetCursor(void* pWnd, UINT nHitTest, UINT message) 
 {
 	return (FrameWnd->OnSetCursor(pWnd, nHitTest, message));
 }

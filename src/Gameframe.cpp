@@ -2106,15 +2106,8 @@ void GameFrame::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
    }
    
-   if (nChar==VK_F4 && (nFlags&(1<<13)))
-   {
-      Sim.bNetwork=FALSE;
-      bLeaveGameLoop=TRUE;
-   }
-	else
-   {
-      RePostMessage (CPoint(0,0));
-   }
+   RePostMessage (CPoint(0,0));
+
 	if (nChar==VK_PAUSE && (gDisablePauseKey==FALSE || Sim.bPause) && (Sim.Gamestate&15)==GAMESTATE_PLAYING)
    {
       if (Sim.bNetwork) Sim.SendSimpleMessage (ATNET_PAUSE, NULL);
@@ -2151,8 +2144,7 @@ void GameFrame::OnLButtonDown(UINT nFlags, CPoint point)
 void GameFrame::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
    //Alles blockieren, wenn im Optionsmenü:
-   if (nOptionsOpen && Sim.localPlayer<Sim.Players.Players.AnzEntries() && 
-       Sim.Players.Players[Sim.localPlayer].GetRoom()!=ROOM_OPTIONS) return;
+   if (nOptionsOpen && Sim.bNetwork && Sim.localPlayer < Sim.Players.Players.AnzEntries() && Sim.Players.Players[Sim.localPlayer].GetRoom() != ROOM_OPTIONS && Sim.Players.Players[Sim.localPlayer].GetRoom() != 0) return;
 
    RePostMessage (point);
    ReferTo (nFlags, point);
@@ -2161,16 +2153,15 @@ void GameFrame::OnLButtonDblClk(UINT nFlags, CPoint point)
 void GameFrame::OnLButtonUp(UINT nFlags, CPoint point)
 {
    //Alles blockieren, wenn im Optionsmenü:
-   if (nOptionsOpen && Sim.localPlayer<Sim.Players.Players.AnzEntries() && 
-       Sim.Players.Players[Sim.localPlayer].GetRoom()!=ROOM_OPTIONS) return;
+   if (nOptionsOpen && Sim.bNetwork && Sim.localPlayer < Sim.Players.Players.AnzEntries() && Sim.Players.Players[Sim.localPlayer].GetRoom() != ROOM_OPTIONS && Sim.Players.Players[Sim.localPlayer].GetRoom() != 0) return;
 
+   RePostMessage(point);
    ReferTo (nFlags, point);
 }
 void GameFrame::OnRButtonDown(UINT nFlags, CPoint point)
 {
    //Alles blockieren, wenn im Optionsmenü:
-   if (nOptionsOpen && Sim.localPlayer<Sim.Players.Players.AnzEntries() && 
-       Sim.Players.Players[Sim.localPlayer].GetRoom()!=ROOM_OPTIONS) return;
+   if (nOptionsOpen && Sim.bNetwork && Sim.localPlayer < Sim.Players.Players.AnzEntries() && Sim.Players.Players[Sim.localPlayer].GetRoom() != ROOM_OPTIONS && Sim.Players.Players[Sim.localPlayer].GetRoom() != 0) return;
 
    RePostMessage (point);
    ReferTo (nFlags, point);
@@ -2178,9 +2169,9 @@ void GameFrame::OnRButtonDown(UINT nFlags, CPoint point)
 void GameFrame::OnRButtonUp(UINT nFlags, CPoint point) 
 {
    //Alles blockieren, wenn im Optionsmenü:
-   if (nOptionsOpen && Sim.localPlayer<Sim.Players.Players.AnzEntries() && 
-       Sim.Players.Players[Sim.localPlayer].GetRoom()!=ROOM_OPTIONS) return;
+   if (nOptionsOpen && Sim.bNetwork && Sim.localPlayer < Sim.Players.Players.AnzEntries() && Sim.Players.Players[Sim.localPlayer].GetRoom() != ROOM_OPTIONS && Sim.Players.Players[Sim.localPlayer].GetRoom() != 0) return;
 
+   RePostMessage(point);
    ReferTo (nFlags, point);
 }
 

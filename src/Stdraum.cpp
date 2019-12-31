@@ -436,8 +436,12 @@ void CStdRaum::ProcessEvent(const SDL_Event& event)
    break;
    case SDL_KEYDOWN:
    {
-      OnKeyDown(toupper(event.key.keysym.sym), event.key.repeat, 0);
-      OnChar(toupper(event.key.keysym.sym), event.key.repeat, 0);
+      if (!(event.key.keysym.sym & SDLK_SCANCODE_MASK))
+      {
+         UINT nFlags = event.key.keysym.scancode | ((SDL_GetModState() & KMOD_LALT) << 5);
+         OnKeyDown(toupper(event.key.keysym.sym), event.key.repeat, nFlags);
+         OnChar(toupper(event.key.keysym.sym), event.key.repeat, nFlags);
+      }
    }
    break;
    case SDL_MOUSEBUTTONDOWN:

@@ -353,8 +353,12 @@ void GameFrame::ProcessEvent(const SDL_Event& event)
    break;
    case SDL_KEYDOWN:
    {
-      FrameWnd->OnKeyDown(toupper(event.key.keysym.sym), event.key.repeat, 0);
-      FrameWnd->OnChar(toupper(event.key.keysym.sym), event.key.repeat, 0);
+      if (!(event.key.keysym.sym & SDLK_SCANCODE_MASK))
+      {
+         UINT nFlags = event.key.keysym.scancode | ((SDL_GetModState() & KMOD_LALT) << 5);
+         FrameWnd->OnKeyDown(toupper(event.key.keysym.sym), event.key.repeat, nFlags);
+         FrameWnd->OnChar(toupper(event.key.keysym.sym), event.key.repeat, nFlags);
+      }
    }
    break;
    case SDL_MOUSEBUTTONDOWN:

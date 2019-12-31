@@ -2230,9 +2230,6 @@ void GameFrame::OnChar(UINT nChar, UINT, UINT)
             break;
       }
    }
-
-   //An alle direkten Sub-Windows schicken:
-   RePostMessage (CPoint(0,0));
 }
 
 //--------------------------------------------------------------------------------------------

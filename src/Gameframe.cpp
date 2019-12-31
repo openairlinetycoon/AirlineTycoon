@@ -357,7 +357,8 @@ void GameFrame::ProcessEvent(const SDL_Event& event)
       {
          UINT nFlags = event.key.keysym.scancode | ((SDL_GetModState() & KMOD_LALT) << 5);
          FrameWnd->OnKeyDown(toupper(event.key.keysym.sym), event.key.repeat, nFlags);
-         FrameWnd->OnChar(toupper(event.key.keysym.sym), event.key.repeat, nFlags);
+         FrameWnd->OnChar(SDL_GetModState() & KMOD_SHIFT ? toupper(event.key.keysym.sym) : event.key.keysym.sym,
+            event.key.repeat, nFlags);
       }
    }
    break;

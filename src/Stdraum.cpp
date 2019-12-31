@@ -440,7 +440,8 @@ void CStdRaum::ProcessEvent(const SDL_Event& event)
       {
          UINT nFlags = event.key.keysym.scancode | ((SDL_GetModState() & KMOD_LALT) << 5);
          OnKeyDown(toupper(event.key.keysym.sym), event.key.repeat, nFlags);
-         OnChar(toupper(event.key.keysym.sym), event.key.repeat, nFlags);
+         OnChar(SDL_GetModState() & KMOD_SHIFT ? toupper(event.key.keysym.sym) : event.key.keysym.sym,
+            event.key.repeat, nFlags);
       }
    }
    break;

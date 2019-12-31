@@ -22,15 +22,15 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <io.h>
-#include <dinput.h>
-#include <dsound.h>
+//#include <dinput.h>
+//#include <dsound.h>
 #include "Checkup.h"
 
 void GetDXVersion(LPDWORD pdwDXVersion, LPDWORD pdwDXPlatform);
 
 void test (void)
 {
-   CSystemCheckup sc (CHECKUP_ALL | CHECKUP_WRITE, "f:\\setup.exe");
+   //CSystemCheckup sc (CHECKUP_ALL | CHECKUP_WRITE, "f:\\setup.exe");
 }
 
 //--------------------------------------------------------------------------------------------
@@ -217,7 +217,7 @@ bool CRegistryAccess::ReadRegistryKeyEx (double *Double, CString EntryName)
    delete [] Temp;
    return (rc);
 }
-
+#if 0
 //--------------------------------------------------------------------------------------------
 // CSystemCheckup::
 //--------------------------------------------------------------------------------------------
@@ -856,3 +856,4 @@ void GetDXVersion(LPDWORD pdwDXVersion, LPDWORD pdwDXPlatform)
 
     return;
 }
+#endif

@@ -19,7 +19,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 extern SB_CColorFX ColorFX;
-extern LPDIRECTDRAWSURFACE FrontSurf;
+//extern LPDIRECTDRAWSURFACE FrontSurf;
 extern XY  gScrollOffsetA, gScrollOffsetB;
 
 //Die statischen Daten dafür initialisieren:

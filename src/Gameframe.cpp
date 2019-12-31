@@ -115,7 +115,7 @@ void MessagePump (void)
       FrameWnd->ProcessEvent(FrameWnd->Mess);
 }
 
-LPDIRECTDRAWSURFACE FrontSurf=NULL;
+//LPDIRECTDRAWSURFACE FrontSurf=NULL;
 
 /*void Copier (void *)
 {
@@ -765,8 +765,8 @@ void GameFrame::OnActivateApp(BOOL bActive, HTASK hTask)
             //Großalarm, wegen Fullscreen: Zahlreiche Bitmaps müssen restauriert werden:
             //PrimaryBm.PrimaryBm.GetPrimarySurface()->Restore();
 
-            if (PrimaryBm.PrimaryBm.GetLastPage())
-               PrimaryBm.PrimaryBm.GetLastPage()->Restore();
+            //if (PrimaryBm.PrimaryBm.GetLastPage())
+            //   PrimaryBm.PrimaryBm.GetLastPage()->Restore();
 
             //Und die Bricks:
             if (Sim.Jahreszeit!=-1)

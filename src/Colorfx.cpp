@@ -504,17 +504,17 @@ void SB_CColorFX::BlitWhiteTrans (BOOL DoMessagePump, SB_CBitmapCore *SrcBitmap,
    IsPaintingTextBubble = TRUE;
    gRoomJustLeft        = FALSE;
 
-   DDSURFACEDESC DDSurfaceDesc;
-   BOOL          bVgaRam;
+   //DDSURFACEDESC DDSurfaceDesc;
+   BOOL          bVgaRam = FALSE;
 
-   ZeroMemory (&DDSurfaceDesc, sizeof (DDSurfaceDesc));
+   //ZeroMemory (&DDSurfaceDesc, sizeof (DDSurfaceDesc));
 
-   DDSurfaceDesc.dwSize  = sizeof (DDSurfaceDesc);
-   DDSurfaceDesc.dwFlags = DDSD_CAPS;
+   //DDSurfaceDesc.dwSize  = sizeof (DDSurfaceDesc);
+   //DDSurfaceDesc.dwFlags = DDSD_CAPS;
 
    //TgtBitmap->GetSurface()->GetSurfaceDesc (&DDSurfaceDesc);
 
-   bVgaRam = TRUE; //((DDSurfaceDesc.ddsCaps.dwCaps & DDSCAPS_VIDEOMEMORY)!=0);
+   //bVgaRam = ((DDSurfaceDesc.ddsCaps.dwCaps & DDSCAPS_VIDEOMEMORY)!=0);
 
    if (Grade!=-1)
    {

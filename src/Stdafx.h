@@ -6,7 +6,6 @@
 #define _WIN32_WINNT _WIN32_WINNT_WINXP
 
 #include <afxwin.h>
-#include <ddraw.h>
 #include <math.h>
 #include <mmsystem.h>
 #include <SDL.h>

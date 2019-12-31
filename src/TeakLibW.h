@@ -596,14 +596,12 @@ class PALETTE
 {
 public:
     PALETTE(void);
-    PALETTE(IDirectDraw*, CString const&);
 
     void Blend(long, long) const;
     void BlendIn(void) const;
     void BlendOut(void) const;
     void RefreshDD(int) const;
     void RefreshDD(long, int) const;
-    void RefreshPal(IDirectDraw*, CString const&);
     void RefreshPalFromLbm(CString const&);
     void RefreshPalFromPcx(CString const&);
     void ConvertToBlackWhite(void);

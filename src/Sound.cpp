@@ -478,6 +478,7 @@ void NextMidi (void)
 //--------------------------------------------------------------------------------------------
 BOOL IsMidiAvailable (void)
 {
+#if 0
    BUFFER<char> str(500);
 
    //CDebugEntryExit ("IsMidiAvailable");
@@ -488,6 +489,9 @@ BOOL IsMidiAvailable (void)
 
    if (atoi(str)>0) return (TRUE);
                else return (FALSE);
+#else
+   return (TRUE);
+#endif
 }
 
 //--------------------------------------------------------------------------------------------
@@ -797,7 +801,7 @@ void CAmbienteManager::Resume (void)
             AmbientFx[c].Soundeffekt.pFX->Resume();
          }
 }
-
+#if 0
 void CloseMixer(HMIXER* phMixer)
 {
 	if (*phMixer)
@@ -806,7 +810,7 @@ void CloseMixer(HMIXER* phMixer)
 		*phMixer = 0;
 	}
 }
-
+#endif
 #define SND_TYPE unsigned char
 
 SND_TYPE Tokens[] = { 64, 135, 192, 2 , 254, 100 };

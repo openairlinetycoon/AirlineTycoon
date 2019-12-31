@@ -5,7 +5,6 @@
 #include "Editor.h"
 #include "glEditor.h"
 #include "atnet.h"
-#include <dsound.h>
 #include <direct.h>
 
 #ifdef _DEBUG

@@ -5,7 +5,6 @@
 #include "ArabAir.h"
 #include "glarab.h"
 #include "atnet.h"
-#include <dsound.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

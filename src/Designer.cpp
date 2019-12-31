@@ -5,7 +5,6 @@
 #include "Designer.h"
 #include "glDesigner.h"
 #include "atnet.h"
-#include <dsound.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

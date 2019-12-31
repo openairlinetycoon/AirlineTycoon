@@ -7,7 +7,7 @@
 
 #include <afxwin.h>
 #include <math.h>
-#include <mmsystem.h>
+#include <timeapi.h>
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>

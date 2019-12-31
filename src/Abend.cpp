@@ -6,7 +6,6 @@
 #include "stdafx.h"
 #include "glabend.h"
 #include "Abend.h"
-#include <dsound.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

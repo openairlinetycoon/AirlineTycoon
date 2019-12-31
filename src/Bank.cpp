@@ -248,9 +248,9 @@ void Bank::OnPaint()
 
       CFont *pOldFont = dc.SelectObject(&f);
 
-      int rc = WideCharToMultiByte (CP_ACP, 0, L"ÿþ", -1, buf, 256, NULL, NULL);
+      int rc = WideCharToMultiByte (CP_ACP, 0, L"ÿ?, -1, buf, 256, NULL, NULL);
       TextOut(dc, 100,100, buf, 2);
-      TextOutW(dc, 100,130, L"ÿþÿþ", 2);
+      TextOutW(dc, 100,130, L"ÿ??, 2);
 
       int rd = WideCharToMultiByte (CP_ACP, 0, inbuf, -1, buf, 256, NULL, NULL);
       TextOut(dc, 100,160, buf, 35);
@@ -394,7 +394,7 @@ void Bank::OnRButtonDown(UINT nFlags, CPoint point)
 {
    DefaultOnRButtonDown ();
 
-   //Außerhalb geklickt? Dann Default-Handler!
+   //Auserhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y)
    {
       return;

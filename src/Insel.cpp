@@ -576,7 +576,6 @@ void CInsel::OnRButtonDown(UINT nFlags, CPoint point)
    //Auﬂerhalb geklickt? Dann Default-Handler!
    if (point.x<WinP1.x || point.y<WinP1.y || point.x>WinP2.x || point.y>WinP2.y)
    {
-      //CWnd::OnRButtonDown(nFlags, point);
       return;
    }
    else

@@ -2,6 +2,7 @@
 // Misc.cpp : Diverse Sachen
 //============================================================================================
 #include "stdafx.h"
+#include <chrono>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -2028,4 +2029,13 @@ CString RemoveAccents (CString str)
    }
 
    return (str);
+}
+
+//--------------------------------------------------------------------------------------------
+// timeGetTime replacement:
+//--------------------------------------------------------------------------------------------
+DWORD   timeGetTime(void)
+{
+   std::chrono::nanoseconds now = std::chrono::steady_clock::now().time_since_epoch();
+   return std::chrono::duration_cast<std::chrono::milliseconds>(now).count();
 }

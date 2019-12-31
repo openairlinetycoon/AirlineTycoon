@@ -1177,7 +1177,7 @@ void AirportView::OnPaint()
             if (LastAnzPeopleOnScreen>AnzPeopleOnScreen) LastAnzPeopleOnScreen--;
          }
 
-         AmbientManager.SetVolume (AMBIENT_PEOPLE,    LastAnzPeopleOnScreen*2+5);
+         AmbientManager.SetVolume (AMBIENT_PEOPLE,    LastAnzPeopleOnScreen*2);
          AmbientManager.SetVolume (AMBIENT_JET_FIELD, 150-(Airport.RightEnd-(ViewPos.x+320))/6);
 
          //Draw intuitive Walknet:

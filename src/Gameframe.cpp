@@ -323,7 +323,13 @@ void GameFrame::ProcessEvent(const SDL_Event& event)
    {
       if (event.window.windowID == SDL_GetWindowID(FrameWnd->m_hWnd))
       {
-         if (event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED)
+         if (event.window.event == SDL_WINDOWEVENT_CLOSE)
+         {
+            SDL_Quit();
+            Sim.Gamestate = GAMESTATE_QUIT;
+            bLeaveGameLoop = TRUE;
+         }
+         else if (event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED)
          {
             FrameWnd->OnActivateApp(TRUE, 0);
             FrameWnd->OnSetCursor(NULL, HTCLIENT, 0);

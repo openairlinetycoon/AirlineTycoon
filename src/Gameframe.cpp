@@ -378,6 +378,7 @@ void GameFrame::ProcessEvent(const SDL_Event& event)
    {
       FrameWnd->OnKeyUp(event.key.keysym.sym, event.key.repeat, 0);
    }
+   break;
    case SDL_MOUSEBUTTONUP:
    {
       if (event.button.button == SDL_BUTTON_LEFT)

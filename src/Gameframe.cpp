@@ -324,9 +324,15 @@ void GameFrame::ProcessEvent(const SDL_Event& event)
       if (event.window.windowID == SDL_GetWindowID(FrameWnd->m_hWnd))
       {
          if (event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED)
+         {
             FrameWnd->OnActivateApp(TRUE, 0);
+            FrameWnd->OnSetCursor(NULL, HTCLIENT, 0);
+         }
          else if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST)
+         {
             FrameWnd->OnActivateApp(FALSE, 0);
+            FrameWnd->OnSetCursor(NULL, HTNOWHERE, 0);
+         }
          else if (event.window.event == SDL_WINDOWEVENT_ENTER)
             FrameWnd->OnSetCursor(NULL, HTCLIENT, 0);
          else if (event.window.event == SDL_WINDOWEVENT_LEAVE)
@@ -793,18 +799,16 @@ BOOL GameFrame::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
       //Keinen Cursor anzeigen:
       if (nHitTest == HTCLIENT && bActive)
       {
-         //SetCursor(NULL);
          //if (!bCursorCaptured) SetCapture();
          bCursorCaptured = TRUE;
-         //if (pCursor) pCursor->Show(true);
+         if (pCursor) pCursor->Show(true);
       }
       else
       {
-         //SetCursor(LoadCursor(NULL, IDC_ARROW));
          //if (bCursorCaptured) ReleaseCapture();
          bCursorCaptured = FALSE;
 		
-		   //if (pCursor) pCursor->Show(false);
+		   if (pCursor) pCursor->Show(false);
       }
    }
 

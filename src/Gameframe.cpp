@@ -158,7 +158,7 @@ GameFrame::GameFrame()
    pGLibPause = NULL;
    PauseFade  = 0;
 
-   if (lpDD==NULL) { MB(); Sleep(100); MB(); Sleep(100); MB(); }
+   if (lpDD==NULL) { MB(); SDL_Delay(100); MB(); SDL_Delay(100); MB(); }
 
    if (DetectCurrentDisplayResolution().x<=640 || DetectCurrentDisplayResolution().y<=480)
       bFullscreen=TRUE;
@@ -166,7 +166,7 @@ GameFrame::GameFrame()
    SDL_Window* h = SDL_CreateWindow("Airline Tycoon", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, rect.Width(), rect.Height(), bFullscreen ? SDL_WINDOW_FULLSCREEN : 0);
    if (!h)
    {
-      ::MessageBox(NULL, "CreateWindow failed", "ERROR", MB_OK);
+      MyMessageBox("ERROR", "CreateWindow failed");
       return;
    }
    SDL_ShowWindow(h);
@@ -208,7 +208,7 @@ GameFrame::GameFrame()
    gCursorNoBm.FillWith (0);
 
    CRect cliprect (2,2,638, 478);
-   if (bFullscreen) ClipCursor (&cliprect);
+   //if (bFullscreen) ClipCursor (&cliprect);
 
    if (!gUseWindowsMouse)
       pCursor->SetImage (gCursorBm.pBitmap);
@@ -233,7 +233,7 @@ GameFrame::GameFrame()
 GameFrame::~GameFrame()
 {
    gpSSE->SetMusicCallback(NULL);
-   ClipCursor (NULL);
+   //ClipCursor (NULL);
 
    if (pCursor)
    {
@@ -352,13 +352,10 @@ void GameFrame::ProcessEvent(const SDL_Event& event)
    break;
    case SDL_KEYDOWN:
    {
-      if (!(event.key.keysym.sym & SDLK_SCANCODE_MASK))
-      {
-         UINT nFlags = event.key.keysym.scancode | ((SDL_GetModState() & KMOD_LALT) << 5);
-         FrameWnd->OnKeyDown(toupper(event.key.keysym.sym), event.key.repeat, nFlags);
-         FrameWnd->OnChar(SDL_GetModState() & KMOD_SHIFT ? toupper(event.key.keysym.sym) : event.key.keysym.sym,
-            event.key.repeat, nFlags);
-      }
+      UINT nFlags = event.key.keysym.scancode | ((SDL_GetModState() & KMOD_LALT) << 5);
+      FrameWnd->OnKeyDown(toupper(event.key.keysym.sym), event.key.repeat, nFlags);
+      FrameWnd->OnChar(SDL_GetModState() & KMOD_SHIFT ? toupper(event.key.keysym.sym) : event.key.keysym.sym,
+         event.key.repeat, nFlags);
    }
    break;
    case SDL_MOUSEBUTTONDOWN:
@@ -366,12 +363,12 @@ void GameFrame::ProcessEvent(const SDL_Event& event)
       if (event.button.button == SDL_BUTTON_LEFT)
       {
          if (event.button.clicks > 1)
-            FrameWnd->OnLButtonDblClk(0, CPoint(event.button.x, event.button.y));
+            FrameWnd->OnLButtonDblClk(WM_LBUTTONDBLCLK, CPoint(event.button.x, event.button.y));
          else
-            FrameWnd->OnLButtonDown(0, CPoint(event.button.x, event.button.y));
+            FrameWnd->OnLButtonDown(WM_LBUTTONDOWN, CPoint(event.button.x, event.button.y));
       }
       else if (event.button.button == SDL_BUTTON_RIGHT)
-         FrameWnd->OnRButtonDown(0, CPoint(event.button.x, event.button.y));
+         FrameWnd->OnRButtonDown(WM_RBUTTONDOWN, CPoint(event.button.x, event.button.y));
    }
    break;
    case SDL_KEYUP:
@@ -382,9 +379,9 @@ void GameFrame::ProcessEvent(const SDL_Event& event)
    case SDL_MOUSEBUTTONUP:
    {
       if (event.button.button == SDL_BUTTON_LEFT)
-         FrameWnd->OnLButtonUp(0, CPoint(event.button.x, event.button.y));
+         FrameWnd->OnLButtonUp(WM_LBUTTONUP, CPoint(event.button.x, event.button.y));
       else if (event.button.button == SDL_BUTTON_RIGHT)
-         FrameWnd->OnRButtonUp(0, CPoint(event.button.x, event.button.y));
+         FrameWnd->OnRButtonUp(WM_RBUTTONUP, CPoint(event.button.x, event.button.y));
    }
    break;
    }
@@ -756,7 +753,7 @@ void GameFrame::OnActivateApp(BOOL bActive, HTASK hTask)
 
          if (Sim.bNetwork) Sim.SendSimpleMessage (ATNET_ACTIVATEAPP, NULL, -1, Sim.localPlayer);
 
-         if (bFullscreen) ClipCursor (&rect);
+         //if (bFullscreen) ClipCursor (&rect);
 
          //Re-Aktiviere TakeOff (ignoriert die Message beim normalen StartUp):
          if (gItemBms.AnzEntries()>0)
@@ -794,7 +791,7 @@ void GameFrame::OnActivateApp(BOOL bActive, HTASK hTask)
 
          if (Sim.bNetwork) Sim.SendSimpleMessage (ATNET_ACTIVATEAPP, NULL, 1, Sim.localPlayer);
 
-         if (bFullscreen) ClipCursor (NULL);
+         //if (bFullscreen) ClipCursor (NULL);
 		   Pause(true);	// AG:
       }
    }
@@ -854,7 +851,7 @@ void GameFrame::OnCaptureChanged (void*)
 //--------------------------------------------------------------------------------------------
 //user pressed F1
 //--------------------------------------------------------------------------------------------
-BOOL GameFrame::OnHelpInfo (HELPINFO*)
+BOOL GameFrame::OnHelpInfo (void*)
 {
    ToolTipState=FALSE;
    

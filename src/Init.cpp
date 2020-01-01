@@ -26,6 +26,7 @@ DWORD GetKey();
 //--------------------------------------------------------------------------------------------
 //Programm läuft nicht direkt von CD:
 //--------------------------------------------------------------------------------------------
+#ifdef CD_PROTECTION
 void DontRunFromCD (void)
 {
 	char laufwerk[4];
@@ -44,6 +45,7 @@ void DontRunFromCD (void)
       exit(0);
 	}
 }
+#endif
 
 //--------------------------------------------------------------------------------------------
 //Copy the savegame from the basic version?
@@ -112,7 +114,7 @@ do_findcd_main:
 
       if (1==0)
    #else
-      if (!DoesFileExist ("C:\\Infos\\identity.txt") && GetKey()!=0x1c4298a0)
+      if (!DoesFileExist ("C:\\Infos\\identity.txt") /*&& GetKey()!=0x1c4298a0*/)
       if (!DoesFileExist (CString(AppPath)+"data\\cm.txt"))
    #endif
       {
@@ -165,7 +167,9 @@ skip_search_demo_cd:
    #endif
 #endif
 
+#ifdef CD_PROTECTION
    DontRunFromCD ();
+#endif
 
    BitmapPath   = "Bitmaps\\%s";
    BrickPath    = "Brick\\%s";
@@ -256,7 +260,7 @@ skip_search_demo_cd:
 //--------------------------------------------------------------------------------------------
 void InitSoundSystem (SDL_Window *AppWnd)
 {
-   gpSSE = new SSE((PVOID)AppWnd, 22050, 1, 16);
+   gpSSE = new SSE(AppWnd, 22050, 1, 16);
    gpSSE->EnableSound(Sim.Options.OptionEnableDigi);
 	
    if (Sim.Options.OptionDigiSound)
@@ -499,9 +503,9 @@ void InitGlobeMapper (void)
    for (x=0; x<256; x++)
       for (y=0; y<64; y++)
       {
-         Color  = min(EarthPal.Pal[x].peBlue*(y+5)/40,255);
-         Color += min(EarthPal.Pal[x].peRed*(y+5)/40+(max(EarthPal.Pal[x].peBlue*(y+5)/40-255,0)),255)<<16;
-         Color += min(EarthPal.Pal[x].peGreen*(y+5)/40+(max(EarthPal.Pal[x].peBlue*(y+5)/40-255,0)),255)<<8;
+         Color  = min(EarthPal.Pal[x].b*(y+5)/40,255);
+         Color += min(EarthPal.Pal[x].r*(y+5)/40+(max(EarthPal.Pal[x].b*(y+5)/40-255,0)),255)<<16;
+         Color += min(EarthPal.Pal[x].g*(y+5)/40+(max(EarthPal.Pal[x].b*(y+5)/40-255,0)),255)<<8;
 
          GlobeMixTab [x+(y<<8)] = (UWORD)(void*)TmpBm.pBitmap->GetHardwarecolor (Color);
          if (GlobeMixTab [x+(y<<8)]==0)

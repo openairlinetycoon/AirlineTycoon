@@ -25,8 +25,8 @@ public:
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CTakeOffApp)
 	public:
-	virtual BOOL InitInstance();
-	virtual void WinHelp(DWORD dwData, UINT nCmd = HELP_CONTEXT);
+	virtual BOOL InitInstance(int argc, char* argv[]);
+	virtual void WinHelp(DWORD dwData, UINT nCmd);
 	//}}AFX_VIRTUAL
 
 // Implementation
@@ -38,8 +38,8 @@ public:
 	//DECLARE_MESSAGE_MAP()
 
 protected:
-	HICON  m_hSmallIcon;
-	HICON  m_hBigIcon;
+	//HICON  m_hSmallIcon;
+	//HICON  m_hBigIcon;
 };
 
 

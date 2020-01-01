@@ -4,7 +4,7 @@
 #include <algorithm>
 
 SSE::SSE(void* hWnd, dword samplesPerSec, word channels, word bitsPerSample, word maxFX)
-    : _hWnd((HWND)hWnd)
+    : _hWnd((SDL_Window*)hWnd)
     , _samplesPerSec(samplesPerSec)
     , _channels(channels)
     , _bitsPerSample(bitsPerSample)

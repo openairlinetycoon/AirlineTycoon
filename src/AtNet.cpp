@@ -1873,19 +1873,11 @@ void PumpNetwork (void)
 }
 
 //--------------------------------------------------------------------------------------------
-// Returns an identifier for the Medium:
-//--------------------------------------------------------------------------------------------
-SLONG GetMediumIdentifier (GUID guidServiceProvider)
-{
-   return NET_MEDIUM_TCPIP;
-}
-
-//--------------------------------------------------------------------------------------------
 // Returns a (short) String describing the Medium
 //--------------------------------------------------------------------------------------------
-CString GetMediumName (GUID Guid)
+CString GetMediumName (SLONG Medium)
 {
-   return (StandardTexte.GetS (TOKEN_MISC, 7100+GetMediumIdentifier(Guid)));
+   return (StandardTexte.GetS (TOKEN_MISC, 7100+Medium));
 }
 
 

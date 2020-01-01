@@ -2426,7 +2426,7 @@ class SIM //Die Simulationswelt; alles was zur aktuellen Partie gehört
    public:
 	   bool		   StatfGraphVisible;							// true -> Der Graph ist sichtbar, ansonsten die schnöden Zahlen
 	   bool		   StatplayerMask[4];							// Diese Spieler wurden zur Ansicht ausgewählt
-	   byte		   Statgroup;										// Die angewählte Gruppe (*0=Finanzen, 1=?, 2=?)
+	   BYTE		   Statgroup;										// Die angewählte Gruppe (*0=Finanzen, 1=?, 2=?)
 	   long		   Statdays;										// Anzahl der darzustellenden Tage
 	   long		   StatnewDays;									// Für eine Animation
 	   bool		   StatiArray[3][16];		               // Merkt sich für jede Gruppe welche Einträge selektiert sind.

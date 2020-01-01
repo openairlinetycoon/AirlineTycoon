@@ -97,7 +97,7 @@ void DumpAASeedSum (long CallerId)
    for (long c=0; c<MAX_CITIES; c++)
       sum += AuslandsAuftraege[c].Random.GetSeed();
 
-   OutputDebugString (bprintf("Summe for %li is %li\n", CallerId, sum));
+   Hdu.HercPrintf("Summe for %li is %li\n", CallerId, sum);
 #endif
 }
 

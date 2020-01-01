@@ -19,7 +19,9 @@
 class CRegistryAccess
 {
    private:
+#ifdef WIN32
       HKEY  hKey;
+#endif
 
    public:
       CRegistryAccess ();

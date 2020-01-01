@@ -1,5 +1,8 @@
 #pragma once
 
+#define _WINSOCK2API_   /* Prevent inclusion of winsock2.h in enet.h */
+typedef struct fd_set fd_set;
+typedef unsigned int SOCKET;
 #include <enet/enet.h>
 
 typedef DWORD DPID;
@@ -56,7 +59,7 @@ struct SBSessionInfo
 class SBNetwork
 {
 public:
-    SBNetwork(bool, GUID);
+    SBNetwork(bool);
 
     long GetMessageCount();
     bool Connect(SBStr);
@@ -68,7 +71,7 @@ public:
     SBList<SBStr>* GetConnectionList();
     SBList<SBStr>* GetSessionListAsync();
     bool StartGetSessionListAsync();
-    GUID* GetProviderGuid(char*);
+    SLONG GetProviderID(char*);
     bool IsEnumSessionFinished();
     bool IsInSession();
     bool Send(BUFFER<UBYTE>&, unsigned long, unsigned long, bool);

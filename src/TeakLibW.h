@@ -247,7 +247,7 @@ public:
     friend TEAKFILE& operator << (TEAKFILE& File, const CString& b)
     {
         File << b.GetLength() + 1;
-        File.Write((UBYTE*)(LPCSTR)b, b.GetLength() + 1);
+        File.Write((UBYTE*)(PCSTR)b, b.GetLength() + 1);
         return File;
     }
     friend TEAKFILE& operator >> (TEAKFILE& File, CString& b)
@@ -256,7 +256,7 @@ public:
         File >> size;
         BUFFER<BYTE> str(size);
         File.Read(str, size);
-        b = (LPCSTR)(BYTE*)str;
+        b = (PCSTR)(BYTE*)str;
         return File;
     }
 
@@ -610,7 +610,7 @@ public:
     void CopyArea(long, long, long);
     void CopyAreaFrom(PALETTE const&, long, long, long);
 
-    BUFFER<PALETTEENTRY> Pal;
+    BUFFER<SDL_Color> Pal;
     SLONG Unknown;
 };
 

@@ -67,14 +67,14 @@ long TeakLibW_Exception(char* file, long line, const char* format, ...)
     va_start(args, format);
     vsprintf(buffer, format, args);
     va_end(args);
-    MessageBeep(0);
-    MessageBeep(0x30u);
+    //MessageBeep(0);
+    //MessageBeep(0x30u);
     Hdu.HercPrintf(1, "====================================================================");
     Hdu.HercPrintf(0, "Exception in File %s, Line %li:", file, line);
     Hdu.HercPrintf(0, buffer);
     Hdu.HercPrintf(1, "====================================================================");
     Hdu.HercPrintf(0, "C++ Exception thrown. Programm will probably be terminated.");
     Hdu.Close();
-    DebugBreak();
+    //DebugBreak();
     throw std::runtime_error(buffer);
 }

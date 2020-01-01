@@ -19,18 +19,21 @@
 //============================================================================================
 #include "stdafx.h"
 
+#include "Checkup.h"
+
+#ifdef SYSTEM_CHECKUP
 #include <fcntl.h>
 #include <stdio.h>
 #include <io.h>
-//#include <dinput.h>
-//#include <dsound.h>
-#include "Checkup.h"
+#include <dinput.h>
+#include <dsound.h>
+#include <ddraw.h>
 
 void GetDXVersion(LPDWORD pdwDXVersion, LPDWORD pdwDXPlatform);
 
 void test (void)
 {
-   //CSystemCheckup sc (CHECKUP_ALL | CHECKUP_WRITE, "f:\\setup.exe");
+   CSystemCheckup sc (CHECKUP_ALL | CHECKUP_WRITE, "f:\\setup.exe");
 }
 
 //--------------------------------------------------------------------------------------------
@@ -63,7 +66,7 @@ BOOL IsPentiumOrBetter (void)
    //Konnte nicht erkannt werden:
    return FALSE;
 }
-
+#endif
 
 //--------------------------------------------------------------------------------------------
 // CRegistryAccess::
@@ -72,7 +75,9 @@ BOOL IsPentiumOrBetter (void)
 //--------------------------------------------------------------------------------------------
 CRegistryAccess::CRegistryAccess ()
 {
+#ifdef WIN32
    hKey = NULL;
+#endif
 }
 
 //--------------------------------------------------------------------------------------------
@@ -80,7 +85,9 @@ CRegistryAccess::CRegistryAccess ()
 //--------------------------------------------------------------------------------------------
 CRegistryAccess::CRegistryAccess (CString RegistryPath)
 {
+#ifdef WIN32
    hKey = NULL;
+#endif
    Open (RegistryPath);
 }
 
@@ -89,6 +96,7 @@ CRegistryAccess::CRegistryAccess (CString RegistryPath)
 //--------------------------------------------------------------------------------------------
 bool CRegistryAccess::Open (CString RegistryPath)
 {
+#ifdef WIN32
    Close ();   //Alten Zugriff schlieﬂen
 
    dword dwDisposition;
@@ -97,6 +105,9 @@ bool CRegistryAccess::Open (CString RegistryPath)
       return (1); //Erfolg
    else
       return (0); //Geht nicht
+#else
+return false;
+#endif
 }
 
 //--------------------------------------------------------------------------------------------
@@ -112,11 +123,13 @@ CRegistryAccess::~CRegistryAccess ()
 //--------------------------------------------------------------------------------------------
 void CRegistryAccess::Close (void)
 {
+#ifdef WIN32
    if (hKey)
    {
       RegCloseKey(hKey);
       hKey=NULL;
    }
+#endif
 }
 
 //--------------------------------------------------------------------------------------------
@@ -124,7 +137,11 @@ void CRegistryAccess::Close (void)
 //--------------------------------------------------------------------------------------------
 bool CRegistryAccess::IsOpen (void)
 {
+#ifdef WIN32
    return (hKey!=NULL);
+#else
+   return false;
+#endif
 }
 
 //--------------------------------------------------------------------------------------------
@@ -132,12 +149,17 @@ bool CRegistryAccess::IsOpen (void)
 //--------------------------------------------------------------------------------------------
 bool CRegistryAccess::WriteRegistryKeyEx (const char *Text, CString EntryName)
 {
+#ifdef WIN32
    if (!hKey) return (0);
 
-   return (ERROR_SUCCESS==RegSetValueEx (hKey, EntryName, 0, REG_SZ, (UBYTE*)Text, strlen(Text)+1));
+   return (ERROR_SUCCESS == RegSetValueEx (hKey, EntryName, 0, REG_SZ, (UBYTE*)Text, strlen(Text)+1));
+#else
+   return false;
+#endif
 }
 bool CRegistryAccess::WriteRegistryKeyEx (const BOOL *Bool, CString EntryName)
 {
+#ifdef WIN32
    char *Temp = new char [500];
 
    sprintf (Temp, "%li", (long)*Bool);
@@ -146,9 +168,13 @@ bool CRegistryAccess::WriteRegistryKeyEx (const BOOL *Bool, CString EntryName)
 
    delete [] Temp;
    return (rc);
+#else
+return false;
+#endif
 }
 bool CRegistryAccess::WriteRegistryKeyEx (const long *Long, CString EntryName)
 {
+#ifdef WIN32
    char *Temp = new char [500];
 
    sprintf (Temp, "%li", *Long);
@@ -157,9 +183,13 @@ bool CRegistryAccess::WriteRegistryKeyEx (const long *Long, CString EntryName)
 
    delete [] Temp;
    return (rc);
+#else
+return false;
+#endif
 }
 bool CRegistryAccess::WriteRegistryKeyEx (const double *Double, CString EntryName)
 {
+#ifdef WIN32
    char *Temp = new char [500];
 
    sprintf (Temp, "%f", *Double);
@@ -168,6 +198,9 @@ bool CRegistryAccess::WriteRegistryKeyEx (const double *Double, CString EntryNam
 
    delete [] Temp;
    return (rc);
+#else
+return false;
+#endif
 }
 
 //--------------------------------------------------------------------------------------------
@@ -175,14 +208,19 @@ bool CRegistryAccess::WriteRegistryKeyEx (const double *Double, CString EntryNam
 //--------------------------------------------------------------------------------------------
 bool CRegistryAccess::ReadRegistryKeyEx (char *Text, CString EntryName)
 {
+#ifdef WIN32
    unsigned long TempSize=500;
 
    if (!hKey) return (0);
 
    return (ERROR_SUCCESS == RegQueryValueEx (hKey, EntryName, NULL, NULL, (UBYTE*)Text, &TempSize));
+#else
+return false;
+#endif
 }
 bool CRegistryAccess::ReadRegistryKeyEx (BOOL *Bool, CString EntryName)
 {
+#ifdef WIN32
    if (!hKey) return (0);
 
    char *Temp = new char [500];
@@ -192,9 +230,13 @@ bool CRegistryAccess::ReadRegistryKeyEx (BOOL *Bool, CString EntryName)
 
    delete [] Temp;
    return (rc);
+#else
+return false;
+#endif
 }
 bool CRegistryAccess::ReadRegistryKeyEx (long *Long, CString EntryName)
 {
+#ifdef WIN32
    if (!hKey) return (0);
 
    char *Temp = new char [500];
@@ -204,9 +246,13 @@ bool CRegistryAccess::ReadRegistryKeyEx (long *Long, CString EntryName)
 
    delete [] Temp;
    return (rc);
+#else
+return false;
+#endif
 }
 bool CRegistryAccess::ReadRegistryKeyEx (double *Double, CString EntryName)
 {
+#ifdef WIN32
    if (!hKey) return (0);
 
    char *Temp = new char [500];
@@ -216,8 +262,11 @@ bool CRegistryAccess::ReadRegistryKeyEx (double *Double, CString EntryName)
 
    delete [] Temp;
    return (rc);
+#else
+   return false;
+#endif
 }
-#if 0
+#ifdef SYSTEM_CHECKUP
 //--------------------------------------------------------------------------------------------
 // CSystemCheckup::
 //--------------------------------------------------------------------------------------------

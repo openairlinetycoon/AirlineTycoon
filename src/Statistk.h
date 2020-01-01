@@ -87,7 +87,7 @@ public:
 	// speichern.
 	bool		_fGraphVisible;							// true -> Der Graph ist sichtbar, ansonsten die schnöden Zahlen
 	bool		_playerMask[4];							// Diese Spieler wurden zur Ansicht ausgewählt
-	byte		_group;										// Die angewählte Gruppe (*0=Finanzen, 1=?, 2=?)
+	BYTE		_group;										// Die angewählte Gruppe (*0=Finanzen, 1=?, 2=?)
 	long		_days;										// Anzahl der darzustellenden Tage
 	long		_newDays;									// Für eine Animation
 	ITEM		_iArray[MAX_GROUP][MAX_ITEMS];		// Merkt sich für jede Gruppe welche Einträge selektiert sind.

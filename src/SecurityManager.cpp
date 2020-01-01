@@ -3,11 +3,15 @@
 // v1.01:		the class was not closing all opened files.
 // v1.00:		initial release
 //////////////////////////////////////////////////////////////////////
+
+#include <stdafx.h>
+
+#ifdef CD_PROTECTION
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <windows.h>
-#include <stdafx.h>
 
 #include	"SecurityManager.h"
 
@@ -422,3 +426,5 @@ long GetCode( char *root)
 
 	return	SectorsPerCluster * BytesPerSector * TotalNumberOfClusters;
 }
+
+#endif

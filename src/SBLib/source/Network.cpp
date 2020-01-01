@@ -2,7 +2,7 @@
 #include "..\include\sblib.h"
 #include "..\include\network.h"
 
-SBNetwork::SBNetwork(bool, GUID)
+SBNetwork::SBNetwork(bool)
     : mState(SBNETWORK_SESSION_FINISHED)
     , mHost(NULL)
     , mMaster(NULL)
@@ -261,9 +261,9 @@ bool SBNetwork::StartGetSessionListAsync()
     return true;
 }
 
-GUID* SBNetwork::GetProviderGuid(char*)
+SLONG SBNetwork::GetProviderID(char*)
 {
-    return (GUID*)&GUID_NULL;
+    return NET_MEDIUM_TCPIP;
 }
 
 bool SBNetwork::IsEnumSessionFinished()

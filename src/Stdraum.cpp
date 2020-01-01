@@ -435,13 +435,10 @@ void CStdRaum::ProcessEvent(const SDL_Event& event)
    break;
    case SDL_KEYDOWN:
    {
-      if (!(event.key.keysym.sym & SDLK_SCANCODE_MASK))
-      {
-         UINT nFlags = event.key.keysym.scancode | ((SDL_GetModState() & KMOD_LALT) << 5);
-         OnKeyDown(toupper(event.key.keysym.sym), event.key.repeat, nFlags);
-         OnChar(SDL_GetModState() & KMOD_SHIFT ? toupper(event.key.keysym.sym) : event.key.keysym.sym,
-            event.key.repeat, nFlags);
-      }
+      UINT nFlags = event.key.keysym.scancode | ((SDL_GetModState() & KMOD_LALT) << 5);
+      OnKeyDown(toupper(event.key.keysym.sym), event.key.repeat, nFlags);
+      OnChar(SDL_GetModState() & KMOD_SHIFT ? toupper(event.key.keysym.sym) : event.key.keysym.sym,
+         event.key.repeat, nFlags);
    }
    break;
    case SDL_MOUSEBUTTONDOWN:
@@ -449,20 +446,20 @@ void CStdRaum::ProcessEvent(const SDL_Event& event)
       if (event.button.button == SDL_BUTTON_LEFT)
       {
          if (event.button.clicks > 1)
-            OnLButtonDblClk(0, CPoint(event.button.x, event.button.y));
+            OnLButtonDblClk(WM_LBUTTONDBLCLK, CPoint(event.button.x, event.button.y));
          else
-            OnLButtonDown(0, CPoint(event.button.x, event.button.y));
+            OnLButtonDown(WM_LBUTTONDOWN, CPoint(event.button.x, event.button.y));
       }
       else if (event.button.button == SDL_BUTTON_RIGHT)
-         OnRButtonDown(0, CPoint(event.button.x, event.button.y));
+         OnRButtonDown(WM_RBUTTONDOWN, CPoint(event.button.x, event.button.y));
    }
    break;
    case SDL_MOUSEBUTTONUP:
    {
       if (event.button.button == SDL_BUTTON_LEFT)
-         OnLButtonUp(0, CPoint(event.button.x, event.button.y));
+         OnLButtonUp(WM_LBUTTONUP, CPoint(event.button.x, event.button.y));
       else if (event.button.button == SDL_BUTTON_RIGHT)
-         OnRButtonUp(0, CPoint(event.button.x, event.button.y));
+         OnRButtonUp(WM_RBUTTONUP, CPoint(event.button.x, event.button.y));
    }
    break;
    }
@@ -2974,7 +2971,7 @@ void CStdRaum::PostPaint (void)
 
             SDL_GetWindowPosition(FrameWnd->m_hWnd, &rcWindow.x, &rcWindow.y);
 
-            SetCursorPos (rcWindow.x+gMousePosition.x, rcWindow.y+gMousePosition.y);
+            SDL_WarpMouseGlobal(rcWindow.x+gMousePosition.x, rcWindow.y+gMousePosition.y);
          }
          else if ((LastCursor==gMousePosition && rand()%2==0) || rand()%10!=0)
          {

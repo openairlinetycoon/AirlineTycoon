@@ -581,7 +581,7 @@ void CHLPool::AddBitmap (__int64 graphicID, SB_CBitmapCore *pBitmap, PALETTE *Pa
 
       for (SLONG c=0; c<256; c++)
       {
-         PaletteMapper[c]=UWORD((Pal->Pal[c].peBlue>>3)+(Pal->Pal[c].peGreen>>2<<5)+(Pal->Pal[c].peRed>>3<<11));
+         PaletteMapper[c]=UWORD((Pal->Pal[c].b>>3)+(Pal->Pal[c].g>>2<<5)+(Pal->Pal[c].r>>3<<11));
       }
    }
 
@@ -607,9 +607,9 @@ void CHLPool::AddBitmap (__int64 graphicID, SB_CBitmapCore *pBitmap, PALETTE *Pa
                d=999;
 
                for (c=1; c<256; c++)
-                  if (d>abs(Pal->Pal[c].peBlue-b)+abs(Pal->Pal[c].peGreen-g)+abs(Pal->Pal[c].peRed-r))
+                  if (d>abs(Pal->Pal[c].b-b)+abs(Pal->Pal[c].g-g)+abs(Pal->Pal[c].r-r))
                   {
-                     d=abs(Pal->Pal[c].peBlue-b)+abs(Pal->Pal[c].peGreen-g)+abs(Pal->Pal[c].peRed-r);
+                     d=abs(Pal->Pal[c].b-b)+abs(Pal->Pal[c].g-g)+abs(Pal->Pal[c].r-r);
                      dc=c;
                   }
 
@@ -629,8 +629,8 @@ void CHLPool::AddBitmap (__int64 graphicID, SB_CBitmapCore *pBitmap, PALETTE *Pa
       for (y=0; y<256; y++)
          for (x=0; x<=y; x++)
          {
-            if (abs(Pal->Pal[x].peBlue-Pal->Pal[y].peBlue)+abs(Pal->Pal[x].peGreen-Pal->Pal[y].peGreen)+abs(Pal->Pal[x].peRed-Pal->Pal[y].peRed)<=MaxDelta)
-               Equal[x+(y<<8)]=Equal[y+(x<<8)]=(UBYTE)min (255,abs(Pal->Pal[x].peBlue-Pal->Pal[y].peBlue)+abs(Pal->Pal[x].peGreen-Pal->Pal[y].peGreen)+abs(Pal->Pal[x].peRed-Pal->Pal[y].peRed));
+            if (abs(Pal->Pal[x].b-Pal->Pal[y].b)+abs(Pal->Pal[x].g-Pal->Pal[y].g)+abs(Pal->Pal[x].r-Pal->Pal[y].r)<=MaxDelta)
+               Equal[x+(y<<8)]=Equal[y+(x<<8)]=(UBYTE)min (255,abs(Pal->Pal[x].b-Pal->Pal[y].b)+abs(Pal->Pal[x].g-Pal->Pal[y].g)+abs(Pal->Pal[x].r-Pal->Pal[y].r));
             else
                Equal[x+(y<<8)]=Equal[y+(x<<8)]=255;
          }

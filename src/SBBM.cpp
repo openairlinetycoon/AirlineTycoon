@@ -638,9 +638,7 @@ void  SBPRIMARYBM::Flip (XY WindowPos, BOOL ShowFPS)
       static SBBM  OldFrame;
 
       //Vollbild Delta Video:
-      BYTE States[26];
-
-      GetKeyboardState (States); 
+      const Uint8* States = SDL_GetKeyboardState(NULL);
       if (States [VK_SCROLL]&0x0001)
       {
          if (pFile==NULL)

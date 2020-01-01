@@ -41,8 +41,8 @@ extern FILE *CreditsSmackerFileHandle;
 extern BOOL gSpawnOnly;
 
 // {7EAFE365-9362-11d2-BA6A-080000278763}
-static const GUID GuidAT = { 0x7eafe365, 0x9362, 0x11d2, { 0xba, 0x6a, 0x8, 0x0, 0x0, 0x27, 0x87, 0x63 } };
-SBNetwork gNetwork (false, GuidAT);
+//static const GUID GuidAT = { 0x7eafe365, 0x9362, 0x11d2, { 0xba, 0x6a, 0x8, 0x0, 0x0, 0x27, 0x87, 0x63 } };
+SBNetwork gNetwork (false);
 
 SLONG bNetworkUnderway=false;
 
@@ -77,6 +77,7 @@ void NewGamePopup::Konstruktor (BOOL bHandy, SLONG PlayerNum)
 
    bNewGamePopupIsOpen = true;
 
+#ifdef CD_PROTECTION
    union
    {
       void (NewGamePopup::*p_member)(BOOL bHandy, SLONG PlayerNum);
@@ -96,6 +97,7 @@ void NewGamePopup::Konstruktor (BOOL bHandy, SLONG PlayerNum)
 
 // Put a marker
 PUTSTARTMARK;
+#endif
 
    gBroadcastBm.Destroy ();
 
@@ -387,8 +389,10 @@ PUTSTARTMARK;
    }
 #endif
 
+#ifdef CD_PROTECTION
 	// Put the end marker
 	PUTENDMARK;
+#endif
 
    SetMouseLook (CURSOR_NORMAL, 0, ROOM_TITLE, 0);
 
@@ -697,9 +701,9 @@ void NewGamePopup::RefreshKlackerField(void)
       {
          if (c==0) pNetworkConnections->GetFirst ();
 
-         GUID *pGuid = gNetwork.GetProviderGuid((char*)(LPCTSTR)pNetworkConnections->GetLastAccessed());
+         SLONG id = gNetwork.GetProviderID((char*)(LPCTSTR)pNetworkConnections->GetLastAccessed());
 
-         if (pGuid && GetMediumIdentifier(*pGuid)!=NET_MEDIUM_MODEM)
+         if (id && id !=NET_MEDIUM_MODEM)
          {
             NetMediumMapper[NetMediumCount++]=c;
          }
@@ -711,10 +715,10 @@ void NewGamePopup::RefreshKlackerField(void)
       if (Selection>=(SLONG)NetMediumCount) Selection=(SLONG)NetMediumCount-1;
       for (c=0; c<(SLONG)NetMediumCount; c++)
       {
-         GUID *pGuid = gNetwork.GetProviderGuid ((char*)(LPCTSTR)pNetworkConnections->Get(NetMediumMapper[c]+1));
+         SLONG id = gNetwork.GetProviderID ((char*)(LPCTSTR)pNetworkConnections->Get(NetMediumMapper[c]+1));
 
          CString Buffer;
-         if (pGuid) Buffer=GetMediumName (*pGuid);
+         if (id) Buffer=GetMediumName (id);
 
          for (SLONG d=0; d<Buffer.GetLength(); d++)
             Buffer.SetAt (d, GerToUpper(Buffer[(int)d]));
@@ -1669,8 +1673,8 @@ again_heimatflughafen:
             else
                Sim.StartTime = time (NULL);
 
-            GUID *pGuid = gNetwork.GetProviderGuid ((char*)(LPCTSTR)pNetworkConnections->Get(NetMediumMapper[Selection]+1));
-            if (pGuid && GetMediumIdentifier(*pGuid)==NET_MEDIUM_TCPIP)
+            SLONG id = gNetwork.GetProviderID ((char*)(LPCTSTR)pNetworkConnections->Get(NetMediumMapper[Selection]+1));
+            if (id && id==NET_MEDIUM_TCPIP)
             {
                gHostIP=".";
                MenuStart (MENU_ENTERTCPIP);

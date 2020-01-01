@@ -3,20 +3,20 @@
 //      are changed infrequently
 //
 
-#include <enet/enet.h>
+#ifdef WIN32
+#include <Windows.h>
+#endif
 #include <math.h>
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 #include <smacker.h>
 
-#undef afx_msg
 #define afx_msg virtual
 
+#include "Defines.h"
 #include "stdstring.h"
 typedef CStdStringA CString;
-
-#include "Defines.h"
 
 #include "TeakLibW.H"
 #include "sbl.h"

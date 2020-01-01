@@ -452,7 +452,7 @@
 //      yourself, if you prefer
 
 #if defined(_MSC_VER) || defined(__BORLANDC__) || defined(_WIN32)
-    #define SS_WIN32
+//    #define SS_WIN32
 #endif
 
 // MACRO: SS_ANSI
@@ -665,7 +665,7 @@ inline const Type& SSMAX(const Type& arg1, const Type& arg2)
 // member functions to deal with COM types & compiler support classes e.g.
 // _bstr_t
 
-#if defined (_MSC_VER) && (_MSC_VER >= 1100)
+#if SS_WIN32 && defined (_MSC_VER) && (_MSC_VER >= 1100)
 	#include <comdef.h>
 	#define SS_INC_COMDEF		// signal that we #included MS comdef.h file
 	#define STDSTRING_INC_COMDEF

@@ -5,7 +5,6 @@
 #include "glbank.h"
 #include "Bank.h"
 #include "AtNet.h"
-#include <winnls.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

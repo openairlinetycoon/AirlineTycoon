@@ -62,7 +62,6 @@ static char THIS_FILE[] = __FILE__;
 
 void Unvideo (CString Filename, CString TargetFilename);
 
-ULONG   GetPhysicalCdRomBitlist (void);
 CJumpingVar<ULONG>   gPhysicalCdRomBitlist=0;
 CJumpingVar<CString> gCDPath;
 
@@ -275,7 +274,7 @@ int main(int argc, char* argv[])
 	delete [] pDecodeBack2;
 	delete [] pDecodeBack3;
 
-	theApp.InitInstance();
+	theApp.InitInstance(argc, argv);
 	return 0;
 }
 
@@ -408,7 +407,7 @@ CTakeOffApp::~CTakeOffApp()
 //--------------------------------------------------------------------------------------------
 //CTakeOffApp initialization:
 //--------------------------------------------------------------------------------------------
-BOOL CTakeOffApp::InitInstance()
+BOOL CTakeOffApp::InitInstance(int argc, char* argv[])
 {
    gPhysicalCdRomBitlist.Pump();
 
@@ -432,7 +431,9 @@ BOOL CTakeOffApp::InitInstance()
    Hdu.HercPrintf (0, "logging starts %s", asctime(localtime(&t)));
    gCDPath.Pump();
 
+#ifdef CD_PROTECTION
    gPhysicalCdRomBitlist=GetPhysicalCdRomBitlist ();
+#endif
    gCDPath.Pump(); gCDPath.Pump(); gCDPath.Pump(); gCDPath.Pump(); gCDPath.Pump();
 
    pTakeOffApp = this;
@@ -500,9 +501,9 @@ BOOL CTakeOffApp::InitInstance()
    bFirstClass = !DoesFileExist (CString(AppPath)+"data\\builds.csv") && !DoesFileExist (CString(AppPath)+"data\\relation.csv");
 
    //Schneller Mode zum Debuggen?
-   char *Argument = strtok (GetCommandLine(), " ");
-   while (Argument)
+   for (int i = 0; i < argc; i++)
    {
+      char* Argument = argv[i];
       gPhysicalCdRomBitlist.Pump();
 
       if (stricmp (Argument, "/fc")==0) bFirstClass = TRUE;
@@ -567,8 +568,6 @@ BOOL CTakeOffApp::InitInstance()
 #endif
 #endif
 #endif
-
-      Argument = strtok (NULL, " ");
    }
 
    Sim.Options.ReadOptions();
@@ -659,7 +658,7 @@ BOOL CTakeOffApp::InitInstance()
          {
             FrameWnd->Invalidate();
             MessagePump();
-            Sleep (10);
+            SDL_Delay (10);
          }
 
          delete TopWin;
@@ -1418,7 +1417,7 @@ void CTakeOffApp::GameLoop(void*)
 
                   if (Sim.Players.Players[Sim.localPlayer].IsDrunk>0)
                   {
-                     SetCursorPos (SLONG(gMousePosition.x+sin(Sim.TimeSlice*70/200.0)*cos(Sim.TimeSlice*70/160.0)*Sim.Players.Players[Sim.localPlayer].IsDrunk/30), SLONG(gMousePosition.y+cos(Sim.TimeSlice*70/230.0)*sin(Sim.TimeSlice*70/177.0)*Sim.Players.Players[Sim.localPlayer].IsDrunk/30));
+                     SDL_WarpMouseGlobal(SLONG(gMousePosition.x+sin(Sim.TimeSlice*70/200.0)*cos(Sim.TimeSlice*70/160.0)*Sim.Players.Players[Sim.localPlayer].IsDrunk/30), SLONG(gMousePosition.y+cos(Sim.TimeSlice*70/230.0)*sin(Sim.TimeSlice*70/177.0)*Sim.Players.Players[Sim.localPlayer].IsDrunk/30));
                      Sim.Players.Players[Sim.localPlayer].IsDrunk--;
                   }
 
@@ -1981,7 +1980,7 @@ void CTakeOffApp::GameLoop(void*)
 
          PumpNetwork ();
       }
-      else Sleep (100);
+      else SDL_Delay (100);
 
       /*for (c=0; c<Sim.Players.AnzPlayers; c++)
       {
@@ -2040,7 +2039,7 @@ void CTakeOffApp::GameLoop(void*)
    if (bFullscreen)
    {
       //lpDD->RestoreDisplayMode ();
-      ClipCursor (NULL);
+      //ClipCursor (NULL);
    }
 
    //Shutdown:

@@ -9,8 +9,7 @@ void SetNetworkBitmap (SLONG Number, SLONG WaitingType=0);
 void DisplayBroadcastMessage (CString String, SLONG FromPlayer=-1);
 void PumpBroadcastBitmap (bool bJustForEmergency=false);
 void PumpNetwork (void);
-SLONG   GetMediumIdentifier (GUID guidServiceProvider);
-CString GetMediumName (GUID Guid);
+CString GetMediumName (SLONG Medium);
 
 //--------------------------------------------------------------------------------------------
 //ColorFx.Cpp:
@@ -20,7 +19,7 @@ void RemapColor (SB_CBitmapCore *pBitmap, const CRect &HighRect, UWORD OldFontCo
 //--------------------------------------------------------------------------------------------
 //DxBm.Cpp:
 //--------------------------------------------------------------------------------------------
-void LoadLBMPalette (const char *Filename, PALETTEENTRY *Palette);
+void LoadLBMPalette (const char *Filename, SDL_Color *Palette);
 
 
 //--------------------------------------------------------------------------------------------
@@ -90,7 +89,13 @@ CString GetMatchingNext (CString DirAndWildcards, CString CurrentFilename, long 
 long    CountMatchingFilelist (CString DirAndWildcards);
 CString CreateNumeratedFreeFilename (CString DirAndFilename);
 CString GetFilenameFromFullFilename (CString FullFilename);
-//DWORD   timeGetTime(void);
+#ifndef WIN32
+DWORD   timeGetTime(void);
+BOOL    OffsetRect(RECT* pRect, int dx, int dy);
+void    DebugBreak(void);
+SHORT   GetAsyncKeyState(int vKey);
+DWORD   GetTickCount(void);
+#endif
 
 //--------------------------------------------------------------------------------------------
 //Planer.Cpp:
@@ -105,6 +110,7 @@ bool RobotUse (SLONG FeatureId);
 //--------------------------------------------------------------------------------------------
 //Protect.Cpp:
 //--------------------------------------------------------------------------------------------
+#ifdef CD_PROTECTION
 #define GetPhysicalCdRomBitlist  ApplyColors
 #define CDProtection             CheckCursorOutline
 #define GetFileChecksum          UpdateCursorPosAndColor
@@ -121,6 +127,7 @@ BOOL  CheckMainFile (const CString &Filename);
 bool  CheckCDFile (int _filepos, int _filesize, int _code);
 void  CheckSomeCdFileLength (void);
 bool  CheckComputerLicense (void);
+#endif
 
 //--------------------------------------------------------------------------------------------
 //SBBM.Cpp:

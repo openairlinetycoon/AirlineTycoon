@@ -21,6 +21,8 @@ extern FILE *CreditsSmackerFileHandle;
 
 BOOL CreditsFilesAreMissing=FALSE;
 
+#ifdef CD_PROTECTION
+
 //--------------------------------------------------------------------------------------------
 //Gibt die Seriennummer eines Volumes zurück: (z.B. 0x0D4719D2 für 0D47-19D2)
 //--------------------------------------------------------------------------------------------
@@ -740,6 +742,8 @@ PUTSTARTMARK;
 // Put a marker
 PUTENDMARK;
 }
+
+#endif
 
 //--------------------------------------------------------------------------------------------
 // Sucht aus, welchen String wir den heute mal so abfagen:

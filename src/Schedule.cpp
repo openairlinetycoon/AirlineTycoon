@@ -728,7 +728,7 @@ void CFlugplanEintrag::BookFlight (CPlane *Plane, SLONG PlayerNum)
    //Bei Aufträgen, die Prämie verbuchen; Aufträge als erledigt markieren
    else if (ObjectType==2)
    {
-      OutputDebugString (bprintf ("Player %li flies %li Passengers from %s to %s\n", PlayerNum, qPlayer.Auftraege[ObjectId].Personen, Cities[qPlayer.Auftraege[ObjectId].VonCity].Name, Cities[qPlayer.Auftraege[ObjectId].NachCity].Name));
+      Hdu.HercPrintf("Player %li flies %li Passengers from %s to %s\n", PlayerNum, qPlayer.Auftraege[ObjectId].Personen, Cities[qPlayer.Auftraege[ObjectId].VonCity].Name, Cities[qPlayer.Auftraege[ObjectId].NachCity].Name);
 
       if (Okay==0 || Okay==1)
       {

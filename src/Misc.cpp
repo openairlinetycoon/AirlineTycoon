@@ -2,8 +2,10 @@
 // Misc.cpp : Diverse Sachen
 //============================================================================================
 #include "stdafx.h"
+#include <assert.h>
 #include <chrono>
 #include <filesystem>
+#include <locale>
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -309,7 +311,33 @@ void MyMessageBox (LPCTSTR Title, LPCTSTR String, ...)
    //Daten bereinigen:
    va_end (Vars);
 
-   ::MessageBox (NULL, Buffer, Title, MB_OK );
+   const SDL_MessageBoxButtonData Buttons[] = {
+    { /* .flags, .buttonid, .text */        0, 0, "OK" }
+   };
+   const SDL_MessageBoxColorScheme ColorScheme = {
+       { /* .colors (.r, .g, .b) */
+           /* [SDL_MESSAGEBOX_COLOR_BACKGROUND] */
+           { 255,   0,   0 },
+           /* [SDL_MESSAGEBOX_COLOR_TEXT] */
+           {   0, 255,   0 },
+           /* [SDL_MESSAGEBOX_COLOR_BUTTON_BORDER] */
+           { 255, 255,   0 },
+           /* [SDL_MESSAGEBOX_COLOR_BUTTON_BACKGROUND] */
+           {   0,   0, 255 },
+           /* [SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED] */
+           { 255,   0, 255 }
+       }
+   };
+   const SDL_MessageBoxData Data = {
+       SDL_MESSAGEBOX_INFORMATION,
+       FrameWnd->m_hWnd,
+       Title,
+       Buffer,
+       SDL_arraysize(Buttons),
+       Buttons,
+       &ColorScheme
+   };
+   SDL_ShowMessageBox(&Data, NULL);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -350,24 +378,23 @@ UWORD ConvertString2Date (char *String)
 //--------------------------------------------------------------------------------------------
 void DoAppPath (void)
 {
-   BUFFER<char> buffer (200);
-
 #ifdef NDEBUG
    //Vollen Programmnamen anfordern:
    GetModuleFileName (NULL, (LPSTR)buffer, 200);
+   char* buffer = SDL_strdup(SDL_GetBasePath());
 
    //eigentlichen Programmteil löschen:
    while (strlen(buffer)>0 && buffer[(SLONG)(strlen(buffer)-1)]!='\\') buffer[(SLONG)(strlen(buffer)-1)]=0;
-#else
-   GetCurrentDirectory(200, (LPSTR)buffer);
-   if (buffer[(SLONG)(strlen(buffer)-1)]!='\\') strcat(buffer, "\\");
-#endif
 
    //Verzeichnis-Namen der %§$@#"$! MS-Entwicklungsumgebung löschen:
-   if (strlen (buffer)>6 && strnicmp (buffer+strlen(buffer)-6, "debug\\", 6)==0) buffer[(SLONG)(strlen(buffer)-6)]=0;
-   if (strlen (buffer)>8 && strnicmp (buffer+strlen(buffer)-8, "release\\" ,8)==0) buffer[(SLONG)(strlen(buffer)-8)]=0;
+   if (strlen(buffer) > 6 && strnicmp(buffer + strlen(buffer) - 6, "debug\\", 6) == 0) buffer[(SLONG)(strlen(buffer) - 6)] = 0;
+   if (strlen(buffer) > 8 && strnicmp(buffer + strlen(buffer) - 8, "release\\", 8) == 0) buffer[(SLONG)(strlen(buffer) - 8)] = 0;
 
    AppPath = buffer;
+   SDL_free(buffer);
+#else
+   AppPath = std::filesystem::current_path().string() + "\\";
+#endif
 }
 
 //--------------------------------------------------------------------------------------------
@@ -1610,10 +1637,7 @@ CString Insert1000erDots (long Value)
 
    if (!Dot)
    {
-      char thousand[3]  = {'.', 0};
-      GetLocaleInfo(LOCALE_SYSTEM_DEFAULT, LOCALE_NOUSEROVERRIDE | LOCALE_STHOUSAND, thousand, 3);
-
-      Dot = thousand[0];
+      Dot = std::use_facet<std::moneypunct<char, true>>(std::locale("")).thousands_sep();
       if (Dot!='.' && Dot!=',' && Dot!=':' && Dot!='/' && Dot!='\'' && Dot!='`')
          Dot='.';
    }
@@ -1664,10 +1688,7 @@ CString Insert1000erDots64 (__int64 Value)
 
    if (!Dot)
    {
-      char thousand[3]  = {'.', 0};
-      GetLocaleInfo(LOCALE_SYSTEM_DEFAULT, LOCALE_NOUSEROVERRIDE | LOCALE_STHOUSAND, thousand, 3);
-
-      Dot = thousand[0];
+      Dot = std::use_facet<std::moneypunct<char, true>>(std::locale("")).thousands_sep();
       if (Dot!='.' && Dot!=',' && Dot!=':' && Dot!='/' && Dot!='\'' && Dot!='`')
          Dot='.';
    }
@@ -2031,11 +2052,37 @@ CString RemoveAccents (CString str)
    return (str);
 }
 
+#ifndef WIN32
 //--------------------------------------------------------------------------------------------
-// timeGetTime replacement:
+// Win32 replacement:
 //--------------------------------------------------------------------------------------------
-/*DWORD   timeGetTime(void)
+DWORD timeGetTime(void)
 {
    std::chrono::nanoseconds now = std::chrono::steady_clock::now().time_since_epoch();
    return std::chrono::duration_cast<std::chrono::milliseconds>(now).count();
-}*/
+}
+
+DWORD GetTickCount(void)
+{
+   return clock() / (CLOCKS_PER_SEC / 1000);
+}
+
+BOOL OffsetRect(RECT* pRect, int dx, int dy)
+{
+   pRect->left += dx;
+   pRect->top += dy;
+   pRect->right += dx;
+   pRect->bottom += dy;
+   return TRUE;
+}
+
+void DebugBreak(void)
+{
+   assert(0);
+}
+
+SHORT GetAsyncKeyState(int vKey)
+{
+   return SDL_GetModState() & vKey ? 0x8000 : 0;
+}
+#endif

@@ -502,13 +502,8 @@ void PlayMidi (const CString &Filename)
 
    if (IsMidiAvailable())
    {
-      CString tmpFilename = FullFilename (Filename, SoundPath);
-      BUFFER<char> ShortFilename (strlen(tmpFilename)+2);
-
-      GetShortPathName (tmpFilename, ShortFilename, strlen(tmpFilename)+1);
-
       if (gpMidi) gpMidi->Stop();
-      if (gpMidi) gpMidi->Load (bprintf ("%s\0", (LPCTSTR)ShortFilename));
+      if (gpMidi) gpMidi->Load (FullFilename(Filename, SoundPath));
       if (gpMidi) gpMidi->Play();
       gpSSE->SetMusicCallback(NextMidi);
    }

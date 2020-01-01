@@ -19,13 +19,20 @@
 #define	MAX_FX_BUFFER			(4)
 #define	EVENTS					(2)
 
+typedef _Return_type_success_(return >= 0) LONG HRESULT;
+
+#ifndef MAKE_HRESULT
+#define MAKE_HRESULT(sev,fac,code) \
+    ((HRESULT)(((unsigned long)(sev)<<31) | ((unsigned long)(fac)<<16) | ((unsigned long)(code))))
+#endif
+
 #define _FACDS  0x878			/* DirectSound's facility code */
 #define MAKE_DSHRESULT(code)	MAKE_HRESULT(1, _FACDS, code)
 
-#define	SSE_OK					NOERROR
+#define	SSE_OK					0
 #define	SSE_DSOUND_NOINIT		MAKE_DSHRESULT(1000)
 #define	SSE_NOTCREATED			MAKE_DSHRESULT(1010)
-#define	SSE_ALREADYCREATED		MAKE_DSHRESULT(1020)
+#define	SSE_ALREADYCREATED	MAKE_DSHRESULT(1020)
 #define	SSE_NOFILENAME			MAKE_DSHRESULT(1030)
 #define	SSE_CANNOTLOAD			MAKE_DSHRESULT(1040)
 #define	SSE_CANNOTREAD			MAKE_DSHRESULT(1050)
@@ -55,7 +62,7 @@
 #define	DSBPLAY_PRIORITY		(0x01000000)
 #define	DSBPLAY_HIGHPRIORITY	(0x02000000)
 #define	DSBPLAY_NOSTOP			(0x04000000)
-#define	DSBPLAY_LOOPING			(0x08000000)
+#define	DSBPLAY_LOOPING		(0x08000000)
 
 #define DSBSTATUS_PLAYING		(0x00000001)
 #define DSBSTATUS_BUFFERLOST	(0x00000002)
@@ -91,7 +98,7 @@ class SSE;
 
 typedef struct _DigitalData
 {
-	std::string		file;
+	std::string	file;
 	SSE*			pSSE;
 	word			state;
 	bool			fNoStop;
@@ -101,7 +108,7 @@ typedef struct _DigitalData
 typedef struct _FXData
 {
 	Mix_Chunk*	pBuffer;
-	word		ref;
+	word			ref;
 	size_t		bufferSize;					// Die aktuelle Größe des DSBuffers
 
 	dword		samplesPerSec;	// Primary buffer frequency
@@ -225,7 +232,7 @@ class SSE
 		DllExport void		SwapChannels(bool fSwap)	{ Mix_SetReverseStereo(-1, _swapChannels = fSwap); }
 		DllExport bool		IsSwapChannels()				{ return _swapChannels; }
 
-		DllExport HWND		GetWindow()						{ return _hWnd; }
+		DllExport SDL_Window* GetWindow()						{ return _hWnd; }
 
 	protected:
 		//std::string	GetNextFileFromPlaylist();
@@ -233,7 +240,7 @@ class SSE
 		//HRESULT	   DuplicateSoundBuffer (IDSB* lpDsbOriginal, IDSB** lplpDsbDuplicate);
 
 	protected:
-		HWND		_hWnd;
+		SDL_Window* _hWnd;
 		dword		_samplesPerSec;	// Primary buffer frequency
 		word		_channels;			// Kanäle
 		word		_bitsPerSample;	// Bits per Sample of mono data

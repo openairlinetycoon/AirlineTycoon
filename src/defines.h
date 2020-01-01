@@ -1,3 +1,4 @@
+
 //============================================================================================
 // Defines.h - globale Konstanten:
 //============================================================================================
@@ -16,14 +17,60 @@
 //#define VOICES_OPTIONAL //Voices werden verwendet, wenn sie da sind; ansonsten auch nicht schlimm
 
 //Meine (konsequenten) Variablentypen
-typedef unsigned long ULONG;
 typedef   signed long SLONG;
+typedef unsigned long ULONG;
 
 typedef unsigned short UWORD;
 typedef   signed short SWORD;
 
 typedef unsigned char UBYTE;
 typedef   signed char SBYTE;
+
+#ifndef WIN32
+typedef          long LONG;
+typedef          long LPARAM;
+typedef unsigned long DWORD;
+typedef unsigned long COLORREF;
+
+typedef          short SHORT;
+typedef unsigned short USHORT;
+typedef unsigned short WORD;
+
+typedef          float FLOAT;
+
+typedef          int BOOL;
+typedef          int INT;
+typedef unsigned int UINT;
+typedef unsigned int WPARAM;
+
+typedef          char CHAR;
+typedef unsigned char UCHAR;
+typedef unsigned char BYTE;
+
+typedef const char* LPCSTR;
+typedef       char* LPSTR;
+
+typedef const wchar_t* LPCWSTR;
+typedef       wchar_t* LPWSTR;
+
+typedef const char* LPCTSTR;
+typedef       char* LPTSTR;
+
+typedef struct tagPOINT
+{
+   LONG x;
+   LONG y;
+} 	POINT;
+
+typedef struct tagRECT
+{
+   LONG left;
+   LONG top;
+   LONG right;
+   LONG bottom;
+} 	RECT;
+
+#endif
 
 class CPoint : public tagPOINT
 {
@@ -47,8 +94,8 @@ public:
 
    CPoint(LPARAM dwPoint)
    {
-      x = LOWORD(dwPoint);
-      y = HIWORD(dwPoint);
+      x = dwPoint & 0xFFFF;
+      y = (dwPoint >> 16) & 0xFFFF;
    }
 };
 
@@ -62,17 +109,17 @@ public:
 
    CRect(const RECT& srcRect)
    {
-      left   = srcRect.left;
-      top    = srcRect.top;
-      right  = srcRect.right;
+      left = srcRect.left;
+      top = srcRect.top;
+      right = srcRect.right;
       bottom = srcRect.bottom;
    }
 
    CRect(LONG l, LONG t, LONG r, LONG b)
    {
-      left   = l;
-      top    = t;
-      right  = r;
+      left = l;
+      top = t;
+      right = r;
       bottom = b;
    }
 
@@ -902,3 +949,66 @@ inline bool operator!=(const CPoint& lhs, const CPoint& rhs)
 #define NET_MEDIUM_TCPIP             3
 #define NET_MEDIUM_IPX               4
 #define NET_MEDIUM_SIMTCPIP          5
+
+#ifndef WIN32
+
+#define MAX_PATH                    256
+
+#define WM_MOUSEMOVE                0x0200
+#define WM_LBUTTONDOWN              0x0201
+#define WM_LBUTTONUP                0x0202
+#define WM_LBUTTONDBLCLK            0x0203
+#define WM_RBUTTONDOWN              0x0204
+#define WM_RBUTTONUP                0x0205
+#define WM_RBUTTONDBLCLK            0x0206
+#define WM_MBUTTONDOWN              0x0207
+#define WM_MBUTTONUP                0x0208
+#define WM_MBUTTONDBLCLK            0x0209
+
+#define VK_CONTROL                  KMOD_CTRL
+#define VK_SHIFT                    KMOD_SHIFT
+#define VK_ALT                      KMOD_ALT
+#define VK_MENU                     KMOD_GUI
+#define VK_RETURN                   SDLK_RETURN
+#define VK_ESCAPE                   SDLK_ESCAPE
+#define VK_BACK                     SDLK_BACKSPACE
+#define VK_TAB                      SDLK_TAB
+#define VK_PAUSE                    SDLK_PAUSE
+#define VK_SCROLL                   SDLK_SCROLLLOCK
+#define VK_SPACE                    SDLK_SPACE
+#define VK_UP                       SDLK_UP
+#define VK_DOWN                     SDLK_DOWN
+#define VK_LEFT                     SDLK_LEFT
+#define VK_RIGHT                    SDLK_RIGHT
+#define VK_PRIOR                    SDLK_PAGEUP
+#define VK_NEXT                     SDLK_PAGEDOWN
+#define VK_INSERT                   SDLK_INSERT
+#define VK_DELETE                   SDLK_DELETE
+#define VK_F1                       SDLK_F1
+#define VK_F2                       SDLK_F2
+#define VK_F3                       SDLK_F3
+#define VK_F4                       SDLK_F4
+#define VK_F5                       SDLK_F5
+#define VK_F6                       SDLK_F6
+#define VK_F7                       SDLK_F7
+#define VK_F8                       SDLK_F8
+#define VK_F9                       SDLK_F9
+#define VK_F10                      SDLK_F10
+#define VK_F11                      SDLK_F11
+#define VK_F12                      SDLK_F12
+
+#define max(a,b) (((a) > (b)) ? (a) : (b))
+#define min(a,b) (((a) < (b)) ? (a) : (b))
+#define RGB(r,g,b) ((COLORREF)(((BYTE)(r)|((WORD)((BYTE)(g))<<8))|(((DWORD)(BYTE)(b))<<16)))
+#define GetRValue(rgb) ((rgb)&0xFF)
+#define GetGValue(rgb) ((((WORD)(rgb)) >> 8)&0xFF)
+#define GetBValue(rgb) (((rgb)>>16)&0xFF)
+#define ZeroMemory(ptr,size) memset(ptr,0,size)
+
+#define FALSE 0
+#define TRUE  1
+
+#define HTNOWHERE 0
+#define HTCLIENT  1
+
+#endif

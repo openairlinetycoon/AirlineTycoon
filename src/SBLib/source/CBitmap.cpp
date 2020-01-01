@@ -353,6 +353,35 @@ SB_CPrimaryBitmap::~SB_CPrimaryBitmap()
 {
 }
 
+bool SB_CPrimaryBitmap::FastClip(CRect clipRect, POINT* pPoint, RECT* pRect)
+{
+   POINT offset;
+   offset.x = 0;
+   if (pRect->top <= 0)
+      offset.y = 0;
+   else
+      offset.y = pRect->top;
+   if (offset.x || offset.y)
+      OffsetRect(pRect, -offset.x, -offset.y);
+   if (pRect->right + pPoint->x >= clipRect.right)
+      pRect->right = clipRect.right - pPoint->x;
+   if (pPoint->x < clipRect.left)
+   {
+      pRect->left += clipRect.left - pPoint->x;
+      pPoint->x = clipRect.left;
+   }
+   if (pRect->bottom + pPoint->y > clipRect.bottom)
+      pRect->bottom = clipRect.bottom - pPoint->y;
+   if (pPoint->y < clipRect.top)
+   {
+      pRect->top += clipRect.top - pPoint->y;
+      pPoint->y = clipRect.top;
+   }
+   if (offset.x || offset.y)
+      OffsetRect(pRect, offset.x, offset.y);
+   return pRect->right - pRect->left > 0 && pRect->bottom - pRect->top > 0;
+}
+
 long SB_CPrimaryBitmap::Flip()
 {
     if (Cursor)

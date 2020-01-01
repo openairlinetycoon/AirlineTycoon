@@ -3261,7 +3261,7 @@ void PLAYER::RobotExecuteAction(void)
    //Die exakte Zeit des Ausführens auf dem Server simulieren
    SLONG RealLocalTime = Sim.Time;
 
-   OutputDebugString (bprintf("Player %li: %li, %li at %li/%li\n", PlayerNum, RobotActions[0].ActionId, RobotActions[1].ActionId, WaitWorkTill, WaitWorkTill2));
+   Hdu.HercPrintf("Player %li: %li, %li at %li/%li\n", PlayerNum, RobotActions[0].ActionId, RobotActions[1].ActionId, WaitWorkTill, WaitWorkTill2);
    NetGenericSync (770+PlayerNum, RobotActions[0].ActionId);
    NetGenericSync (740+PlayerNum, RobotActions[1].ActionId);
 

@@ -380,7 +380,6 @@ void DoAppPath (void)
 {
 #ifdef NDEBUG
    //Vollen Programmnamen anfordern:
-   GetModuleFileName (NULL, (LPSTR)buffer, 200);
    char* buffer = SDL_strdup(SDL_GetBasePath());
 
    //eigentlichen Programmteil löschen:

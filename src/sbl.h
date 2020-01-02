@@ -305,8 +305,9 @@ typedef struct
 #define TEC_FONT_CENTERED  3
 
 #define TAB_STYLE_LEFT     1
-#define TAB_STYLE_RIGHT    2
+#define TAB_STYLE_DOT      2
 #define TAB_STYLE_CENTER   3
+#define TAB_STYLE_RIGHT    4
 
 typedef struct tagTabs
 {

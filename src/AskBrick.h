@@ -34,13 +34,13 @@ public:
 	// Generated message map functions
 protected:
 	//{{AFX_MSG(AskBrick)
-	afx_msg void OnPaint();
-	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
-	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
-	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
-	afx_msg void OnClose();
-	afx_msg BOOL OnSetCursor(void* pWnd, UINT nHitTest, UINT message);
-	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	virtual void OnPaint();
+	virtual void OnRButtonDown(UINT nFlags, CPoint point);
+	virtual void OnLButtonDown(UINT nFlags, CPoint point);
+	virtual void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	virtual void OnClose();
+	virtual BOOL OnSetCursor(void* pWnd, UINT nHitTest, UINT message);
+	virtual void OnMouseMove(UINT nFlags, CPoint point);
 	//}}AFX_MSG
 	//DECLARE_MESSAGE_MAP()
 };

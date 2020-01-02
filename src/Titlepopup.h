@@ -32,8 +32,8 @@ public:
 	// Generated message map functions
 protected:
 	//{{AFX_MSG(TitlePopup)
-	afx_msg void OnPaint();
-	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	virtual void OnPaint();
+	virtual void OnLButtonDown(UINT nFlags, CPoint point);
 	//}}AFX_MSG
 	//DECLARE_MESSAGE_MAP()
 };

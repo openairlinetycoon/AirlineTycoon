@@ -47,9 +47,9 @@ public:
 	// Generated message map functions
 protected:
 	//{{AFX_MSG(CReisebuero)
-	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
-	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
-	afx_msg void OnPaint();
+	virtual void OnLButtonDown(UINT nFlags, CPoint point);
+	virtual void OnRButtonDown(UINT nFlags, CPoint point);
+	virtual void OnPaint();
 	//}}AFX_MSG
 	//DECLARE_MESSAGE_MAP()
 };

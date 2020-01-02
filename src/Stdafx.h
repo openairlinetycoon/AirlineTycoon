@@ -12,8 +12,6 @@
 #include <SDL_mixer.h>
 #include <smacker.h>
 
-#define afx_msg virtual
-
 #include "Defines.h"
 #include "stdstring.h"
 typedef CStdStringA CString;

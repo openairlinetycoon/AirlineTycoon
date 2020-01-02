@@ -123,9 +123,9 @@ protected:
    void RepaintTextWindow (void);
 
 	//{{AFX_MSG(CStatistik)
-	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
-	afx_msg void OnPaint();
-	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
+	virtual void OnLButtonDown(UINT nFlags, CPoint point);
+	virtual void OnPaint();
+	virtual void OnRButtonDown(UINT nFlags, CPoint point);
 	//}}AFX_MSG
 	//DECLARE_MESSAGE_MAP()
 };

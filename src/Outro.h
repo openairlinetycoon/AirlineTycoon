@@ -32,12 +32,12 @@ public:
 	// Generated message map functions
 public:
 	//{{AFX_MSG(COutro)
-	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
-	afx_msg void OnPaint();
-	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
-	afx_msg BOOL OnSetCursor(void* pWnd, UINT nHitTest, UINT message);
-	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	virtual void OnLButtonDown(UINT nFlags, CPoint point);
+	virtual void OnPaint();
+	virtual void OnRButtonDown(UINT nFlags, CPoint point);
+	virtual BOOL OnSetCursor(void* pWnd, UINT nHitTest, UINT message);
+	virtual void OnMouseMove(UINT nFlags, CPoint point);
+	virtual void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	//}}AFX_MSG
 	//DECLARE_MESSAGE_MAP()
 

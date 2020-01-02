@@ -53,12 +53,12 @@ public:
 	// Generated message map functions
 protected:
 	//{{AFX_MSG(Options)
-	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
-	afx_msg void OnPaint();
-	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
-	afx_msg void OnTimer(UINT nIDEvent);
-	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
-	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	virtual void OnLButtonDown(UINT nFlags, CPoint point);
+	virtual void OnPaint();
+	virtual void OnRButtonDown(UINT nFlags, CPoint point);
+	virtual void OnTimer(UINT nIDEvent);
+	virtual void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
+	virtual void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	//}}AFX_MSG
 	//DECLARE_MESSAGE_MAP()
 };

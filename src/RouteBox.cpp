@@ -384,12 +384,12 @@ void CRouteBox::RepaintList(void)
 
       if (Haken) ListBm.BlitFromT (HakenBm, 4, 1+i*13+2);
 
-      if (ListBm.TryPrintAt (bprintf ("%s - %s", Table.Values[0+c*Table.AnzColums], Table.Values[1+c*Table.AnzColums]), *s, TEC_FONT_LEFT, 13, 3+i*13, 161, 3+i*13+14)<3+12)
-         ListBm.PrintAt (bprintf ("%s - %s", Table.Values[0+c*Table.AnzColums], Table.Values[1+c*Table.AnzColums]), *s, TEC_FONT_LEFT, 13, 3+i*13, 161, 3+i*13+14);
-      else if (ListBm.TryPrintAt (bprintf ("%s - %s", Table.Values[0+c*Table.AnzColums], Table.Values[3+c*Table.AnzColums]), *s, TEC_FONT_LEFT, 13, 3+i*13, 161, 3+i*13+14)<3+12)
-         ListBm.PrintAt (bprintf ("%s - %s", Table.Values[0+c*Table.AnzColums], Table.Values[3+c*Table.AnzColums]), *s, TEC_FONT_LEFT, 13, 3+i*13, 161, 3+i*13+14);
+      if (ListBm.TryPrintAt (bprintf ("%s - %s", (LPCTSTR)Table.Values[0+c*Table.AnzColums], (LPCTSTR)Table.Values[1+c*Table.AnzColums]), *s, TEC_FONT_LEFT, 13, 3+i*13, 161, 3+i*13+14)<3+12)
+         ListBm.PrintAt (bprintf ("%s - %s", (LPCTSTR)Table.Values[0+c*Table.AnzColums], (LPCTSTR)Table.Values[1+c*Table.AnzColums]), *s, TEC_FONT_LEFT, 13, 3+i*13, 161, 3+i*13+14);
+      else if (ListBm.TryPrintAt (bprintf ("%s - %s", (LPCTSTR)Table.Values[0+c*Table.AnzColums], (LPCTSTR)Table.Values[3+c*Table.AnzColums]), *s, TEC_FONT_LEFT, 13, 3+i*13, 161, 3+i*13+14)<3+12)
+         ListBm.PrintAt (bprintf ("%s - %s", (LPCTSTR)Table.Values[0+c*Table.AnzColums], (LPCTSTR)Table.Values[3+c*Table.AnzColums]), *s, TEC_FONT_LEFT, 13, 3+i*13, 161, 3+i*13+14);
       else
-         ListBm.PrintAt (bprintf ("%s - %s", Table.Values[2+c*Table.AnzColums], Table.Values[3+c*Table.AnzColums]), *s, TEC_FONT_LEFT, 13, 3+i*13, 161, 3+i*13+14);
+         ListBm.PrintAt (bprintf ("%s - %s", (LPCTSTR)Table.Values[2+c*Table.AnzColums], (LPCTSTR)Table.Values[3+c*Table.AnzColums]), *s, TEC_FONT_LEFT, 13, 3+i*13, 161, 3+i*13+14);
    }
 
    ListBm.PrintAt (bprintf ("%li / %li", RoutePage+1, RoutePageMax), FontSmallBlack, TEC_FONT_CENTERED, 4, 3+ListSize*13, 161, 3+ListSize*13+14);
@@ -411,12 +411,12 @@ void CRouteBox::RepaintTip (void)
       CRentRoute &qRRoute = Sim.Players.Players[PlayerNum].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)];
 
       //Von/Nach
-      if (TipBm.TryPrintAt (bprintf ("%s - %s", Table.Values[0+CurrentTipIndex*Table.AnzColums], Table.Values[1+CurrentTipIndex*Table.AnzColums]), FontSmallBlack, TEC_FONT_LEFT, 27+4, 3, 125, 3+14)<3+12)
-         TipBm.PrintAt (bprintf ("%s - %s", Table.Values[0+CurrentTipIndex*Table.AnzColums], Table.Values[1+CurrentTipIndex*Table.AnzColums]), FontSmallBlack, TEC_FONT_LEFT, 27+4, 3, 125, 3+14);
-      else if (TipBm.TryPrintAt (bprintf ("%s - %s", Table.Values[0+CurrentTipIndex*Table.AnzColums], Table.Values[3+CurrentTipIndex*Table.AnzColums]), FontSmallBlack, TEC_FONT_LEFT, 27+4, 3, 125, 3+14)<3+12)
-         TipBm.PrintAt (bprintf ("%s - %s", Table.Values[0+CurrentTipIndex*Table.AnzColums], Table.Values[3+CurrentTipIndex*Table.AnzColums]), FontSmallBlack, TEC_FONT_LEFT, 27+4, 3, 125, 3+14);
+      if (TipBm.TryPrintAt (bprintf ("%s - %s", (LPCTSTR)Table.Values[0+CurrentTipIndex*Table.AnzColums], (LPCTSTR)Table.Values[1+CurrentTipIndex*Table.AnzColums]), FontSmallBlack, TEC_FONT_LEFT, 27+4, 3, 125, 3+14)<3+12)
+         TipBm.PrintAt (bprintf ("%s - %s", (LPCTSTR)Table.Values[0+CurrentTipIndex*Table.AnzColums], (LPCTSTR)Table.Values[1+CurrentTipIndex*Table.AnzColums]), FontSmallBlack, TEC_FONT_LEFT, 27+4, 3, 125, 3+14);
+      else if (TipBm.TryPrintAt (bprintf ("%s - %s", (LPCTSTR)Table.Values[0+CurrentTipIndex*Table.AnzColums], (LPCTSTR)Table.Values[3+CurrentTipIndex*Table.AnzColums]), FontSmallBlack, TEC_FONT_LEFT, 27+4, 3, 125, 3+14)<3+12)
+         TipBm.PrintAt (bprintf ("%s - %s", (LPCTSTR)Table.Values[0+CurrentTipIndex*Table.AnzColums], (LPCTSTR)Table.Values[3+CurrentTipIndex*Table.AnzColums]), FontSmallBlack, TEC_FONT_LEFT, 27+4, 3, 125, 3+14);
       else
-         TipBm.PrintAt (bprintf ("%s - %s", Table.Values[2+CurrentTipIndex*Table.AnzColums], Table.Values[3+CurrentTipIndex*Table.AnzColums]), FontSmallBlack, TEC_FONT_LEFT, 27+4, 3, 125, 3+14);
+         TipBm.PrintAt (bprintf ("%s - %s", (LPCTSTR)Table.Values[2+CurrentTipIndex*Table.AnzColums], (LPCTSTR)Table.Values[3+CurrentTipIndex*Table.AnzColums]), FontSmallBlack, TEC_FONT_LEFT, 27+4, 3, 125, 3+14);
 
       //Entfernung, Potentielle Nachfrage, Nachfrage
       TipBm.PrintAt (StandardTexte.GetS (TOKEN_AUFTRAG, 1007), FontSmallBlack, TEC_FONT_LEFT, XY(4,27), XY(177, 157));
@@ -449,12 +449,12 @@ void CRouteBox::RepaintTip (void)
             for (c=0; c<4; c++)
                if (Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang)
                   if (Sim.Players.Players[(SLONG)PlayerNum].HasBerater(BERATERTYP_INFO))
-                     TipBm.PrintAt ((CString)bprintf ("%li. %s (%li%%)", Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang, Sim.Players.Players[c].AirlineX, Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].RoutenAuslastung), FontSmallBlack, TEC_FONT_LEFT, XY(4,114+Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang*12), XY(172,166));
+                     TipBm.PrintAt ((CString)bprintf ("%li. %s (%li%%)", (LPCTSTR)Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang, (LPCTSTR)Sim.Players.Players[c].AirlineX, (LPCTSTR)Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].RoutenAuslastung), FontSmallBlack, TEC_FONT_LEFT, XY(4,114+Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang*12), XY(172,166));
                   else
                      if (c==PlayerNum)
-                        TipBm.PrintAt ((CString)bprintf ("%li. %s", Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang, Sim.Players.Players[c].AirlineX), FontSmallBlack, TEC_FONT_LEFT, XY(4,114+Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang*12), XY(172,166));
+                        TipBm.PrintAt ((CString)bprintf ("%li. %s", (LPCTSTR)Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang, (LPCTSTR)Sim.Players.Players[c].AirlineX), FontSmallBlack, TEC_FONT_LEFT, XY(4,114+Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang*12), XY(172,166));
                      else
-                        TipBm.PrintAt ((CString)bprintf ("%li. %s", Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang, StandardTexte.GetS (TOKEN_ROUTE, 997)), FontSmallBlack, TEC_FONT_LEFT, XY(4,114+Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang*12), XY(172,166));
+                        TipBm.PrintAt ((CString)bprintf ("%li. %s", (LPCTSTR)Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang, StandardTexte.GetS (TOKEN_ROUTE, 997)), FontSmallBlack, TEC_FONT_LEFT, XY(4,114+Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang*12), XY(172,166));
             break;
          }
    }

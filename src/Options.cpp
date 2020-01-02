@@ -245,7 +245,7 @@ void Options::RefreshKlackerField(void)
       KlackerTafel.PrintAt (0, 0, StandardTexte.GetS (TOKEN_MISC, 4070));
 
       for (c=0; c<12; c++)
-         KlackerTafel.PrintAt (1, 2+c, bprintf ("%2li:%s", c+1, SavegameNames[c]));
+         KlackerTafel.PrintAt (1, 2+c, bprintf ("%2li:%s", c+1,  (LPCTSTR)SavegameNames[c]));
 
       KlackerTafel.PrintAt (0, 15, StandardTexte.GetS (TOKEN_MISC, 4096));
    }
@@ -254,7 +254,7 @@ void Options::RefreshKlackerField(void)
       KlackerTafel.PrintAt (0, 0, StandardTexte.GetS (TOKEN_MISC, 4071));
 
       for (c=0; c<11; c++)
-         KlackerTafel.PrintAt (1, 2+c, bprintf ("%2li:%s", c+1, SavegameNames[c]));
+         KlackerTafel.PrintAt (1, 2+c, bprintf ("%2li:%s", c+1,  (LPCTSTR)SavegameNames[c]));
 
       if (CursorY!=-1)
       {
@@ -653,9 +653,9 @@ void Options::OnLButtonDown(UINT nFlags, CPoint point)
                if (Sim.bNetwork)
                {
                   Sim.UniqueGameId=((timeGetTime () ^ DWORD(rand()%30000) ^ gMousePosition.x ^ gMousePosition.y)&0x7fffffff);
-                  Sim.Players.Players[(SLONG)PlayerNum].NetSave (Sim.UniqueGameId, CursorY, SavegameNames[CursorY]);
+                  Sim.Players.Players[(SLONG)PlayerNum].NetSave (Sim.UniqueGameId, CursorY,  (LPCTSTR)SavegameNames[CursorY]);
                }
-               Sim.SaveGame (CursorY, SavegameNames[CursorY]);
+               Sim.SaveGame (CursorY,  (LPCTSTR)SavegameNames[CursorY]);
 
                if ((Sim.Gamestate & 31)==GAMESTATE_INIT)
                {
@@ -805,9 +805,9 @@ void Options::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
          if (Sim.bNetwork)
          {
             Sim.UniqueGameId=((timeGetTime () ^ DWORD(rand()%30000) ^ gMousePosition.x ^ gMousePosition.y)&0x7fffffff);
-            Sim.Players.Players[(SLONG)PlayerNum].NetSave (Sim.UniqueGameId, CursorY, SavegameNames[CursorY]);
+            Sim.Players.Players[(SLONG)PlayerNum].NetSave (Sim.UniqueGameId, CursorY,  (LPCTSTR)SavegameNames[CursorY]);
          }
-         Sim.SaveGame (CursorY, SavegameNames[CursorY]);
+         Sim.SaveGame (CursorY,  (LPCTSTR)SavegameNames[CursorY]);
 
          if ((Sim.Gamestate & 31)==GAMESTATE_INIT)
          {

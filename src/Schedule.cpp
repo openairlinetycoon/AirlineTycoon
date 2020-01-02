@@ -199,19 +199,19 @@ void CFlugplan::Dump (bool bHercules)
       switch (Flug[e].ObjectType)
       {
           case 1:
-             sprintf (Buffer, "[%02li] %02li/%02li-%02li/%02li Route   %s-%s", e, Flug[e].Startzeit, Flug[e].Startdate, Flug[e].Landezeit, Flug[e].Landedate, Cities[Flug[e].VonCity].Name, Cities[Flug[e].NachCity].Name);
+             sprintf (Buffer, "[%02li] %02li/%02li-%02li/%02li Route   %s-%s", e, Flug[e].Startzeit, Flug[e].Startdate, Flug[e].Landezeit, Flug[e].Landedate, (LPCTSTR)Cities[Flug[e].VonCity].Name, (LPCTSTR)Cities[Flug[e].NachCity].Name);
              break;
 
           case 2:
-             sprintf (Buffer, "[%02li] %02li/%02li-%02li/%02li Auftrag %s-%s", e, Flug[e].Startzeit, Flug[e].Startdate, Flug[e].Landezeit, Flug[e].Landedate, Cities[Flug[e].VonCity].Name, Cities[Flug[e].NachCity].Name);
+             sprintf (Buffer, "[%02li] %02li/%02li-%02li/%02li Auftrag %s-%s", e, Flug[e].Startzeit, Flug[e].Startdate, Flug[e].Landezeit, Flug[e].Landedate, (LPCTSTR)Cities[Flug[e].VonCity].Name, (LPCTSTR)Cities[Flug[e].NachCity].Name);
              break;
 
           case 3:
-             sprintf (Buffer, "[%02li] %02li/%02li-%02li/%02li Auto    %s-%s", e, Flug[e].Startzeit, Flug[e].Startdate, Flug[e].Landezeit, Flug[e].Landedate, Cities[Flug[e].VonCity].Name, Cities[Flug[e].NachCity].Name);
+             sprintf (Buffer, "[%02li] %02li/%02li-%02li/%02li Auto    %s-%s", e, Flug[e].Startzeit, Flug[e].Startdate, Flug[e].Landezeit, Flug[e].Landedate, (LPCTSTR)Cities[Flug[e].VonCity].Name, (LPCTSTR)Cities[Flug[e].NachCity].Name);
              break;
 
           case 4:
-             sprintf (Buffer, "[%02li] %02li/%02li-%02li/%02li Fracht  %s-%s", e, Flug[e].Startzeit, Flug[e].Startdate, Flug[e].Landezeit, Flug[e].Landedate, Cities[Flug[e].VonCity].Name, Cities[Flug[e].NachCity].Name);
+             sprintf (Buffer, "[%02li] %02li/%02li-%02li/%02li Fracht  %s-%s", e, Flug[e].Startzeit, Flug[e].Startdate, Flug[e].Landezeit, Flug[e].Landedate, (LPCTSTR)Cities[Flug[e].VonCity].Name, (LPCTSTR)Cities[Flug[e].NachCity].Name);
              break;
 
           default:
@@ -728,7 +728,7 @@ void CFlugplanEintrag::BookFlight (CPlane *Plane, SLONG PlayerNum)
    //Bei Aufträgen, die Prämie verbuchen; Aufträge als erledigt markieren
    else if (ObjectType==2)
    {
-      Hdu.HercPrintf("Player %li flies %li Passengers from %s to %s\n", PlayerNum, qPlayer.Auftraege[ObjectId].Personen, Cities[qPlayer.Auftraege[ObjectId].VonCity].Name, Cities[qPlayer.Auftraege[ObjectId].NachCity].Name);
+      Hdu.HercPrintf("Player %li flies %li Passengers from %s to %s\n", PlayerNum, qPlayer.Auftraege[ObjectId].Personen, (LPCTSTR)Cities[qPlayer.Auftraege[ObjectId].VonCity].Name, (LPCTSTR)Cities[qPlayer.Auftraege[ObjectId].NachCity].Name);
 
       if (Okay==0 || Okay==1)
       {

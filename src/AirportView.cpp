@@ -1264,13 +1264,13 @@ void AirportView::OnPaint()
             }
             else if (c>=ROOM_BURO_A && c<=ROOM_BURO_D && c%10==0 && c/10==ULONG(Sim.localPlayer+1))
             {
-               if (gLanguage==LANGUAGE_D) SetMouseLook (CURSOR_HOT, 5000+c, CString (bprintf (StandardTexte.GetS (TOKEN_TOOLTIP, 5000+c), Sim.Players.Players[SLONG(c/10-1)].AirlineX))+" (B)", ROOM_AIRPORT, 10);
-                                     else SetMouseLook (CURSOR_HOT, 5000+c, CString (bprintf (StandardTexte.GetS (TOKEN_TOOLTIP, 5000+c), Sim.Players.Players[SLONG(c/10-1)].AirlineX))+" (O)", ROOM_AIRPORT, 10);
+               if (gLanguage==LANGUAGE_D) SetMouseLook (CURSOR_HOT, 5000+c, CString (bprintf (StandardTexte.GetS (TOKEN_TOOLTIP, 5000+c), (LPCTSTR)Sim.Players.Players[SLONG(c/10-1)].AirlineX))+" (B)", ROOM_AIRPORT, 10);
+                                     else SetMouseLook (CURSOR_HOT, 5000+c, CString (bprintf (StandardTexte.GetS (TOKEN_TOOLTIP, 5000+c), (LPCTSTR)Sim.Players.Players[SLONG(c/10-1)].AirlineX))+" (O)", ROOM_AIRPORT, 10);
             }
             else if (c>=ROOM_PERSONAL_A && c<=ROOM_PERSONAL_D && c%10==1 && c/10==ULONG(Sim.localPlayer+1))
-               SetMouseLook (CURSOR_HOT, 5000+c, CString (bprintf (StandardTexte.GetS (TOKEN_TOOLTIP, 5000+c), Sim.Players.Players[SLONG(c/10-1)].AirlineX))+" (P)", ROOM_AIRPORT, 10);
+               SetMouseLook (CURSOR_HOT, 5000+c, CString (bprintf (StandardTexte.GetS (TOKEN_TOOLTIP, 5000+c), (LPCTSTR)Sim.Players.Players[SLONG(c/10-1)].AirlineX))+" (P)", ROOM_AIRPORT, 10);
             else if (c>=ROOM_BURO_A && c<=ROOM_PERSONAL_D)
-               SetMouseLook (CURSOR_HOT, 5000+c, CString (bprintf (StandardTexte.GetS (TOKEN_TOOLTIP, 5000+c), Sim.Players.Players[SLONG(c/10-1)].AirlineX)), ROOM_AIRPORT, 10);
+               SetMouseLook (CURSOR_HOT, 5000+c, CString (bprintf (StandardTexte.GetS (TOKEN_TOOLTIP, 5000+c), (LPCTSTR)Sim.Players.Players[SLONG(c/10-1)].AirlineX)), ROOM_AIRPORT, 10);
             else if (c) SetMouseLook (CURSOR_HOT, 5000+c, ROOM_AIRPORT, 10);
          }
 			if (!IsDialogOpen() && !MenuIsOpen() && !Sim.bPause && gMousePosition.y<440)
@@ -3777,9 +3777,9 @@ void AIRPORT::RepaintTextBricks (void)
                      {
                         TextBricks[Plan->Flug[e].Gate].FillWith (0);
                         TextBricks[Plan->Flug[e].Gate].PrintAt (
-                           bprintf ("%s-%s %li:00", Cities[Plan->Flug[e].VonCity].Kuerzel, Cities[Plan->Flug[e].NachCity].Kuerzel, Plan->Flug[e].Startzeit+1), FontSmallWhiteX, TEC_FONT_LEFT, 0, 0, 132, 12);
+                           bprintf ("%s-%s %li:00", (LPCTSTR)Cities[Plan->Flug[e].VonCity].Kuerzel, (LPCTSTR)Cities[Plan->Flug[e].NachCity].Kuerzel, Plan->Flug[e].Startzeit+1), FontSmallWhiteX, TEC_FONT_LEFT, 0, 0, 132, 12);
 
-                        TextBrickTexts[Plan->Flug[e].Gate]=bprintf ("%s-%s %li:00", Cities[Plan->Flug[e].VonCity].Name, Cities[Plan->Flug[e].NachCity].Name, Plan->Flug[e].Startzeit+1);
+                        TextBrickTexts[Plan->Flug[e].Gate]=bprintf ("%s-%s %li:00", (LPCTSTR)Cities[Plan->Flug[e].VonCity].Name, (LPCTSTR)Cities[Plan->Flug[e].NachCity].Name, Plan->Flug[e].Startzeit+1);
                         TextPrinted[Plan->Flug[e].Gate]=Plan->Flug[e].Startzeit+1;
                      }
                   }
@@ -3790,9 +3790,9 @@ void AIRPORT::RepaintTextBricks (void)
                      {
                         TextBricks[TextBricks.AnzEntries()/2+Plan->Flug[e].Gate].FillWith (0);
                         TextBricks[TextBricks.AnzEntries()/2+Plan->Flug[e].Gate].PrintAt (
-                           bprintf ("%s-%s %li:00", Cities[Plan->Flug[e].VonCity].Kuerzel, Cities[Plan->Flug[e].NachCity].Kuerzel, Plan->Flug[e].Startzeit+1), FontSmallWhiteX, TEC_FONT_LEFT, 0, 0, 132, 12);
+                           bprintf ("%s-%s %li:00", (LPCTSTR)Cities[Plan->Flug[e].VonCity].Kuerzel, (LPCTSTR)Cities[Plan->Flug[e].NachCity].Kuerzel, Plan->Flug[e].Startzeit+1), FontSmallWhiteX, TEC_FONT_LEFT, 0, 0, 132, 12);
 
-                        TextBrickTexts[TextBricks.AnzEntries()/2+Plan->Flug[e].Gate]=bprintf ("%s-%s %li:00", Cities[Plan->Flug[e].VonCity].Name, Cities[Plan->Flug[e].NachCity].Name, Plan->Flug[e].Startzeit+1);
+                        TextBrickTexts[TextBricks.AnzEntries()/2+Plan->Flug[e].Gate]=bprintf ("%s-%s %li:00", (LPCTSTR)Cities[Plan->Flug[e].VonCity].Name, (LPCTSTR)Cities[Plan->Flug[e].NachCity].Name, Plan->Flug[e].Startzeit+1);
                         TextPrinted[TextBricks.AnzEntries()/2+Plan->Flug[e].Gate]=Plan->Flug[e].Startzeit+1;
                      }
                   }
@@ -3813,9 +3813,9 @@ void AIRPORT::RepaintTextBricks (void)
                      {
                         TextBricks[TextBricks.AnzEntries()/2+Plan->Flug[e].Gate].FillWith (0);
                         TextBricks[TextBricks.AnzEntries()/2+Plan->Flug[e].Gate].PrintAt (
-                           bprintf ("%s-%s %li:00", Cities[Plan->Flug[e].VonCity].Kuerzel, Cities[Plan->Flug[e].NachCity].Kuerzel, Plan->Flug[e].Landezeit), FontSmallWhiteX, TEC_FONT_LEFT, 0, 0, 132, 12);
+                           bprintf ("%s-%s %li:00", (LPCTSTR)Cities[Plan->Flug[e].VonCity].Kuerzel, (LPCTSTR)Cities[Plan->Flug[e].NachCity].Kuerzel, Plan->Flug[e].Landezeit), FontSmallWhiteX, TEC_FONT_LEFT, 0, 0, 132, 12);
 
-                        TextBrickTexts[TextBricks.AnzEntries()/2+Plan->Flug[e].Gate]=bprintf ("%s-%s %li:00", Cities[Plan->Flug[e].VonCity].Name, Cities[Plan->Flug[e].NachCity].Name, Plan->Flug[e].Landezeit);
+                        TextBrickTexts[TextBricks.AnzEntries()/2+Plan->Flug[e].Gate]=bprintf ("%s-%s %li:00", (LPCTSTR)Cities[Plan->Flug[e].VonCity].Name, (LPCTSTR)Cities[Plan->Flug[e].NachCity].Name, Plan->Flug[e].Landezeit);
                         TextPrinted[TextBricks.AnzEntries()/2+Plan->Flug[e].Gate]=Plan->Flug[e].Landezeit;
                      }
                   }

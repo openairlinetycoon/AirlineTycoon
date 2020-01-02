@@ -92,7 +92,7 @@ void PLAYER::CheckAuftragsBerater (const CAuftrag &Auftrag)
                       SLONG(Auftrag.Personen)<=qPlane.MaxPassagiere+qPlane.MaxPassagiereFC)
                   {
                      //Auftrag ersetzt Autoflug:
-                     Messages.AddMessage (BERATERTYP_AUFTRAG, bprintf (StandardTexte.GetS (TOKEN_ADVICE, 7013), qPlane.Name), MESSAGE_COMMENT, SMILEY_GREAT);
+                     Messages.AddMessage (BERATERTYP_AUFTRAG, bprintf (StandardTexte.GetS (TOKEN_ADVICE, 7013), (LPCTSTR)qPlane.Name), MESSAGE_COMMENT, SMILEY_GREAT);
                      return;
                   }
                }

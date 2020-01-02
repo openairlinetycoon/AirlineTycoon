@@ -797,7 +797,7 @@ void NewGamePopup::RefreshKlackerField(void)
          {
             char Buffer[80];
 
-            strcpy (Buffer, Cities[c].Name);
+            strcpy (Buffer, (LPCTSTR)Cities[c].Name);
 
             KlackerTafel.PrintAt (3, 2+c-PageSub, Buffer);
             if (Cities.GetIdFromIndex(c)==(ULONG)Sim.HomeAirportId) KlackerTafel.PrintAt (0, 2+c-PageSub, "==>");

@@ -231,7 +231,7 @@ ULONG CITIES::GetIdFromName (char *Name)
    SLONG c;
 
    for (c=0; c<(SLONG)AnzEntries(); c++)
-      if (IsInAlbum(c) && stricmp (Name, Cities[c].Name)==0)
+      if (IsInAlbum(c) && stricmp (Name, (LPCTSTR)Cities[c].Name)==0)
          return (GetIdFromIndex(c));
 
    TeakLibW_Exception (FNL, ExcNever);
@@ -258,7 +258,7 @@ ULONG CITIES::GetIdFromNames (char *Name, ...)
    foreacharg (LPSTR, Name, NULL)
    {
       for (c=0; c<(SLONG)AnzEntries(); c++)
-         if (IsInAlbum(c) && stricmp (qLPSTR, Cities[c].Name)==0)
+         if (IsInAlbum(c) && stricmp (qLPSTR, (LPCTSTR)Cities[c].Name)==0)
             return (GetIdFromIndex(c));
    }
 

@@ -116,9 +116,9 @@ void CDataTable::FillWithPlanes (CPlanes *Planes, BOOL Expert, SLONG FilterType,
             Values[d*4+2] = Einheiten[EINH_DM].bString ((SLONG)qPlane.Wartungskosten);
 
             if (qPlane.Ort>=0)
-               Values[d*4+3] = bprintf ("%s %s", StandardTexte.GetS (TOKEN_SCHED, 1105), Cities[qPlane.Ort].Name);
+               Values[d*4+3] = bprintf ("%s %s", StandardTexte.GetS (TOKEN_SCHED, 1105), (LPCTSTR)Cities[qPlane.Ort].Name);
             else
-               Values[d*4+3] = bprintf ("%s %s", StandardTexte.GetS (TOKEN_SCHED, 1102), Cities[qPlane.Flugplan.Flug[qPlane.Flugplan.NextFlight].NachCity].Name);
+               Values[d*4+3] = bprintf ("%s %s", StandardTexte.GetS (TOKEN_SCHED, 1102), (LPCTSTR)Cities[qPlane.Flugplan.Flug[qPlane.Flugplan.NextFlight].NachCity].Name);
 
             //if (qPlane.AnzBegleiter<PlaneTypes[qPlane.TypeId].AnzBegleiter ||
             if (qPlane.AnzBegleiter<qPlane.ptAnzBegleiter ||

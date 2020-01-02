@@ -886,7 +886,7 @@ void HEADLINES::ComparisonHeadlines (void)
                }
 
             if (Sim.Players.Players[best].Planes.GetNumUsed()>10)
-               AddOverride (1, bprintf ((LPCTSTR)(CString)StandardTexte.GetS (TOKEN_MISC, 2050), Sim.Players.Players[best].AirlineX), GetIdFromString ("PLANES")+best*100, 10+(best==Sim.localPlayer)*10);
+               AddOverride (1, bprintf ((LPCTSTR)(CString)StandardTexte.GetS (TOKEN_MISC, 2050), (LPCTSTR)Sim.Players.Players[best].AirlineX), GetIdFromString ("PLANES")+best*100, 10+(best==Sim.localPlayer)*10);
             break;
 
          case 1: //Image
@@ -907,7 +907,7 @@ void HEADLINES::ComparisonHeadlines (void)
                }
 
             if (best2!=-1 && Sim.Players.Players[best].Image>100)
-               AddOverride (1, bprintf ((LPCTSTR)(CString)StandardTexte.GetS (TOKEN_MISC, 2051), Sim.Players.Players[best].AirlineX, Sim.Players.Players[best2].AirlineX), GetIdFromString ("LIEBSTE")+best*100, 10+(best==Sim.localPlayer)*10);
+               AddOverride (1, bprintf ((LPCTSTR)(CString)StandardTexte.GetS (TOKEN_MISC, 2051), (LPCTSTR)Sim.Players.Players[best].AirlineX, (LPCTSTR)Sim.Players.Players[best2].AirlineX), GetIdFromString ("LIEBSTE")+best*100, 10+(best==Sim.localPlayer)*10);
             break;
 
          case 2: //Routen
@@ -921,7 +921,7 @@ void HEADLINES::ComparisonHeadlines (void)
                }
 
             if (Sim.Players.Players[best].RentRouten.GetNumUsed()>30)
-               AddOverride (1, bprintf ((LPCTSTR)(CString)StandardTexte.GetS (TOKEN_MISC, 2052), Sim.Players.Players[best].AirlineX, Sim.Players.Players[best].RentRouten.GetNumUsed()), GetIdFromString ("ROUTEN")+best*100, 10+(best==Sim.localPlayer)*10);
+               AddOverride (1, bprintf ((LPCTSTR)(CString)StandardTexte.GetS (TOKEN_MISC, 2052), (LPCTSTR)Sim.Players.Players[best].AirlineX, Sim.Players.Players[best].RentRouten.GetNumUsed()), GetIdFromString ("ROUTEN")+best*100, 10+(best==Sim.localPlayer)*10);
             break;
 
          case 3: //Geld
@@ -935,7 +935,7 @@ void HEADLINES::ComparisonHeadlines (void)
                }
 
             if (Sim.Players.Players[best].Money>25000000)
-               AddOverride (1, bprintf ((LPCTSTR)(CString)StandardTexte.GetS (TOKEN_MISC, 2053), Sim.Players.Players[best].AirlineX), GetIdFromString ("GELD")+best*100, 10+(best==Sim.localPlayer)*10);
+               AddOverride (1, bprintf ((LPCTSTR)(CString)StandardTexte.GetS (TOKEN_MISC, 2053), (LPCTSTR)Sim.Players.Players[best].AirlineX), GetIdFromString ("GELD")+best*100, 10+(best==Sim.localPlayer)*10);
             break;
 
          case 4: //Bester Pilot:
@@ -1024,7 +1024,7 @@ void HEADLINES::ComparisonHeadlines (void)
          for (c=0; c<Sim.Players.Players.AnzEntries(); c++)
             if ((Sim.Players.Players[c].RocketFlags&ROCKET_PART_ONE)==ROCKET_PART_ONE)
             {
-               AddOverride (1, bprintf ((LPCTSTR)(CString)StandardTexte.GetS (TOKEN_MISC, 2060), Sim.Players.Players[c].AirlineX), GetIdFromString("INTRVIEW"), 15+(c==Sim.localPlayer)*10);
+               AddOverride (1, bprintf ((LPCTSTR)(CString)StandardTexte.GetS (TOKEN_MISC, 2060), (LPCTSTR)Sim.Players.Players[c].AirlineX), GetIdFromString("INTRVIEW"), 15+(c==Sim.localPlayer)*10);
                break; 
             }
       }
@@ -1037,7 +1037,7 @@ void HEADLINES::ComparisonHeadlines (void)
          for (c=0; c<Sim.Players.Players.AnzEntries(); c++)
             if ((Sim.Players.Players[c].RocketFlags&ROCKET_PART_TWO_A)==ROCKET_PART_TWO_A)
             {
-               AddOverride (1, bprintf ((LPCTSTR)(CString)StandardTexte.GetS (TOKEN_MISC, 2061), Sim.Players.Players[c].AirlineX), 0, 20+(c==Sim.localPlayer)*10);
+               AddOverride (1, bprintf ((LPCTSTR)(CString)StandardTexte.GetS (TOKEN_MISC, 2061), (LPCTSTR)Sim.Players.Players[c].AirlineX), 0, 20+(c==Sim.localPlayer)*10);
                break; 
             }
       }

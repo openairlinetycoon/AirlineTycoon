@@ -637,7 +637,7 @@ public:
     BUFFER<char>& GetB(unsigned long, unsigned long);
     char* GetP(unsigned long, unsigned long);
     char* GetS(unsigned long, unsigned long);
-    char* GetS(unsigned long, char const*);
+    //char* GetS(unsigned long, char const*);
     char* GetS(char const* c, unsigned long i) { return GetS(*(unsigned long*)c, i); }
 
 private:

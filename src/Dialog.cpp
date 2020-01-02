@@ -290,9 +290,9 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                case 1045:
                case 1500:
                   MakeSayWindow (1, TOKEN_SABOTAGE, 1030, 1033, TRUE, &FontDialog, &FontDialogLight, 
-                     CString(bprintf ("%s (%s)", Sim.Players.Players[0+(PlayerNum<=0)].AirlineX, Sim.Players.Players[0+(PlayerNum<=0)].NameX)),
-                     CString(bprintf ("%s (%s)", Sim.Players.Players[1+(PlayerNum<=1)].AirlineX, Sim.Players.Players[1+(PlayerNum<=1)].NameX)),
-                     CString(bprintf ("%s (%s)", Sim.Players.Players[2+(PlayerNum<=2)].AirlineX, Sim.Players.Players[2+(PlayerNum<=2)].NameX)),
+                     CString(bprintf ("%s (%s)", (LPCTSTR)Sim.Players.Players[0+(PlayerNum<=0)].AirlineX, (LPCTSTR)Sim.Players.Players[0+(PlayerNum<=0)].NameX)),
+                     CString(bprintf ("%s (%s)", (LPCTSTR)Sim.Players.Players[1+(PlayerNum<=1)].AirlineX, (LPCTSTR)Sim.Players.Players[1+(PlayerNum<=1)].NameX)),
+                     CString(bprintf ("%s (%s)", (LPCTSTR)Sim.Players.Players[2+(PlayerNum<=2)].AirlineX, (LPCTSTR)Sim.Players.Players[2+(PlayerNum<=2)].NameX)),
                      0);
                   break;
 
@@ -3645,7 +3645,7 @@ _ehemals_2080:
                   else if (Sim.Difficulty>=DIFF_ADDON)
                   {
                      if (Sim.Difficulty==DIFF_ADDON03)
-                        MakeSayWindow (0, TOKEN_BOSS, 4070+Sim.Difficulty-DIFF_ADDON, pFontPartner, Cities[Sim.KrisenCity].Name);
+                        MakeSayWindow (0, TOKEN_BOSS, 4070+Sim.Difficulty-DIFF_ADDON, pFontPartner, (LPCTSTR)Cities[Sim.KrisenCity].Name);
                      else
                         MakeSayWindow (0, TOKEN_BOSS, 4070+Sim.Difficulty-DIFF_ADDON, pFontPartner);
 
@@ -3963,7 +3963,7 @@ _ehemals_2080:
                   else
                   {
                      Sim.Players.Players[Sim.OvertakenAirline].IsOut=TRUE;
-                     //hprintf ("Event: Player %li (%s, %s) is out (overtaken)!!", DialogPar1, Sim.Players.Players[Sim.OvertakenAirline].NameX, Sim.Players.Players[Sim.OvertakenAirline].AirlineX);
+                     //hprintf ("Event: Player %li (%s, %s) is out (overtaken)!!", DialogPar1, (LPCTSTR)Sim.Players.Players[Sim.OvertakenAirline].NameX, (LPCTSTR)Sim.Players.Players[Sim.OvertakenAirline].AirlineX);
 
                      for (SLONG c=0; c<Sim.Players.Players.AnzEntries(); c++)
                      {

@@ -722,7 +722,7 @@ void BLOCK::Refresh (SLONG PlayerNum, BOOL StyleType)
 
                   //Typ/Hersteller:
                   if (qPlane.ptHersteller!="")
-                     Bitmap.PrintAt (bprintf ("%s %s", qPlane.ptHersteller, qPlane.ptName), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(2, 4), ClientArea+XY(172,170));
+                     Bitmap.PrintAt (bprintf ("%s %s", (LPCTSTR)qPlane.ptHersteller, (LPCTSTR)qPlane.ptName), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(2, 4), ClientArea+XY(172,170));
                   else
                      Bitmap.PrintAt (qPlane.ptName, FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(2, 4), ClientArea+XY(172,170));
 
@@ -730,7 +730,7 @@ void BLOCK::Refresh (SLONG PlayerNum, BOOL StyleType)
                   Bitmap.PrintAt (StandardTexte.GetS (TOKEN_PLANE, 1000), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(2,25), ClientArea+XY(172,170));
                   Bitmap.PrintAt (StandardTexte.GetS (TOKEN_PLANE, 1017), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(2,37), ClientArea+XY(172,170));
                   Bitmap.PrintAt (StandardTexte.GetS (TOKEN_PLANE, 1001), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(2,37+11), ClientArea+XY(172,170));
-                  Bitmap.PrintAt (bprintf ("%li (%li)", qPlane.MaxPassagiere, qPlane.MaxPassagiereFC), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(75,25), ClientArea+XY(172,170));
+                  Bitmap.PrintAt (bprintf ("%li (%li)", (LPCTSTR)qPlane.MaxPassagiere, (LPCTSTR)qPlane.MaxPassagiereFC), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(75,25), ClientArea+XY(172,170));
                   Bitmap.PrintAt (Einheiten[EINH_T].bString (qPlane.ptPassagiere/10), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(75,25+11), ClientArea+XY(172,170));
                   Bitmap.PrintAt (Einheiten[EINH_KM].bString (qPlane.ptReichweite), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(75,37+11), ClientArea+XY(172,170));
 
@@ -745,10 +745,10 @@ void BLOCK::Refresh (SLONG PlayerNum, BOOL StyleType)
                   //Besatzung:
                   Bitmap.PrintAt (StandardTexte.GetS (TOKEN_PLANE, 1041), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(2,69+52-14), ClientArea+XY(172,170));
                   Bitmap.PrintAt (StandardTexte.GetS (TOKEN_PLANE, 1011), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(2,82+52-15), ClientArea+XY(172,170));
-                  //Bitmap.PrintAt (bprintf (StandardTexte.GetS (TOKEN_PLANE, 1014), qPlane.AnzPiloten, qPlaneType.AnzPiloten),   FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(75,69+52-14), ClientArea+XY(172,170));
-                  Bitmap.PrintAt (bprintf (StandardTexte.GetS (TOKEN_PLANE, 1014), qPlane.AnzPiloten, qPlane.ptAnzPiloten),   FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(75,69+52-14), ClientArea+XY(172,170));
-                  //Bitmap.PrintAt (bprintf (StandardTexte.GetS (TOKEN_PLANE, 1014), qPlane.AnzBegleiter, qPlaneType.AnzBegleiter), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(75,82+52-15), ClientArea+XY(172,170));
-                  Bitmap.PrintAt (bprintf (StandardTexte.GetS (TOKEN_PLANE, 1014), qPlane.AnzBegleiter, qPlane.ptAnzBegleiter), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(75,82+52-15), ClientArea+XY(172,170));
+                  //Bitmap.PrintAt (bprintf (StandardTexte.GetS (TOKEN_PLANE, 1014), (LPCTSTR)qPlane.AnzPiloten, (LPCTSTR)qPlaneType.AnzPiloten),   FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(75,69+52-14), ClientArea+XY(172,170));
+                  Bitmap.PrintAt (bprintf (StandardTexte.GetS (TOKEN_PLANE, 1014), (LPCTSTR)qPlane.AnzPiloten, (LPCTSTR)qPlane.ptAnzPiloten),   FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(75,69+52-14), ClientArea+XY(172,170));
+                  //Bitmap.PrintAt (bprintf (StandardTexte.GetS (TOKEN_PLANE, 1014), (LPCTSTR)qPlane.AnzBegleiter, (LPCTSTR)qPlaneType.AnzBegleiter), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(75,82+52-15), ClientArea+XY(172,170));
+                  Bitmap.PrintAt (bprintf (StandardTexte.GetS (TOKEN_PLANE, 1014), (LPCTSTR)qPlane.AnzBegleiter, (LPCTSTR)qPlane.ptAnzBegleiter), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(75,82+52-15), ClientArea+XY(172,170));
 
                   //Baujahr
                   Bitmap.PrintAt (StandardTexte.GetS (TOKEN_PLANE, 1013), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(2,82+52-13+15), ClientArea+XY(172,170));
@@ -821,8 +821,8 @@ void BLOCK::Refresh (SLONG PlayerNum, BOOL StyleType)
                   CPlane &qPlane = qPlayer.Planes[SelectedId];
 
                   //Typ/Hersteller:
-                  //Bitmap.PrintAt (bprintf ("%s %s", qPlaneType.Hersteller, qPlaneType.Name), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(2, 4), ClientArea+XY(172,170));
-                  Bitmap.PrintAt (bprintf ("%s %s", qPlane.ptHersteller, qPlane.ptName), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(2, 4), ClientArea+XY(172,170));
+                  //Bitmap.PrintAt (bprintf ("%s %s", (LPCTSTR)qPlaneType.Hersteller, (LPCTSTR)qPlaneType.Name), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(2, 4), ClientArea+XY(172,170));
+                  Bitmap.PrintAt (bprintf ("%s %s", (LPCTSTR)qPlane.ptHersteller, (LPCTSTR)qPlane.ptName), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(2, 4), ClientArea+XY(172,170));
 
                   //Kommentar:
                   //Bitmap.PrintAt (qPlaneType.Kommentar, FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(2, 30), ClientArea+XY(172,170));
@@ -1100,11 +1100,11 @@ switch_again:
 
                   Bitmap.BlitFromT (gInfoBms[0], ClientAreaB+XY(3, (c-PageB)*26+9));
 
-                  if (Bitmap.TryPrintAt (bprintf ("%s - %s", TableB.Values[0+c*TableB.AnzColums], TableB.Values[1+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(142,170).x, (c-PageB)*26+14))<12)
-                     Bitmap.PrintAt (bprintf ("%s - %s", TableB.Values[0+c*TableB.AnzColums], TableB.Values[1+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(142,170).x, (c-PageB)*26+14));
-                  else if (Bitmap.TryPrintAt (bprintf ("%s - %s", TableB.Values[0+c*TableB.AnzColums], TableB.Values[3+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(142,170).x, (c-PageB)*26+14))<12)
-                     Bitmap.PrintAt (bprintf ("%s - %s", TableB.Values[0+c*TableB.AnzColums], TableB.Values[3+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(142,170).x, (c-PageB)*26+14));
-                  else Bitmap.PrintAt (bprintf ("%s - %s", TableB.Values[2+c*TableB.AnzColums], TableB.Values[3+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(142,170).x, (c-PageB)*26+14));
+                  if (Bitmap.TryPrintAt (bprintf ("%s - %s", (LPCTSTR)TableB.Values[0+c*TableB.AnzColums], (LPCTSTR)TableB.Values[1+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(142,170).x, (c-PageB)*26+14))<12)
+                     Bitmap.PrintAt (bprintf ("%s - %s", (LPCTSTR)TableB.Values[0+c*TableB.AnzColums], (LPCTSTR)TableB.Values[1+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(142,170).x, (c-PageB)*26+14));
+                  else if (Bitmap.TryPrintAt (bprintf ("%s - %s", (LPCTSTR)TableB.Values[0+c*TableB.AnzColums], (LPCTSTR)TableB.Values[3+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(142,170).x, (c-PageB)*26+14))<12)
+                     Bitmap.PrintAt (bprintf ("%s - %s", (LPCTSTR)TableB.Values[0+c*TableB.AnzColums], (LPCTSTR)TableB.Values[3+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(142,170).x, (c-PageB)*26+14));
+                  else Bitmap.PrintAt (bprintf ("%s - %s", (LPCTSTR)TableB.Values[2+c*TableB.AnzColums], (LPCTSTR)TableB.Values[3+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(142,170).x, (c-PageB)*26+14));
 
                   Bitmap.PrintAt (TableB.Values[6+c*TableB.AnzColums], *s, TEC_FONT_RIGHT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(172,170).x, (c-PageB)*26+14));
 
@@ -1152,12 +1152,12 @@ switch_again:
 
                   if (TableB.ValueFlags[0+c*TableB.AnzColums]) s=&FontSmallGrey;
 
-                  if (Bitmap.TryPrintAt (bprintf ("%s - %s", TableB.Values[0+c*TableB.AnzColums], TableB.Values[1+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(172,170).x, (c-PageB)*26+14))<12)
-                     Bitmap.PrintAt (bprintf ("%s - %s", TableB.Values[0+c*TableB.AnzColums], TableB.Values[1+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(172,170).x, (c-PageB)*26+14));
-                  else if (Bitmap.TryPrintAt (bprintf ("%s - %s", TableB.Values[0+c*TableB.AnzColums], TableB.Values[3+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(172,170).x, (c-PageB)*26+14))<12)
-                     Bitmap.PrintAt (bprintf ("%s - %s", TableB.Values[0+c*TableB.AnzColums], TableB.Values[3+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(172,170).x, (c-PageB)*26+14));
+                  if (Bitmap.TryPrintAt (bprintf ("%s - %s", (LPCTSTR)TableB.Values[0+c*TableB.AnzColums], (LPCTSTR)TableB.Values[1+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(172,170).x, (c-PageB)*26+14))<12)
+                     Bitmap.PrintAt (bprintf ("%s - %s", (LPCTSTR)TableB.Values[0+c*TableB.AnzColums], (LPCTSTR)TableB.Values[1+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(172,170).x, (c-PageB)*26+14));
+                  else if (Bitmap.TryPrintAt (bprintf ("%s - %s", (LPCTSTR)TableB.Values[0+c*TableB.AnzColums], (LPCTSTR)TableB.Values[3+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(172,170).x, (c-PageB)*26+14))<12)
+                     Bitmap.PrintAt (bprintf ("%s - %s", (LPCTSTR)TableB.Values[0+c*TableB.AnzColums], (LPCTSTR)TableB.Values[3+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(172,170).x, (c-PageB)*26+14));
                   else
-                     Bitmap.PrintAt (bprintf ("%s - %s", TableB.Values[2+c*TableB.AnzColums], TableB.Values[3+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(172,170).x, (c-PageB)*26+14));
+                     Bitmap.PrintAt (bprintf ("%s - %s", (LPCTSTR)TableB.Values[2+c*TableB.AnzColums], (LPCTSTR)TableB.Values[3+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(172,170).x, (c-PageB)*26+14));
 
                   Bitmap.PrintAt (TableB.Values[4+c*TableB.AnzColums], *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26+10), ClientAreaB+XY(XY(172,170).x, (c-PageB)*26+13+10));
                }
@@ -1193,11 +1193,11 @@ switch_again:
 
                   Bitmap.BlitFromT (gInfoBms[0], ClientAreaB+XY(3, (c-PageB)*26+9));
 
-                  if (Bitmap.TryPrintAt (bprintf ("%s - %s", TableB.Values[0+c*TableB.AnzColums], TableB.Values[1+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(142,170).x, (c-PageB)*26+14))<12)
-                     Bitmap.PrintAt (bprintf ("%s - %s", TableB.Values[0+c*TableB.AnzColums], TableB.Values[1+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(142,170).x, (c-PageB)*26+14));
-                  else if (Bitmap.TryPrintAt (bprintf ("%s - %s", TableB.Values[0+c*TableB.AnzColums], TableB.Values[3+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(142,170).x, (c-PageB)*26+14))<12)
-                     Bitmap.PrintAt (bprintf ("%s - %s", TableB.Values[0+c*TableB.AnzColums], TableB.Values[3+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(142,170).x, (c-PageB)*26+14));
-                  else Bitmap.PrintAt (bprintf ("%s - %s", TableB.Values[2+c*TableB.AnzColums], TableB.Values[3+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(142,170).x, (c-PageB)*26+14));
+                  if (Bitmap.TryPrintAt (bprintf ("%s - %s", (LPCTSTR)TableB.Values[0+c*TableB.AnzColums], (LPCTSTR)TableB.Values[1+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(142,170).x, (c-PageB)*26+14))<12)
+                     Bitmap.PrintAt (bprintf ("%s - %s", (LPCTSTR)TableB.Values[0+c*TableB.AnzColums], (LPCTSTR)TableB.Values[1+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(142,170).x, (c-PageB)*26+14));
+                  else if (Bitmap.TryPrintAt (bprintf ("%s - %s", (LPCTSTR)TableB.Values[0+c*TableB.AnzColums], (LPCTSTR)TableB.Values[3+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(142,170).x, (c-PageB)*26+14))<12)
+                     Bitmap.PrintAt (bprintf ("%s - %s", (LPCTSTR)TableB.Values[0+c*TableB.AnzColums], (LPCTSTR)TableB.Values[3+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(142,170).x, (c-PageB)*26+14));
+                  else Bitmap.PrintAt (bprintf ("%s - %s", (LPCTSTR)TableB.Values[2+c*TableB.AnzColums], (LPCTSTR)TableB.Values[3+c*TableB.AnzColums]), *s, TEC_FONT_LEFT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(142,170).x, (c-PageB)*26+14));
 
                   Bitmap.PrintAt (TableB.Values[6+c*TableB.AnzColums], *s, TEC_FONT_RIGHT, ClientAreaB+XY(gPostItBms[0].Size.x+2, (c-PageB)*26), ClientAreaB+XY(XY(172,170).x, (c-PageB)*26+14));
 
@@ -1226,7 +1226,7 @@ switch_again:
                   CAuftrag &qAuftrag = qPlayer.Auftraege[SelectedIdB];
 
                   //Headline: LAX - DUS
-                  Bitmap.PrintAt (bprintf ("%s - %s", Cities[qAuftrag.VonCity].Kuerzel, Cities[qAuftrag.NachCity].Kuerzel), TitleFont, TEC_FONT_LEFT, TitleAreaB, Bitmap.Size);
+                  Bitmap.PrintAt (bprintf ("%s - %s", (LPCTSTR)Cities[qAuftrag.VonCity].Kuerzel, (LPCTSTR)Cities[qAuftrag.NachCity].Kuerzel), TitleFont, TEC_FONT_LEFT, TitleAreaB, Bitmap.Size);
 
                   //Ausführlich von A nach B
                   Bitmap.PrintAt (bprintf ("%s - %s", 
@@ -1288,7 +1288,7 @@ switch_again:
                   CRentRoute &qRRoute = qPlayer.RentRouten.RentRouten[(SLONG)Routen(SelectedIdB)];
 
                   //Headline: LAX - DUS
-                  Bitmap.PrintAt (bprintf ("%s - %s", Cities[qRoute.VonCity].Kuerzel, Cities[qRoute.NachCity].Kuerzel), TitleFont, TEC_FONT_LEFT, TitleAreaB, Bitmap.Size);
+                  Bitmap.PrintAt (bprintf ("%s - %s", (LPCTSTR)Cities[qRoute.VonCity].Kuerzel, (LPCTSTR)Cities[qRoute.NachCity].Kuerzel), TitleFont, TEC_FONT_LEFT, TitleAreaB, Bitmap.Size);
 
                   //Ausführlich von A nach B
                   Bitmap.PrintAt (bprintf ("%s - %s", 
@@ -1391,7 +1391,7 @@ switch_again:
                   CFracht &qFracht = qPlayer.Frachten[SelectedIdB];
 
                   //Headline: LAX - DUS
-                  Bitmap.PrintAt (bprintf ("%s - %s", Cities[qFracht.VonCity].Kuerzel, Cities[qFracht.NachCity].Kuerzel), TitleFont, TEC_FONT_LEFT, TitleAreaB, Bitmap.Size);
+                  Bitmap.PrintAt (bprintf ("%s - %s", (LPCTSTR)Cities[qFracht.VonCity].Kuerzel, (LPCTSTR)Cities[qFracht.NachCity].Kuerzel), TitleFont, TEC_FONT_LEFT, TitleAreaB, Bitmap.Size);
 
                   //Ausführlich von A nach B
                   Bitmap.PrintAt (bprintf ("%s - %s", 

@@ -343,7 +343,7 @@ void CPlane::DoOneStep (SLONG PlayerNum)
 
                   Ort = Sim.HomeAirportId;
 
-                  if (Flugplan.NextFlight!=-1) qPlayer.Messages.AddMessage (BERATERTYP_GIRL, bprintf(StandardTexte.GetS (TOKEN_ADVICE, 2354), Name, Cities[Flugplan.Flug[Flugplan.NextFlight].NachCity].Name));
+                  if (Flugplan.NextFlight!=-1) qPlayer.Messages.AddMessage (BERATERTYP_GIRL, bprintf(StandardTexte.GetS (TOKEN_ADVICE, 2354), Name, (LPCTSTR)Cities[Flugplan.Flug[Flugplan.NextFlight].NachCity].Name));
                   qPlayer.Image-=2;
                   Limit (-1000l, qPlayer.Image, 1000l);
 

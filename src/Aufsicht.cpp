@@ -576,7 +576,7 @@ CAufsicht::~CAufsicht()
                   qOpfer.Presseerklaerung=true;
                   qOpfer.NetSynchronizeFlags();
                   Sim.Players.Players[Sim.localPlayer].Letters.AddLetter (FALSE,
-                     bprintf (StandardTexte.GetS (TOKEN_LETTER, 509), qOpfer.AirlineX, qOpfer.NameX, qOpfer.AirlineX),
+                     bprintf (StandardTexte.GetS (TOKEN_LETTER, 509), (LPCTSTR)qOpfer.AirlineX, (LPCTSTR)qOpfer.NameX, (LPCTSTR)qOpfer.AirlineX),
                      "", "", 0);
                   if (qOpfer.PlayerNum==Sim.localPlayer)
                      qOpfer.Messages.AddMessage (BERATERTYP_GIRL, StandardTexte.GetS (TOKEN_ADVICE, 2020));
@@ -591,7 +591,7 @@ CAufsicht::~CAufsicht()
                            for (long e=0; e<qPlane.Flugplan.Flug.AnzEntries(); e++)
                               if (qPlane.Flugplan.Flug[e].ObjectType==1)
                                  qPlane.Flugplan.Flug[e].CalcPassengers (qOpfer.PlayerNum, qPlane);
-                                 //qPlane.Flugplan.Flug[e].CalcPassengers (qPlane.TypeId, qOpfer.PlayerNum, qPlane);
+                                 //qPlane.Flugplan.Flug[e].CalcPassengers (qPlane.TypeId, (LPCTSTR)qOpfer.PlayerNum, (LPCTSTR)qPlane);
                         }
                   }
                   break;

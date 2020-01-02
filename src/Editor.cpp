@@ -2317,8 +2317,8 @@ void CPlanePartRelation::FromString (CString str)
 //--------------------------------------------------------------------------------------------
 CString CPlanePartRelation::ToString (void)
 {
-   CString n1="-";
-   CString n2="-";
+   LPCTSTR n1="-";
+   LPCTSTR n2="-";
 
    if (FromBuildIndex!=-1) n1=gPlaneBuilds[FromBuildIndex].Shortname;
    if (FromBuildIndex!=-1) n2=gPlaneBuilds[ToBuildIndex].Shortname;

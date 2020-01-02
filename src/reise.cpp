@@ -346,7 +346,7 @@ void CReisebuero::RepaintZettel (SLONG n)
       ZettelBms[n].ReSize(gZettelBms[n%3].Size);
       ZettelBms[n].BlitFrom(gZettelBms[n%3]);
 
-      ZettelBms[n].PrintAt (bprintf ("%s-%s", Cities[ReisebueroAuftraege.Auftraege[n].VonCity].Kuerzel, Cities [ReisebueroAuftraege.Auftraege[n].NachCity].Kuerzel),
+      ZettelBms[n].PrintAt (bprintf ("%s-%s", (LPCTSTR)Cities[ReisebueroAuftraege.Auftraege[n].VonCity].Kuerzel, (LPCTSTR)Cities [ReisebueroAuftraege.Auftraege[n].NachCity].Kuerzel),
                       FontSmallBlack, TEC_FONT_CENTERED,
                       XY(3, 10), XY(ZettelBms[n].Size.x-3, 29));
 

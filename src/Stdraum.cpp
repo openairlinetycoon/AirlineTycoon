@@ -1340,7 +1340,7 @@ void CStdRaum::StartDialog (SLONG DialogPartner, BOOL Medium, SLONG DialogPar1, 
                else if (Sim.Difficulty>=DIFF_ADDON)
                {
                   if (Sim.Difficulty==DIFF_ADDON03)
-                     MakeSayWindow (0, TOKEN_BOSS, 1600+(Sim.Difficulty-DIFF_ADDON)*10, pFontPartner, Cities[Sim.KrisenCity].Name);
+                     MakeSayWindow (0, TOKEN_BOSS, 1600+(Sim.Difficulty-DIFF_ADDON)*10, pFontPartner, (LPCTSTR)Cities[Sim.KrisenCity].Name);
                   else
                      MakeSayWindow (0, TOKEN_BOSS, 1600+(Sim.Difficulty-DIFF_ADDON)*10, pFontPartner);
                }
@@ -1807,7 +1807,7 @@ void CStdRaum::StartDialog (SLONG DialogPartner, BOOL Medium, SLONG DialogPar1, 
          if (Sim.Players.Players[PlayerNum].CalledCities[MouseClickPar2]==0)
          {
             //Haben wir ein Sample dafür?
-            if (Cities[DialogPar2].Wave!="-" && Cities[DialogPar2].Wave!="") MakeSayWindow (0, TOKEN_WELT, 1000, pFontPartner, Sim.Players.Players[DialogPar1].AirlineX, Cities[DialogPar2].Name);
+            if (Cities[DialogPar2].Wave!="-" && Cities[DialogPar2].Wave!="") MakeSayWindow (0, TOKEN_WELT, 1000, pFontPartner, Sim.Players.Players[DialogPar1].AirlineX, (LPCTSTR)Cities[DialogPar2].Name);
             else                                                             MakeSayWindow (1, TOKEN_WELT, 2000, 2000, FALSE, &FontDialog, &FontDialogLight, (LPCTSTR)Sim.Players.Players[DialogPar1].AirlineX);
          }
          else
@@ -2391,7 +2391,7 @@ void CStdRaum::InitToolTips (void)
                for (c=0; c<4; c++)
                   if (Sim.Players.Players[c].Owner==2)
                      if (CursorPos.IfIsWithin (60+(c-(c>Sim.localPlayer))*60, 80, 60+(c-(c>Sim.localPlayer))*60+60, 80+60))
-                        SetMouseLook (CURSOR_HOT, 1000+c, bprintf("%s (%s)", Sim.Players.Players[c].NameX, Sim.Players.Players[c].AirlineX), -101, MENU_RENAMEPLANE, 10+c);
+                        SetMouseLook (CURSOR_HOT, 1000+c, bprintf("%s (%s)", (LPCTSTR)Sim.Players.Players[c].NameX, (LPCTSTR)Sim.Players.Players[c].AirlineX), -101, MENU_RENAMEPLANE, 10+c);
                break;
 
             case MENU_GAMEOVER:
@@ -4756,15 +4756,15 @@ void CStdRaum::MenuRepaint (void)
                {
                   if (c==8)
                   {
-                          if (qPlayer.SecurityFlags&(1<<11)) OnscreenBitmap.PrintAt (bprintf("%s%s", prefix, StandardTexte.GetS (TOKEN_MISC, 8011)), FontSmallBlack, TEC_FONT_LEFT, XY(63, 55+c*12), XY(346,226));
-                     else if (qPlayer.SecurityFlags&(1<<10)) OnscreenBitmap.PrintAt (bprintf("%s%s", prefix, StandardTexte.GetS (TOKEN_MISC, 8010)), FontSmallBlack, TEC_FONT_LEFT, XY(63, 55+c*12), XY(346,226));
-                     else                                    OnscreenBitmap.PrintAt (bprintf("%s%s", prefix, StandardTexte.GetS (TOKEN_MISC, 8000+c)), FontSmallBlack, TEC_FONT_LEFT, XY(63, 55+c*12), XY(346,226));
+                          if (qPlayer.SecurityFlags&(1<<11)) OnscreenBitmap.PrintAt (bprintf("%s%s", (LPCTSTR)prefix, StandardTexte.GetS (TOKEN_MISC, 8011)), FontSmallBlack, TEC_FONT_LEFT, XY(63, 55+c*12), XY(346,226));
+                     else if (qPlayer.SecurityFlags&(1<<10)) OnscreenBitmap.PrintAt (bprintf("%s%s", (LPCTSTR)prefix, StandardTexte.GetS (TOKEN_MISC, 8010)), FontSmallBlack, TEC_FONT_LEFT, XY(63, 55+c*12), XY(346,226));
+                     else                                    OnscreenBitmap.PrintAt (bprintf("%s%s", (LPCTSTR)prefix, StandardTexte.GetS (TOKEN_MISC, 8000+c)), FontSmallBlack, TEC_FONT_LEFT, XY(63, 55+c*12), XY(346,226));
                   }
                   else
-                     OnscreenBitmap.PrintAt (bprintf("%s%s", prefix, StandardTexte.GetS (TOKEN_MISC, 8000+c)), FontSmallBlack, TEC_FONT_LEFT, XY(63, 55+c*12), XY(346,226));
+                     OnscreenBitmap.PrintAt (bprintf("%s%s", (LPCTSTR)prefix, StandardTexte.GetS (TOKEN_MISC, 8000+c)), FontSmallBlack, TEC_FONT_LEFT, XY(63, 55+c*12), XY(346,226));
                }
                else
-                  OnscreenBitmap.PrintAt (bprintf("%s%s", prefix, StandardTexte.GetS (TOKEN_MISC, 8000+c)), FontSmallGrey, TEC_FONT_LEFT, XY(63, 55+c*12), XY(346,226));
+                  OnscreenBitmap.PrintAt (bprintf("%s%s", (LPCTSTR)prefix, StandardTexte.GetS (TOKEN_MISC, 8000+c)), FontSmallGrey, TEC_FONT_LEFT, XY(63, 55+c*12), XY(346,226));
             }
 
             OnscreenBitmap.PrintAt (StandardTexte.GetS (TOKEN_MISC, 8021), FontSmallBlack, TEC_FONT_LEFT, XY(155, 50+113+22), XY(346,226));
@@ -5258,15 +5258,15 @@ void CStdRaum::MenuRepaint (void)
 
                                  OnscreenBitmap.PrintAt (bprintf ("%2li:00", Plan->Flug[e].Landezeit), FontSmallWhiteX, TEC_FONT_LEFT, 2+55, 59+py+3, 310, 255+3);
                                  OnscreenBitmap.BlitFromT (MenuBms[3+c], 90, 60+py+3);
-                                 OnscreenBitmap.PrintAt (bprintf ("%s", Sim.Players.Players[c].Abk), FontSmallWhiteX, TEC_FONT_LEFT, 11+90, 59+py+3, 310, 255+3);
+                                 OnscreenBitmap.PrintAt (bprintf ("%s", (LPCTSTR)Sim.Players.Players[c].Abk), FontSmallWhiteX, TEC_FONT_LEFT, 11+90, 59+py+3, 310, 255+3);
                               
                                  //Rio-Rom
-                                 if (OnscreenBitmap.TryPrintAt (bprintf ("%s-%s", Cities[Plan->Flug[e].VonCity].Name, Cities[Plan->Flug[e].NachCity].Name), FontSmallWhiteX, TEC_FONT_LEFT, 8+115, 59+py+3, 290, 255+3)<13)
-                                    OnscreenBitmap.PrintAt (bprintf ("%s-%s", Cities[Plan->Flug[e].VonCity].Name, Cities[Plan->Flug[e].NachCity].Name), FontSmallWhiteX, TEC_FONT_LEFT, 8+115, 59+py+3, 290, 255+3);
-                                 else if (OnscreenBitmap.TryPrintAt (bprintf ("%s-%s", Cities[Plan->Flug[e].VonCity].Name, Cities[Plan->Flug[e].NachCity].Kuerzel), FontSmallWhiteX, TEC_FONT_LEFT, 8+115, 59+py+3, 290, 255+3)<13)
-                                    OnscreenBitmap.PrintAt (bprintf ("%s-%s", Cities[Plan->Flug[e].VonCity].Name, Cities[Plan->Flug[e].NachCity].Kuerzel), FontSmallWhiteX, TEC_FONT_LEFT, 8+115, 59+py+3, 290, 255+3);
+                                 if (OnscreenBitmap.TryPrintAt (bprintf ("%s-%s", (LPCTSTR)Cities[Plan->Flug[e].VonCity].Name, (LPCTSTR)Cities[Plan->Flug[e].NachCity].Name), FontSmallWhiteX, TEC_FONT_LEFT, 8+115, 59+py+3, 290, 255+3)<13)
+                                    OnscreenBitmap.PrintAt (bprintf ("%s-%s", (LPCTSTR)Cities[Plan->Flug[e].VonCity].Name, (LPCTSTR)Cities[Plan->Flug[e].NachCity].Name), FontSmallWhiteX, TEC_FONT_LEFT, 8+115, 59+py+3, 290, 255+3);
+                                 else if (OnscreenBitmap.TryPrintAt (bprintf ("%s-%s", (LPCTSTR)Cities[Plan->Flug[e].VonCity].Name, (LPCTSTR)Cities[Plan->Flug[e].NachCity].Kuerzel), FontSmallWhiteX, TEC_FONT_LEFT, 8+115, 59+py+3, 290, 255+3)<13)
+                                    OnscreenBitmap.PrintAt (bprintf ("%s-%s", (LPCTSTR)Cities[Plan->Flug[e].VonCity].Name, (LPCTSTR)Cities[Plan->Flug[e].NachCity].Kuerzel), FontSmallWhiteX, TEC_FONT_LEFT, 8+115, 59+py+3, 290, 255+3);
                                  else
-                                    OnscreenBitmap.PrintAt (bprintf ("%s-%s", Cities[Plan->Flug[e].VonCity].Kuerzel, Cities[Plan->Flug[e].NachCity].Kuerzel), FontSmallWhiteX, TEC_FONT_LEFT, 8+115, 59+py+3, 290, 255+3);
+                                    OnscreenBitmap.PrintAt (bprintf ("%s-%s", (LPCTSTR)Cities[Plan->Flug[e].VonCity].Kuerzel, (LPCTSTR)Cities[Plan->Flug[e].NachCity].Kuerzel), FontSmallWhiteX, TEC_FONT_LEFT, 8+115, 59+py+3, 290, 255+3);
 
                                  //Gate:
                                  if (Plan->Flug[e].Gate==-1)
@@ -5315,15 +5315,15 @@ void CStdRaum::MenuRepaint (void)
 
                               OnscreenBitmap.PrintAt (bprintf ("%2li:00", Plan->Flug[e].Startzeit+1), FontSmallWhiteX, TEC_FONT_LEFT, 2+55, 164+py+3, 310, 255+3);
                               OnscreenBitmap.BlitFromT (MenuBms[3+c], 90, 165+py+3);
-                              OnscreenBitmap.PrintAt (bprintf ("%s", Sim.Players.Players[c].Abk), FontSmallWhiteX, TEC_FONT_LEFT, 11+90, 164+py+3, 310, 255+3);
+                              OnscreenBitmap.PrintAt (bprintf ("%s", (LPCTSTR)Sim.Players.Players[c].Abk), FontSmallWhiteX, TEC_FONT_LEFT, 11+90, 164+py+3, 310, 255+3);
                               
                               //Rio-Rom
-                              if (OnscreenBitmap.TryPrintAt (bprintf ("%s-%s", Cities[Plan->Flug[e].VonCity].Name, Cities[Plan->Flug[e].NachCity].Name), FontSmallWhiteX, TEC_FONT_LEFT, 8+115, 164+py+3, 290, 255+3)<13)
-                                 OnscreenBitmap.PrintAt (bprintf ("%s-%s", Cities[Plan->Flug[e].VonCity].Name, Cities[Plan->Flug[e].NachCity].Name), FontSmallWhiteX, TEC_FONT_LEFT, 8+115, 164+py+3, 290, 255+3);
-                              else if (OnscreenBitmap.TryPrintAt (bprintf ("%s-%s", Cities[Plan->Flug[e].VonCity].Name, Cities[Plan->Flug[e].NachCity].Kuerzel), FontSmallWhiteX, TEC_FONT_LEFT, 8+115, 164+py+3, 290, 255+3)<13)
-                                 OnscreenBitmap.PrintAt (bprintf ("%s-%s", Cities[Plan->Flug[e].VonCity].Name, Cities[Plan->Flug[e].NachCity].Kuerzel), FontSmallWhiteX, TEC_FONT_LEFT, 8+115, 164+py+3, 290, 255+3);
+                              if (OnscreenBitmap.TryPrintAt (bprintf ("%s-%s", (LPCTSTR)Cities[Plan->Flug[e].VonCity].Name, (LPCTSTR)Cities[Plan->Flug[e].NachCity].Name), FontSmallWhiteX, TEC_FONT_LEFT, 8+115, 164+py+3, 290, 255+3)<13)
+                                 OnscreenBitmap.PrintAt (bprintf ("%s-%s", (LPCTSTR)Cities[Plan->Flug[e].VonCity].Name, (LPCTSTR)Cities[Plan->Flug[e].NachCity].Name), FontSmallWhiteX, TEC_FONT_LEFT, 8+115, 164+py+3, 290, 255+3);
+                              else if (OnscreenBitmap.TryPrintAt (bprintf ("%s-%s", (LPCTSTR)Cities[Plan->Flug[e].VonCity].Name, (LPCTSTR)Cities[Plan->Flug[e].NachCity].Kuerzel), FontSmallWhiteX, TEC_FONT_LEFT, 8+115, 164+py+3, 290, 255+3)<13)
+                                 OnscreenBitmap.PrintAt (bprintf ("%s-%s", (LPCTSTR)Cities[Plan->Flug[e].VonCity].Name, (LPCTSTR)Cities[Plan->Flug[e].NachCity].Kuerzel), FontSmallWhiteX, TEC_FONT_LEFT, 8+115, 164+py+3, 290, 255+3);
                               else
-                                 OnscreenBitmap.PrintAt (bprintf ("%s-%s", Cities[Plan->Flug[e].VonCity].Kuerzel, Cities[Plan->Flug[e].NachCity].Kuerzel), FontSmallWhiteX, TEC_FONT_LEFT, 8+115, 164+py+3, 290, 255+3);
+                                 OnscreenBitmap.PrintAt (bprintf ("%s-%s", (LPCTSTR)Cities[Plan->Flug[e].VonCity].Kuerzel, (LPCTSTR)Cities[Plan->Flug[e].NachCity].Kuerzel), FontSmallWhiteX, TEC_FONT_LEFT, 8+115, 164+py+3, 290, 255+3);
 
                               //Gate:
                               if (Plan->Flug[e].Gate==-1)
@@ -5359,11 +5359,11 @@ void CStdRaum::MenuRepaint (void)
                CITY &qVon = Cities[qAuftrag.VonCity];
                CITY &qNach = Cities[qAuftrag.NachCity];
 
-               if (OnscreenBitmap.TryPrintAt (bprintf ("%s - %s", qVon.Name, qNach.Name), FontSmallBlack, TEC_FONT_LEFT, 34+180, 12+c*13+26, 204+180, 13+14+c*13+26)<14)
-                  OnscreenBitmap.PrintAt (bprintf ("%s - %s", qVon.Name, qNach.Name), FontSmallBlack, TEC_FONT_LEFT, 34+180, 12+c*13+26, 204+180, 13+14+c*13+26);
-               else if (OnscreenBitmap.TryPrintAt (bprintf ("%s - %s", qVon.Name, qNach.Kuerzel), FontSmallBlack, TEC_FONT_LEFT, 34+180, 12+c*13+26, 204+180, 13+14+c*13+26)<14)
-                  OnscreenBitmap.PrintAt (bprintf ("%s - %s", qVon.Name, qNach.Kuerzel), FontSmallBlack, TEC_FONT_LEFT, 34+180, 12+c*13+26, 204+180, 13+14+c*13+26);
-               else OnscreenBitmap.PrintAt (bprintf ("%s - %s", qVon.Kuerzel, qNach.Kuerzel), FontSmallBlack, TEC_FONT_LEFT, 34+180, 12+c*13+26, 204+180, 13+14+c*13+26);
+               if (OnscreenBitmap.TryPrintAt (bprintf ("%s - %s", (LPCTSTR)qVon.Name, (LPCTSTR)qNach.Name), FontSmallBlack, TEC_FONT_LEFT, 34+180, 12+c*13+26, 204+180, 13+14+c*13+26)<14)
+                  OnscreenBitmap.PrintAt (bprintf ("%s - %s", (LPCTSTR)qVon.Name, (LPCTSTR)qNach.Name), FontSmallBlack, TEC_FONT_LEFT, 34+180, 12+c*13+26, 204+180, 13+14+c*13+26);
+               else if (OnscreenBitmap.TryPrintAt (bprintf ("%s - %s", (LPCTSTR)qVon.Name, (LPCTSTR)qNach.Kuerzel), FontSmallBlack, TEC_FONT_LEFT, 34+180, 12+c*13+26, 204+180, 13+14+c*13+26)<14)
+                  OnscreenBitmap.PrintAt (bprintf ("%s - %s", (LPCTSTR)qVon.Name, (LPCTSTR)qNach.Kuerzel), FontSmallBlack, TEC_FONT_LEFT, 34+180, 12+c*13+26, 204+180, 13+14+c*13+26);
+               else OnscreenBitmap.PrintAt (bprintf ("%s - %s", (LPCTSTR)qVon.Kuerzel, (LPCTSTR)qNach.Kuerzel), FontSmallBlack, TEC_FONT_LEFT, 34+180, 12+c*13+26, 204+180, 13+14+c*13+26);
 
                if (MouseClickArea==-101 && MouseClickPar2>=0 && MouseClickPar2<=5 && MouseClickPar2==c)
                {
@@ -5380,11 +5380,11 @@ void CStdRaum::MenuRepaint (void)
                CITY &qVon = Cities[qFracht.VonCity];
                CITY &qNach = Cities[qFracht.NachCity];
 
-               if (OnscreenBitmap.TryPrintAt (bprintf ("%s - %s", qVon.Name, qNach.Name), FontSmallBlack, TEC_FONT_LEFT, 34+180, 12+(c+7)*13+26, 204+180, 13+14+(c+7)*13+26)<14)
-                  OnscreenBitmap.PrintAt (bprintf ("%s - %s", qVon.Name, qNach.Name), FontSmallBlack, TEC_FONT_LEFT, 34+180, 12+(c+7)*13+26, 204+180, 13+14+(c+7)*13+26);
-               else if (OnscreenBitmap.TryPrintAt (bprintf ("%s - %s", qVon.Name, qNach.Kuerzel), FontSmallBlack, TEC_FONT_LEFT, 34+180, 12+(c+7)*13+26, 204+180, 13+14+(c+7)*13+26)<14)
-                  OnscreenBitmap.PrintAt (bprintf ("%s - %s", qVon.Name, qNach.Kuerzel), FontSmallBlack, TEC_FONT_LEFT, 34+180, 12+(c+7)*13+26, 204+180, 13+14+(c+7)*13+26);
-               else OnscreenBitmap.PrintAt (bprintf ("%s - %s", qVon.Kuerzel, qNach.Kuerzel), FontSmallBlack, TEC_FONT_LEFT, 34+180, 12+(c+7)*13+26, 204+180, 13+14+(c+7)*13+26);
+               if (OnscreenBitmap.TryPrintAt (bprintf ("%s - %s", (LPCTSTR)qVon.Name, (LPCTSTR)qNach.Name), FontSmallBlack, TEC_FONT_LEFT, 34+180, 12+(c+7)*13+26, 204+180, 13+14+(c+7)*13+26)<14)
+                  OnscreenBitmap.PrintAt (bprintf ("%s - %s", (LPCTSTR)qVon.Name, (LPCTSTR)qNach.Name), FontSmallBlack, TEC_FONT_LEFT, 34+180, 12+(c+7)*13+26, 204+180, 13+14+(c+7)*13+26);
+               else if (OnscreenBitmap.TryPrintAt (bprintf ("%s - %s", (LPCTSTR)qVon.Name, (LPCTSTR)qNach.Kuerzel), FontSmallBlack, TEC_FONT_LEFT, 34+180, 12+(c+7)*13+26, 204+180, 13+14+(c+7)*13+26)<14)
+                  OnscreenBitmap.PrintAt (bprintf ("%s - %s", (LPCTSTR)qVon.Name, (LPCTSTR)qNach.Kuerzel), FontSmallBlack, TEC_FONT_LEFT, 34+180, 12+(c+7)*13+26, 204+180, 13+14+(c+7)*13+26);
+               else OnscreenBitmap.PrintAt (bprintf ("%s - %s", (LPCTSTR)qVon.Kuerzel, (LPCTSTR)qNach.Kuerzel), FontSmallBlack, TEC_FONT_LEFT, 34+180, 12+(c+7)*13+26, 204+180, 13+14+(c+7)*13+26);
 
                if (MouseClickArea==-101 && MouseClickPar2>=0+7 && MouseClickPar2<=5+7 && MouseClickPar2==c+7)
                {
@@ -6992,7 +6992,7 @@ phone_busy:
                      }
 
                   qPlayer.Statistiken[STAT_A_STRAFEN].AddAtPastDay (0, -qPlayer.Auftraege[MenuPar2].Strafe);
-                  qPlayer.ChangeMoney (-qPlayer.Auftraege[MenuPar2].Strafe, 2065, (LPCTSTR)(CString)bprintf("%s-%s", Cities[qPlayer.Auftraege[MenuPar2].VonCity].Kuerzel, Cities[qPlayer.Auftraege[MenuPar2].NachCity].Kuerzel));
+                  qPlayer.ChangeMoney (-qPlayer.Auftraege[MenuPar2].Strafe, 2065, (LPCTSTR)(CString)bprintf("%s-%s", (LPCTSTR)Cities[qPlayer.Auftraege[MenuPar2].VonCity].Kuerzel, (LPCTSTR)Cities[qPlayer.Auftraege[MenuPar2].NachCity].Kuerzel));
 
                   if (qPlayer.LocationWin && (qPlayer.GetRoom()==ROOM_LAPTOP || qPlayer.GetRoom()==ROOM_GLOBE))
                   {
@@ -7052,7 +7052,7 @@ phone_busy:
                      }
 
                   qPlayer.Statistiken[STAT_A_STRAFEN].AddAtPastDay (0, -qPlayer.Frachten[MenuPar2].Strafe);
-                  qPlayer.ChangeMoney (-qPlayer.Frachten[MenuPar2].Strafe, 2060, (LPCTSTR)(CString)bprintf("%s-%s", Cities[qPlayer.Frachten[MenuPar2].VonCity].Kuerzel, Cities[qPlayer.Frachten[MenuPar2].NachCity].Kuerzel));
+                  qPlayer.ChangeMoney (-qPlayer.Frachten[MenuPar2].Strafe, 2060, (LPCTSTR)(CString)bprintf("%s-%s", (LPCTSTR)Cities[qPlayer.Frachten[MenuPar2].VonCity].Kuerzel, (LPCTSTR)Cities[qPlayer.Frachten[MenuPar2].NachCity].Kuerzel));
 
                   if (qPlayer.LocationWin && (qPlayer.GetRoom()==ROOM_LAPTOP || qPlayer.GetRoom()==ROOM_GLOBE))
                   {

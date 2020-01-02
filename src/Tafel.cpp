@@ -192,7 +192,7 @@ void CTafel::RepaintZettel (SLONG n)
          ZettelBms[n].ReSize(LeereZettelBms[n%3].Size);
          ZettelBms[n].BlitFrom(LeereZettelBms[n%3]);
 
-         ZettelBms[n].PrintAt (bprintf ("%s-%s", Cities [Routen[TafelData.Route[n].ZettelId].VonCity].Kuerzel, Cities [Routen[TafelData.Route[n].ZettelId].NachCity].Kuerzel),
+         ZettelBms[n].PrintAt (bprintf ("%s-%s", (LPCTSTR)Cities [Routen[TafelData.Route[n].ZettelId].VonCity].Kuerzel, (LPCTSTR)Cities [Routen[TafelData.Route[n].ZettelId].NachCity].Kuerzel),
                          FontSmallBlack, TEC_FONT_CENTERED,
                          XY(3, 30), XY(ZettelBms[n].Size.x-3, 202));
 

@@ -302,7 +302,7 @@ void PumpNetwork (void)
                             Sim.Players.Players[c].Owner=1;
                             Sim.Players.Players[c].NetworkID=0;
                             Sim.Players.Players[c].GameSpeed=3;
-                            DisplayBroadcastMessage (bprintf (StandardTexte.GetS (TOKEN_MISC, 7002), Sim.Players.Players[c].NameX));
+                            DisplayBroadcastMessage (bprintf (StandardTexte.GetS (TOKEN_MISC, 7002), (LPCTSTR)Sim.Players.Players[c].NameX));
                          }
 
                       if (Sim.Players.GetAnzHumanPlayers()==1)
@@ -1003,7 +1003,7 @@ void PumpNetwork (void)
                          if (qPlayer.HasBerater (BERATERTYP_INFO))
                          {
                             if (Generic1>=14) qPlayer.Messages.AddMessage (BERATERTYP_INFO, bprintf (StandardTexte.GetS (TOKEN_ADVICE, 9001), qFromPlayer.NameX, qFromPlayer.AirlineX));
-                            if (Generic1>=7 && Generic1<14) qPlayer.Messages.AddMessage (BERATERTYP_INFO, bprintf (StandardTexte.GetS (TOKEN_ADVICE, 9002), qFromPlayer.NameX, qFromPlayer.AirlineX, Cities[TafelData.City[Generic1-7].ZettelId].Name));
+                            if (Generic1>=7 && Generic1<14) qPlayer.Messages.AddMessage (BERATERTYP_INFO, bprintf (StandardTexte.GetS (TOKEN_ADVICE, 9002), qFromPlayer.NameX, qFromPlayer.AirlineX, (LPCTSTR)Cities[TafelData.City[Generic1-7].ZettelId].Name));
                          }
                          break;
 

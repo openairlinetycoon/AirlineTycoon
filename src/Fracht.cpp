@@ -438,7 +438,7 @@ void CFrachtRaum::RepaintZettel (SLONG n)
       ZettelBms[n].ReSize(KistenBms[n].Size);
       ZettelBms[n].BlitFrom(KistenBms[n]);
 
-      ZettelBms[n].PrintAt (bprintf ("%s-%s", Cities [gFrachten.Fracht[n].VonCity].Kuerzel, Cities [gFrachten.Fracht[n].NachCity].Kuerzel),
+      ZettelBms[n].PrintAt (bprintf ("%s-%s", (LPCTSTR)Cities [gFrachten.Fracht[n].VonCity].Kuerzel, (LPCTSTR)Cities [gFrachten.Fracht[n].NachCity].Kuerzel),
                       FontSmallBlack, TEC_FONT_CENTERED,
                       XY(3, 10)+ZettelOffset[n], XY(ZettelBms[n].Size.x-3, 29)+ZettelOffset[n]);
 
@@ -942,7 +942,7 @@ void PLAYER::CheckAuftragsBerater (const CFracht &Fracht)
                       Fracht.Date<=qFPE.Startdate  && Fracht.BisDate>=qFPE.Startdate)
                   {
                      //Fracht ersetzt Autoflug:
-                     Messages.AddMessage (BERATERTYP_AUFTRAG, bprintf (StandardTexte.GetS (TOKEN_ADVICE, 7113), qPlane.Name), MESSAGE_COMMENT, SMILEY_GREAT);
+                     Messages.AddMessage (BERATERTYP_AUFTRAG, bprintf (StandardTexte.GetS (TOKEN_ADVICE, 7113), (LPCTSTR)qPlane.Name), MESSAGE_COMMENT, SMILEY_GREAT);
                      return;
                   }
                }

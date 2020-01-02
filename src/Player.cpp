@@ -981,14 +981,14 @@ void PLAYER::NewDay (void)
             {
                if (RentRouten.RentRouten[c].TageMitGering==10)
                   Letters.AddLetter (TRUE, //Brief: Warnung
-                                     CString (bprintf (StandardTexte.GetS (TOKEN_LETTER, 3000), Cities[Routen[c].VonCity].Name, Cities[Routen[c].NachCity].Name)),
+                                     CString (bprintf (StandardTexte.GetS (TOKEN_LETTER, 3000), (LPCTSTR)Cities[Routen[c].VonCity].Name, (LPCTSTR)Cities[Routen[c].NachCity].Name)),
                                      CString (bprintf (StandardTexte.GetS (TOKEN_LETTER, 3001), RentRouten.RentRouten[c].RoutenAuslastung, 10)),
                                      StandardTexte.GetS (TOKEN_LETTER, 3002),
                                      -1);
 
                if (RentRouten.RentRouten[c].TageMitGering==15)
                   Letters.AddLetter (TRUE, //Brief: Warnung
-                                     CString (bprintf (StandardTexte.GetS (TOKEN_LETTER, 3000), Cities[Routen[c].VonCity].Name, Cities[Routen[c].NachCity].Name)),
+                                     CString (bprintf (StandardTexte.GetS (TOKEN_LETTER, 3000), (LPCTSTR)Cities[Routen[c].VonCity].Name, (LPCTSTR)Cities[Routen[c].NachCity].Name)),
                                      CString (bprintf (StandardTexte.GetS (TOKEN_LETTER, 3001), RentRouten.RentRouten[c].RoutenAuslastung, 5)),
                                      StandardTexte.GetS (TOKEN_LETTER, 3002),
                                      -1);
@@ -996,7 +996,7 @@ void PLAYER::NewDay (void)
                if (RentRouten.RentRouten[c].TageMitGering==20)
                {
                   Letters.AddLetter (TRUE, //Brief: Route weg
-                                     CString (bprintf (StandardTexte.GetS (TOKEN_LETTER, 3100), Cities[Routen[c].VonCity].Name, Cities[Routen[c].NachCity].Name)),
+                                     CString (bprintf (StandardTexte.GetS (TOKEN_LETTER, 3100), (LPCTSTR)Cities[Routen[c].VonCity].Name, (LPCTSTR)Cities[Routen[c].NachCity].Name)),
                                      StandardTexte.GetS (TOKEN_LETTER, 3101),
                                      StandardTexte.GetS (TOKEN_LETTER, 3102),
                                      -1);
@@ -1310,7 +1310,7 @@ void PLAYER::UpdateAuftraege (void)
                {
                   Statistiken[STAT_A_STRAFEN].AddAtPastDay (0, -Auftraege[c].Strafe);
 
-                  ChangeMoney (-Auftraege[c].Strafe, 2060, (LPCTSTR)(CString)bprintf("%s-%s", Cities[Auftraege[c].VonCity].Kuerzel, Cities[Auftraege[c].NachCity].Kuerzel));
+                  ChangeMoney (-Auftraege[c].Strafe, 2060, (LPCTSTR)(CString)bprintf("%s-%s", (LPCTSTR)Cities[Auftraege[c].VonCity].Kuerzel, (LPCTSTR)Cities[Auftraege[c].NachCity].Kuerzel));
 
                   //Für die Gewinn-Mission:
                   Gewinn-=Auftraege[c].Strafe;
@@ -1318,7 +1318,7 @@ void PLAYER::UpdateAuftraege (void)
                   if (Owner==0 && !IsOut)
                      Letters.AddLetter (TRUE,
                                         StandardTexte.GetS (TOKEN_LETTER, 1000),
-                                        (LPCTSTR)(CString)bprintf(StandardTexte.GetS (TOKEN_LETTER, 1001), Cities[Auftraege[c].VonCity].Name, Cities[Auftraege[c].NachCity].Name, Auftraege[c].Strafe),
+                                        (LPCTSTR)(CString)bprintf(StandardTexte.GetS (TOKEN_LETTER, 1001), (LPCTSTR)Cities[Auftraege[c].VonCity].Name, (LPCTSTR)Cities[Auftraege[c].NachCity].Name, Auftraege[c].Strafe),
                                         StandardTexte.GetS (TOKEN_LETTER, 1002),
                                         -1);
                }
@@ -1327,7 +1327,7 @@ void PLAYER::UpdateAuftraege (void)
                   if (Owner==0 && !IsOut)
                      Letters.AddLetter (TRUE,
                                         StandardTexte.GetS (TOKEN_LETTER, 1010),
-                                        (LPCTSTR)(CString)bprintf(StandardTexte.GetS (TOKEN_LETTER, 1011), Cities[Auftraege[c].VonCity].Name, Cities[Auftraege[c].NachCity].Name),
+                                        (LPCTSTR)(CString)bprintf(StandardTexte.GetS (TOKEN_LETTER, 1011), (LPCTSTR)Cities[Auftraege[c].VonCity].Name, (LPCTSTR)Cities[Auftraege[c].NachCity].Name),
                                         StandardTexte.GetS (TOKEN_LETTER, 1012),
                                         -1);
                }
@@ -1386,7 +1386,7 @@ void PLAYER::UpdateAuftraege (void)
                {
                   Statistiken[STAT_A_STRAFEN].AddAtPastDay (0, -Frachten[c].Strafe);
 
-                  ChangeMoney (-Frachten[c].Strafe, 2065, (LPCTSTR)(CString)bprintf("%s-%s", Cities[Frachten[c].VonCity].Kuerzel, Cities[Frachten[c].NachCity].Kuerzel));
+                  ChangeMoney (-Frachten[c].Strafe, 2065, (LPCTSTR)(CString)bprintf("%s-%s", (LPCTSTR)Cities[Frachten[c].VonCity].Kuerzel, (LPCTSTR)Cities[Frachten[c].NachCity].Kuerzel));
 
                   //Für die Gewinn-Mission:
                   Sim.Players.Players[PlayerNum].Gewinn-=Frachten[c].Strafe;
@@ -1394,7 +1394,7 @@ void PLAYER::UpdateAuftraege (void)
                   if (Owner==0 && !IsOut)
                      Letters.AddLetter (TRUE,
                                         StandardTexte.GetS (TOKEN_LETTER, 1005),
-                                        (LPCTSTR)(CString)bprintf(StandardTexte.GetS (TOKEN_LETTER, 1006), Cities[Frachten[c].VonCity].Name, Cities[Frachten[c].NachCity].Name, Frachten[c].Strafe),
+                                        (LPCTSTR)(CString)bprintf(StandardTexte.GetS (TOKEN_LETTER, 1006), (LPCTSTR)Cities[Frachten[c].VonCity].Name, (LPCTSTR)Cities[Frachten[c].NachCity].Name, Frachten[c].Strafe),
                                         StandardTexte.GetS (TOKEN_LETTER, 1007),
                                         -1);
                }
@@ -1403,7 +1403,7 @@ void PLAYER::UpdateAuftraege (void)
                   if (Owner==0 && !IsOut)
                      Letters.AddLetter (TRUE,
                                         StandardTexte.GetS (TOKEN_LETTER, 1015),
-                                        (LPCTSTR)(CString)bprintf(StandardTexte.GetS (TOKEN_LETTER, 1016), Cities[Frachten[c].VonCity].Name, Cities[Frachten[c].NachCity].Name),
+                                        (LPCTSTR)(CString)bprintf(StandardTexte.GetS (TOKEN_LETTER, 1016), (LPCTSTR)Cities[Frachten[c].VonCity].Name, (LPCTSTR)Cities[Frachten[c].NachCity].Name),
                                         StandardTexte.GetS (TOKEN_LETTER, 1017),
                                         -1);
                }
@@ -3055,7 +3055,7 @@ void PLAYER::RobotPlanRoutes(void)
                //Spieler hat die Faxen dicke und will die Route nicht mehr:
                if (Sim.Players.Players[Sim.localPlayer].HasBerater (BERATERTYP_INFO))
                {
-                  Sim.Players.Players[Sim.localPlayer].Messages.AddMessage (BERATERTYP_INFO, bprintf (StandardTexte.GetS (TOKEN_ADVICE, 9006), NameX, AirlineX, Cities[Routen[c].VonCity].Name, Cities[Routen[c].NachCity].Name));
+                  Sim.Players.Players[Sim.localPlayer].Messages.AddMessage (BERATERTYP_INFO, bprintf (StandardTexte.GetS (TOKEN_ADVICE, 9006), NameX, AirlineX, (LPCTSTR)Cities[Routen[c].VonCity].Name, (LPCTSTR)Cities[Routen[c].NachCity].Name));
                }
 
                for (e=0; e<4; e++)
@@ -3466,7 +3466,7 @@ void PLAYER::RobotExecuteAction(void)
 
                                     CFlugplanEintrag &fpe=Planes[c].Flugplan.Flug[Planes[c].Flugplan.Flug.AnzEntries()-1];
 
-                                    //DisplayBroadcastMessage (bprintf ("B: %s took Order %s-%s", NameX, Cities[qAuftraege.Auftraege[e].VonCity].Name, Cities[qAuftraege.Auftraege[e].NachCity].Name));
+                                    //DisplayBroadcastMessage (bprintf ("B: %s took Order %s-%s", (LPCTSTR)NameX, (LPCTSTR)Cities[qAuftraege.Auftraege[e].VonCity].Name, (LPCTSTR)Cities[qAuftraege.Auftraege[e].NachCity].Name));
 
                                     fpe.ObjectType = 2;
                                     fpe.ObjectId   = ObjectId;
@@ -3695,7 +3695,7 @@ void PLAYER::RobotExecuteAction(void)
                            case 6: if (qPlane.SicherheitTarget==2) continue; qPlane.SicherheitTarget++; break;
                         }
 
-                        ChangeMoney (-170000, 2110, qPlane.Name);
+                        ChangeMoney (-170000, 2110, (LPCTSTR)qPlane.Name);
                         bpass=4;
                         break;
                      }
@@ -4754,7 +4754,7 @@ void PLAYER::RobotExecuteAction(void)
                   {
                      if (TafelData.City[c].Player==Sim.localPlayer && Sim.Players.Players[Sim.localPlayer].HasBerater (BERATERTYP_INFO))
                      {
-                        Sim.Players.Players[Sim.localPlayer].Messages.AddMessage (BERATERTYP_INFO, bprintf (StandardTexte.GetS (TOKEN_ADVICE, 9002), NameX, AirlineX, Cities[TafelData.City[c].ZettelId].Name));
+                        Sim.Players.Players[Sim.localPlayer].Messages.AddMessage (BERATERTYP_INFO, bprintf (StandardTexte.GetS (TOKEN_ADVICE, 9002), NameX, AirlineX, (LPCTSTR)Cities[TafelData.City[c].ZettelId].Name));
                      }
                      TafelData.City[c].Preis += TafelData.City[c].Preis/10;
                      TafelData.City[c].Player = PlayerNum;
@@ -4841,7 +4841,7 @@ void PLAYER::RobotExecuteAction(void)
                {
                   SLONG Rang=1;
 
-                  //hprintf ("Event: %s (Player %li) buys route %s-%s.", NameX, PlayerNum+1, Cities[Routen[BestC].VonCity].Name, Cities[Routen[BestC].NachCity].Name);
+                  //hprintf ("Event: %s (Player %li) buys route %s-%s.", (LPCTSTR)NameX, PlayerNum+1, (LPCTSTR)Cities[Routen[BestC].VonCity].Name, (LPCTSTR)Cities[Routen[BestC].NachCity].Name);
 
                   for (SLONG d=0; d<4; d++)
                      if (!Sim.Players.Players[d].IsOut && Sim.Players.Players[d].RentRouten.RentRouten[BestC].Rang>=Rang)
@@ -5896,7 +5896,7 @@ void PLAYER::UpdateTicketpreise (SLONG RouteId, SLONG Ticketpreis, SLONG Ticketp
                   qFPE.Ticketpreis   = Ticketpreis;
                   qFPE.TicketpreisFC = TicketpreisFC;
                   qFPE.FlightChanged ();
-                  //qFPE.CalcPassengers (qPlane.TypeId, PlayerNum, qPlane);
+                  //qFPE.CalcPassengers (qPlane.TypeId, PlayerNum, (LPCTSTR)qPlane);
                   qFPE.CalcPassengers (PlayerNum, qPlane);
                }
 

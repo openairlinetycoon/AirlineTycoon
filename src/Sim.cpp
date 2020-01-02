@@ -1714,7 +1714,7 @@ void SIM::DoTimeStep (void)
                                     if (qPlane.Flugplan.Flug[e].Startzeit==24) { qPlane.Flugplan.Flug[e].Startzeit=0; qPlane.Flugplan.Flug[e].Startdate++; }
                                     qPlane.CheckFlugplaene(Sim.Players.Players[c].ArabOpfer);
                                     qOpfer.UpdateAuftragsUsage();
-                                    qOpfer.Messages.AddMessage (BERATERTYP_GIRL, bprintf(StandardTexte.GetS (TOKEN_ADVICE, 2304), qPlane.Name));
+                                    qOpfer.Messages.AddMessage (BERATERTYP_GIRL, bprintf(StandardTexte.GetS (TOKEN_ADVICE, 2304), (LPCTSTR)qPlane.Name));
                                     PictureId=GetIdFromString ("REIFEN");
                                  }
                                  break;
@@ -1742,7 +1742,7 @@ void SIM::DoTimeStep (void)
                                  break;
                            }
                            if (qOpfer.Kurse[0]<0) qOpfer.Kurse[0]=0;
-                           //log: hprintf ("Player[%li].Image now (sabo) = %li", Sim.Players.Players[c].ArabOpfer, qOpfer.Image);
+                           //log: hprintf ("Player[%li].Image now (sabo) = %li", (LPCTSTR)Sim.Players.Players[c].ArabOpfer, (LPCTSTR)qOpfer.Image);
 
                            //Für's Briefing vermerken:
                            SabotageActs.ReSize (SabotageActs.AnzEntries()+1);
@@ -1750,7 +1750,7 @@ void SIM::DoTimeStep (void)
                            SabotageActs[SabotageActs.AnzEntries()-1].ArabMode = Sim.Players.Players[c].ArabMode;
                            SabotageActs[SabotageActs.AnzEntries()-1].Opfer    = Sim.Players.Players[c].ArabOpfer;
 
-                           Sim.Headlines.AddOverride (0, bprintf (StandardTexte.GetS (TOKEN_MISC, 2000+Sim.Players.Players[c].ArabMode), qOpfer.AirlineX), PictureId, (Sim.Players.Players[c].ArabOpfer==Sim.localPlayer)*50+Sim.Players.Players[c].ArabMode);
+                           Sim.Headlines.AddOverride (0, bprintf (StandardTexte.GetS (TOKEN_MISC, 2000+Sim.Players.Players[c].ArabMode), (LPCTSTR)qOpfer.AirlineX), PictureId, (Sim.Players.Players[c].ArabOpfer==Sim.localPlayer)*50+Sim.Players.Players[c].ArabMode);
                            Limit (-1000l, qOpfer.Image, 1000l);
 
                            //Araber meldet sich, oder Fax oder Brief sind da.
@@ -1897,7 +1897,7 @@ void SIM::DoTimeStep (void)
 
                               SLONG r=LocalRand.Rand(9);
                               qPlane.AddPanne (r);
-                              qPlayer.Messages.AddMessage (BERATERTYP_GIRL, bprintf (StandardTexte.GetS (TOKEN_ADVICE, 2360+r), qPlane.Name));
+                              qPlayer.Messages.AddMessage (BERATERTYP_GIRL, bprintf (StandardTexte.GetS (TOKEN_ADVICE, 2360+r), (LPCTSTR)qPlane.Name));
 
                               Limit (-1000l, qPlayer.Image, 1000l);
                               qPlayer.Kurse[0]*=0.7;
@@ -1924,7 +1924,7 @@ void SIM::DoTimeStep (void)
                               qPlayer.ChangeMoney (-75000, 3501, "");
 
                               qPlane.AddPanne (10+GetSeason());
-                              qPlayer.Messages.AddMessage (BERATERTYP_GIRL, bprintf (StandardTexte.GetS (TOKEN_ADVICE, 2370+GetSeason()), qPlane.Name));
+                              qPlayer.Messages.AddMessage (BERATERTYP_GIRL, bprintf (StandardTexte.GetS (TOKEN_ADVICE, 2370+GetSeason()), (LPCTSTR)qPlane.Name));
                            }
                         }
 
@@ -1999,7 +1999,7 @@ void SIM::DoTimeStep (void)
                   //Passagierzahlen aktualisieren:
                   if (qPlane.Flugplan.Flug[e].ObjectType==1)
                      qPlane.Flugplan.Flug[e].CalcPassengers (c, qPlane);
-                     //qPlane.Flugplan.Flug[e].CalcPassengers (qPlane.TypeId, c, qPlane);
+                     //qPlane.Flugplan.Flug[e].CalcPassengers (qPlane.TypeId, c, (LPCTSTR)qPlane);
                }
                qPlane.Flugplan.UpdateNextFlight ();
 
@@ -2013,28 +2013,28 @@ void SIM::DoTimeStep (void)
                       if (qPlane.PseudoProblem)
                       {
                          Delay = TRUE;
-                         if (Sim.Players.Players[c].Owner==0) Sim.Players.Players[c].Messages.AddMessage (BERATERTYP_GIRL, bprintf(StandardTexte.GetS (TOKEN_ADVICE, 2358), qPlane.Name, Cities[qPlane.Flugplan.Flug[e].VonCity].Name));
+                         if (Sim.Players.Players[c].Owner==0) Sim.Players.Players[c].Messages.AddMessage (BERATERTYP_GIRL, bprintf(StandardTexte.GetS (TOKEN_ADVICE, 2358), (LPCTSTR)qPlane.Name, (LPCTSTR)Cities[qPlane.Flugplan.Flug[e].VonCity].Name));
                       }
                       if (Sim.Players.Players[c].StrikeHours)
                       {
                          Delay = TRUE;
-                         if (Sim.Players.Players[c].Owner==0) Sim.Players.Players[c].Messages.AddMessage (BERATERTYP_GIRL, bprintf(StandardTexte.GetS (TOKEN_ADVICE, 2356), qPlane.Name, Cities[qPlane.Flugplan.Flug[e].VonCity].Name));
+                         if (Sim.Players.Players[c].Owner==0) Sim.Players.Players[c].Messages.AddMessage (BERATERTYP_GIRL, bprintf(StandardTexte.GetS (TOKEN_ADVICE, 2356), (LPCTSTR)qPlane.Name, (LPCTSTR)Cities[qPlane.Flugplan.Flug[e].VonCity].Name));
                       }
                       //else if (qPlane.AnzPiloten<PlaneTypes[qPlane.TypeId].AnzPiloten || qPlane.AnzBegleiter<PlaneTypes[qPlane.TypeId].AnzBegleiter)
                       else if (qPlane.AnzPiloten<qPlane.ptAnzPiloten || qPlane.AnzBegleiter<qPlane.ptAnzBegleiter)
                       {
                          Delay = TRUE;
-                         if (Sim.Players.Players[c].Owner==0) Sim.Players.Players[c].Messages.AddMessage (BERATERTYP_GIRL, bprintf(StandardTexte.GetS (TOKEN_ADVICE, 2350), qPlane.Name, Cities[qPlane.Flugplan.Flug[e].VonCity].Name));
+                         if (Sim.Players.Players[c].Owner==0) Sim.Players.Players[c].Messages.AddMessage (BERATERTYP_GIRL, bprintf(StandardTexte.GetS (TOKEN_ADVICE, 2350), (LPCTSTR)qPlane.Name, (LPCTSTR)Cities[qPlane.Flugplan.Flug[e].VonCity].Name));
                       }
                       else if (qPlane.Zustand<15)
                       {
                          Delay = TRUE;
-                         if (Sim.Players.Players[c].Owner==0) Sim.Players.Players[c].Messages.AddMessage (BERATERTYP_GIRL, bprintf(StandardTexte.GetS (TOKEN_ADVICE, 2351), qPlane.Name, Cities[qPlane.Flugplan.Flug[e].VonCity].Name));
+                         if (Sim.Players.Players[c].Owner==0) Sim.Players.Players[c].Messages.AddMessage (BERATERTYP_GIRL, bprintf(StandardTexte.GetS (TOKEN_ADVICE, 2351), (LPCTSTR)qPlane.Name, (LPCTSTR)Cities[qPlane.Flugplan.Flug[e].VonCity].Name));
                       }
                       else if (qPlane.Flugplan.Flug[e].ObjectType==2 && qPlane.Flugplan.Flug[e].Okay==1)
                       {
                          Delay = TRUE;
-                         if (Sim.Players.Players[c].Owner==0) Sim.Players.Players[c].Messages.AddMessage (BERATERTYP_GIRL, bprintf(StandardTexte.GetS (TOKEN_ADVICE, 2352), qPlane.Name, Cities[qPlane.Flugplan.Flug[e].VonCity].Name));
+                         if (Sim.Players.Players[c].Owner==0) Sim.Players.Players[c].Messages.AddMessage (BERATERTYP_GIRL, bprintf(StandardTexte.GetS (TOKEN_ADVICE, 2352), (LPCTSTR)qPlane.Name, (LPCTSTR)Cities[qPlane.Flugplan.Flug[e].VonCity].Name));
                       }
                       else if (qPlane.Problem)
                       {
@@ -2042,7 +2042,7 @@ void SIM::DoTimeStep (void)
 
                          if (Sim.Players.Players[c].Owner==0) 
                             if (qLocalPlayer.LocationWin && ((CStdRaum*)qLocalPlayer.LocationWin)->CurrentMenu!=MENU_SABOTAGEFAX)
-                               Sim.Players.Players[c].Messages.AddMessage (BERATERTYP_GIRL, bprintf(StandardTexte.GetS (TOKEN_ADVICE, 2355), qPlane.Name, Cities[qPlane.Flugplan.Flug[e].VonCity].Name));
+                               Sim.Players.Players[c].Messages.AddMessage (BERATERTYP_GIRL, bprintf(StandardTexte.GetS (TOKEN_ADVICE, 2355), (LPCTSTR)qPlane.Name, (LPCTSTR)Cities[qPlane.Flugplan.Flug[e].VonCity].Name));
                       }
 
                       if (Delay)
@@ -2106,7 +2106,7 @@ void SIM::DoTimeStep (void)
                                  qPlane.Problem = max (1, qPlane.Problem-15);
 
                                  qPlayer.Messages.AddMessage (BERATERTYP_GIRL, 
-                                    bprintf (StandardTexte.GetS (TOKEN_ADVICE, 2320), (LPCTSTR)Cities[qFPE.NachCity].Name, qPlane.Problem));
+                                    bprintf (StandardTexte.GetS (TOKEN_ADVICE, 2320), (LPCTSTR)Cities[qFPE.NachCity].Name, (LPCTSTR)qPlane.Problem));
                               }
                            }
                   }
@@ -2190,10 +2190,10 @@ void SIM::DoTimeStep (void)
 
                      if (City == Sim.HomeAirportId && qPlane.GetFlugplanEintrag()->Gate==-1 && qPlane.Flugplan.Flug[qPlane.Flugplan.NextFlight].ObjectType!=3 && qPlane.Flugplan.Flug[qPlane.Flugplan.NextFlight].ObjectType!=4)
                      {
-                        Sim.Players.Players[c].Messages.AddMessage (BERATERTYP_GIRL, bprintf(StandardTexte.GetS (TOKEN_ADVICE, 2353), qPlane.Name, Cities[qPlane.Flugplan.Flug[qPlane.Flugplan.NextFlight].VonCity].Name));
+                        Sim.Players.Players[c].Messages.AddMessage (BERATERTYP_GIRL, bprintf(StandardTexte.GetS (TOKEN_ADVICE, 2353), (LPCTSTR)qPlane.Name, (LPCTSTR)Cities[qPlane.Flugplan.Flug[qPlane.Flugplan.NextFlight].VonCity].Name));
                         Sim.Players.Players[c].Image-=2;
                         Limit (-1000l, Sim.Players.Players[c].Image, 1000l);
-                        //log: hprintf ("Player[%li].Image! now = %li", c, Sim.Players.Players[c].Image);
+                        //log: hprintf ("Player[%li].Image! now = %li", c, (LPCTSTR)Sim.Players.Players[c].Image);
                      }
                   }
                }
@@ -2371,11 +2371,11 @@ void SIM::NewDay (void)
    for (c=0; c<Sim.Players.AnzPlayers; c++)
       if (!Sim.Players.Players[c].IsOut)
       {
-         hprintf ("%s: %s - Sympathien: %li, %li, %li, %li", Sim.Players.Players[c].NameX, Sim.Players.Players[c].AirlineX, Sim.Players.Players[c].Sympathie[0], Sim.Players.Players[c].Sympathie[1], Sim.Players.Players[c].Sympathie[2], Sim.Players.Players[c].Sympathie[3]);
-         hprintf ("- Geld: %li-%li=%li, %li Aktien, Kurs %li", Sim.Players.Players[c].Money, Sim.Players.Players[c].Credit, Sim.Players.Players[c].Money-Sim.Players.Players[c].Credit, Sim.Players.Players[c].AnzAktien, SLONG(Sim.Players.Players[c].Kurse[0]));
-         hprintf ("- Aktien: %li, %li, %li, %li", Sim.Players.Players[c].OwnsAktien[0], Sim.Players.Players[c].OwnsAktien[1], Sim.Players.Players[c].OwnsAktien[2], Sim.Players.Players[c].OwnsAktien[3]);
-         hprintf ("- Bilanz: %li (Gestern: %li), Image: %li", Sim.Players.Players[c].Bilanz.GetSumme(), Sim.Players.Players[c].BilanzGestern.GetSumme(), Sim.Players.Players[c].Image);
-         hprintf ("- Routen: %li, Aufträge: %li, Flüge (heute): %li, Flugzeuge: %li", Sim.Players.Players[c].RentRouten.GetNumUsed(), Sim.Players.Players[c].Auftraege.GetNumUsed(), Sim.Players.Players[c].NumFlights, Sim.Players.Players[c].Planes.GetNumUsed());
+         hprintf ("%s: %s - Sympathien: %li, %li, %li, %li", (LPCTSTR)Sim.Players.Players[c].NameX, (LPCTSTR)Sim.Players.Players[c].AirlineX, (LPCTSTR)Sim.Players.Players[c].Sympathie[0], (LPCTSTR)Sim.Players.Players[c].Sympathie[1], (LPCTSTR)Sim.Players.Players[c].Sympathie[2], (LPCTSTR)Sim.Players.Players[c].Sympathie[3]);
+         hprintf ("- Geld: %li-%li=%li, %li Aktien, Kurs %li", (LPCTSTR)Sim.Players.Players[c].Money, (LPCTSTR)Sim.Players.Players[c].Credit, (LPCTSTR)Sim.Players.Players[c].Money-Sim.Players.Players[c].Credit, (LPCTSTR)Sim.Players.Players[c].AnzAktien, SLONG(Sim.Players.Players[c].Kurse[0]));
+         hprintf ("- Aktien: %li, %li, %li, %li", (LPCTSTR)Sim.Players.Players[c].OwnsAktien[0], (LPCTSTR)Sim.Players.Players[c].OwnsAktien[1], (LPCTSTR)Sim.Players.Players[c].OwnsAktien[2], (LPCTSTR)Sim.Players.Players[c].OwnsAktien[3]);
+         hprintf ("- Bilanz: %li (Gestern: %li), Image: %li", (LPCTSTR)Sim.Players.Players[c].Bilanz.GetSumme(), (LPCTSTR)Sim.Players.Players[c].BilanzGestern.GetSumme(), (LPCTSTR)Sim.Players.Players[c].Image);
+         hprintf ("- Routen: %li, Aufträge: %li, Flüge (heute): %li, Flugzeuge: %li", (LPCTSTR)Sim.Players.Players[c].RentRouten.GetNumUsed(), (LPCTSTR)Sim.Players.Players[c].Auftraege.GetNumUsed(), (LPCTSTR)Sim.Players.Players[c].NumFlights, (LPCTSTR)Sim.Players.Players[c].Planes.GetNumUsed());
       } */
 
    //Remove Person, Kleber und Stinkbomben-Flags:
@@ -2498,7 +2498,7 @@ void SIM::NewDay (void)
             NewCity.Image = 0;
             NewCity.Miete = TafelData.City[c].Preis;
 
-            //hprintf ("Event: %s (Player %li) buys %s.", Sim.Players.Players[TafelData.City[c].Player].NameX, TafelData.City[c].Player+1, Cities[TafelData.City[c].ZettelId].Name);
+            //hprintf ("Event: %s (Player %li) buys %s.", Sim.Players.Players[TafelData.City[c].Player].NameX, TafelData.City[c].Player+1, (LPCTSTR)Cities[TafelData.City[c].ZettelId].Name);
 
             Sim.Players.Players[TafelData.City[c].Player].ChangeMoney (
                -TafelData.City[c].Preis*3,
@@ -2523,7 +2523,7 @@ void SIM::NewDay (void)
             qPlayer.ChangeMoney (
                -TafelData.Route[c].Preis*3,
                2041,                //Ersteigerung einer Route
-               (CString)bprintf ("%s-%s", Cities[Routen[TafelData.Route[c].ZettelId].VonCity].Kuerzel, Cities[Routen[TafelData.Route[c].ZettelId].NachCity].Kuerzel));
+               (CString)bprintf ("%s-%s", (LPCTSTR)Cities[Routen[TafelData.Route[c].ZettelId].VonCity].Kuerzel, (LPCTSTR)Cities[Routen[TafelData.Route[c].ZettelId].NachCity].Kuerzel));
 
             TafelData.Route[c].ZettelId=0;
             TafelData.Route[c].Player=-1;

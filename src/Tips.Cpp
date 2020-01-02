@@ -68,7 +68,7 @@ void DrawCityTip (SBBM &TipBm, ULONG CityId)
    PaintStarAt (TipBm, CityPos);
 
    //Text:
-   TipBm.PrintAt (bprintf ("%s (%s), %s", Cities[CityId].Name, Cities[CityId].Kuerzel, Cities[CityId].Lage), FontSmallWhite, TEC_FONT_LEFT, 16, 4, 265, 82);
+   TipBm.PrintAt (bprintf ("%s (%s), %s", (LPCTSTR)Cities[CityId].Name, (LPCTSTR)Cities[CityId].Kuerzel, (LPCTSTR)Cities[CityId].Lage), FontSmallWhite, TEC_FONT_LEFT, 16, 4, 265, 82);
 
    if (CityPos.y<17+160-60) CityPos.y+=5; else CityPos.y-=60;
    CityPos.x = min (max (17, CityPos.x-60), 80);
@@ -87,10 +87,10 @@ void DrawCityTip (SBBM &TipBm, ULONG CityId)
       if (Cities.GetIdFromIndex(CityId)!=(ULONG)Sim.HomeAirportId)
       {
          if (Sim.Players.Players[c].RentCities.RentCities[(SLONG)Cities(CityId)].Rang!=0)
-            TipBm.PrintAt (bprintf ("%li.%s", Sim.Players.Players[c].RentCities.RentCities[(SLONG)Cities(CityId)].Rang, Sim.Players.Players[c].Airline), FontSmallGrey, TEC_FONT_LEFT, CityPos.x, CityPos.y+11*(Sim.Players.Players[c].RentCities.RentCities[(SLONG)Cities(CityId)].Rang+1), 278, 181);
+            TipBm.PrintAt (bprintf ("%li.%s", (LPCTSTR)Sim.Players.Players[c].RentCities.RentCities[(SLONG)Cities(CityId)].Rang, (LPCTSTR)Sim.Players.Players[c].Airline), FontSmallGrey, TEC_FONT_LEFT, CityPos.x, CityPos.y+11*(Sim.Players.Players[c].RentCities.RentCities[(SLONG)Cities(CityId)].Rang+1), 278, 181);
       }
       else
-         TipBm.PrintAt (bprintf ("%s", Sim.Players.Players[c].Airline), FontSmallGrey, TEC_FONT_LEFT, CityPos.x, CityPos.y+11*(c+2), 278, 181);
+         TipBm.PrintAt (bprintf ("%s", (LPCTSTR)Sim.Players.Players[c].Airline), FontSmallGrey, TEC_FONT_LEFT, CityPos.x, CityPos.y+11*(c+2), 278, 181);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -108,7 +108,7 @@ void DrawCityTipContents (SBBM &TipBm, ULONG CityId, XY Headline, XY Contents, X
    PaintStarAt (TipBm, CityPos);
 
    //Text:
-   TipBm.PrintAt (bprintf ("%s (%s)", Cities[CityId].Name, Cities[CityId].Kuerzel), *pHeadFont, TEC_FONT_LEFT, Headline.x, Headline.y, TipBm.Size.x, TipBm.Size.y);
+   TipBm.PrintAt (bprintf ("%s (%s)", (LPCTSTR)Cities[CityId].Name, (LPCTSTR)Cities[CityId].Kuerzel), *pHeadFont, TEC_FONT_LEFT, Headline.x, Headline.y, TipBm.Size.x, TipBm.Size.y);
 
    if (CityPos.y<17+160-60) CityPos.y+=5; else CityPos.y-=60;
    CityPos.x = min (max (17, CityPos.x-60), 80);
@@ -125,10 +125,10 @@ void DrawCityTipContents (SBBM &TipBm, ULONG CityId, XY Headline, XY Contents, X
       if (Cities.GetIdFromIndex(Cities(CityId))!=(ULONG)Sim.HomeAirportId)
       {
          if (Sim.Players.Players[c].RentCities.RentCities[(SLONG)Cities(CityId)].Rang!=0)
-            TipBm.PrintAt (bprintf ("%li.%s", Sim.Players.Players[c].RentCities.RentCities[(SLONG)Cities(CityId)].Rang, Sim.Players.Players[c].Airline), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+122+11*(Sim.Players.Players[c].RentCities.RentCities[(SLONG)Cities(CityId)].Rang+1), TipBm.Size.x, TipBm.Size.y);
+            TipBm.PrintAt (bprintf ("%li.%s", (LPCTSTR)Sim.Players.Players[c].RentCities.RentCities[(SLONG)Cities(CityId)].Rang, (LPCTSTR)Sim.Players.Players[c].Airline), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+122+11*(Sim.Players.Players[c].RentCities.RentCities[(SLONG)Cities(CityId)].Rang+1), TipBm.Size.x, TipBm.Size.y);
       }
       else
-         TipBm.PrintAt (bprintf ("%s", Sim.Players.Players[c].Airline), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+122+11*(c+2), TipBm.Size.x, TipBm.Size.y);
+         TipBm.PrintAt (bprintf ("%s", (LPCTSTR)Sim.Players.Players[c].Airline), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+122+11*(c+2), TipBm.Size.x, TipBm.Size.y);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -355,12 +355,12 @@ void DrawRouteTipContents (SBBM &TipBm, SLONG PlayerNum, ULONG RouteId, SLONG Ga
    TipBm.PrintAt (StandardTexte.GetS (TOKEN_ROUTE, 900), *pHeadFont, TEC_FONT_LEFT, Headline.x, Headline.y, Contents.x+170, Headline.y+15);
 
    //Sub-Überschrift:
-   if (TipBm.TryPrintAt (bprintf ("%s - %s", Cities[Routen[RouteId].VonCity].Name, Cities[Routen[RouteId].NachCity].Name), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y, Contents.x+170, Contents.y+170)<12)
-      TipBm.PrintAt (bprintf ("%s - %s", Cities[Routen[RouteId].VonCity].Name, Cities[Routen[RouteId].NachCity].Name), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y, Contents.x+170, Contents.y+170);
-   else if (TipBm.TryPrintAt (bprintf ("%s - %s", Cities[Routen[RouteId].VonCity].Name, Cities[Routen[RouteId].NachCity].Kuerzel), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y, Contents.x+170, Contents.y+170)<12)
-      TipBm.PrintAt (bprintf ("%s - %s", Cities[Routen[RouteId].VonCity].Name, Cities[Routen[RouteId].NachCity].Kuerzel), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y, Contents.x+170, Contents.y+170);
+   if (TipBm.TryPrintAt (bprintf ("%s - %s", (LPCTSTR)Cities[Routen[RouteId].VonCity].Name, (LPCTSTR)Cities[Routen[RouteId].NachCity].Name), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y, Contents.x+170, Contents.y+170)<12)
+      TipBm.PrintAt (bprintf ("%s - %s", (LPCTSTR)Cities[Routen[RouteId].VonCity].Name, (LPCTSTR)Cities[Routen[RouteId].NachCity].Name), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y, Contents.x+170, Contents.y+170);
+   else if (TipBm.TryPrintAt (bprintf ("%s - %s", (LPCTSTR)Cities[Routen[RouteId].VonCity].Name, (LPCTSTR)Cities[Routen[RouteId].NachCity].Kuerzel), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y, Contents.x+170, Contents.y+170)<12)
+      TipBm.PrintAt (bprintf ("%s - %s", (LPCTSTR)Cities[Routen[RouteId].VonCity].Name, (LPCTSTR)Cities[Routen[RouteId].NachCity].Kuerzel), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y, Contents.x+170, Contents.y+170);
    else
-      TipBm.PrintAt (bprintf ("%s - %s", Cities[Routen[RouteId].VonCity].Kuerzel, Cities[Routen[RouteId].NachCity].Kuerzel), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y, Contents.x+170, Contents.y+170);
+      TipBm.PrintAt (bprintf ("%s - %s", (LPCTSTR)Cities[Routen[RouteId].VonCity].Kuerzel, (LPCTSTR)Cities[Routen[RouteId].NachCity].Kuerzel), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y, Contents.x+170, Contents.y+170);
 
    //Konkrete oder abstrakte Version des Tips?
    if (Costs!=0)
@@ -458,12 +458,12 @@ void DrawAuftragTipContents (SLONG PlayerNum, SBBM &TipBm, SBBMS *pPlaneTips, CA
    TipBm.PrintAt (StandardTexte.GetS (TOKEN_AUFTRAG, 900), *pHeadFont, TEC_FONT_LEFT, Headline.x, Headline.y, Contents.x+170, Headline.y+15);
 
    //Sub-Überschrift:
-   if (TipBm.TryPrintAt (bprintf ("%s - %s", Cities[Auftrag->VonCity].Name, Cities[Auftrag->NachCity].Name), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15)<12)
-      TipBm.PrintAt (bprintf ("%s - %s", Cities[Auftrag->VonCity].Name, Cities[Auftrag->NachCity].Name), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15);
-   else if (TipBm.TryPrintAt (bprintf ("%s - %s", Cities[Auftrag->VonCity].Name, Cities[Auftrag->NachCity].Kuerzel), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15)<12)
-      TipBm.PrintAt (bprintf ("%s - %s", Cities[Auftrag->VonCity].Name, Cities[Auftrag->NachCity].Kuerzel), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15);
+   if (TipBm.TryPrintAt (bprintf ("%s - %s", (LPCTSTR)Cities[Auftrag->VonCity].Name, (LPCTSTR)Cities[Auftrag->NachCity].Name), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15)<12)
+      TipBm.PrintAt (bprintf ("%s - %s", (LPCTSTR)Cities[Auftrag->VonCity].Name, (LPCTSTR)Cities[Auftrag->NachCity].Name), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15);
+   else if (TipBm.TryPrintAt (bprintf ("%s - %s", (LPCTSTR)Cities[Auftrag->VonCity].Name, (LPCTSTR)Cities[Auftrag->NachCity].Kuerzel), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15)<12)
+      TipBm.PrintAt (bprintf ("%s - %s", (LPCTSTR)Cities[Auftrag->VonCity].Name, (LPCTSTR)Cities[Auftrag->NachCity].Kuerzel), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15);
    else
-      TipBm.PrintAt (bprintf ("%s - %s", Cities[Auftrag->VonCity].Kuerzel, Cities[Auftrag->NachCity].Kuerzel), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15);
+      TipBm.PrintAt (bprintf ("%s - %s", (LPCTSTR)Cities[Auftrag->VonCity].Kuerzel, (LPCTSTR)Cities[Auftrag->NachCity].Kuerzel), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15);
 
    //Text:
    TipBm.PrintAt (StandardTexte.GetS (TOKEN_AUFTRAG, 1003), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+22, Contents.x+170, Contents.y+170);
@@ -628,12 +628,12 @@ void DrawFrachtTipContents (SLONG PlayerNum, SBBM &TipBm, SBBMS *pPlaneTips, CFr
    TipBm.PrintAt (StandardTexte.GetS (TOKEN_AUFTRAG, 902), *pHeadFont, TEC_FONT_LEFT, Headline.x, Headline.y, Contents.x+170, Headline.y+15);
 
    //Sub-Überschrift:
-   if (TipBm.TryPrintAt (bprintf ("%s - %s", Cities[Fracht->VonCity].Name, Cities[Fracht->NachCity].Name), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15)<12)
-      TipBm.PrintAt (bprintf ("%s - %s", Cities[Fracht->VonCity].Name, Cities[Fracht->NachCity].Name), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15);
-   else if (TipBm.TryPrintAt (bprintf ("%s - %s", Cities[Fracht->VonCity].Name, Cities[Fracht->NachCity].Kuerzel), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15)<12)
-      TipBm.PrintAt (bprintf ("%s - %s", Cities[Fracht->VonCity].Name, Cities[Fracht->NachCity].Kuerzel), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15);
+   if (TipBm.TryPrintAt (bprintf ("%s - %s", (LPCTSTR)Cities[Fracht->VonCity].Name, (LPCTSTR)Cities[Fracht->NachCity].Name), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15)<12)
+      TipBm.PrintAt (bprintf ("%s - %s", (LPCTSTR)Cities[Fracht->VonCity].Name, (LPCTSTR)Cities[Fracht->NachCity].Name), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15);
+   else if (TipBm.TryPrintAt (bprintf ("%s - %s", (LPCTSTR)Cities[Fracht->VonCity].Name, (LPCTSTR)Cities[Fracht->NachCity].Kuerzel), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15)<12)
+      TipBm.PrintAt (bprintf ("%s - %s", (LPCTSTR)Cities[Fracht->VonCity].Name, (LPCTSTR)Cities[Fracht->NachCity].Kuerzel), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15);
    else
-      TipBm.PrintAt (bprintf ("%s - %s", Cities[Fracht->VonCity].Kuerzel, Cities[Fracht->NachCity].Kuerzel), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15);
+      TipBm.PrintAt (bprintf ("%s - %s", (LPCTSTR)Cities[Fracht->VonCity].Kuerzel, (LPCTSTR)Cities[Fracht->NachCity].Kuerzel), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15);
 
    //Text:
    TipBm.PrintAt (StandardTexte.GetS (TOKEN_AUFTRAG, 1003), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+22, Contents.x+170, Contents.y+170);
@@ -800,9 +800,9 @@ void DrawAutoflugTipContents (SBBM &TipBm, SLONG Costs, SLONG NotPassengers, SLO
    TipBm.PrintAt (StandardTexte.GetS (TOKEN_AUFTRAG, 901), *pHeadFont, TEC_FONT_LEFT, Headline.x, Headline.y, Contents.x+170, Headline.y+15);
 
    //Sub-Überschrift:
-   if (TipBm.TryPrintAt (bprintf ("%s - %s", Cities[VonCity].Name, Cities[NachCity].Name), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15)<12) TipBm.PrintAt (bprintf ("%s - %s", Cities[VonCity].Name, Cities[NachCity].Name), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15);
-   else if (TipBm.TryPrintAt (bprintf ("%s - %s", Cities[VonCity].Name, Cities[NachCity].Kuerzel), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15)<12) TipBm.PrintAt (bprintf ("%s - %s", Cities[VonCity].Name, Cities[NachCity].Kuerzel), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15);
-   else TipBm.PrintAt (bprintf ("%s - %s", Cities[VonCity].Kuerzel, Cities[NachCity].Kuerzel), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15);
+   if (TipBm.TryPrintAt (bprintf ("%s - %s", (LPCTSTR)Cities[VonCity].Name, (LPCTSTR)Cities[NachCity].Name), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15)<12) TipBm.PrintAt (bprintf ("%s - %s", (LPCTSTR)Cities[VonCity].Name, (LPCTSTR)Cities[NachCity].Name), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15);
+   else if (TipBm.TryPrintAt (bprintf ("%s - %s", (LPCTSTR)Cities[VonCity].Name, (LPCTSTR)Cities[NachCity].Kuerzel), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15)<12) TipBm.PrintAt (bprintf ("%s - %s", (LPCTSTR)Cities[VonCity].Name, (LPCTSTR)Cities[NachCity].Kuerzel), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15);
+   else TipBm.PrintAt (bprintf ("%s - %s", (LPCTSTR)Cities[VonCity].Kuerzel, (LPCTSTR)Cities[NachCity].Kuerzel), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+0, Contents.x+170, Contents.y+15);
 
    //Text:
    TipBm.PrintAt (StandardTexte.GetS (TOKEN_AUFTRAG, 1007), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+44, Contents.x+170, Contents.y+170);

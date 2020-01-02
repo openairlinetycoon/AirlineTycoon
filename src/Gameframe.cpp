@@ -2069,8 +2069,8 @@ void GameFrame::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
             {
                PERSON &qPerson = Sim.Persons[Sim.Persons.GetPlayerIndex (c)];
 
-               hprintf ("%s: %s (%li) - Sympathien: %li, %li, %li, %li", Sim.Players.Players[c].NameX, Sim.Players.Players[c].AirlineX, Sim.Players.Players[c].Owner, Sim.Players.Players[c].Sympathie[0], Sim.Players.Players[c].Sympathie[1], Sim.Players.Players[c].Sympathie[2], Sim.Players.Players[c].Sympathie[3]);
-               hprintf ("- Owner %li - TopLocation: %li", Sim.Players.Players[c].Owner, Sim.Players.Players[c].GetRoom());
+               hprintf ("%s: %s (%li) - Sympathien: %li, %li, %li, %li", (LPCTSTR)Sim.Players.Players[c].NameX, (LPCTSTR)Sim.Players.Players[c].AirlineX, (LPCTSTR)Sim.Players.Players[c].Owner, (LPCTSTR)Sim.Players.Players[c].Sympathie[0], (LPCTSTR)Sim.Players.Players[c].Sympathie[1], (LPCTSTR)Sim.Players.Players[c].Sympathie[2], (LPCTSTR)Sim.Players.Players[c].Sympathie[3]);
+               hprintf ("- Owner %li - TopLocation: %li", (LPCTSTR)Sim.Players.Players[c].Owner, (LPCTSTR)Sim.Players.Players[c].GetRoom());
                hprintf ("- (%li,%li)->(%li,%li)", qPerson.Position.x, qPerson.Position.y, qPerson.Target.x, qPerson.Target.y);
             }
 

@@ -103,10 +103,11 @@ void CHLObj::BlitAt (SB_CBitmapCore *pBitmap, XY Target)
             anz=ClipRect.right-SLONG(qHLGene.Offset);
          }
 
-         /*if (anz>0)
+#ifndef ENABLE_ASM
+         if (anz>0)
             for (SLONG c=anz-1; c>=0; c--)
-               target[c]=pHLPool->PaletteMapper[(SLONG)source[c]];*/
-
+               target[c]=pHLPool->PaletteMapper[(SLONG)source[c]];
+#else
          if (anz>0)
          _asm
          {
@@ -227,7 +228,7 @@ CopyWords01: mov     cl, [esi+0]
 
 game_over:
          }
-
+#endif
          count++;
       }
       bm += Key.lPitch/2;
@@ -294,7 +295,7 @@ void CHLObj::BlitLargeAt (SB_CBitmapCore *pBitmap, XY Target)
 
          if (anz>0)
             for (SLONG c=anz-1; c>=0; c--)
-               target[c+Key.lPitch/2]=target[c]=pHLPool->PaletteMapper[(SLONG)(ULONG)source[c/2]];
+               target[c+Key.lPitch/2]=target[c]=pHLPool->PaletteMapper[(ptrdiff_t)source[c/2]];
 
          count++;
       }
@@ -663,7 +664,7 @@ void CHLPool::AddBitmap (__int64 graphicID, SB_CBitmapCore *pBitmap, PALETTE *Pa
                qObj.HLines[AnzObjHLines].Offset = (UBYTE)x;
                qObj.HLines[AnzObjHLines].Anz    = (UBYTE)cx;
 
-               qObj.HLines[AnzObjHLines].pPixel = (UBYTE*)(*((ULONG*)(bm+x)));
+               qObj.HLines[AnzObjHLines].pPixel = (UBYTE*)(*((ptrdiff_t*)(bm+x)));
 
                AnzObjHLines++;
 
@@ -880,12 +881,12 @@ void CHLPool::DoBaseObjects (void)
          //Falls die HLine aus dem aktuellen Pool stammt...
          if (qObj.HLines[d].Anz>4)
             if (qObj.HLines[d].pPixel>=(UBYTE*)0x00000000 && qObj.HLines[d].pPixel<=(UBYTE*)0x00000000+PoolSize)
-               qObj.HLines[d].pPixel = (UBYTE*) (((UBYTE*)qObj.HLines[d].pPixel)-(ULONG)0x00000000+(ULONG)pPool);
+               qObj.HLines[d].pPixel = (UBYTE*) (((UBYTE*)qObj.HLines[d].pPixel)-(ptrdiff_t)0x00000000+(ptrdiff_t)pPool);
             else if (pHLBasepool1 && qObj.HLines[d].pPixel>=(UBYTE*)0x10000000 && qObj.HLines[d].pPixel<=(UBYTE*)0x10000000+pHLBasepool1->PoolSize)
-               qObj.HLines[d].pPixel = (UBYTE*) (((UBYTE*)qObj.HLines[d].pPixel)-(ULONG)0x10000000+(ULONG)pHLBasepool1->pPool);
+               qObj.HLines[d].pPixel = (UBYTE*) (((UBYTE*)qObj.HLines[d].pPixel)-(ptrdiff_t)0x10000000+(ptrdiff_t)pHLBasepool1->pPool);
 
             else if (pHLBasepool2 && qObj.HLines[d].pPixel>=(UBYTE*)0x20000000 && qObj.HLines[d].pPixel<=(UBYTE*)0x20000000+pHLBasepool2->PoolSize)
-               qObj.HLines[d].pPixel = (UBYTE*) (((UBYTE*)qObj.HLines[d].pPixel)-(ULONG)0x20000000+(ULONG)pHLBasepool2->pPool);
+               qObj.HLines[d].pPixel = (UBYTE*) (((UBYTE*)qObj.HLines[d].pPixel)-(ptrdiff_t)0x20000000+(ptrdiff_t)pHLBasepool2->pPool);
 
             else DebugBreak();
       }
@@ -910,13 +911,13 @@ void CHLPool::UnBaseObjects (void)
          //Falls die HLine aus dem aktuellen Pool stammt...
          if (qObj.HLines[d].Anz>4)
             if (qObj.HLines[d].pPixel>=pPool && qObj.HLines[d].pPixel<=pPool+PoolSize)
-               qObj.HLines[d].pPixel = (UBYTE*) (((UBYTE*)qObj.HLines[d].pPixel)-(ULONG)pPool+(ULONG)0x00000000);
+               qObj.HLines[d].pPixel = (UBYTE*) (((UBYTE*)qObj.HLines[d].pPixel)-(ptrdiff_t)pPool+(ptrdiff_t)0x00000000);
 
             else if (pHLBasepool1 && qObj.HLines[d].pPixel>=pHLBasepool1Pool && qObj.HLines[d].pPixel<=pHLBasepool1Pool+HLBasepool1Size)
-               qObj.HLines[d].pPixel = (UBYTE*) (((UBYTE*)qObj.HLines[d].pPixel)-(ULONG)pHLBasepool1Pool+(ULONG)0x10000000);
+               qObj.HLines[d].pPixel = (UBYTE*) (((UBYTE*)qObj.HLines[d].pPixel)-(ptrdiff_t)pHLBasepool1Pool+(ptrdiff_t)0x10000000);
 
             else if (pHLBasepool2 && qObj.HLines[d].pPixel>=pHLBasepool2Pool && qObj.HLines[d].pPixel<=pHLBasepool2Pool+HLBasepool2Size)
-               qObj.HLines[d].pPixel = (UBYTE*) (((UBYTE*)qObj.HLines[d].pPixel)-(ULONG)pHLBasepool2Pool+(ULONG)0x20000000);
+               qObj.HLines[d].pPixel = (UBYTE*) (((UBYTE*)qObj.HLines[d].pPixel)-(ptrdiff_t)pHLBasepool2Pool+(ptrdiff_t)0x20000000);
 
             else DebugBreak();
       }
@@ -944,7 +945,7 @@ void CHLPool::ReBaseObjects (UBYTE *pOldPool, UBYTE *pNewPool)
          //Falls die HLine aus dem aktuellen Pool stammt...
          if (qObj.HLines[d].Anz>4)
             if (qObj.HLines[d].pPixel>=pOldPool && qObj.HLines[d].pPixel<=pOldPool+PoolSize)
-               qObj.HLines[d].pPixel = (UBYTE*) (((UBYTE*)qObj.HLines[d].pPixel)-(ULONG)pOldPool+(ULONG)pNewPool);
+               qObj.HLines[d].pPixel = (UBYTE*) (((UBYTE*)qObj.HLines[d].pPixel)-(ptrdiff_t)pOldPool+(ptrdiff_t)pNewPool);
       }
    }
 }

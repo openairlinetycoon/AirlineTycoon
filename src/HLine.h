@@ -20,15 +20,15 @@
          UBYTE *pPixel;                     //Pointer in den Pool oder wenn Anz<=2, direkt die Pixel
 
       private:
-         CHLGene () {}
+         CHLGene () { Offset = 0; Anz = 0; pPixel = NULL; }
          ~CHLGene () {}
 
       friend class BUFFER<CHLGene>;
       friend class CHLObj;
       friend class CHLPool;
 
-      friend TEAKFILE &operator << (TEAKFILE &File, const CHLGene &gene)  { File.Write ((UBYTE*)&gene, sizeof(CHLGene)); return (File); }
-      friend TEAKFILE &operator >> (TEAKFILE &File, CHLGene &gene)  { File.Read ((UBYTE*)&gene, sizeof(CHLGene)); return (File); }
+      friend TEAKFILE &operator << (TEAKFILE &File, const CHLGene &gene)  {  File << gene.Offset << gene.Anz; File.Write((UBYTE*)&gene.pPixel, 4); return (File); }
+      friend TEAKFILE &operator >> (TEAKFILE &File, CHLGene &gene)  { File >> gene.Offset >> gene.Anz; File.Read((UBYTE*)&gene.pPixel, 4); return (File); }
    };
 #pragma pack (pop, pragma_gene)
 

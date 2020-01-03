@@ -1849,6 +1849,7 @@ void TEAKRAND::Reset ()
 //--------------------------------------------------------------------------------------------
 UWORD TEAKRAND::Rand ()
 {
+#ifdef ENABLE_ASM
    ULONG localValue = Value;
 
    _asm
@@ -1874,6 +1875,11 @@ UWORD TEAKRAND::Rand ()
    Value = localValue;
 
    return (UWORD(localValue >> 16));
+#else
+   Value = Value * 7381 + 0x269EC3;
+
+   return (UWORD(Value >> 16));
+#endif
 }
 
 //--------------------------------------------------------------------------------------------

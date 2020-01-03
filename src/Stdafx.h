@@ -4,6 +4,7 @@
 //
 
 #ifdef WIN32
+#define _WINSOCKAPI_   /* Prevent inclusion of winsock.h in windows.h */
 #include <Windows.h>
 #endif
 #include <math.h>

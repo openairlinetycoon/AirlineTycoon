@@ -150,7 +150,7 @@ void SB_CColorFX::ReInit (SB_CColorFXType FXType, SLONG Steps, SB_CBitmapCore *B
 //--------------------------------------------------------------------------------------------
 void SB_CColorFX::Apply (SLONG Step, SB_CBitmapCore *Bitmap)
 {
-   SLONG  cy;
+   SLONG  cx, cy;
    UWORD *p;
    UWORD *Table = BlendTables+(Step<<9);
    static SLONG sizex;
@@ -168,12 +168,14 @@ void SB_CColorFX::Apply (SLONG Step, SB_CBitmapCore *Bitmap)
    {
       p = ((UWORD*) (((char*)Key.Bitmap) + cy*Key.lPitch))+ClipRect.left;
 
-      /*for (cx=Bitmap->GetXSize(); cx>0; cx--)
+#ifndef ENABLE_ASM
+      for (cx=sizex; cx>0; cx--)
       {
          *p = Table[((UBYTE*)p)[0]]+
               Table[256+((UBYTE*)p)[1]];
          p++;
-      } */
+      }
+#else
       __asm
       {
          push  ebp
@@ -224,6 +226,7 @@ oops_we_dont_want_transparency:
 
 ende:
       }
+#endif
    }
 }
 
@@ -232,30 +235,7 @@ ende:
 //--------------------------------------------------------------------------------------------
 void SB_CColorFX::Apply (SLONG Step, SB_CBitmapCore *SrcBitmap, SB_CBitmapCore *TgtBitmap)
 {
-   /*SLONG  cx, cy;
-   UWORD *p, *pp;
-   UWORD *Table = BlendTables[Step];
-   static ULONG _ESP;
-   static SLONG sizex;
-
-   SB_CBitmapKey SrdKey(*SrcBitmap);
-   SB_CBitmapKey TgtKey(*TgtBitmap);
-
-   sizex=Bitmap->GetXSize();
-
-   for (cy=0; cy<SrcBitmap->GetYSize(); cy++)
-   {
-      p  = (UWORD*) (((char*)SrdKey.Bitmap) + cy*SrdKey.lPitch);
-      pp = (UWORD*) (((char*)TgtKey.Bitmap) + cy*TgtKey.lPitch);
-
-      /*for (cx=SrcBitmap->GetXSize(); cx>0; cx--)
-      {
-         *pp = Table[((UBYTE*)p)[0]]+
-               Table[256+((UBYTE*)p)[1]];
-         p++; pp++;
-      }
-   } */
-   SLONG  cy;
+   SLONG  cx, cy;
    UWORD *p, *pp;
    UWORD *Table = BlendTables+(Step<<9);
    static SLONG sizex;
@@ -271,6 +251,14 @@ void SB_CColorFX::Apply (SLONG Step, SB_CBitmapCore *SrcBitmap, SB_CBitmapCore *
       p  = (UWORD*) (((char*)SrcKey.Bitmap) + cy*SrcKey.lPitch);
       pp = (UWORD*) (((char*)TgtKey.Bitmap) + cy*TgtKey.lPitch);
 
+#ifndef ENABLE_ASM
+      for (cx=SrcBitmap->GetXSize(); cx>0; cx--)
+      {
+         *pp = Table[((UBYTE*)p)[0]]+
+               Table[256+((UBYTE*)p)[1]];
+         p++; pp++;
+      }
+#else
       __asm
       {
          push  ebp
@@ -306,6 +294,7 @@ Looping3:
          pop   esi
          pop   ebp
       }
+#endif
    }
 }
 
@@ -314,7 +303,7 @@ Looping3:
 //--------------------------------------------------------------------------------------------
 void SB_CColorFX::ApplyOn2 (SLONG Step, SB_CBitmapCore *DestBitmap, SLONG Step2, SB_CBitmapCore *SrcBitmap2)
 {
-   SLONG  cy;
+   SLONG  cx, cy;
    UWORD *p, *pp;
    UWORD *Table = BlendTables+(Step<<9);
    UWORD *Table2 = BlendTables+(Step2<<9);
@@ -338,6 +327,7 @@ void SB_CColorFX::ApplyOn2 (SLONG Step, SB_CBitmapCore *DestBitmap, SLONG Step2,
       memcpy (PixelBuffer, p, sizex*2);
       p = PixelBuffer;
 
+#ifdef ENABLE_ASM
       __asm
       {
          push  ebp
@@ -394,17 +384,18 @@ Looping:
          pop   esi
          pop   ebp
       }
-
-      memcpy ((((char*)Key.Bitmap) + cy*Key.lPitch), PixelBuffer, sizex*2);
-
-      /*for (cx=sizex; cx>0; cx--)
+#else
+      for (cx=sizex; cx>0; cx--)
       {
          *p = Table[((UBYTE*)p)[0]]+Table[256+((UBYTE*)p)[1]]+
               Table2[((UBYTE*)pp)[0]]+Table2[256+((UBYTE*)pp)[1]];
 
          p++;
          pp++;
-      } */
+      }
+#endif
+
+      memcpy ((((char*)Key.Bitmap) + cy*Key.lPitch), PixelBuffer, sizex*2);
    }
 }
 
@@ -413,7 +404,7 @@ Looping:
 //--------------------------------------------------------------------------------------------
 void SB_CColorFX::ApplyOn2 (SLONG Step, SB_CBitmapCore *SrcBitmap, SLONG Step2, SB_CBitmapCore *SrcBitmap2, SB_CBitmapCore *TgtBitmap)
 {
-   SLONG  cy;
+   SLONG  cx, cy;
    UWORD *p, *pp, *ppp;
    UWORD *Table = BlendTables+(Step<<9);
    UWORD *Table2 = BlendTables+(Step2<<9);
@@ -435,6 +426,7 @@ void SB_CColorFX::ApplyOn2 (SLONG Step, SB_CBitmapCore *SrcBitmap, SLONG Step2, 
       pp = (UWORD*) (((char*)Key2.Bitmap) + cy*Key2.lPitch);
       ppp = (UWORD*) (((char*)TgtKey.Bitmap) + cy*TgtKey.lPitch);
 
+#ifdef ENABLE_ASM
       sizex=SrcBitmap->GetXSize()/2;
 
       __asm
@@ -484,6 +476,19 @@ Looping:
          pop   esi
          pop   ebp
       }
+#else
+      sizex = SrcBitmap->GetXSize();
+
+      for (cx = sizex; cx > 0; cx--)
+      {
+         *ppp = Table[((UBYTE*)p)[0]] + Table[256 + ((UBYTE*)p)[1]] +
+            Table2[((UBYTE*)pp)[0]] + Table2[256 + ((UBYTE*)pp)[1]];
+
+         p++;
+         pp++;
+         ppp++;
+      }
+#endif
    }
 }
 
@@ -966,7 +971,7 @@ void SB_CColorFX::BlitAlpha (SB_CBitmapCore *SrcBitmap, SB_CBitmapCore *TgtBitma
    if (SrcBitmap==NULL) return;
    if (TargetPos.x>=640 || TargetPos.x+SrcBitmap->GetXSize()<0) return;
 
-   SLONG  cy;
+   SLONG  cx, cy;
    UWORD *p, *pp;
    static SLONG sizex;
    static ULONG _ESP;
@@ -1022,6 +1027,7 @@ void SB_CColorFX::BlitAlpha (SB_CBitmapCore *SrcBitmap, SB_CBitmapCore *TgtBitma
 
          UWORD *Table = BlendTables;
 
+#ifdef ENABLE_ASM
          __asm
          {
             push  ebp
@@ -1064,7 +1070,7 @@ void SB_CColorFX::BlitAlpha (SB_CBitmapCore *SrcBitmap, SB_CBitmapCore *TgtBitma
             pop   esi
             pop   ebp
          }
-
+#else
          /*for (cx=sizex; cx>0; cx--)
          {
             *p = Table[((UBYTE*)p)[0]]+Table[256+((UBYTE*)p)[1]]+
@@ -1074,7 +1080,7 @@ void SB_CColorFX::BlitAlpha (SB_CBitmapCore *SrcBitmap, SB_CBitmapCore *TgtBitma
             pp++;
          }*/
 
-         /*for (cx=sizex; cx>0; cx--)
+         for (cx=sizex; cx>0; cx--)
          {
             UWORD *Table1 = BlendTables+(SLONG(*pp)<<9);
 
@@ -1082,8 +1088,8 @@ void SB_CColorFX::BlitAlpha (SB_CBitmapCore *SrcBitmap, SB_CBitmapCore *TgtBitma
 
             p++;
             pp++;
-         } */
-
+         }
+#endif
          memcpy ((((char*)Key.Bitmap) + t.x*2 + (cy+t.y)*Key.lPitch), PixelBuffer, sizex*2);
       }
 }

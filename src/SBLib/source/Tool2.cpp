@@ -1,5 +1,7 @@
 #include "stdafx.h"
+#include <SDL_bits.h>
 
+#ifdef ENABLE_ASM
 long GetLowestSetBit(long mask)
 {
     unsigned long result;
@@ -13,9 +15,11 @@ long GetLowestSetBit(long mask)
     }
     return result;
 }
+#endif
 
 long GetHighestSetBit(long mask)
 {
+#ifdef ENABLE_ASM
     unsigned long result;
     //_BitScanReverse(&result, mask);
     __asm
@@ -26,6 +30,9 @@ long GetHighestSetBit(long mask)
         pop eax
     }
     return result;
+#else
+    return SDL_MostSignificantBitIndex32(mask);
+#endif
 }
 
 void ODS(char const *, ...)

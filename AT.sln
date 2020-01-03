@@ -33,7 +33,8 @@ Global
 		Template|x86 = Template|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F3EFC08D-EDEB-4159-A1B0-DEFCADB2F76D}.Debug|x64.ActiveCfg = Debug|Win32
+		{F3EFC08D-EDEB-4159-A1B0-DEFCADB2F76D}.Debug|x64.ActiveCfg = Debug|x64
+		{F3EFC08D-EDEB-4159-A1B0-DEFCADB2F76D}.Debug|x64.Build.0 = Debug|x64
 		{F3EFC08D-EDEB-4159-A1B0-DEFCADB2F76D}.Debug|x86.ActiveCfg = Debug|Win32
 		{F3EFC08D-EDEB-4159-A1B0-DEFCADB2F76D}.Debug|x86.Build.0 = Debug|Win32
 		{F3EFC08D-EDEB-4159-A1B0-DEFCADB2F76D}.Release|x64.ActiveCfg = Release|Win32
@@ -43,7 +44,8 @@ Global
 		{F3EFC08D-EDEB-4159-A1B0-DEFCADB2F76D}.Template|x64.Build.0 = Release|Win32
 		{F3EFC08D-EDEB-4159-A1B0-DEFCADB2F76D}.Template|x86.ActiveCfg = Release|Win32
 		{F3EFC08D-EDEB-4159-A1B0-DEFCADB2F76D}.Template|x86.Build.0 = Release|Win32
-		{136F3A23-0212-42C8-9235-33A622249C54}.Debug|x64.ActiveCfg = Debug|Win32
+		{136F3A23-0212-42C8-9235-33A622249C54}.Debug|x64.ActiveCfg = Debug|x64
+		{136F3A23-0212-42C8-9235-33A622249C54}.Debug|x64.Build.0 = Debug|x64
 		{136F3A23-0212-42C8-9235-33A622249C54}.Debug|x86.ActiveCfg = Debug|Win32
 		{136F3A23-0212-42C8-9235-33A622249C54}.Debug|x86.Build.0 = Debug|Win32
 		{136F3A23-0212-42C8-9235-33A622249C54}.Release|x64.ActiveCfg = Release|Win32

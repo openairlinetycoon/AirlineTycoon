@@ -37,7 +37,7 @@ void PaintGlobe (const TECBM &SourceBm, SBBM *TargetBm, UWORD EarthAlpha, const 
    UWORD *map;
    UBYTE *lightmap;
 
-   SLONG  cy;
+   SLONG  cx, cy;
 
    static SLONG a; a = (EarthAlpha>>7);
    static ULONG _esp;
@@ -53,8 +53,10 @@ void PaintGlobe (const TECBM &SourceBm, SBBM *TargetBm, UWORD EarthAlpha, const 
       map      = GlobeMapper[cy];
       lightmap = GlobeLight[cy];
 
-      /*for (cx=anz-1; cx>=0; cx--)
-         t[cx]=GlobeMixTab[s[(map[cx]+a)&511]+(lightmap[cx]<<8)];*/
+#ifndef ENABLE_ASM
+      for (cx=anz-1; cx>=0; cx--)
+         t[cx]=GlobeMixTab[s[(map[cx]+a)&511]+(lightmap[cx]<<8)];
+#else
       __asm
       {
          push  ebp
@@ -95,7 +97,7 @@ looping:
          pop   esi
          pop   ebp
       }
-
+#endif
       //unten:
       if (GlobeMapperY[368-cy]<SourceBm.Size.y)
       {
@@ -107,8 +109,10 @@ looping:
          map      = GlobeMapper[cy];
          lightmap = GlobeLight[368-cy];
 
-         //for (cx=anz-1; cx>=0; cx--)
-         //   t[cx]=GlobeMixTab[s[(map[cx]+a)&511]+(lightmap[cx]<<8)];
+#ifndef ENABLE_ASM
+         for (cx=anz-1; cx>=0; cx--)
+            t[cx]=GlobeMixTab[s[(map[cx]+a)&511]+(lightmap[cx]<<8)];
+#else
          __asm
          {
             push  ebp
@@ -149,6 +153,7 @@ looping:
             pop   esi
             pop   ebp
          }
+#endif
       }
    }
 }

@@ -3,6 +3,8 @@
 //      are changed infrequently
 //
 
+#pragma once
+
 #ifdef WIN32
 #define _WINSOCKAPI_   /* Prevent inclusion of winsock.h in windows.h */
 #include <Windows.h>
@@ -11,7 +13,6 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
-#include <smacker.h>
 
 #include "Defines.h"
 #include "stdstring.h"

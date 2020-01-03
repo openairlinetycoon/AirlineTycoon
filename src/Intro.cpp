@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "glTitel.h"
 #include "Intro.h"
+#include <smacker.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

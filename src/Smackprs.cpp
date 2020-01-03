@@ -2,6 +2,7 @@
 // SmackPrs.cpp : Wrapper-Klasse für den Smacker für 16Bit Farben bei 8-Bit Videos:
 //============================================================================================
 #include "stdafx.h"
+#include <smacker.h>
 
 //Zum debuggen:
 static const char FileId[] = "Smak";

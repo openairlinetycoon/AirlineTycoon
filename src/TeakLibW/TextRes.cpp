@@ -9,16 +9,17 @@ long gLanguage;
 
 void LanguageSpecifyString(char *Dst)
 {
+    int i, j;
     char langs[24];
 
     strcpy(langs, "DEFTPNISOBJKLMNQRTUV");
     if (Dst[0] && Dst[1] && Dst[1] == ':' && Dst[2] && Dst[2] == ':')
     {
-        for (int i = 0; Dst[i]; ++i)
+        for (i = 0; Dst[i]; ++i)
         {
             if (Dst[i] == langs[gLanguage] && Dst[i + 1] && Dst[i + 1] == ':' && Dst[i + 2] && Dst[i + 2] == ':')
             {
-                for (int j = i + 2; Dst[j] && (!Dst[j + 1] || Dst[j + 1] != ':' || !Dst[j + 2] || Dst[j + 2] != ':'); ++j);
+                for (j = i + 2; Dst[j] && (!Dst[j + 1] || Dst[j + 1] != ':' || !Dst[j + 2] || Dst[j + 2] != ':'); ++j);
                 memmove(Dst, &Dst[i + 3], j - i - 3);
                 Dst[j - i - 3] = 0;
                 if (j - i - 3 > 0 && Dst[j - i - 4] == 32)
@@ -100,12 +101,12 @@ void TEXTRES::Open(char const* source, void* cached)
         Strings.ReSize(AnzStrings + 5);
         Entries.ReSize(AnzEntries);
 
-        for (i = 0; i < Entries.AnzEntries(); ++i)
+        for (long i = 0; i < Entries.AnzEntries(); ++i)
             Entries.DelPointer[i].Text = NULL;
 
         AnzStrings = 0;
         AnzEntries = -1;
-        for (i = 0, j = 0; i < FileBuffer.AnzEntries(); i += j)
+        for (long i = 0, j = 0; i < FileBuffer.AnzEntries(); i += j)
         {
             long Size;
             if (FileBuffer.AnzEntries() - i <= 1023)

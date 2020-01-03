@@ -349,10 +349,10 @@ HRESULT FX::Tokenize(__int64 Token, long* Von, long* Bis, long& rcAnzahl)
     if (!_fxData.pBuffer || _fxData.bufferSize < sizeof(__int64))
         return SSE_NOSOUNDLOADED;
 
-    size_t count = 0;
+    size_t count = 0, i;
     Von[count++] = 0;
     Uint8* ptr = _fxData.pBuffer->abuf;
-    for (size_t i = 0; i < _fxData.bufferSize - 7; i++)
+    for (i = 0; i < _fxData.bufferSize - 7; i++)
     {
         if (*(__int64*)ptr == Token)
         {

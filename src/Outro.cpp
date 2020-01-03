@@ -3,6 +3,7 @@
 //============================================================================================
 #include "stdafx.h"
 #include "Outro.h"
+#include <smacker.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

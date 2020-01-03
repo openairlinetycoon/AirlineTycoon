@@ -141,27 +141,26 @@ private:
 	char* Buffer;
 };
 
-class SB_CHardwarecolorHelper;
-
-class SB_Hardwarecolor
+class SB_CHardwarecolorHelper
 {
 public:
-    SB_Hardwarecolor() : Color() { }
-    SB_Hardwarecolor(SB_CHardwarecolorHelper* helper) : Color(helper) { }
+   SB_CHardwarecolorHelper() : Color() { }
+   SB_CHardwarecolorHelper(SB_CHardwarecolorHelper* color) : Color((word)color) { }
 
-    operator SB_CHardwarecolorHelper*() { return Color; }
-    operator word() { return (word)Color; }
+   operator word() { return Color; }
 
 private:
-    SB_CHardwarecolorHelper* Color;
+   word Color;
 };
+
+typedef SB_CHardwarecolorHelper* SB_Hardwarecolor;
 
 class SB_CBitmapCore
 {
 public:
     unsigned long AddAlphaMsk(void);
     unsigned long AddZBuffer(unsigned long, unsigned long);
-    class SB_CHardwarecolorHelper* GetHardwarecolor(unsigned long);
+    SB_Hardwarecolor GetHardwarecolor(unsigned long);
     unsigned long SetPixel(long, long, class SB_CHardwarecolorHelper*);
     unsigned long GetPixel(long, long);
     unsigned long Clear(class SB_CHardwarecolorHelper*, struct tagRECT const* = NULL);

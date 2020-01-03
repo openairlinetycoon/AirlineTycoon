@@ -189,7 +189,7 @@ void SB_CBitmapCore::SetClipRect(const CRect& rect)
    SDL_SetClipRect(lpDDSurface, &clip);
 }
 
-class SB_CHardwarecolorHelper* SB_CBitmapCore::GetHardwarecolor(unsigned long color)
+SB_Hardwarecolor SB_CBitmapCore::GetHardwarecolor(unsigned long color)
 {
 #if 0
     long r = GetHighestSetBit(Format.redMask) - GetHighestSetBit(0xFF0000);
@@ -214,7 +214,7 @@ class SB_CHardwarecolorHelper* SB_CBitmapCore::GetHardwarecolor(unsigned long co
     char r = (color & 0xFF0000) >> 16;
     char g = (color & 0xFF00) >> 8;
     char b = (color & 0xFF);
-    return (class SB_CHardwarecolorHelper*)(SDL_MapRGB(lpDDSurface->format, r, g, b));
+    return (SB_Hardwarecolor)SDL_MapRGB(lpDDSurface->format, r, g, b);
 #endif
 }
 

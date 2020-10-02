@@ -6,10 +6,6 @@ add_subdirectory (SBLib)
 add_subdirectory (SSE)
 
 include_directories(${PROJECT_SOURCE_DIR})
-include_directories(${SDL2_INCLUDE_DIR})
-include_directories(${SDL2_MIXER_INCLUDE_DIR})
-include_directories(${SDL2_IMAGE_INCLUDE_DIR})
-include_directories(${SDL2_TTF_INCLUDE_DIR})
 
 if(MSVC)
     add_compile_options("/Zc:forScope-")
@@ -109,11 +105,10 @@ target_link_libraries(AT
     SBLib
     libsmacker
     enet
-    ${SDL2_TTF_LIBRARY}
-    ${SDL2_IMAGE_LIBRARY}
-    ${SDL2_MIXER_LIBRARY}
-    ${SDL2_LIBRARY}
-    ${ws2_32_LIBRARY}
-    ${Winmm_LIBRARY}
+    SDL2::SDL2_ttf
+    SDL2::SDL2_image
+    SDL2::SDL2_mixer
+    SDL2::SDL2
+    SDL2::SDL2main
     ws2_32
     Winmm)

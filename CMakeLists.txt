@@ -2,12 +2,14 @@
 
 project (AirlineTycoon)
 
-set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+if(NOT WIN32)
+	set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
+endif()
 
 find_package(SDL2 REQUIRED)
-find_package(SDL2_mixer REQUIRED)
-find_package(SDL2_image REQUIRED)
-find_package(SDL2_ttf REQUIRED)
+find_package(SDL2-mixer REQUIRED)
+find_package(SDL2-image REQUIRED)
+find_package(SDL2-ttf REQUIRED)
 
 # Include external libs.
 add_subdirectory (libs)

@@ -35,7 +35,7 @@ void HDU::Close()
     Log = NULL;
 }
 
-void HDU::HercPrintf(int, char* format, ...)
+void HDU::HercPrintf(int, const char* format, ...)
 {
     va_list args;
     va_start(args, format);
@@ -45,7 +45,7 @@ void HDU::HercPrintf(int, char* format, ...)
     fflush(Log);
 }
 
-void HDU::HercPrintf(char* format, ...)
+void HDU::HercPrintf(const char* format, ...)
 {
     va_list args;
     va_start(args, format);

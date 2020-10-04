@@ -814,8 +814,8 @@ public:
     void Close();
     void Disable();
     void ClearScreen();
-    void HercPrintf(int, char* Format, ...);
-    void HercPrintf(char* Format, ...);
+    void HercPrintf(int, const char* Format, ...);
+    void HercPrintf(const char* Format, ...);
     void LogPosition(const char*, int);
 
 private:

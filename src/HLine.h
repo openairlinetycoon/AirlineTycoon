@@ -3,9 +3,9 @@
 //============================================================================================
 
 #ifndef hline_h
-   #define hline_h
+#define hline_h
 
-   class CHLPool;
+class CHLPool;
 
 #pragma pack (push, pragma_gene)
 #pragma pack (2)
@@ -156,4 +156,4 @@
          CHLBm& operator [](const SLONG Index) const { return Bitmaps[Index]; }
          CHLBm& operator [](const int Index) const { return Bitmaps[Index]; }
    };
-#endif hline_h
+#endif // hline_h

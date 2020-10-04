@@ -2,7 +2,7 @@
 
 extern void memswap(void*, void*, ULONG);
 extern char* bprintf(char const*, ...);
-extern char* bitoa(long, long = 10);
+extern char* bitoa(int);
 extern void here(char*, long);
 
 extern const char* ExcAssert;

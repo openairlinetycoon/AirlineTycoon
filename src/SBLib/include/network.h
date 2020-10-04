@@ -1,8 +1,11 @@
 #pragma once
 
+#ifdef WIN32
 #define _WINSOCK2API_   /* Prevent inclusion of winsock2.h in enet.h */
+#define INVALID_SOCKET (SOCKET)(~0)
 typedef struct fd_set fd_set;
 typedef ptrdiff_t SOCKET;
+#endif
 #include <enet/enet.h>
 
 typedef DWORD DPID;

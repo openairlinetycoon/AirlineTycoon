@@ -22,6 +22,38 @@ extern unsigned char GerToUpper(unsigned char);
 extern unsigned char* RecapizalizeString(unsigned char*);
 extern const char* GetSuffix(const char*);
 
+template <class T>
+inline void Limit(T min, T& value, T max)
+{
+    if (value < min) value = min;
+    if (value > max) value = max;
+}
+
+template <class T>
+inline void Swap(T& a, T& b)
+{
+    T c(a);
+    a = b;
+    b = c;
+}
+
+template <class T>
+inline const T& Min(const T& a, const T& b)
+{
+    return (b < a) ? b : a;
+}
+
+
+template <class T>
+inline const T& Max(const T& a, const T& b)
+{
+    return (a < b) ? b : a;
+}
+
+inline void ReferTo(...) {}
+
+inline void MB() {}
+
 template <typename T>
 class BUFFER
 {
@@ -147,28 +179,6 @@ public:
         ::Swap(Size, rhs.Size);
     }
 
-    friend class TEAKFILE& operator << (TEAKFILE& File, const BUFFER<T>& buffer)
-    {
-        File << buffer.Size;
-        File << (buffer.DelPointer - buffer.MemPointer);
-        for (SLONG i = 0; i < buffer.Size; i++)
-            File << buffer.MemPointer[i];
-        return File;
-    }
-
-    friend class TEAKFILE& operator >> (TEAKFILE& File, BUFFER<T>& buffer)
-    {
-        SLONG size, offset;
-        File >> size;
-        buffer.ReSize(0);
-        buffer.ReSize(size);
-        File >> offset;
-        for (SLONG i = 0; i < buffer.Size; i++)
-            File >> buffer.MemPointer[i];
-        buffer.DelPointer = buffer.MemPointer + offset;
-        return File;
-    }
-
     T* MemPointer;
     T* DelPointer;
     SLONG Size;
@@ -232,8 +242,8 @@ public:
     friend TEAKFILE& operator << (TEAKFILE& File, const SLONG& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
     friend TEAKFILE& operator >> (TEAKFILE& File, SLONG& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }
 
-    friend TEAKFILE& operator << (TEAKFILE& File, const __int64& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
-    friend TEAKFILE& operator >> (TEAKFILE& File, __int64& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }
+    friend TEAKFILE& operator << (TEAKFILE& File, const long long& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
+    friend TEAKFILE& operator >> (TEAKFILE& File, long long& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }
 
     friend TEAKFILE& operator << (TEAKFILE& File, const double& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
     friend TEAKFILE& operator >> (TEAKFILE& File, double& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }
@@ -257,6 +267,30 @@ public:
         BUFFER<BYTE> str(size);
         File.Read(str, size);
         b = (PCSTR)(BYTE*)str;
+        return File;
+    }
+
+    template <typename T>
+    friend TEAKFILE& operator << (TEAKFILE& File, const BUFFER<T>& buffer)
+    {
+        File << buffer.Size;
+        File << (buffer.DelPointer - buffer.MemPointer);
+        for (SLONG i = 0; i < buffer.Size; i++)
+            File << buffer.MemPointer[i];
+        return File;
+    }
+
+    template <typename T>
+    friend TEAKFILE& operator >> (TEAKFILE& File, BUFFER<T>& buffer)
+    {
+        SLONG size, offset;
+        File >> size;
+        buffer.ReSize(0);
+        buffer.ReSize(size);
+        File >> offset;
+        for (SLONG i = 0; i < buffer.Size; i++)
+            File >> buffer.MemPointer[i];
+        buffer.DelPointer = buffer.MemPointer + offset;
         return File;
     }
 
@@ -474,37 +508,37 @@ public:
 
     TXYZ operator+(const TXYZ& b) const
     {
-        return TXY(x + b.x, y + b.y, z + b.z);
+        return TXY<T>(x + b.x, y + b.y, z + b.z);
     }
 
     TXYZ operator-(const TXYZ& b) const
     {
-        return TXY(x - b.x, y - b.y, z - b.z);
+        return TXY<T>(x - b.x, y - b.y, z - b.z);
     }
 
     TXYZ operator*(const TXYZ& b) const
     {
-        return TXY(x * b.x, y * b.y, z * b.z);
+        return TXY<T>(x * b.x, y * b.y, z * b.z);
     }
 
     TXYZ operator/(const TXYZ& b) const
     {
-        return TXY(x / b.x, y / b.y, z / b.z);
+        return TXY<T>(x / b.x, y / b.y, z / b.z);
     }
 
     TXYZ operator*(const T& b) const
     {
-        return TXY(x * b, y * b, z * b);
+        return TXY<T>(x * b, y * b, z * b);
     }
 
     TXYZ operator/(const T& b) const
     {
-        return TXY(x / b, y / b, z / b);
+        return TXY<T>(x / b, y / b, z / b);
     }
 
     TXYZ operator-() const
     {
-        return TXY(-x, -y, -z);
+        return TXY<T>(-x, -y, -z);
     }
 
     bool operator==(const TXYZ& b) const
@@ -1000,35 +1034,3 @@ extern int DoesFileExist(char const*);
 extern BUFFER<BYTE>* LoadCompleteFile(char const*);
 extern long CalcInertiaVelocity(long, long);
 extern long Calc1nSum(long);
-
-template <class T>
-inline void Limit(T min, T& value, T max)
-{
-    if (value < min) value = min;
-    if (value > max) value = max;
-}
-
-template <class T>
-inline void Swap(T& a, T& b)
-{
-    T c(a);
-    a = b;
-    b = c;
-}
-
-template <class T>
-inline const T& Min(const T& a, const T& b)
-{
-    return (b < a) ? b : a;
-}
-
-
-template <class T>
-inline const T& Max(const T& a, const T& b)
-{
-    return (a < b) ? b : a;
-}
-
-inline void ReferTo(...) {}
-
-inline void MB() {}

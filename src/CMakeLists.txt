@@ -11,6 +11,7 @@ if(MSVC)
     add_compile_options("/Zc:forScope-")
 else()
     add_compile_options("-fno-for-scope")
+    add_compile_options("-fpermissive")
 endif()
 
 # Add source to this project's executable.

@@ -56,11 +56,13 @@ typedef       wchar_t* LPWSTR;
 typedef const char* LPCTSTR;
 typedef       char* LPTSTR;
 
+typedef long long __int64;
+
 typedef struct tagPOINT
 {
    LONG x;
    LONG y;
-} 	POINT;
+} POINT;
 
 typedef struct tagRECT
 {
@@ -68,8 +70,7 @@ typedef struct tagRECT
    LONG top;
    LONG right;
    LONG bottom;
-} 	RECT;
-
+} RECT;
 #endif
 
 class CPoint : public tagPOINT

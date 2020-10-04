@@ -246,7 +246,7 @@ class SSE
 		bool		_fSoundEnabled;
 		bool		_fMusicEnabled;
 
-		MUSIC*	_playingMusicObj;	// Das aktuell gespielte Music-Objekt
+		class MUSIC*	_playingMusicObj;	// Das aktuell gespielte Music-Objekt
 
 		//std::string	_musicListPath;	// Pfad auf Musik-Dateien
 		//char*		   _pMusicListFiles;	// Liste der Musik-Dateien (00-terminiert)

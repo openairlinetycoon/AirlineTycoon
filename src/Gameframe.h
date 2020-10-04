@@ -43,11 +43,7 @@ public:
 	//{{AFX_MSG(GameFrame)
 	virtual void OnPaint();
 	virtual BOOL OnEraseBkgnd(void* pDC);
-#if _MSC_VER >= 1400
 	virtual void OnActivateApp(BOOL bActive, DWORD hTask);
-#else
-	virtual void OnActivateApp(BOOL bActive, HTASK hTask);
-#endif
    virtual BOOL OnSetCursor(void* pWnd, UINT nHitTest, UINT message);
    virtual void OnCaptureChanged(void* pWnd);
 	virtual void OnMouseMove(UINT nFlags, CPoint point);

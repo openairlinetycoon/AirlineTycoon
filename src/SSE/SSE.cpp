@@ -26,7 +26,7 @@ SSE::~SSE()
     Mix_CloseAudio();
 }
 
-HRESULT SSE::CreateFX(FX** ppFX, char* file, dword samplesPerSec, word channels, word bitsPerSample)
+int SSE::CreateFX(FX** ppFX, char* file, dword samplesPerSec, word channels, word bitsPerSample)
 {
     if (!ppFX)
         return SSE_INVALIDPARAM;
@@ -36,7 +36,7 @@ HRESULT SSE::CreateFX(FX** ppFX, char* file, dword samplesPerSec, word channels,
     return (*ppFX)->Create(this, file, samplesPerSec, channels, bitsPerSample);
 }
 
-HRESULT SSE::CreateMidi(MIDI** ppMidi, char* file)
+int SSE::CreateMidi(MIDI** ppMidi, char* file)
 {
     if (!ppMidi)
         return SSE_INVALIDPARAM;
@@ -46,7 +46,7 @@ HRESULT SSE::CreateMidi(MIDI** ppMidi, char* file)
     return (*ppMidi)->Create(this, file);
 }
 
-HRESULT SSE::EnableSound(bool fSoundEnabled)
+int SSE::EnableSound(bool fSoundEnabled)
 {
     if (fSoundEnabled == _fSoundEnabled)
         return SSE_OK;
@@ -62,7 +62,7 @@ void SSE::StopSound()
         fx.Stop();
 }
 
-HRESULT SSE::EnableMusic(bool fMusicEnabled)
+int SSE::EnableMusic(bool fMusicEnabled)
 {
     if (fMusicEnabled == _fMusicEnabled)
         return SSE_OK;
@@ -78,13 +78,13 @@ void SSE::StopMusic()
         mid.Stop();
 }
 
-HRESULT SSE::SetMusicVolume(long volume)
+int SSE::SetMusicVolume(long volume)
 {
     Mix_VolumeMusic(volume);
     return SSE_OK;
 }
 
-HRESULT SSE::GetMusicVolume(long* pVolume)
+int SSE::GetMusicVolume(long* pVolume)
 {
     if (!pVolume)
         return SSE_INVALIDPARAM;
@@ -93,13 +93,13 @@ HRESULT SSE::GetMusicVolume(long* pVolume)
     return SSE_OK;
 }
 
-HRESULT SSE::SetSoundVolume(long volume)
+int SSE::SetSoundVolume(long volume)
 {
     Mix_Volume(-1, volume);
     return SSE_OK;
 }
 
-HRESULT SSE::GetSoundVolume(long* pVolume)
+int SSE::GetSoundVolume(long* pVolume)
 {
     if (!pVolume)
         return SSE_INVALIDPARAM;
@@ -127,7 +127,7 @@ FX::~FX()
 {
 }
 
-HRESULT	FX::Create(SSE* pSSE, char* file, dword samplesPerSec, word channels, word bitsPerSample)
+int	FX::Create(SSE* pSSE, char* file, dword samplesPerSec, word channels, word bitsPerSample)
 {
     _digitalData.pSSE = pSSE;
     SetFormat(samplesPerSec, channels, bitsPerSample);
@@ -182,7 +182,7 @@ long FX::Release()
     return 0;
 }
 
-HRESULT FX::Play(dword dwFlags, long pan)
+int FX::Play(dword dwFlags, long pan)
 {
     if (!_digitalData.pSSE->IsSoundEnabled())
         return SSE_SOUNDDISABLED;
@@ -214,7 +214,7 @@ HRESULT FX::Play(dword dwFlags, long pan)
     return Mix_PlayChannel(-1, _fxData.pBuffer, dwFlags & DSBPLAY_LOOPING ? -1 : 0) < 0 ? SSE_CANNOTPLAY : SSE_OK;
 }
 
-HRESULT FX::Stop()
+int FX::Stop()
 {
     if (!_fxData.pBuffer)
         return SSE_NOSOUNDLOADED;
@@ -228,7 +228,7 @@ HRESULT FX::Stop()
     return SSE_OK;
 }
 
-HRESULT FX::Pause()
+int FX::Pause()
 {
     if (!_fxData.pBuffer)
         return SSE_NOSOUNDLOADED;
@@ -242,7 +242,7 @@ HRESULT FX::Pause()
     return SSE_OK;
 }
 
-HRESULT FX::Resume()
+int FX::Resume()
 {
     if (!_fxData.pBuffer)
         return SSE_NOSOUNDLOADED;
@@ -256,7 +256,7 @@ HRESULT FX::Resume()
     return SSE_OK;
 }
 
-HRESULT FX::GetVolume(long* pVolume)
+int FX::GetVolume(long* pVolume)
 {
     if (!pVolume)
         return SSE_INVALIDPARAM;
@@ -268,7 +268,7 @@ HRESULT FX::GetVolume(long* pVolume)
     return SSE_OK;
 }
 
-HRESULT FX::SetVolume(long volume)
+int FX::SetVolume(long volume)
 {
     if (!_fxData.pBuffer)
         return SSE_NOSOUNDLOADED;
@@ -277,7 +277,7 @@ HRESULT FX::SetVolume(long volume)
     return SSE_OK;
 }
 
-HRESULT FX::GetPan(long* pPan)
+int FX::GetPan(long* pPan)
 {
     if (!pPan)
         return SSE_INVALIDPARAM;
@@ -285,12 +285,12 @@ HRESULT FX::GetPan(long* pPan)
     return SSE_OK;
 }
 
-HRESULT FX::SetPan(long pan)
+int FX::SetPan(long pan)
 {
     return SSE_OK;
 }
 
-HRESULT FX::Load(const char* file)
+int FX::Load(const char* file)
 {
     if (_fxData.pBuffer)
         Free();
@@ -301,7 +301,7 @@ HRESULT FX::Load(const char* file)
     return SSE_OK;
 }
 
-HRESULT FX::Fusion(const FX** Fx, long NumFx)
+int FX::Fusion(const FX** Fx, long NumFx)
 {
     for (long i = 0; i < NumFx; i++)
     {
@@ -324,7 +324,7 @@ HRESULT FX::Fusion(const FX** Fx, long NumFx)
     return SSE_OK;
 }
 
-HRESULT FX::Fusion(const FX* Fx, long* Von, long* Bis, long NumFx)
+int FX::Fusion(const FX* Fx, long* Von, long* Bis, long NumFx)
 {
     if (!Fx || !Fx->_fxData.pBuffer)
         return SSE_INVALIDPARAM;
@@ -344,7 +344,7 @@ HRESULT FX::Fusion(const FX* Fx, long* Von, long* Bis, long NumFx)
     return SSE_OK;
 }
 
-HRESULT FX::Tokenize(__int64 Token, long* Von, long* Bis, long& rcAnzahl)
+int FX::Tokenize(__int64 Token, long* Von, long* Bis, long& rcAnzahl)
 {
     if (!_fxData.pBuffer || _fxData.bufferSize < sizeof(__int64))
         return SSE_NOSOUNDLOADED;
@@ -396,7 +396,7 @@ FX** FX::Tokenize(__int64 Token, long& rcAnzahl)
     return pFX;
 }
 
-HRESULT FX::Free()
+int FX::Free()
 {
     if (_fxData.pBuffer)
     {
@@ -410,7 +410,7 @@ HRESULT FX::Free()
     return SSE_OK;
 }
 
-HRESULT FX::GetStatus(dword* pStatus)
+int FX::GetStatus(dword* pStatus)
 {
     if (!pStatus)
         return SSE_INVALIDPARAM;
@@ -495,7 +495,7 @@ MIDI::~MIDI()
 {
 }
 
-HRESULT MIDI::Create(SSE* pSSE, char* file)
+int MIDI::Create(SSE* pSSE, char* file)
 {
     _musicData.pSSE = pSSE;
 
@@ -524,7 +524,7 @@ long MIDI::Release()
     return 0;
 }
 
-HRESULT MIDI::Play(dword dwFlags, long pan)
+int MIDI::Play(dword dwFlags, long pan)
 {
     if (!_musicData.pSSE->IsMusicEnabled())
         return SSE_MUSICDISABLED;
@@ -539,46 +539,46 @@ HRESULT MIDI::Play(dword dwFlags, long pan)
     return Mix_PlayMusic(_music, 0) < 0 ? SSE_CANNOTPLAY : SSE_OK;
 }
 
-HRESULT MIDI::Stop()
+int MIDI::Stop()
 {
     return Mix_HaltMusic() < 0 ? SSE_CANNOTPLAY : SSE_OK;
 }
 
-HRESULT MIDI::Pause()
+int MIDI::Pause()
 {
     Mix_PauseMusic();
     return SSE_OK;
 }
 
-HRESULT MIDI::Resume()
+int MIDI::Resume()
 {
     Mix_ResumeMusic();
     return SSE_OK;
 }
 
-HRESULT MIDI::GetVolume(long* pVolume)
+int MIDI::GetVolume(long* pVolume)
 {
     *pVolume = Mix_VolumeMusic(-1);
     return SSE_OK;
 }
 
-HRESULT MIDI::SetVolume(long volume)
+int MIDI::SetVolume(long volume)
 {
     Mix_VolumeMusic(volume);
     return SSE_OK;
 }
 
-HRESULT MIDI::GetPan(long* pPan)
+int MIDI::GetPan(long* pPan)
 {
     return SSE_OK;
 }
 
-HRESULT MIDI::SetPan(long pan)
+int MIDI::SetPan(long pan)
 {
     return SSE_OK;
 }
 
-HRESULT MIDI::Load(const char* file)
+int MIDI::Load(const char* file)
 {
     if (_music)
         Free();
@@ -595,13 +595,13 @@ HRESULT MIDI::Load(const char* file)
     return SSE_OK;
 }
 
-HRESULT MIDI::Free()
+int MIDI::Free()
 {
     Mix_FreeMusic(_music);
     return SSE_OK;
 }
 
-HRESULT MIDI::GetStatus(dword* pStatus)
+int MIDI::GetStatus(dword* pStatus)
 {
     return SSE_OK;
 }

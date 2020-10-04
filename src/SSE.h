@@ -19,37 +19,27 @@
 #define	MAX_FX_BUFFER			(4)
 #define	EVENTS					(2)
 
-typedef _Return_type_success_(return >= 0) LONG HRESULT;
-
-#ifndef MAKE_HRESULT
-#define MAKE_HRESULT(sev,fac,code) \
-    ((HRESULT)(((unsigned long)(sev)<<31) | ((unsigned long)(fac)<<16) | ((unsigned long)(code))))
-#endif
-
-#define _FACDS  0x878			/* DirectSound's facility code */
-#define MAKE_DSHRESULT(code)	MAKE_HRESULT(1, _FACDS, code)
-
 #define	SSE_OK					0
-#define	SSE_DSOUND_NOINIT		MAKE_DSHRESULT(1000)
-#define	SSE_NOTCREATED			MAKE_DSHRESULT(1010)
-#define	SSE_ALREADYCREATED	MAKE_DSHRESULT(1020)
-#define	SSE_NOFILENAME			MAKE_DSHRESULT(1030)
-#define	SSE_CANNOTLOAD			MAKE_DSHRESULT(1040)
-#define	SSE_CANNOTREAD			MAKE_DSHRESULT(1050)
-#define	SSE_NOTSUPPORTED		MAKE_DSHRESULT(1060)
-#define	SSE_SOUNDDISABLED		MAKE_DSHRESULT(1070)
-#define	SSE_MUSICDISABLED		MAKE_DSHRESULT(1080)
-#define	SSE_MAXFXREACHED		MAKE_DSHRESULT(1090)
-#define	SSE_CANNOTPLAY			MAKE_DSHRESULT(1100)
-#define	SSE_NOMUSICLOADED		MAKE_DSHRESULT(1110)
-#define	SSE_NOSOUNDLOADED		MAKE_DSHRESULT(1120)
-#define SSE_INVALIDPARAM		MAKE_DSHRESULT(1130)
-#define SSE_CANNOTTEST			MAKE_DSHRESULT(1140)
-#define SSE_NORMALMODE			MAKE_DSHRESULT(1150)
-#define SSE_COMPATIBLEMODE		MAKE_DSHRESULT(1160)
+#define	SSE_DSOUND_NOINIT		(-1000)
+#define	SSE_NOTCREATED			(-1010)
+#define	SSE_ALREADYCREATED		(-1020)
+#define	SSE_NOFILENAME			(-1030)
+#define	SSE_CANNOTLOAD			(-1040)
+#define	SSE_CANNOTREAD			(-1050)
+#define	SSE_NOTSUPPORTED		(-1060)
+#define	SSE_SOUNDDISABLED		(-1070)
+#define	SSE_MUSICDISABLED		(-1080)
+#define	SSE_MAXFXREACHED		(-1090)
+#define	SSE_CANNOTPLAY			(-1100)
+#define	SSE_NOMUSICLOADED		(-1110)
+#define	SSE_NOSOUNDLOADED		(-1120)
+#define SSE_INVALIDPARAM		(-1130)
+#define SSE_CANNOTTEST			(-1140)
+#define SSE_NORMALMODE			(-1150)
+#define SSE_COMPATIBLEMODE		(-1160)
 
-#define	SSE_MCIERROR			MAKE_DSHRESULT(3000)
-#define	SSE_MIDIERR_STOP		MAKE_DSHRESULT(3010)
+#define	SSE_MCIERROR			(-3000)
+#define	SSE_MIDIERR_STOP		(-3010)
 
 // Interne Flags
 #define	STATE_PAUSED			(0x0001)
@@ -186,11 +176,11 @@ class SSE
 		DllExport SSE(void *hWnd, dword samplesPerSec = 22050, word channels = 2, word bitsPerSample = 16, word maxFX = 8);
 		DllExport ~SSE();
 
-		//DllExport HRESULT	EnableDS ();
-		//DllExport HRESULT	DisableDS ();
-		DllExport HRESULT	CreateFX (FX** ppFX, char* file = 0, dword samplesPerSec = 0, word channels = 0, word bitsPerSample = 0);
-		DllExport HRESULT	CreateMidi (MIDI** ppMidi, char* file = 0);
-		//DllExport HRESULT	CreateDigimusic (DIGIMUSIC** ppDigimusic, char* file = 0, dword bufferSecs = 4, dword samplesPerSec = 0, word channels = 0, word bitsPerSample = 0);
+		//DllExport int	EnableDS ();
+		//DllExport int	DisableDS ();
+		DllExport int	CreateFX (FX** ppFX, char* file = 0, dword samplesPerSec = 0, word channels = 0, word bitsPerSample = 0);
+		DllExport int	CreateMidi (MIDI** ppMidi, char* file = 0);
+		//DllExport int	CreateDigimusic (DIGIMUSIC** ppDigimusic, char* file = 0, dword bufferSecs = 4, dword samplesPerSec = 0, word channels = 0, word bitsPerSample = 0);
 
 		//DllExport void		Activate(bool fActivate, bool fPlayAgain = true);
 		//DllExport bool		IsDSInit() { return (_pDS != 0); }
@@ -199,29 +189,29 @@ class SSE
 
 		DllExport dword	GetFrequency() { return _samplesPerSec; }
 
-		//DllExport HRESULT GetCaps(DSCAPS* pDSCaps);
+		//DllExport int GetCaps(DSCAPS* pDSCaps);
 
-		DllExport HRESULT	EnableSound (bool fSoundEnabled);
+		DllExport int	EnableSound (bool fSoundEnabled);
 		DllExport bool		IsSoundEnabled() { return _fSoundEnabled; }
 		DllExport void		SetMaxSound(word fx) { _maxSound = Mix_AllocateChannels(fx - _maxSound); }
 		DllExport word		GetMaxSound()		{ return _maxSound; }
 		DllExport word		GetSoundPlaying();
 		DllExport void		StopSound();
 
-		DllExport HRESULT	EnableMusic(bool fMusicEnabled	);
+		DllExport int	EnableMusic(bool fMusicEnabled	);
 		DllExport bool		IsMusicEnabled() { return _fMusicEnabled; }
 		DllExport void		StopMusic();
 
 		// Lautstärkefunktionen
 
-		DllExport HRESULT	SetMusicVolume(long volume);
-		DllExport HRESULT	GetMusicVolume(long* pVolume);
+		DllExport int	SetMusicVolume(long volume);
+		DllExport int	GetMusicVolume(long* pVolume);
 
-		DllExport HRESULT	SetSoundVolume(long volume);
-		DllExport HRESULT	GetSoundVolume(long* pVolume);
+		DllExport int	SetSoundVolume(long volume);
+		DllExport int	GetSoundVolume(long* pVolume);
 
-		//DllExport HRESULT	SetMixerVolume (char * device, long volume);
-		//DllExport HRESULT	GetMixerVolume(char * device, long* pVolume, MIXERBOUNDS* pMB = NULL);
+		//DllExport int	SetMixerVolume (char * device, long volume);
+		//DllExport int	GetMixerVolume(char * device, long* pVolume, MIXERBOUNDS* pMB = NULL);
 
 
 		DllExport void		SetMusicCallback(void (*callback)());
@@ -236,8 +226,8 @@ class SSE
 
 	protected:
 		//std::string	GetNextFileFromPlaylist();
-		//HRESULT	   CreateSoundBuffer (IDSB** ppBuffer, dword size, dword samplesPerSecond, word channels, word bitsPerSample, dword flags);
-		//HRESULT	   DuplicateSoundBuffer (IDSB* lpDsbOriginal, IDSB** lplpDsbDuplicate);
+		//int	   CreateSoundBuffer (IDSB** ppBuffer, dword size, dword samplesPerSecond, word channels, word bitsPerSample, dword flags);
+		//int	   DuplicateSoundBuffer (IDSB* lpDsbOriginal, IDSB** lplpDsbDuplicate);
 
 	protected:
 		SDL_Window* _hWnd;
@@ -281,18 +271,18 @@ class DIGITAL
 	public:
 		virtual	~DIGITAL() {};
 		virtual  long Release() = 0;
-		virtual	HRESULT Play(dword dwFlags = 0, long pan = 0) = 0;
-		virtual	HRESULT Stop() = 0;
-		virtual	HRESULT Pause() { return Stop(); }
-		virtual	HRESULT Resume() = 0;
-		virtual	HRESULT GetVolume (long* pVolume) = 0;
-		virtual	HRESULT SetVolume (long volume) = 0;
-		virtual	HRESULT GetPan (long* pPan) = 0;
-		virtual	HRESULT SetPan (long pan) = 0;
-		virtual	HRESULT Load (const char* file = NULL) = 0;
-		virtual	HRESULT Free () = 0;
+		virtual	int Play(dword dwFlags = 0, long pan = 0) = 0;
+		virtual	int Stop() = 0;
+		virtual	int Pause() { return Stop(); }
+		virtual	int Resume() = 0;
+		virtual	int GetVolume (long* pVolume) = 0;
+		virtual	int SetVolume (long volume) = 0;
+		virtual	int GetPan (long* pPan) = 0;
+		virtual	int SetPan (long pan) = 0;
+		virtual	int Load (const char* file = NULL) = 0;
+		virtual	int Free () = 0;
 
-		virtual	HRESULT GetStatus(dword* pStatus) = 0;
+		virtual	int GetStatus(dword* pStatus) = 0;
 		virtual	word	CountPlaying() = 0;
 		virtual	void	SetFormat (dword samplesPerSec, word channels, word bitsPerSample) = 0;
 
@@ -311,28 +301,28 @@ class FX : public DIGITAL
 
 	protected:
 		FX();
-		HRESULT	Create(SSE* pSSE, char* file, dword samplesPerSec, word channels, word bitsPerSample);
+		int	Create(SSE* pSSE, char* file, dword samplesPerSec, word channels, word bitsPerSample);
 		virtual	bool	StopPriority (dword flags);
 
 	public:
 		virtual	~FX();
 		virtual  long Release();
-		virtual	HRESULT Play(dword dwFlags = 0, long pan = 0);
-		virtual	HRESULT Stop();
-		virtual	HRESULT Pause();
-		virtual	HRESULT Resume();
-		virtual	HRESULT GetVolume (long* pVolume);
-		virtual	HRESULT SetVolume (long volume);
-		virtual	HRESULT GetPan (long* pPan);
-		virtual	HRESULT SetPan (long pan);
-		virtual	HRESULT Load (const char* file = NULL);
-		virtual	HRESULT Fusion (const FX **Fx, long NumFx);
-		virtual	HRESULT Fusion (const FX *Fx, long *Von, long *Bis, long NumFx);
-		virtual	HRESULT Tokenize (__int64 Token, long *Von, long *Bis, long &rcAnzahl);
+		virtual	int Play(dword dwFlags = 0, long pan = 0);
+		virtual	int Stop();
+		virtual	int Pause();
+		virtual	int Resume();
+		virtual	int GetVolume (long* pVolume);
+		virtual	int SetVolume (long volume);
+		virtual	int GetPan (long* pPan);
+		virtual	int SetPan (long pan);
+		virtual	int Load (const char* file = NULL);
+		virtual	int Fusion (const FX **Fx, long NumFx);
+		virtual	int Fusion (const FX *Fx, long *Von, long *Bis, long NumFx);
+		virtual	int Tokenize (__int64 Token, long *Von, long *Bis, long &rcAnzahl);
 		virtual	FX    **Tokenize (__int64 Token, long &rcAnzahl);
-		virtual	HRESULT Free ();
+		virtual	int Free ();
 
-		virtual	HRESULT GetStatus(dword* pStatus);
+		virtual	int GetStatus(dword* pStatus);
 		virtual	bool	IsMouthOpen(long PreTime);
 		virtual	word	CountPlaying();
 		virtual	void	SetFormat (dword samplesPerSec = 0, word channels = 0, word bitsPerSample = 0);
@@ -360,18 +350,18 @@ class MUSIC
 	public:
 		virtual	~MUSIC() {};
 		virtual  long Release() = 0;
-		DllExport virtual	HRESULT Play(dword dwFlags = 0, long pan = 0) = 0;
-		virtual	HRESULT Stop() = 0;
-		virtual	HRESULT Pause() { return Stop(); }
-		virtual	HRESULT Resume() = 0;
-		virtual	HRESULT GetVolume (long* pVolume) = 0;
-		virtual	HRESULT SetVolume (long volume) = 0;
-		virtual	HRESULT GetPan (long* pPan) = 0;
-		virtual	HRESULT SetPan (long pan) = 0;
-		virtual	HRESULT Load (const char* file = NULL) = 0;
-		virtual	HRESULT Free () = 0;
+		DllExport virtual	int Play(dword dwFlags = 0, long pan = 0) = 0;
+		virtual	int Stop() = 0;
+		virtual	int Pause() { return Stop(); }
+		virtual	int Resume() = 0;
+		virtual	int GetVolume (long* pVolume) = 0;
+		virtual	int SetVolume (long volume) = 0;
+		virtual	int GetPan (long* pPan) = 0;
+		virtual	int SetPan (long pan) = 0;
+		virtual	int Load (const char* file = NULL) = 0;
+		virtual	int Free () = 0;
 
-		virtual	HRESULT GetStatus(dword* pStatus) = 0;
+		virtual	int GetStatus(dword* pStatus) = 0;
 		virtual	word	CountPlaying() = 0;
 
 	protected:
@@ -389,24 +379,24 @@ class MIDI : public MUSIC
 
 	protected:
 		MIDI();
-		HRESULT	Create(SSE* pSSE, char* file);
+		int	Create(SSE* pSSE, char* file);
 		virtual	bool	StopPriority (dword flags);
 
 	public:
 		virtual	~MIDI();
 		virtual  long Release();
-		DllExport virtual	HRESULT Play(dword dwFlags = 0, long pan = 0);
-		virtual	HRESULT Stop();
-		virtual	HRESULT Pause();
-		virtual	HRESULT Resume();
-		virtual	HRESULT GetVolume (long* pVolume);
-		virtual	HRESULT SetVolume (long volume);
-		virtual	HRESULT GetPan (long* pPan);
-		virtual	HRESULT SetPan (long pan);
-		virtual	HRESULT Load (const char* file = NULL);
-		virtual	HRESULT Free ();
+		DllExport virtual	int Play(dword dwFlags = 0, long pan = 0);
+		virtual	int Stop();
+		virtual	int Pause();
+		virtual	int Resume();
+		virtual	int GetVolume (long* pVolume);
+		virtual	int SetVolume (long volume);
+		virtual	int GetPan (long* pPan);
+		virtual	int SetPan (long pan);
+		virtual	int Load (const char* file = NULL);
+		virtual	int Free ();
 
-		virtual	HRESULT GetStatus(dword* pStatus);
+		virtual	int GetStatus(dword* pStatus);
 		virtual	word	CountPlaying();
 
 	protected:
@@ -428,8 +418,8 @@ class MIDI : public MUSIC
 	protected:
 		DIGIMUSIC() { ZeroMemory(&_dmData,sizeof(_dmData)); }
 
-		HRESULT	Create(SSE* pSSE, char* file,dword buffersSecs,dword samplesPerSec, word channels, word bitsPerSample);
-		HRESULT DIGIMUSIC::CompatibleModeRequired();
+		int	Create(SSE* pSSE, char* file,dword buffersSecs,dword samplesPerSec, word channels, word bitsPerSample);
+		int DIGIMUSIC::CompatibleModeRequired();
 
 		virtual	word	GetInternalState() { return word(_dmData.state); }
 		virtual	bool	StopPriority (dword flags);
@@ -437,18 +427,18 @@ class MIDI : public MUSIC
 	public:
 		virtual	~DIGIMUSIC();
 		virtual  long Release();
-		DllExport virtual	HRESULT Play(dword dwFlags = 0, long pan = 0);
-		virtual	HRESULT Stop();
-		virtual	HRESULT Pause();
-		virtual	HRESULT Resume();
-		virtual	HRESULT GetVolume (long* pVolume);
-		virtual	HRESULT SetVolume (long volume);
-		virtual	HRESULT GetPan (long* pPan);
-		virtual	HRESULT SetPan (long pan);
-		virtual	HRESULT Load (const char* file = NULL);
-		virtual	HRESULT Free ();
+		DllExport virtual	int Play(dword dwFlags = 0, long pan = 0);
+		virtual	int Stop();
+		virtual	int Pause();
+		virtual	int Resume();
+		virtual	int GetVolume (long* pVolume);
+		virtual	int SetVolume (long volume);
+		virtual	int GetPan (long* pPan);
+		virtual	int SetPan (long pan);
+		virtual	int Load (const char* file = NULL);
+		virtual	int Free ();
 
-		virtual	HRESULT GetStatus(dword* pStatus);
+		virtual	int GetStatus(dword* pStatus);
 		virtual	word	CountPlaying();
 		virtual	void	SetFormat (dword samplesPerSec = 0, word channels = 0, word bitsPerSample = 0);
 
@@ -456,7 +446,7 @@ class MIDI : public MUSIC
 		virtual void SetNormalMode() { _dmData.compatibleMode = false; }
 
 	protected:
-		virtual	HRESULT SetupNotifications();
+		virtual	int SetupNotifications();
 //		dword		HandleNotifications(void * lParam);
 
 	protected:

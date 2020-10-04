@@ -145,7 +145,7 @@ class SB_CHardwarecolorHelper
 {
 public:
    SB_CHardwarecolorHelper() : Color() { }
-   SB_CHardwarecolorHelper(SB_CHardwarecolorHelper* color) : Color((word)color) { }
+   SB_CHardwarecolorHelper(SB_CHardwarecolorHelper* color) : Color((word)(uintptr_t)color) { }
 
    operator word() { return Color; }
 

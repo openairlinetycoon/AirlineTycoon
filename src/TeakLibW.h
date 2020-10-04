@@ -242,8 +242,8 @@ public:
     friend TEAKFILE& operator << (TEAKFILE& File, const SLONG& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
     friend TEAKFILE& operator >> (TEAKFILE& File, SLONG& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }
 
-    friend TEAKFILE& operator << (TEAKFILE& File, const long long& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
-    friend TEAKFILE& operator >> (TEAKFILE& File, long long& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }
+    friend TEAKFILE& operator << (TEAKFILE& File, const __int64& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
+    friend TEAKFILE& operator >> (TEAKFILE& File, __int64& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }
 
     friend TEAKFILE& operator << (TEAKFILE& File, const double& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
     friend TEAKFILE& operator >> (TEAKFILE& File, double& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }

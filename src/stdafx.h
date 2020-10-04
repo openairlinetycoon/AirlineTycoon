@@ -18,7 +18,7 @@
 #include "stdstring.h"
 typedef CStdStringA CString;
 
-#include "TeakLibW.H"
+#include "TeakLibW.h"
 #include "sbl.h"
 #include "sbbm.h"
 #include "sse.h"
@@ -27,7 +27,7 @@ typedef CStdStringA CString;
 #include "glstd.h"
 #include "glbasis.h"
 
-#include "res\Resource.h"
+#include "Res/resource.h"
 
 #include "class.h"         //Eigene Klassen
 #include "Proto.h"

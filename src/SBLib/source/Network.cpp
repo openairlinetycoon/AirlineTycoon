@@ -1,11 +1,14 @@
 #include "stdafx.h"
-#include "..\include\sblib.h"
-#include "..\include\network.h"
+#include "sblib.h"
+#include "network.h"
 
 SBNetwork::SBNetwork(bool)
     : mState(SBNETWORK_SESSION_FINISHED)
     , mHost(NULL)
     , mMaster(NULL)
+    , mSearchTime(0)
+    , mServer()
+    , mSocket()
 {
     TEAKRAND rand;
     rand.SRandTime();
@@ -184,7 +187,7 @@ bool SBNetwork::Connect(SBStr medium, char* host)
         return false;
 
     mSocket = enet_socket_create(ENET_SOCKET_TYPE_DATAGRAM);
-    if (mSocket == NULL)
+    if (mSocket == ENET_SOCKET_NULL)
         return false;
 
     enet_socket_set_option(mSocket, ENET_SOCKOPT_REUSEADDR, 1);

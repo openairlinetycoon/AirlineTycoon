@@ -17,6 +17,11 @@ extern CHLPool HLPool;
 static char THIS_FILE[] = __FILE__;
 #endif
 
+#ifndef WIN32
+#define max(a,b) (((a) > (b)) ? (a) : (b))
+#define min(a,b) (((a) < (b)) ? (a) : (b))
+#endif // !WIN32
+
 extern SB_CColorFX ColorFX;
 //extern LPDIRECTDRAWSURFACE FrontSurf;
 extern XY  gScrollOffsetA, gScrollOffsetB;

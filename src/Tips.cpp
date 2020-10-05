@@ -11,6 +11,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+#ifndef WIN32
+#define max(a,b) (((a) > (b)) ? (a) : (b))
+#define min(a,b) (((a) < (b)) ? (a) : (b))
+#endif // !WIN32
+
 static const char FileId[] = "Tips";
 
 extern ULONG AktienKursLineColor [];

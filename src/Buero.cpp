@@ -40,7 +40,7 @@ public:
 //--------------------------------------------------------------------------------------------
 //Büro-Konstruktor:
 //--------------------------------------------------------------------------------------------
-CBuero::CBuero(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "", 0)
+CBuero::CBuero(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "", NULL)
 {
    CWaitCursorNow wc; //CD-Cursor anzeigen
 

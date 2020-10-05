@@ -730,7 +730,7 @@ void BLOCK::Refresh (SLONG PlayerNum, BOOL StyleType)
                   Bitmap.PrintAt (StandardTexte.GetS (TOKEN_PLANE, 1000), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(2,25), ClientArea+XY(172,170));
                   Bitmap.PrintAt (StandardTexte.GetS (TOKEN_PLANE, 1017), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(2,37), ClientArea+XY(172,170));
                   Bitmap.PrintAt (StandardTexte.GetS (TOKEN_PLANE, 1001), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(2,37+11), ClientArea+XY(172,170));
-                  Bitmap.PrintAt (bprintf ("%li (%li)", (LPCTSTR)qPlane.MaxPassagiere, (LPCTSTR)qPlane.MaxPassagiereFC), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(75,25), ClientArea+XY(172,170));
+                  Bitmap.PrintAt (bprintf ("%li (%li)", qPlane.MaxPassagiere, qPlane.MaxPassagiereFC), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(75,25), ClientArea+XY(172,170));
                   Bitmap.PrintAt (Einheiten[EINH_T].bString (qPlane.ptPassagiere/10), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(75,25+11), ClientArea+XY(172,170));
                   Bitmap.PrintAt (Einheiten[EINH_KM].bString (qPlane.ptReichweite), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(75,37+11), ClientArea+XY(172,170));
 
@@ -745,10 +745,10 @@ void BLOCK::Refresh (SLONG PlayerNum, BOOL StyleType)
                   //Besatzung:
                   Bitmap.PrintAt (StandardTexte.GetS (TOKEN_PLANE, 1041), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(2,69+52-14), ClientArea+XY(172,170));
                   Bitmap.PrintAt (StandardTexte.GetS (TOKEN_PLANE, 1011), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(2,82+52-15), ClientArea+XY(172,170));
-                  //Bitmap.PrintAt (bprintf (StandardTexte.GetS (TOKEN_PLANE, 1014), (LPCTSTR)qPlane.AnzPiloten, (LPCTSTR)qPlaneType.AnzPiloten),   FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(75,69+52-14), ClientArea+XY(172,170));
-                  Bitmap.PrintAt (bprintf (StandardTexte.GetS (TOKEN_PLANE, 1014), (LPCTSTR)qPlane.AnzPiloten, (LPCTSTR)qPlane.ptAnzPiloten),   FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(75,69+52-14), ClientArea+XY(172,170));
-                  //Bitmap.PrintAt (bprintf (StandardTexte.GetS (TOKEN_PLANE, 1014), (LPCTSTR)qPlane.AnzBegleiter, (LPCTSTR)qPlaneType.AnzBegleiter), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(75,82+52-15), ClientArea+XY(172,170));
-                  Bitmap.PrintAt (bprintf (StandardTexte.GetS (TOKEN_PLANE, 1014), (LPCTSTR)qPlane.AnzBegleiter, (LPCTSTR)qPlane.ptAnzBegleiter), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(75,82+52-15), ClientArea+XY(172,170));
+                  //Bitmap.PrintAt (bprintf (StandardTexte.GetS (TOKEN_PLANE, 1014), qPlane.AnzPiloten, qPlaneType.AnzPiloten),   FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(75,69+52-14), ClientArea+XY(172,170));
+                  Bitmap.PrintAt (bprintf (StandardTexte.GetS (TOKEN_PLANE, 1014), qPlane.AnzPiloten, qPlane.ptAnzPiloten),   FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(75,69+52-14), ClientArea+XY(172,170));
+                  //Bitmap.PrintAt (bprintf (StandardTexte.GetS (TOKEN_PLANE, 1014), qPlane.AnzBegleiter, qPlaneType.AnzBegleiter), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(75,82+52-15), ClientArea+XY(172,170));
+                  Bitmap.PrintAt (bprintf (StandardTexte.GetS (TOKEN_PLANE, 1014), qPlane.AnzBegleiter, qPlane.ptAnzBegleiter), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(75,82+52-15), ClientArea+XY(172,170));
 
                   //Baujahr
                   Bitmap.PrintAt (StandardTexte.GetS (TOKEN_PLANE, 1013), FontSmallBlack, TEC_FONT_LEFT, ClientArea+XY(2,82+52-13+15), ClientArea+XY(172,170));

@@ -26,13 +26,13 @@ struct DPPacket
 
 struct SBNetworkPlayer
 {
-    unsigned long ID;
+    ULONG ID;
     ENetPeer* peer;
 };
 
 struct SBNetworkPeer
 {
-    unsigned long ID;
+    ULONG ID;
     ENetAddress address;
 };
 
@@ -48,13 +48,13 @@ enum SBSessionEnum
 struct SBNetworkCreation
 {
     SBStr sessionName;
-    long maxPlayers;
-    long flags;
+    SLONG maxPlayers;
+    SLONG flags;
 };
 
 struct SBSessionInfo
 {
-    unsigned long hostID;
+    ULONG hostID;
     char sessionName[26];
     ENetAddress address;
 };
@@ -64,27 +64,27 @@ class SBNetwork
 public:
     SBNetwork(bool);
 
-    long GetMessageCount();
+    SLONG GetMessageCount();
     bool Connect(SBStr);
     bool Connect(SBStr, char*);
     void DisConnect();
     bool CreateSession(SBStr, SBNetworkCreation*);
     void CloseSession();
-    unsigned long GetLocalPlayerID();
+    ULONG GetLocalPlayerID();
     SBList<SBStr>* GetConnectionList();
     SBList<SBStr>* GetSessionListAsync();
     bool StartGetSessionListAsync();
     SLONG GetProviderID(char*);
     bool IsEnumSessionFinished();
     bool IsInSession();
-    bool Send(BUFFER<UBYTE>&, unsigned long, unsigned long, bool);
-    bool Receive(UBYTE**, unsigned long&);
+    bool Send(BUFFER<UBYTE>&, ULONG, ULONG, bool);
+    bool Receive(UBYTE**, ULONG&);
     bool JoinSession(SBStr, SBStr);
     SBList<SBNetworkPlayer>* GetAllPlayers();
 
 private:
     SBSessionEnum mState;
-    unsigned long mLocalID;
+    ULONG mLocalID;
     SBList<SBStr> mConnections;
     SBList<SBStr> mSessions;
     SBList<SBSessionInfo> mSessionInfo;

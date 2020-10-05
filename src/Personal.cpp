@@ -353,7 +353,8 @@ void CWorkers::ReInit (const CString &TabFilename, const CString &TabFilename2)
       Workers[Num].Gehalt      = atoi (strtok (NULL, TabSeparator));
       Workers[Num].Talent      = atoi (strtok (NULL, TabSeparator));
       Workers[Num].Alter       = atoi (strtok (NULL, TabSeparator));
-      Workers[Num].Kommentar   = KorrigiereUmlaute (CString(strtok (NULL, "")));
+      CString Kommentar(strtok(NULL, ""));
+      Workers[Num].Kommentar   = KorrigiereUmlaute (Kommentar);
       Workers[Num].Employer    = WORKER_RESERVE;
       Workers[Num].Happyness   = 100;
 

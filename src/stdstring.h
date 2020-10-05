@@ -2004,7 +2004,11 @@ inline int sscpy(CT1* pDst, const std::basic_string<CT2>& sSrc)
 	template<typename CT>
 	struct SSToUpper
 	{
-		inline CT operator()(const CT& t, const std::locale& loc) const
+		const std::locale& loc;
+
+		SSToUpper(const std::locale& l) : loc(l) {}
+
+		inline CT operator()(const CT& t) const
 		{
 			return sstoupper<CT>(t, loc);
 		}
@@ -2012,7 +2016,11 @@ inline int sscpy(CT1* pDst, const std::basic_string<CT2>& sSrc)
 	template<typename CT>
 	struct SSToLower
 	{
-		inline CT operator()(const CT& t, const std::locale& loc) const
+		const std::locale& loc;
+
+		SSToLower(const std::locale& l) : loc(l) {}
+
+		inline CT operator()(const CT& t) const
 		{
 			return sstolower<CT>(t, loc);
 		}
@@ -2428,7 +2436,7 @@ public:
 #ifdef SS_NO_LOCALE
 					   SSToUpper<CT>());
 #else
-					   std::bind2nd(SSToUpper<CT>(), loc));
+					   SSToUpper<CT>(loc));
 #endif
 
 		// ...but if it were, this would probably work better.  Also, this way
@@ -2456,7 +2464,7 @@ public:
 #ifdef SS_NO_LOCALE
 					   SSToLower<CT>());
 #else
-					   std::bind2nd(SSToLower<CT>(), loc));
+					   SSToLower<CT>(loc));
 #endif
 
 		// ...but if it were, this would probably work better.  Also, this way

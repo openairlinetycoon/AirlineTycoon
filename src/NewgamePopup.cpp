@@ -199,7 +199,7 @@ PUTSTARTMARK;
       Sim.Options.OptionLastPlayer = 1;
    #endif
 
-   Limit (0l, Sim.Options.OptionLastPlayer, 3l);
+   Limit (SLONG(0), Sim.Options.OptionLastPlayer, SLONG(3));
 
    for (c=0; c<4; c++)
       UnselectedNetworkIDs[c]=NULL;
@@ -230,9 +230,9 @@ PUTSTARTMARK;
       if (Sim.Players.Players[c].Abk.GetLength()==0)
          Sim.Players.Players[c].Abk=bprintf ("%-2s", StandardTexte.GetS (TOKEN_NEWGAME, 1002+c*10));
 
-      strupr ((char*)(LPCTSTR)Sim.Players.Players[c].Name);
-      strupr ((char*)(LPCTSTR)Sim.Players.Players[c].Airline);
-      strupr ((char*)(LPCTSTR)Sim.Players.Players[c].Abk);
+      Sim.Players.Players[c].Name.ToUpper();
+      Sim.Players.Players[c].Airline.ToUpper();
+      Sim.Players.Players[c].Abk.ToUpper();
 
       for (int d=0; d<Sim.Players.Players[c].Name.GetLength(); d++)
       {

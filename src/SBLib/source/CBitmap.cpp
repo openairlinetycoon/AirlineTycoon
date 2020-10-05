@@ -82,7 +82,7 @@ void SB_CBitmapCore::SetColorKey(ULONG key)
     SDL_SetColorKey(lpDDSurface, SDL_TRUE, key);
 }
 
-ULONG SB_CBitmapCore::Line(SLONG x1, SLONG y1, SLONG x2, SLONG y2, class SB_CHardwarecolorHelper* pColor)
+ULONG SB_CBitmapCore::Line(SLONG x1, SLONG y1, SLONG x2, SLONG y2, SB_Hardwarecolor pColor)
 {
 #if 0
     if (SDL_SetRenderTarget(lpDD, lpDDSurface) < 0)
@@ -209,7 +209,7 @@ SB_Hardwarecolor SB_CBitmapCore::GetHardwarecolor(ULONG color)
         result |= Format.blueMask & ((unsigned char)color << b);
     else
         result |= Format.blueMask & ((dword)(unsigned char)color >> -(char)b);
-    return (class SB_CHardwarecolorHelper*)(result);
+    return (SB_Hardwarecolor)(result);
 #else
     char r = (color & 0xFF0000) >> 16;
     char g = (color & 0xFF00) >> 8;
@@ -218,7 +218,7 @@ SB_Hardwarecolor SB_CBitmapCore::GetHardwarecolor(ULONG color)
 #endif
 }
 
-ULONG SB_CBitmapCore::Clear(class SB_CHardwarecolorHelper* pColor, const RECT* pRect)
+ULONG SB_CBitmapCore::Clear(SB_Hardwarecolor pColor, const RECT* pRect)
 {
     dword color = (dword)pColor;
     if (pRect)
@@ -233,7 +233,7 @@ ULONG SB_CBitmapCore::Clear(class SB_CHardwarecolorHelper* pColor, const RECT* p
     }
 }
 
-ULONG SB_CBitmapCore::SetPixel(SLONG x, SLONG y, class SB_CHardwarecolorHelper* pColor)
+ULONG SB_CBitmapCore::SetPixel(SLONG x, SLONG y, SB_Hardwarecolor pColor)
 {
     dword color = (dword)pColor;
 #if 0

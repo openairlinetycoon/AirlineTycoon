@@ -161,12 +161,12 @@ public:
     ULONG AddAlphaMsk(void);
     ULONG AddZBuffer(ULONG, ULONG);
     SB_Hardwarecolor GetHardwarecolor(ULONG);
-    ULONG SetPixel(SLONG, SLONG, class SB_CHardwarecolorHelper*);
+    ULONG SetPixel(SLONG, SLONG, SB_Hardwarecolor);
     ULONG GetPixel(SLONG, SLONG);
-    ULONG Clear(class SB_CHardwarecolorHelper*, struct tagRECT const* = NULL);
-    ULONG Line(SLONG, SLONG, SLONG, SLONG, class SB_CHardwarecolorHelper*);
-    ULONG LineTo(SLONG, SLONG, class SB_CHardwarecolorHelper*);
-    ULONG Rectangle(const RECT*, class SB_CHardwarecolorHelper*);
+    ULONG Clear(SB_Hardwarecolor, struct tagRECT const* = NULL);
+    ULONG Line(SLONG, SLONG, SLONG, SLONG, SB_Hardwarecolor);
+    ULONG LineTo(SLONG, SLONG, SB_Hardwarecolor);
+    ULONG Rectangle(const RECT*, SB_Hardwarecolor);
     void InitClipRect(void);
     void SetClipRect(const RECT*);
     void SetClipRect(const CRect&);
@@ -175,9 +175,9 @@ public:
     ULONG BlitFast(class SB_CBitmapCore*, SLONG, SLONG, const RECT* = NULL, unsigned short = 0);
     ULONG BlitChar(SDL_Surface*, SLONG, SLONG, const RECT* = NULL, unsigned short = 0);
     ULONG Blit(class SB_CBitmapCore*, SLONG, SLONG, const RECT* = NULL, unsigned short = 0, ULONG = 0);
-    SLONG BlitA(class SB_CBitmapCore*, SLONG, SLONG, const RECT*, class SB_CHardwarecolorHelper*);
+    SLONG BlitA(class SB_CBitmapCore*, SLONG, SLONG, const RECT*, SB_Hardwarecolor);
     SLONG BlitA(class SB_CBitmapCore*, SLONG, SLONG, const RECT*);
-    SLONG BlitAT(class SB_CBitmapCore*, SLONG, SLONG, const RECT*, class SB_CHardwarecolorHelper*);
+    SLONG BlitAT(class SB_CBitmapCore*, SLONG, SLONG, const RECT*, SB_Hardwarecolor);
     SLONG BlitAT(class SB_CBitmapCore*, SLONG, SLONG, const RECT*);
 
     ULONG BlitT(class SB_CBitmapCore* bm, SLONG x, SLONG y, const RECT* rect = NULL, short flags = 16, ULONG unk = 0) { return Blit(bm, x, y, rect, flags, unk); }

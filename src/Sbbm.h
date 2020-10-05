@@ -127,8 +127,8 @@
          BOOL   SetPixel (XY Pos, dword Color) { pBitmap->SetPixel (Pos.x, Pos.y, Color); return (TRUE); }
          BOOL   SetPixel (SLONG x, SLONG y, dword Color) { return (SetPixel (XY(x,y), Color)); return (TRUE); }
          dword  GetPixel(long x,long y) { return (pBitmap->GetPixel (x,y)); }
-         dword  Clear(dword color=0) { Bench.ClearTime.Start(); pBitmap->Clear ((SB_CHardwarecolorHelper *)color); Bench.ClearTime.Stop(); return (TRUE); }
-         BOOL   FillWith (dword Color) { Bench.ClearTime.Start(); pBitmap->Clear ((SB_CHardwarecolorHelper *)Color); Bench.ClearTime.Stop(); return (TRUE); }
+         dword  Clear(dword color=0) { Bench.ClearTime.Start(); pBitmap->Clear ((SB_Hardwarecolor)color); Bench.ClearTime.Stop(); return (TRUE); }
+         BOOL   FillWith (dword Color) { Bench.ClearTime.Start(); pBitmap->Clear ((SB_Hardwarecolor)Color); Bench.ClearTime.Stop(); return (TRUE); }
          BOOL   Line (const XY &From, const XY &To, dword Color) {pBitmap->Line (From.x, From.y, To.x, To.y, Color); return (TRUE); }
          BOOL   Line (SLONG x1, SLONG y1, SLONG x2, SLONG y2, dword Color) { return(Line (XY(x1,y1), XY(x2,y2), Color)); return (TRUE); }
          BOOL   Line (const XY &From, const XY &To, SB_Hardwarecolor Color) {pBitmap->Line (From.x, From.y, To.x, To.y, Color); return (TRUE); }
@@ -231,7 +231,7 @@
          void Flip (SLONG WindowX, SLONG WindowsY, BOOL ShowFPS=FALSE) { Flip (XY (WindowX, WindowsY), ShowFPS); }
          void Flip (XY WindowPos, BOOL ShowFPS=FALSE);
          BOOL IsFullscreen (void) { return (Fullscreen); }
-         dword  Clear(dword color=0) { return(PrimaryBm.Clear((SB_CHardwarecolorHelper *)color)); }
+         dword  Clear(dword color=0) { return(PrimaryBm.Clear((SB_Hardwarecolor)color)); }
 
          //Blit Services:
          BOOL  BlitFrom (SBBM &TecBitmap) { return (BlitFrom (TecBitmap, XY (0l, 0l))); }

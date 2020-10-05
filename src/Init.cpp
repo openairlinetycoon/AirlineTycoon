@@ -507,9 +507,9 @@ void InitGlobeMapper (void)
          Color += min(EarthPal.Pal[x].r*(y+5)/40+(max(EarthPal.Pal[x].b*(y+5)/40-255,0)),255)<<16;
          Color += min(EarthPal.Pal[x].g*(y+5)/40+(max(EarthPal.Pal[x].b*(y+5)/40-255,0)),255)<<8;
 
-         GlobeMixTab [x+(y<<8)] = (UWORD)(void*)TmpBm.pBitmap->GetHardwarecolor (Color);
+         GlobeMixTab [x+(y<<8)] = (UWORD)TmpBm.pBitmap->GetHardwarecolor (Color);
          if (GlobeMixTab [x+(y<<8)]==0)
-            GlobeMixTab [x+(y<<8)]=(UWORD)(void*)TmpBm.pBitmap->GetHardwarecolor (0x000008);
+            GlobeMixTab [x+(y<<8)]=(UWORD)TmpBm.pBitmap->GetHardwarecolor (0x000008);
       }
 
    GlobeLight.ReSize (369);

@@ -141,19 +141,13 @@ private:
 	char* Buffer;
 };
 
-class SB_CHardwarecolorHelper
+struct SB_Hardwarecolor
 {
-public:
-   SB_CHardwarecolorHelper() : Color() { }
-   SB_CHardwarecolorHelper(SB_CHardwarecolorHelper* color) : Color((word)(uintptr_t)color) { }
+    word Color;
 
-   operator word() { return Color; }
-
-private:
-   word Color;
+    SB_Hardwarecolor(word c=0) : Color(c) {}
+    operator word() { return Color; }
 };
-
-typedef SB_CHardwarecolorHelper* SB_Hardwarecolor;
 
 class SB_CBitmapCore
 {

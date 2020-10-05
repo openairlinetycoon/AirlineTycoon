@@ -6,8 +6,8 @@
 //--------------------------------------------------------------------------------------------
 //Zu erst die Ausnahmen:
 //--------------------------------------------------------------------------------------------
-extern char            *ExcNever="ExcNever";
-extern char            *ExcCreateWindow="CreateWindow failed!";
+const char             *ExcNever="ExcNever";
+const char             *ExcCreateWindow="CreateWindow failed!";
 
 //--------------------------------------------------------------------------------------------
 //Dinge für den Überblendeffekt:
@@ -85,7 +85,7 @@ CHLPool                 SkelettPool;
 
 CVoiceScheduler         VoiceScheduler;
 
-extern bool             bVoicesNotFound=false;
+bool                    bVoicesNotFound=false;
 
 //--------------------------------------------------------------------------------------------
 //Maus & Tooltips:
@@ -170,9 +170,9 @@ CTakeOffApp             theApp;
 //--------------------------------------------------------------------------------------------
 //Einfache globale Variablen:
 //--------------------------------------------------------------------------------------------
-char                   *TabSeparator = ";\x8";   //Zum Import der Excel-Tabellen
-char                   *DateSeparator = "-/;.";  //Erlaubte Datums-Separatoren
-char                   *HallFilenames[] = { "kompletter Airport (%li-%li-%li-%li-%li-%li-%li-%li-%li-%li)", "Left%03li.dat", "Check%03li.dat", "Ofice%03li.dat", "Entry%03li.dat", "Shops%03li.dat", "Cafe%03li.dat", "Secur%03li.dat", "Suit%03li.dat", "WaitZ%03li.dat", "Right%03li.dat" };
+const char             *TabSeparator = ";\x8";   //Zum Import der Excel-Tabellen
+const char             *DateSeparator = "-/;.";  //Erlaubte Datums-Separatoren
+const char             *HallFilenames[] = { "kompletter Airport (%li-%li-%li-%li-%li-%li-%li-%li-%li-%li)", "Left%03li.dat", "Check%03li.dat", "Ofice%03li.dat", "Entry%03li.dat", "Shops%03li.dat", "Cafe%03li.dat", "Secur%03li.dat", "Suit%03li.dat", "WaitZ%03li.dat", "Right%03li.dat" };
 
 //--------------------------------------------------------------------------------------------
 //Die Pfade der einzelnen Dateigruppen:

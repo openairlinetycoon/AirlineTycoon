@@ -640,7 +640,8 @@ void CPlaner::DoPollingStuff (void)
    PLAYER &qPlayer = Sim.Players.Players[(SLONG)PlayerNum];
 
    //Geschlossene Blöcke aus dem Array entfernen:
-   for (SLONG c=0; c<(SLONG)qPlayer.Blocks.AnzEntries(); c++)
+   SLONG c;
+   for (c=0; c<(SLONG)qPlayer.Blocks.AnzEntries(); c++)
       if (qPlayer.Blocks.IsInAlbum(c) && qPlayer.Blocks[c].Destructing==2)
       {
          GlobeWindows [qPlayer.Blocks[c].BlockType-1]=qPlayer.Blocks[c].ScreenPos;
@@ -733,9 +734,9 @@ void CPlaner::DoPollingStuff (void)
                    }
                }
 
-               if (Sim.Date==Date) Limit (SLONG(Sim.GetHour()+2), (SLONG)Time, (SLONG)24l);
-                              else Limit (SLONG(0), (SLONG)Time, (SLONG)24l);
-               Limit ((SLONG)Sim.Date, (SLONG)Date, SLONG(Sim.Date+6));
+               if (Sim.Date==Date) Limit (SLONG(Sim.GetHour()+2), Time, SLONG(24));
+                              else Limit (SLONG(0), Time, SLONG(24));
+               Limit ((SLONG)Sim.Date, Date, SLONG(Sim.Date+6));
 
                if (Time==24)
                {
@@ -827,8 +828,8 @@ void CPlaner::DoPollingStuff (void)
                    }
                }
 
-               if (Sim.Date==Date) Limit (SLONG(Sim.GetHour()+2), (SLONG)Time, (SLONG)24l);
-                              else Limit (SLONG(0), (SLONG)Time, (SLONG)24l);
+               if (Sim.Date==Date) Limit (SLONG(Sim.GetHour()+2), Time, SLONG(24));
+                              else Limit (SLONG(0), Time, SLONG(24));
 
                if (Time==24)
                {
@@ -997,7 +998,8 @@ void CPlaner::DoPollingStuff (void)
             if (Date!=Sim.Date || Time>Sim.GetHour()+1)
             {
                //Drag am Fluganfang:
-               for (SLONG d=qPlan.Flug.AnzEntries()-1; d>=0; d--)
+               SLONG d;
+               for (d=qPlan.Flug.AnzEntries()-1; d>=0; d--)
                   if (qPlan.Flug[d].ObjectType==1 || qPlan.Flug[d].ObjectType==2 || qPlan.Flug[d].ObjectType==4)
                   {
                      if (qPlan.Flug[d].Startdate==Date && qPlan.Flug[d].Startzeit==Time)
@@ -1035,8 +1037,9 @@ void CPlaner::DoPollingStuff (void)
             CFlugplan &qPlan = qPlayer.Planes[ActivePlane].Flugplan;
             SLONG      Date=Sim.Date+(ClientPos.y-17)/19;
             SLONG      Time=(ClientPos.x-25)/6;
+            SLONG      d;
 
-            for (SLONG d=qPlan.Flug.AnzEntries()-1; d>=0; d--)
+            for (d=qPlan.Flug.AnzEntries()-1; d>=0; d--)
                if (qPlan.Flug[d].ObjectType)
                {
                   if ((qPlan.Flug[d].Startdate<Date || (qPlan.Flug[d].Startdate==Date && qPlan.Flug[d].Startzeit<=Time)) &&
@@ -1144,10 +1147,11 @@ void CPlaner::DoPollingStuff (void)
             SLONG      Time=(ClientPos.y-6)/6;
             SLONG      ActivePlane = pBlock->SelectedId;
             CFlugplan &qPlan = qPlayer.Planes[ActivePlane].Flugplan;
+            SLONG      d;
 
             if (Date!=Sim.Date || Time>Sim.GetHour()+1)
             {
-               for (SLONG d=qPlan.Flug.AnzEntries()-1; d>=0; d--)
+               for (d=qPlan.Flug.AnzEntries()-1; d>=0; d--)
                   if (qPlan.Flug[d].ObjectType==1 || qPlan.Flug[d].ObjectType==2)
                   {
                      if (qPlan.Flug[d].Startdate==Date && qPlan.Flug[d].Startzeit==Time)
@@ -1185,8 +1189,9 @@ void CPlaner::DoPollingStuff (void)
             CFlugplan &qPlan = qPlayer.Planes[ActivePlane].Flugplan;
             SLONG      Date=Sim.Date+pBlock->Page;
             SLONG      Time=(ClientPos.y-6)/6;
+            SLONG      d;
 
-            for (SLONG d=qPlan.Flug.AnzEntries()-1; d>=0; d--)
+            for (d=qPlan.Flug.AnzEntries()-1; d>=0; d--)
                if (qPlan.Flug[d].ObjectType)
                {
                   if ((qPlan.Flug[d].Startdate<Date || (qPlan.Flug[d].Startdate==Date && qPlan.Flug[d].Startzeit<=Time)) &&
@@ -1657,8 +1662,8 @@ void CPlaner::HandleLButtonDown (void)
             SLONG      tmpObjectId;
 
             //An diese Stelle (links vom Cursor) kommt der Flug hin:
-            SLONG      Date=Sim.Date+((ClientPos-PostItBm.Size/2l+XY(3,9)).y-17)/19;
-            SLONG      Time=((ClientPos-PostItBm.Size/2l+XY(3,9)).x-24)/6;
+            SLONG      Date=Sim.Date+((ClientPos-PostItBm.Size/SLONG(2)+XY(3,9)).y-17)/19;
+            SLONG      Time=((ClientPos-PostItBm.Size/SLONG(2)+XY(3,9)).x-24)/6;
 
             //Da, wo wir klicken, nehmen wir den Flug raus:
             SLONG      ClickDate=Sim.Date+((ClientPos-XY(0,PostItBm.Size.y/2)+XY(3,9)).y-17)/19;
@@ -1733,7 +1738,8 @@ void CPlaner::HandleLButtonDown (void)
                }
                else
                {
-                  for (SLONG c=qPlan.Flug.AnzEntries()-1; c>=0; c--)
+                  SLONG c;
+                  for (c=qPlan.Flug.AnzEntries()-1; c>=0; c--)
                      if (qPlan.Flug[c].ObjectType)
                      {
                         if ((qPlan.Flug[c].Startdate<ClickDate || (qPlan.Flug[c].Startdate==ClickDate && qPlan.Flug[c].Startzeit<=ClickTime)) &&
@@ -1805,10 +1811,11 @@ void CPlaner::HandleLButtonDown (void)
             CFlugplan &qPlan = qPlayer.Planes[ActivePlane].Flugplan;
             SLONG      Date=Sim.Date+(ClientPos.y-17)/19;
             SLONG      Time=(ClientPos.x-25)/6;
+            SLONG      c;
 
             if (Date>Sim.Date || (Date==Sim.Date && Time>Sim.GetHour()+1))
             {
-               for (SLONG c=qPlan.Flug.AnzEntries()-1; c>=0; c--)
+               for (c=qPlan.Flug.AnzEntries()-1; c>=0; c--)
                   if (qPlan.Flug[c].ObjectType)
                   {
                      if ((qPlan.Flug[c].Startdate<Date || (qPlan.Flug[c].Startdate==Date && qPlan.Flug[c].Startzeit<=Time)) &&
@@ -1916,7 +1923,8 @@ void CPlaner::HandleLButtonDown (void)
                   }
                   else
                   {
-                     for (SLONG c=qPlan.Flug.AnzEntries()-1; c>=0; c--)
+                     SLONG c;
+                     for (c=qPlan.Flug.AnzEntries()-1; c>=0; c--)
                         if (qPlan.Flug[c].ObjectType)
                         {
                            if ((qPlan.Flug[c].Startdate<Date || (qPlan.Flug[c].Startdate==Date && qPlan.Flug[c].Startzeit<=Time)) &&
@@ -1983,10 +1991,11 @@ void CPlaner::HandleLButtonDown (void)
                CFlugplan &qPlan = qPlayer.Planes[ActivePlane].Flugplan;
                SLONG      Date=Sim.Date+pBlock->Page;
                SLONG      Time=(ClientPos.y-5)/6;
+               SLONG      c;
 
                if (Date>Sim.Date || (Date==Sim.Date && Time>Sim.GetHour()+1))
                {
-                  for (SLONG c=qPlan.Flug.AnzEntries()-1; c>=0; c--)
+                  for (c=qPlan.Flug.AnzEntries()-1; c>=0; c--)
                      if (qPlan.Flug[c].ObjectType)
                      {
                         if ((qPlan.Flug[c].Startdate<Date || (qPlan.Flug[c].Startdate==Date && qPlan.Flug[c].Startzeit<=Time)) &&
@@ -2433,8 +2442,8 @@ void CPlaner::HandleLButtonUp (void)
             SLONG      tmpObjectId;
 
             //An diese Stelle (links vom Cursor) kommt der Flug hin:
-            SLONG      Date=Sim.Date+((ClientPos-PostItBm.Size/2l+XY(3,9)).y-17)/19;
-            SLONG      Time=((ClientPos-PostItBm.Size/2l+XY(3,9)).x-24)/6;
+            SLONG      Date=Sim.Date+((ClientPos-PostItBm.Size/SLONG(2)+XY(3,9)).y-17)/19;
+            SLONG      Time=((ClientPos-PostItBm.Size/SLONG(2)+XY(3,9)).x-24)/6;
 
             //Da, wo wir klicken, nehmen wir den Flug raus:
             SLONG      ClickDate=Sim.Date+((ClientPos-XY(0,PostItBm.Size.y/2)+XY(3,9)).y-17)/19;
@@ -2496,7 +2505,8 @@ void CPlaner::HandleLButtonUp (void)
                }
                else
                {
-                  for (SLONG c=qPlan.Flug.AnzEntries()-1; c>=0; c--)
+                  SLONG c;
+                  for (c=qPlan.Flug.AnzEntries()-1; c>=0; c--)
                      if (qPlan.Flug[c].ObjectType)
                      {
                         if ((qPlan.Flug[c].Startdate<ClickDate || (qPlan.Flug[c].Startdate==ClickDate && qPlan.Flug[c].Startzeit<=ClickTime)) &&
@@ -2862,7 +2872,8 @@ void CPlaner::HandleLButtonDouble (void)
                      else
                      {
                      add:
-                        for (SLONG c=qPlan.Flug.AnzEntries()-1; c>=0; c--)
+                        SLONG c;
+                        for (c=qPlan.Flug.AnzEntries()-1; c>=0; c--)
                            if (qPlan.Flug[c].ObjectType!=0)
                               break;
 

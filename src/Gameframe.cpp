@@ -12,8 +12,8 @@
 #include "cd_prot.h"
 #include "AtNet.h"
 
-#include "sblib\include\SbLib.h"
-#include "sblib\include\network.h"
+#include "SbLib.h"
+#include "network.h"
 extern SBNetwork gNetwork;
 
 #ifdef _DEBUG

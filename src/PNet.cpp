@@ -403,7 +403,7 @@ void PLAYER::NetSynchronizeKooperation (void)
 void PLAYER::NetUpdateWorkers (void)
 {
    TEAKFILE Message;
-   SLONG    m, n;
+   SLONG    m, n, c;
 
    if (bgIsLoadingSavegame) return;
 
@@ -418,7 +418,7 @@ void PLAYER::NetUpdateWorkers (void)
    
    Message << PlayerNum << m << n;
 
-   for (SLONG c=0; c<(SLONG)Planes.AnzEntries(); c++)
+   for (c=0; c<(SLONG)Planes.AnzEntries(); c++)
       if (Planes.IsInAlbum(c))
       {
          Message << c;

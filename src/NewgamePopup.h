@@ -1,7 +1,7 @@
 // NewGamePopup.h : header file
 //
-#include "sblib\include\SbLib.h"
-#include "sblib\include\network.h"
+#include "SbLib.h"
+#include "network.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // NewGamePopup window

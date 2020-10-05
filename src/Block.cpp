@@ -545,7 +545,7 @@ void BLOCK::Refresh (SLONG PlayerNum, BOOL StyleType)
 
                   CRect rect (0,0, 9999,9999);
                   if (Photo.Size.x!=0) RemapColor (Photo.pBitmap, rect, 0x0000, 0x0001);
-                  Bitmap.BlitFrom (Photo, ClientArea-XY(0,3)+XY(85,85)-Photo.Size/2l);
+                  Bitmap.BlitFrom (Photo, ClientArea-XY(0,3)+XY(85,85)-Photo.Size/SLONG(2));
                }
                break;
 

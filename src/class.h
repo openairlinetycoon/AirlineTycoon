@@ -717,7 +717,7 @@ class CFlugplan
       void UpdateNextFlight (void);
       void UpdateNextStart (void);
       void Dump (bool Hercules=true);
-      BOOL ContainsFlight (ULONG ObjectType, SLONG ObjectId1, SLONG ObjectId2=0);
+      BOOL ContainsFlight (ULONG ObjectType, SLONG ObjectId1, SLONG ObjectId2=NULL);
 
    friend TEAKFILE &operator << (TEAKFILE &File, const CFlugplan &Plan);
    friend TEAKFILE &operator >> (TEAKFILE &File, CFlugplan &Plan);
@@ -1985,8 +1985,8 @@ class PLAYER
       XY             ViewPos;    //SichtPosition im Flughafen
       XY             IslandViewPos; //SichtPosition für die Inseln
       XY             CameraSpeed;   //Trägheitssteuerung. Dies ist die Geschw. der Kamera
-      class CStdRaum*LocationWin;//Pointer auf offenes Sub-Fenster (Raum)
-      class CStdRaum*DialogWin;  //Pointer auf offenes Dialog-Sub-Fenster
+      CStdRaum      *LocationWin;//Pointer auf offenes Sub-Fenster (Raum)
+      CStdRaum      *DialogWin;  //Pointer auf offenes Dialog-Sub-Fenster
       UBYTE          NewDir;     //Flag, falls die Laufrichtung geändert wurde
       XY             WinP1;      //Die Position des ViewFensters im GameFrame Fenster
       XY             WinP2;
@@ -2516,16 +2516,16 @@ class SIM //Die Simulationswelt; alles was zur aktuellen Partie gehört
       void    NetSynchronizeOvertake (void);
 
       //In NewgamePopup.cpp
-      bool	  SendMemFile (TEAKFILE &file, ULONG target = 0, bool useCompression = true);
+      bool	  SendMemFile (TEAKFILE &file, ULONG target = NULL, bool useCompression = true);
       bool	  ReceiveMemFile (TEAKFILE &file);
-      bool    SendSimpleMessage (ULONG Message, ULONG target=0);
+      bool    SendSimpleMessage (ULONG Message, ULONG target=NULL);
       bool    SendSimpleMessage (ULONG Message, ULONG target, SLONG Par1);
       bool    SendSimpleMessage (ULONG Message, ULONG target, SLONG Par1, SLONG Par2);
       bool    SendSimpleMessage (ULONG Message, ULONG target, SLONG Par1, SLONG Par2, SLONG Par3);
       bool    SendSimpleMessage (ULONG Message, ULONG target, SLONG Par1, SLONG Par2, SLONG Par3, SLONG Par4);
       bool    SendSimpleMessage (ULONG Message, ULONG target, SLONG Par1, SLONG Par2, SLONG Par3, SLONG Par4, SLONG Par5);
       bool    SendSimpleMessage (ULONG Message, ULONG target, SLONG Par1, SLONG Par2, SLONG Par3, SLONG Par4, SLONG Par5, SLONG Par6);
-      bool    SendChatBroadcast (CString Message, bool bSayFromWhom=false, ULONG target=0);
+      bool    SendChatBroadcast (CString Message, bool bSayFromWhom=false, ULONG target=NULL);
 
       void    AddHighscore (CString Name, DWORD UniqueGameId2, __int64 Score);
       void    SaveHighscores (void);

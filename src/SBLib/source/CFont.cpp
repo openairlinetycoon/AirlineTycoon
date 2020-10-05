@@ -65,7 +65,7 @@ bool SB_CFont::Load(SDL_Renderer* renderer, char* path, struct HPALETTE__*)
     return true;
 }
 
-long SB_CFont::DrawTextBlock(class SB_CBitmapCore* bmp, RECT* block, char* str, long length, long offset, bool hidden)
+SLONG SB_CFont::DrawTextBlock(class SB_CBitmapCore* bmp, RECT* block, char* str, SLONG length, SLONG offset, bool hidden)
 {
     this->Bitmap = bmp;
     this->Hidden = hidden;
@@ -79,10 +79,10 @@ long SB_CFont::DrawTextBlock(class SB_CBitmapCore* bmp, RECT* block, char* str, 
         this->Start.x = this->Pos.x;
         this->Pos.y = block->top;
         while (length != 0) {
-            long i = GetWordLength(str,length);
+            SLONG i = GetWordLength(str,length);
             if (i > 0) {
                 if (block->right < this->Pos.x + GetWidth(str,i)) {
-                    this->Pos.y = this->Pos.y + long(this->Header.Height * LineSpace);
+                    this->Pos.y = this->Pos.y + SLONG(this->Header.Height * LineSpace);
                     this->Pos.x = block->left;
                 }
                 if (block->bottom < this->Pos.y + this->Header.Height) {
@@ -108,7 +108,7 @@ long SB_CFont::DrawTextBlock(class SB_CBitmapCore* bmp, RECT* block, char* str, 
                 i++;
                 break;
             case -0x4b:
-                this->Pos.y = this->Pos.y + long(this->Header.Height * LineSpace);
+                this->Pos.y = this->Pos.y + SLONG(this->Header.Height * LineSpace);
                 this->Pos.x = this->Start.x;
                 i++;
                 break;
@@ -129,7 +129,7 @@ long SB_CFont::DrawTextBlock(class SB_CBitmapCore* bmp, RECT* block, char* str, 
     return offset;
 }
 
-void SB_CFont::DrawTextWithTabs(class SB_CBitmapCore* bmp, long x, long y, char* str, long length, bool hidden)
+void SB_CFont::DrawTextWithTabs(class SB_CBitmapCore* bmp, SLONG x, SLONG y, char* str, SLONG length, bool hidden)
 {
     int i = 0;
     this->Bitmap = bmp;
@@ -163,7 +163,7 @@ void SB_CFont::DrawTextWithTabs(class SB_CBitmapCore* bmp, long x, long y, char*
             }
             break;
         case '\n':
-            this->Pos.y = this->Pos.y + long(this->Header.Height * LineSpace);
+            this->Pos.y = this->Pos.y + SLONG(this->Header.Height * LineSpace);
             str++;
             break;
         case '\r':
@@ -173,7 +173,7 @@ void SB_CFont::DrawTextWithTabs(class SB_CBitmapCore* bmp, long x, long y, char*
             break;
         case -0x4b:
             i = 0;
-            this->Pos.y = this->Pos.y + long(this->Header.Height * LineSpace);
+            this->Pos.y = this->Pos.y + SLONG(this->Header.Height * LineSpace);
             this->Pos.x = this->Start.x;
             str++;
             break;
@@ -185,7 +185,7 @@ void SB_CFont::DrawTextWithTabs(class SB_CBitmapCore* bmp, long x, long y, char*
     return;
 }
 
-void SB_CFont::SetTabulator(TABS* pTabs, unsigned long szTabs)
+void SB_CFont::SetTabulator(TABS* pTabs, ULONG szTabs)
 {
     if (this->Tabulator) {
         delete [] this->Tabulator;
@@ -197,7 +197,7 @@ void SB_CFont::SetTabulator(TABS* pTabs, unsigned long szTabs)
     return;
 }
 
-long SB_CFont::PreviewTextBlock(class SB_CBitmapCore * bmp, RECT * block, char* str, long length, long offset, bool hidden)
+SLONG SB_CFont::PreviewTextBlock(class SB_CBitmapCore * bmp, RECT * block, char* str, SLONG length, SLONG offset, bool hidden)
 {
     this->Bitmap = bmp;
     this->Hidden = hidden;
@@ -213,9 +213,9 @@ long SB_CFont::PreviewTextBlock(class SB_CBitmapCore * bmp, RECT * block, char* 
         while (length != 0) {
             int i = GetWordLength(str, length);
             if (0 < i) {
-                long width = GetWidth(str, i);
+                SLONG width = GetWidth(str, i);
                 if (block->right < this->Pos.x + width) {
-                    this->Pos.y = this->Pos.y + long(this->Header.Height * LineSpace);
+                    this->Pos.y = this->Pos.y + SLONG(this->Header.Height * LineSpace);
                     this->Pos.x = block->left;
                     if (block->right < this->Pos.x + width) {
                         return -1;
@@ -227,7 +227,7 @@ long SB_CFont::PreviewTextBlock(class SB_CBitmapCore * bmp, RECT * block, char* 
             case '\0':
                 break;
             case '\n':
-                this->Pos.y = this->Pos.y + long(this->Header.Height * LineSpace);
+                this->Pos.y = this->Pos.y + SLONG(this->Header.Height * LineSpace);
                 i++;
                 break;
             case '\r':
@@ -239,7 +239,7 @@ long SB_CFont::PreviewTextBlock(class SB_CBitmapCore * bmp, RECT * block, char* 
                 i++;
                 break;
             case -0x4b:
-                this->Pos.y = this->Pos.y + long(this->Header.Height * LineSpace);
+                this->Pos.y = this->Pos.y + SLONG(this->Header.Height * LineSpace);
                 this->Pos.x = this->Start.x;
                 i++;
                 break;
@@ -257,19 +257,19 @@ long SB_CFont::PreviewTextBlock(class SB_CBitmapCore * bmp, RECT * block, char* 
     }
 }
 
-long SB_CFont::DrawTextBlock(class SB_CBitmapCore* bmp, long l, long t, long r, long b, char* str, long length, long offset, bool hidden)
+SLONG SB_CFont::DrawTextBlock(class SB_CBitmapCore* bmp, SLONG l, SLONG t, SLONG r, SLONG b, char* str, SLONG length, SLONG offset, bool hidden)
 {
    RECT rect{ l, t, r, b };
    return DrawTextBlock(bmp, &rect, str, length, offset, hidden);
 }
 
-long SB_CFont::PreviewTextBlock(class SB_CBitmapCore* bmp, long l, long t, long r, long b, char* str, long length, long offset, bool hidden)
+SLONG SB_CFont::PreviewTextBlock(class SB_CBitmapCore* bmp, SLONG l, SLONG t, SLONG r, SLONG b, char* str, SLONG length, SLONG offset, bool hidden)
 {
    RECT rect{ l, t, r, b };
    return PreviewTextBlock(bmp, &rect, str, length, offset, hidden);
 }
 
-long SB_CFont::GetWidthAt(char* str, long offset, char ch)
+SLONG SB_CFont::GetWidthAt(char* str, SLONG offset, char ch)
 {
     int i = 0;
     while( true ) {
@@ -287,7 +287,7 @@ long SB_CFont::GetWidthAt(char* str, long offset, char ch)
     return i;
 }
 
-long SB_CFont::GetWordLength(char* str, long offset)
+SLONG SB_CFont::GetWordLength(char* str, SLONG offset)
 {
     dword length = 0;
     while (offset != 0) {
@@ -307,7 +307,7 @@ long SB_CFont::GetWordLength(char* str, long offset)
     return length;
 }
 
-long SB_CFont::GetWidth(char ch)
+SLONG SB_CFont::GetWidth(char ch)
 {
     if ((this->Header.Flags & 1) == 1)
         return *(this->VarWidth + ch);
@@ -315,9 +315,9 @@ long SB_CFont::GetWidth(char ch)
         return this->Header.Width;
 }
 
-long SB_CFont::GetWidth(char* str, long offset)
+SLONG SB_CFont::GetWidth(char* str, SLONG offset)
 {
-    long width = 0;
+    SLONG width = 0;
     if (offset == 0)
     {
         offset = strlen(str);
@@ -361,19 +361,19 @@ bool SB_CFont::DrawChar(char ch, bool)
     return false;
 }
 
-bool SB_CFont::DrawWord(char* str, long offset)
+bool SB_CFont::DrawWord(char* str, SLONG offset)
 {
     do {
         if (offset == 0) {
             return true;
         }
         if (*str == -0x4b) {
-            this->Pos.y = this->Pos.y + long(this->Header.Height * LineSpace);
+            this->Pos.y = this->Pos.y + SLONG(this->Header.Height * LineSpace);
             this->Pos.x = this->Start.x;
         }
         else {
             if (*str == '\n') {
-                this->Pos.y = this->Pos.y + long(this->Header.Height * LineSpace);
+                this->Pos.y = this->Pos.y + SLONG(this->Header.Height * LineSpace);
             }
             else {
                 if (*str == '\r') {

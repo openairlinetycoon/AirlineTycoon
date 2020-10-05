@@ -11,8 +11,8 @@ typedef ULONG dword;
 #define DD_ERROR(x) if (!(x)) ODS("DDError in File: %s Line: %d Code: %d [%x]",__FILE__,__LINE__,x,x);
 
 extern void ODS(const char *, ...);
-extern long GetLowestSetBit(long mask);
-extern long GetHighestSetBit(long mask);
+extern SLONG GetLowestSetBit(SLONG mask);
+extern SLONG GetHighestSetBit(SLONG mask);
 
 #define CREATE_SYSMEM      0
 #define CREATE_VIDMEM      1
@@ -25,41 +25,41 @@ class GfxLib
 {
 public:
     struct _GfxStruct* ReloadSurface(__int64);
-    long Restore(void);
+    SLONG Restore(void);
     void Release(void);
-    class GfxLib* ReleaseSurface(long);
+    class GfxLib* ReleaseSurface(SLONG);
     class GfxLib* ReleaseSurface(__int64);
     SDL_Surface* GetSurface(__int64);
-    SDL_Surface* GetSurface(long);
-    long AddRef(__int64);
-    long AddRef(long);
+    SDL_Surface* GetSurface(SLONG);
+    SLONG AddRef(__int64);
+    SLONG AddRef(SLONG);
     __int64 LongName2Id(char*);
     char* Id2LongName(__int64);
-    long GetGfxHeader(long, struct _GfxChunkInfo*);
-    __int64 GetGfxShortId(long);
+    SLONG GetGfxHeader(SLONG, struct _GfxChunkInfo*);
+    __int64 GetGfxShortId(SLONG);
 
 protected:
-    GfxLib(void*, SDL_Renderer*, char*, long, long, long*);
-    void ErrorProc(long);
+    GfxLib(void*, SDL_Renderer*, char*, SLONG, SLONG, SLONG*);
+    void ErrorProc(SLONG);
 
     friend class GfxMain;
 
 private:
-    long CountGfxChunks(struct _uniChunk*, long);
+    SLONG CountGfxChunks(struct _uniChunk*, SLONG);
     struct _GfxLibHeader* LoadHeader(SDL_RWops*);
     void ReadPaletteChunk(int, struct _PaletteInfo);
     void ReadNameChunk(int, struct _LongNameChunk);
-    void* DeCompData(void*, struct _GfxChunkInfo, long);
-    void* ConvertData(void*, long, char*, long, long, long, long, long);
+    void* DeCompData(void*, struct _GfxChunkInfo, SLONG);
+    void* ConvertData(void*, SLONG, char*, SLONG, SLONG, SLONG, SLONG, SLONG);
     struct IDirectDrawSurface* FillSurface(int, struct _GfxChunkInfo, char*, struct IDirectDrawSurface*);
-    struct IDirectDrawSurface* ReadPixelData(int, struct _GfxChunkInfo, char*, long);
+    struct IDirectDrawSurface* ReadPixelData(int, struct _GfxChunkInfo, char*, SLONG);
     struct IDirectDrawPalette* ReadPalette(int, struct _GfxChunkInfo);
     void* ReadZBuffer(SDL_RWops*, struct _GfxChunkInfo);
     void* ReadAlphaBuffer(SDL_RWops*, struct _GfxChunkInfo);
-    long ReadGfxChunk(SDL_RWops*, struct _GfxChunkHeader, long, long);
-    long Load(SDL_RWops*, struct _GfxLibHeader*);
-    long FindId(__int64);
-    void RelSurface(long);
+    SLONG ReadGfxChunk(SDL_RWops*, struct _GfxChunkHeader, SLONG, SLONG);
+    SLONG Load(SDL_RWops*, struct _GfxLibHeader*);
+    SLONG FindId(__int64);
+    void RelSurface(SLONG);
 
     std::map<__int64, SDL_Surface*> Surfaces;
 };
@@ -71,17 +71,17 @@ class GfxMain
 public:
     GfxMain(SDL_Renderer*);
     ~GfxMain(void);
-    long Restore(void);
-    long LoadLib(char*, class GfxLib**, long);
-    long ReleaseLib(class GfxLib*);
+    SLONG Restore(void);
+    SLONG LoadLib(char*, class GfxLib**, SLONG);
+    SLONG ReleaseLib(class GfxLib*);
     void KillLib(class GfxLib*);
-    long GetListId(class GfxLib*, __int64);
-    struct _GfxStruct* GetSurface(long);
-    long AddRef(long);
-    class GfxLib* ReleaseSurface(long);
+    SLONG GetListId(class GfxLib*, __int64);
+    struct _GfxStruct* GetSurface(SLONG);
+    SLONG AddRef(SLONG);
+    class GfxLib* ReleaseSurface(SLONG);
 
 private:
-    void ErrorProc(long);
+    void ErrorProc(SLONG);
 
     std::list<GfxLib> Libs;
 };
@@ -110,18 +110,18 @@ public:
     class SB_CString& RemoveSlash(void);
     void SplitPath(class SB_CString*, class SB_CString*, class SB_CString*, class SB_CString*);
     class SB_CString& MakePath(char*, char*, char*, char*);
-    class SB_CString Mid(unsigned long) const;
-    class SB_CString Mid(unsigned long, unsigned long) const;
-    class SB_CString Right(unsigned long) const;
-    class SB_CString Left(unsigned long) const;
-    unsigned long ReverseFind(char) const;
-    unsigned long Find(char const*) const;
+    class SB_CString Mid(ULONG) const;
+    class SB_CString Mid(ULONG, ULONG) const;
+    class SB_CString Right(ULONG) const;
+    class SB_CString Left(ULONG) const;
+    ULONG ReverseFind(char) const;
+    ULONG Find(char const*) const;
     bool LoadStringA(unsigned int, struct HINSTANCE__*);
-    bool LoadStringA(unsigned long, class SB_CDatabase*);
+    bool LoadStringA(ULONG, class SB_CDatabase*);
     void MakeUpper(void);
     void MakeLower(void);
     void Show(void) const;
-	unsigned long Length() { return Anz; }
+	ULONG Length() { return Anz; }
 
     static SB_CString& Format(char const*, ...);
 
@@ -136,8 +136,8 @@ protected:
     void SafeDelete(char*);
 
 private:
-	unsigned long Anz;
-	unsigned long Size;
+	ULONG Anz;
+	ULONG Size;
 	char* Buffer;
 };
 
@@ -158,31 +158,31 @@ typedef SB_CHardwarecolorHelper* SB_Hardwarecolor;
 class SB_CBitmapCore
 {
 public:
-    unsigned long AddAlphaMsk(void);
-    unsigned long AddZBuffer(unsigned long, unsigned long);
-    SB_Hardwarecolor GetHardwarecolor(unsigned long);
-    unsigned long SetPixel(long, long, class SB_CHardwarecolorHelper*);
-    unsigned long GetPixel(long, long);
-    unsigned long Clear(class SB_CHardwarecolorHelper*, struct tagRECT const* = NULL);
-    unsigned long Line(long, long, long, long, class SB_CHardwarecolorHelper*);
-    unsigned long LineTo(long, long, class SB_CHardwarecolorHelper*);
-    unsigned long Rectangle(const RECT*, class SB_CHardwarecolorHelper*);
+    ULONG AddAlphaMsk(void);
+    ULONG AddZBuffer(ULONG, ULONG);
+    SB_Hardwarecolor GetHardwarecolor(ULONG);
+    ULONG SetPixel(SLONG, SLONG, class SB_CHardwarecolorHelper*);
+    ULONG GetPixel(SLONG, SLONG);
+    ULONG Clear(class SB_CHardwarecolorHelper*, struct tagRECT const* = NULL);
+    ULONG Line(SLONG, SLONG, SLONG, SLONG, class SB_CHardwarecolorHelper*);
+    ULONG LineTo(SLONG, SLONG, class SB_CHardwarecolorHelper*);
+    ULONG Rectangle(const RECT*, class SB_CHardwarecolorHelper*);
     void InitClipRect(void);
     void SetClipRect(const RECT*);
     void SetClipRect(const CRect&);
-    void SetColorKey(unsigned long);
-    virtual unsigned long Release(void);
-    unsigned long BlitFast(class SB_CBitmapCore*, long, long, const RECT* = NULL, unsigned short = 0);
-    unsigned long BlitChar(SDL_Surface*, long, long, const RECT* = NULL, unsigned short = 0);
-    unsigned long Blit(class SB_CBitmapCore*, long, long, const RECT* = NULL, unsigned short = 0, unsigned long = 0);
-    long BlitA(class SB_CBitmapCore*, long, long, const RECT*, class SB_CHardwarecolorHelper*);
-    long BlitA(class SB_CBitmapCore*, long, long, const RECT*);
-    long BlitAT(class SB_CBitmapCore*, long, long, const RECT*, class SB_CHardwarecolorHelper*);
-    long BlitAT(class SB_CBitmapCore*, long, long, const RECT*);
+    void SetColorKey(ULONG);
+    virtual ULONG Release(void);
+    ULONG BlitFast(class SB_CBitmapCore*, SLONG, SLONG, const RECT* = NULL, unsigned short = 0);
+    ULONG BlitChar(SDL_Surface*, SLONG, SLONG, const RECT* = NULL, unsigned short = 0);
+    ULONG Blit(class SB_CBitmapCore*, SLONG, SLONG, const RECT* = NULL, unsigned short = 0, ULONG = 0);
+    SLONG BlitA(class SB_CBitmapCore*, SLONG, SLONG, const RECT*, class SB_CHardwarecolorHelper*);
+    SLONG BlitA(class SB_CBitmapCore*, SLONG, SLONG, const RECT*);
+    SLONG BlitAT(class SB_CBitmapCore*, SLONG, SLONG, const RECT*, class SB_CHardwarecolorHelper*);
+    SLONG BlitAT(class SB_CBitmapCore*, SLONG, SLONG, const RECT*);
 
-    unsigned long BlitT(class SB_CBitmapCore* bm, long x, long y, const RECT* rect = NULL, short flags = 16, unsigned long unk = 0) { return Blit(bm, x, y, rect, flags, unk); }
-    unsigned long SetPixel(long x, long y, SLONG color) { return SetPixel(x, y, GetHardwarecolor(color)); }
-    unsigned long Line(long x1, long y1, long x2, long y2, DWORD color) { return Line(x1, y1, x2, y2, GetHardwarecolor(color)); }
+    ULONG BlitT(class SB_CBitmapCore* bm, SLONG x, SLONG y, const RECT* rect = NULL, short flags = 16, ULONG unk = 0) { return Blit(bm, x, y, rect, flags, unk); }
+    ULONG SetPixel(SLONG x, SLONG y, SLONG color) { return SetPixel(x, y, GetHardwarecolor(color)); }
+    ULONG Line(SLONG x1, SLONG y1, SLONG x2, SLONG y2, DWORD color) { return Line(x1, y1, x2, y2, GetHardwarecolor(color)); }
     SLONG GetXSize() { return Size.x; }
     SLONG GetYSize() { return Size.y; }
     RECT GetClipRect() { const SDL_Rect& r = lpDDSurface->clip_rect; return CRect(r.x, r.y, r.x + r.w, r.y + r.h); }
@@ -190,8 +190,8 @@ public:
     SDL_PixelFormat* GetPixelFormat(void) { return lpDDSurface->format; }
 
 protected:
-    virtual long Lock(struct _DDSURFACEDESC*) const;
-    virtual long Unlock(struct _DDSURFACEDESC*) const;
+    virtual SLONG Lock(struct _DDSURFACEDESC*) const;
+    virtual SLONG Unlock(struct _DDSURFACEDESC*) const;
 
     friend class SB_CBitmapMain;
     friend class SB_CBitmapKey;
@@ -211,19 +211,19 @@ class SB_CCursor
 public:
     SB_CCursor(class SB_CPrimaryBitmap*, class SB_CBitmapCore* = NULL);
     ~SB_CCursor(void);
-    long Create(class SB_CBitmapCore*);
-    long SetImage(class SB_CBitmapCore*);
-    long MoveImage(long, long);
-    long FlipBegin(void);
-    long FlipEnd(void);
-    long Show(bool);
+    SLONG Create(class SB_CBitmapCore*);
+    SLONG SetImage(class SB_CBitmapCore*);
+    SLONG MoveImage(SLONG, SLONG);
+    SLONG FlipBegin(void);
+    SLONG FlipEnd(void);
+    SLONG Show(bool);
 
 private:
-    long BlitImage(long, long);
-    long RestoreBackground(struct SDL_Surface*);
-    long SaveBackground(struct SDL_Surface*);
-    long CreateBackground(void);
-    long CreateSurface(struct SDL_Surface**, long, long);
+    SLONG BlitImage(SLONG, SLONG);
+    SLONG RestoreBackground(struct SDL_Surface*);
+    SLONG SaveBackground(struct SDL_Surface*);
+    SLONG CreateBackground(void);
+    SLONG CreateSurface(struct SDL_Surface**, SLONG, SLONG);
 
     SB_CPrimaryBitmap* Primary;
     SB_CBitmapCore* Cursor;
@@ -240,9 +240,9 @@ public:
     SB_CPrimaryBitmap(void);
     ~SB_CPrimaryBitmap(void);
 
-    long Create(SDL_Renderer**, SDL_Window*, unsigned short, long, long, unsigned char, unsigned short);
-    virtual unsigned long Release(void);
-    long Flip(void);
+    SLONG Create(SDL_Renderer**, SDL_Window*, unsigned short, SLONG, SLONG, unsigned char, unsigned short);
+    virtual ULONG Release(void);
+    SLONG Flip(void);
     void SetPos(struct tagPOINT&);
     struct IDirectDrawSurface* GetLastPage(void);
 
@@ -265,11 +265,11 @@ class SB_CBitmapMain
 public:
     SB_CBitmapMain(SDL_Renderer*);
     ~SB_CBitmapMain(void);
-    unsigned long Release(void);
-    unsigned long CreateBitmap(SB_CBitmapCore**, GfxLib*, __int64, unsigned long);
-    unsigned long CreateBitmap(SB_CBitmapCore**, long, long, unsigned long, unsigned long = 16, unsigned long = 0);
-    unsigned long ReleaseBitmap(SB_CBitmapCore*);
-    unsigned long DelEntry(SB_CBitmapCore*);
+    ULONG Release(void);
+    ULONG CreateBitmap(SB_CBitmapCore**, GfxLib*, __int64, ULONG);
+    ULONG CreateBitmap(SB_CBitmapCore**, SLONG, SLONG, ULONG, ULONG = 16, ULONG = 0);
+    ULONG ReleaseBitmap(SB_CBitmapCore*);
+    ULONG DelEntry(SB_CBitmapCore*);
 
 private:
     SDL_Renderer* Renderer;
@@ -335,35 +335,35 @@ public:
         word Flags;
         word Width;
         word Height;
-        long Unknown1;
-        long BitDepth;
+        SLONG Unknown1;
+        SLONG BitDepth;
         word NumColors;
         word Unknown2;
         word LoChar;
         word HiChar;
         word Unknown3;
-        long szPixels;
-        long szColors;
-        long Unknown4;
-        long szFooter;
+        SLONG szPixels;
+        SLONG szColors;
+        SLONG Unknown4;
+        SLONG szFooter;
     };
 #pragma pack(pop)
 
     SB_CFont(void);
     ~SB_CFont(void);
-    void DrawTextA(class SB_CBitmapCore*, long, long, char*, long = 0, bool = false);
-    void DrawTextWithTabs(class SB_CBitmapCore*, long, long, char*, long = 0, bool = false);
-    long DrawTextBlock(class SB_CBitmapCore*, struct tagRECT*, char*, long = 0, long = 0, bool = false);
-    long PreviewTextBlock(class SB_CBitmapCore*, struct tagRECT*, char*, long = 0, long = 0, bool = false);
-    long DrawTextBlock(class SB_CBitmapCore*, long, long, long, long, char*, long = 0, long = 0, bool = false);
-    long PreviewTextBlock(class SB_CBitmapCore*, long, long, long, long, char*, long = 0, long = 0, bool = false);
-    long GetWidthAt(char*, long, char);
-    long GetWordLength(char*, long);
-    long GetWidth(char*, long);
-    long GetWidth(char);
+    void DrawTextA(class SB_CBitmapCore*, SLONG, SLONG, char*, SLONG = 0, bool = false);
+    void DrawTextWithTabs(class SB_CBitmapCore*, SLONG, SLONG, char*, SLONG = 0, bool = false);
+    SLONG DrawTextBlock(class SB_CBitmapCore*, struct tagRECT*, char*, SLONG = 0, SLONG = 0, bool = false);
+    SLONG PreviewTextBlock(class SB_CBitmapCore*, struct tagRECT*, char*, SLONG = 0, SLONG = 0, bool = false);
+    SLONG DrawTextBlock(class SB_CBitmapCore*, SLONG, SLONG, SLONG, SLONG, char*, SLONG = 0, SLONG = 0, bool = false);
+    SLONG PreviewTextBlock(class SB_CBitmapCore*, SLONG, SLONG, SLONG, SLONG, char*, SLONG = 0, SLONG = 0, bool = false);
+    SLONG GetWidthAt(char*, SLONG, char);
+    SLONG GetWordLength(char*, SLONG);
+    SLONG GetWidth(char*, SLONG);
+    SLONG GetWidth(char);
     bool Load(SDL_Renderer*, char*, struct HPALETTE__* = NULL);
     bool CopyMemToSurface(struct HPALETTE__*);
-    void SetTabulator(struct tagTabs*, unsigned long);
+    void SetTabulator(struct tagTabs*, ULONG);
 
     void SetLineSpace(float LineSpace) { this->LineSpace = LineSpace; }
 
@@ -373,7 +373,7 @@ protected:
     bool GetSurface(struct _DDSURFACEDESC*);
     void ReleaseSurface(struct _DDSURFACEDESC*);
     bool DrawChar(char, bool);
-    bool DrawWord(char*, long);
+    bool DrawWord(char*, SLONG);
     unsigned char* GetDataPtr(void);
     bool CreateFontSurface(SDL_Renderer*);
     bool CopyBitmapToMem(struct tagCreateFont*);

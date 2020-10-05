@@ -610,7 +610,7 @@ SLONG PLAYER::GetMissionRating (bool bAnderer)
                else
                {
                   //Menschlicher Spieler hat Personal:
-                  for (c=0; c<Workers.Workers.AnzEntries(); c++)
+                  for (SLONG c=0; c<Workers.Workers.AnzEntries(); c++)
                   {
                      CWorker &qWorker = Workers.Workers[c];
 
@@ -683,7 +683,7 @@ SLONG PLAYER::GetMissionRating (bool bAnderer)
                __int64 f = 0;
 
                p = Statistiken[STAT_PASSAGIERE].GetAtPastDay(1)-Statistiken[STAT_PASSAGIERE].GetAtPastDay(6);
-               for (c=0; c<min(Sim.Date, 5); c++)
+               for (c=0; c<min((SLONG)Sim.Date, 5); c++)
                   f += Statistiken[STAT_FLUGZEUGE].GetAtPastDay(c+1);
 
                if (f) return (SLONG(p/f)); else return (0);
@@ -716,7 +716,7 @@ SLONG PLAYER::GetMissionRating (bool bAnderer)
                if (bAnderer==0)
                {
                   long anz=0;
-                  for (long c=1; c<=min(29, Sim.Date); c++)
+                  for (long c=1; c<=min(29, (SLONG)Sim.Date); c++)
                   {
                      sum+=SLONG(Statistiken[STAT_AKTIENKURS].GetAtPastDay(c));
                      anz++;
@@ -4803,7 +4803,7 @@ void PLAYER::RobotExecuteAction(void)
                               if (Routen[c].VonCity==Routen[d].VonCity || Routen[c].VonCity==Routen[d].NachCity || Routen[c].NachCity==Routen[d].VonCity || Routen[c].NachCity==Routen[d].NachCity)
                                  IsBuyable[d]=TRUE;
                      }
-               for (d=Routen.AnzEntries()-1; d>=0; d--)
+               for (SLONG d=Routen.AnzEntries()-1; d>=0; d--)
                   if (Routen.IsInAlbum(d) && RentRouten.RentRouten[d].Rang==0 && RentRouten.RentRouten[d].TageMitGering<7)
                      IsBuyable[d]=FALSE;
 
@@ -5599,7 +5599,7 @@ void PLAYER::UpdateWalkSpeed (void)
          if (Workers.Workers[c].Employer==PlayerNum && Workers.Workers[c].Typ==BERATERTYP_FITNESS)
             WalkSpeed+=(Workers.Workers[c].Talent-30)/30;
 
-      Limit (1l, WalkSpeed, 5l);
+      Limit (SLONG(1), WalkSpeed, SLONG(5));
    }
 }
 
@@ -6650,7 +6650,7 @@ bool RobotUse (SLONG FeatureId)
    else if (Sim.Difficulty>=DIFF_ATFS01 && Sim.Difficulty<=DIFF_ATFS10) Level = Sim.Difficulty-DIFF_ATFS01+7+10;
 
    //Tabelle ermitteln für welche Level ein Feature ermittelt wird:
-   char *pFeatureDesc;
+   const char *pFeatureDesc;
    switch (FeatureId)
    {
       //0-5 : Level im Basisspiel

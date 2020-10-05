@@ -99,7 +99,7 @@ bool CRegistryAccess::Open (CString RegistryPath)
 #ifdef WIN32
    Close ();   //Alten Zugriff schlieﬂen
 
-   dword dwDisposition;
+   DWORD dwDisposition;
 
    if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_CURRENT_USER, RegistryPath, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, &dwDisposition))
       return (1); //Erfolg

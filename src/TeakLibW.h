@@ -463,11 +463,6 @@ public:
         return *this;
     }
 
-    operator POINT& ()
-    {
-        return reinterpret_cast<POINT&>(*this);
-    }
-
     operator CPoint& ()
     {
         return reinterpret_cast<CPoint&>(*this);

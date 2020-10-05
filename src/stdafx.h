@@ -14,9 +14,9 @@
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 
-#include "Defines.h"
 #include "stdstring.h"
 typedef CStdStringA CString;
+#include "Defines.h"
 
 #include "TeakLibW.h"
 #include "sbl.h"

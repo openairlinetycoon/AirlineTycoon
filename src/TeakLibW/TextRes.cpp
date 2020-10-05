@@ -5,7 +5,7 @@ const char* ExcTextResStaticOverflow    = "TextRes is too long: %lx:%lx";
 const char* ExcTextResFormat            = "Bad TextRes format: %s (%li)";
 const char* ExcTextResNotFound          = "TextRes not found: %lx:%lx";
 
-long gLanguage;
+SLONG gLanguage;
 
 void LanguageSpecifyString(char *Dst)
 {

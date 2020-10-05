@@ -6,8 +6,8 @@
 #include "stdafx.h"
 #include "glstart.h"
 #include "atnet.h"
-#include "sblib\include\SbLib.h"
-#include "sblib\include\network.h"
+#include "SbLib.h"
+#include "network.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

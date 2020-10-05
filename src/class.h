@@ -1084,8 +1084,8 @@ class /**/CITIES : public ALBUM<CITY>
       SLONG CalcFlugdauer (long CityId1, long CityId2, long Speed);
       SLONG GetRandomUsedIndex (TEAKRAND *pRand=NULL);
       SLONG GetRandomUsedIndex (SLONG AreaCode, TEAKRAND *pRand=NULL);
-      ULONG GetIdFromName (char *Name);
-      ULONG GetIdFromNames (char *Name, ...);
+      ULONG GetIdFromName (const char *Name);
+      ULONG GetIdFromNames (const char *Name, ...);
       void  UseRealKuerzel (BOOL Real);
 };
 

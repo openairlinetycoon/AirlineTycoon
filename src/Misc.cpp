@@ -3,9 +3,15 @@
 //============================================================================================
 #include "stdafx.h"
 #include <assert.h>
+
+// Avoid conflict with STL headers
+#undef min
+#undef max
+
 #include <chrono>
 #include <filesystem>
 #include <locale>
+#include <algorithm>
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -454,7 +460,7 @@ SLONG CalculateFlightCostRechnerisch (SLONG VonCity, SLONG NachCity, SLONG Verbr
    //Kerosin aus dem Vorrat:
    if (PlayerNum!=-1 && Sim.Players.Players[(SLONG)PlayerNum].TankOpen)
    {
-      SLONG tmp = min (Sim.Players.Players[(SLONG)PlayerNum].TankInhalt, Kerosin); 
+      SLONG tmp = std::min (Sim.Players.Players[(SLONG)PlayerNum].TankInhalt, Kerosin); 
       Kosten  += SLONG(Sim.Players.Players[(SLONG)PlayerNum].TankPreis*tmp);
 
       Kerosin -= tmp;
@@ -487,7 +493,7 @@ SLONG CalculateFlightCost (SLONG VonCity, SLONG NachCity, SLONG Verbrauch, SLONG
    //Kerosin aus dem Vorrat:
    if (PlayerNum!=-1 && Sim.Players.Players[(SLONG)PlayerNum].TankOpen)
    {
-      SLONG tmp = min (Sim.Players.Players[(SLONG)PlayerNum].TankInhalt, Kerosin); 
+      SLONG tmp = std::min (Sim.Players.Players[(SLONG)PlayerNum].TankInhalt, Kerosin); 
 
       Kerosin -= tmp;
    }
@@ -519,7 +525,7 @@ SLONG CalculateRealFlightCost (SLONG VonCity, SLONG NachCity, SLONG Verbrauch, S
    //Kerosin aus dem Vorrat:
    if (Sim.Players.Players[(SLONG)PlayerNum].TankOpen)
    {
-      SLONG tmp = min (Sim.Players.Players[(SLONG)PlayerNum].TankInhalt, Kerosin); 
+      SLONG tmp = std::min (Sim.Players.Players[(SLONG)PlayerNum].TankInhalt, Kerosin); 
 
       Kerosin -= tmp;
    }
@@ -1387,7 +1393,7 @@ void CMessages::PaintMessage (void)
          {
             if (c<3 && Messages[0].Mood!=-1)
             {
-               c=max(1,c);
+               c=std::max(SLONG(1),c);
 
                SprechblaseBm.ReSize (::SprechblasenBms[c+3].Size);
                SprechblaseBm.BlitFrom (::SprechblasenBms[c+3]);
@@ -1692,7 +1698,7 @@ CString Insert1000erDots64 (__int64 Value)
          Dot='.';
    }
 
-	sprintf(Tmp,"%I64i",Value);
+	sprintf(Tmp,"%lli",Value);
 
 	l=short(strlen(Tmp));
 

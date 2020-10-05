@@ -87,7 +87,7 @@ void DrawCityTip (SBBM &TipBm, ULONG CityId)
       if (Cities.GetIdFromIndex(CityId)!=(ULONG)Sim.HomeAirportId)
       {
          if (Sim.Players.Players[c].RentCities.RentCities[(SLONG)Cities(CityId)].Rang!=0)
-            TipBm.PrintAt (bprintf ("%li.%s", (LPCTSTR)Sim.Players.Players[c].RentCities.RentCities[(SLONG)Cities(CityId)].Rang, (LPCTSTR)Sim.Players.Players[c].Airline), FontSmallGrey, TEC_FONT_LEFT, CityPos.x, CityPos.y+11*(Sim.Players.Players[c].RentCities.RentCities[(SLONG)Cities(CityId)].Rang+1), 278, 181);
+            TipBm.PrintAt (bprintf ("%li.%s", Sim.Players.Players[c].RentCities.RentCities[(SLONG)Cities(CityId)].Rang, (LPCTSTR)Sim.Players.Players[c].Airline), FontSmallGrey, TEC_FONT_LEFT, CityPos.x, CityPos.y+11*(Sim.Players.Players[c].RentCities.RentCities[(SLONG)Cities(CityId)].Rang+1), 278, 181);
       }
       else
          TipBm.PrintAt (bprintf ("%s", (LPCTSTR)Sim.Players.Players[c].Airline), FontSmallGrey, TEC_FONT_LEFT, CityPos.x, CityPos.y+11*(c+2), 278, 181);
@@ -125,7 +125,7 @@ void DrawCityTipContents (SBBM &TipBm, ULONG CityId, XY Headline, XY Contents, X
       if (Cities.GetIdFromIndex(Cities(CityId))!=(ULONG)Sim.HomeAirportId)
       {
          if (Sim.Players.Players[c].RentCities.RentCities[(SLONG)Cities(CityId)].Rang!=0)
-            TipBm.PrintAt (bprintf ("%li.%s", (LPCTSTR)Sim.Players.Players[c].RentCities.RentCities[(SLONG)Cities(CityId)].Rang, (LPCTSTR)Sim.Players.Players[c].Airline), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+122+11*(Sim.Players.Players[c].RentCities.RentCities[(SLONG)Cities(CityId)].Rang+1), TipBm.Size.x, TipBm.Size.y);
+            TipBm.PrintAt (bprintf ("%li.%s", Sim.Players.Players[c].RentCities.RentCities[(SLONG)Cities(CityId)].Rang, (LPCTSTR)Sim.Players.Players[c].Airline), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+122+11*(Sim.Players.Players[c].RentCities.RentCities[(SLONG)Cities(CityId)].Rang+1), TipBm.Size.x, TipBm.Size.y);
       }
       else
          TipBm.PrintAt (bprintf ("%s", (LPCTSTR)Sim.Players.Players[c].Airline), *pFont, TEC_FONT_LEFT, Contents.x, Contents.y+122+11*(c+2), TipBm.Size.x, TipBm.Size.y);

@@ -203,8 +203,8 @@ void CLANS::ReInit (const CString &TabFilename)
                }
                else
                {
-                  unsigned __int64 id=GetIdFromString(DirPhaseLists[c]);
-                  unsigned __int64 add;
+                  unsigned long long id=GetIdFromString(DirPhaseLists[c]);
+                  unsigned long long add;
 
                        if (id>=0x01ff00ff00ff00ff) add=7;
                   else if (id>=0x01ff00ff00ff00)   add=6;
@@ -413,7 +413,7 @@ void CLAN::BlitLargeAt (SBBM &Offscreen, SLONG Dir, SLONG Phase, XY ScreenPos)
       {
          if (ScreenPos.x>-60 && ScreenPos.x<700)
          {
-            Size = XY(pbm->Size.x/2, pbm->Size.y-1)*2l;
+            Size = XY(pbm->Size.x/2, pbm->Size.y-1)*SLONG(2);
             SDL_Rect SrcRect = { 0,0,pbm->pBitmap->GetXSize(),pbm->pBitmap->GetYSize() };
             SDL_Rect DestRect = { ScreenPos.x-Size.x, ScreenPos.y-pbm->pBitmap->GetYSize()*2, ScreenPos.x-Size.x+pbm->pBitmap->GetXSize()*2, ScreenPos.y };
             SDL_Rect ClipRect = Offscreen.pBitmap->GetSurface()->clip_rect;
@@ -497,7 +497,7 @@ TEAKFILE &operator >> (TEAKFILE &File, CLAN &Clan)
 //--------------------------------------------------------------------------------------------
 UBYTE CLANS::GetCustomerId (SLONG Browned, SLONG Koffer, TEAKRAND *pRand)
 {
-	SLONG Num, Rnd;
+	SLONG Num, c, Rnd;
 
    if (CheatMoreNuns)
    {
@@ -508,7 +508,7 @@ UBYTE CLANS::GetCustomerId (SLONG Browned, SLONG Koffer, TEAKRAND *pRand)
 
 	Num = 0;
 
-   for (SLONG c=0; c<(SLONG)AnzEntries(); c++)
+   for (c=0; c<(SLONG)AnzEntries(); c++)
       if (IsInAlbum (c) && (*this)[c].TodayInGame && (Koffer==sign((*this)[c].HasSuitcase) || (Koffer==99 && (*this)[c].HasSuitcase<=0)) && ((((*this)[c].Type==CLAN_FEMALE || (*this)[c].Type==CLAN_MALE) && Browned<2) || (((*this)[c].Type==CLAN_BROWNFEMALE || (*this)[c].Type==CLAN_BROWNMALE) && Browned>0)))
          Num+=(*this)[c].Wkeit;
 
@@ -534,11 +534,11 @@ UBYTE CLANS::GetCustomerId (SLONG Browned, SLONG Koffer, TEAKRAND *pRand)
 //--------------------------------------------------------------------------------------------
 UBYTE CLANS::GetCustomerIdByGroup (SLONG Group)
 {
-	SLONG Num,   Rnd;
+	SLONG Num, c, Rnd;
 
 	Num = 0;
 
-   for (SLONG c=0; c<(SLONG)AnzEntries(); c++)
+   for (c=0; c<(SLONG)AnzEntries(); c++)
       if (IsInAlbum (c) && (*this)[c].TodayInGame && Group==(*this)[c].Group)
          Num++;
 
@@ -1310,7 +1310,7 @@ void PERSON::DoOneCustomerStep (void)
                }
                else
                {
-                  SLONG ty;
+                  SLONG c, ty;
 
                   if (Position.x<Target.x) //nach rechts
                   {
@@ -1328,7 +1328,7 @@ void PERSON::DoOneCustomerStep (void)
                            else
                            {
                               //Prüfen, ob auf der gemeinsamen Innenspur Platz ist...
-                              for (SLONG c=0; c<5; c++)
+                              for (c=0; c<5; c++)
                                  if (((Airport.iPlateDir[12+((ArrayPos.x+c)<<4)]==3 || Airport.iPlateDir[12+((ArrayPos.x+c)<<4)]==254) && (Airport.iPlate[12+((ArrayPos.x+c)<<4)]&2)) || (Airport.iPlate[12+((ArrayPos.x+c)<<4)]&64)==0)
                                     break;
 
@@ -1345,7 +1345,7 @@ void PERSON::DoOneCustomerStep (void)
                            else if (ArrayPos.y+5==12 && (Dir==1 || Dir==0))
                            {
                               //Prüfen, ob auf der gemeinsamen Innenspur Platz ist...
-                              for (SLONG c=0; c<5; c++)
+                              for (c=0; c<5; c++)
                                  if ((Airport.iPlateDir[12+((ArrayPos.x+c)<<4)]==3 && (Airport.iPlate[12+((ArrayPos.x+c)<<4)]&2)) || (Airport.iPlate[12+((ArrayPos.x+c)<<4)]&64)==0)
                                     break;
 
@@ -1504,13 +1504,13 @@ void PERSON::DoOneCustomerStep (void)
 
                      if (qClan.HasSuitcase<0 && Clans.IsInAlbum(ClanId-1) && Clans[(SLONG)(ClanId-1)].HasSuitcase==-qClan.HasSuitcase)
                      {
-                        SLONG n = PersonalRand.Rand(Airport.NumBeltSpots);
+                        SLONG n = PersonalRand.Rand(Airport.NumBeltSpots), c;
 
                         //Max 2 Personen an die gleiche Stelle lassen:
                         if (Sim.RoomBusy[ROOM_BELT_X1+n]==0 || Sim.RoomBusy[ROOM_BELT_X1+n]==1)
                         {
                            //log: hprintf ("Add Suitcase at n=%li..", n);
-                           for (SLONG c=0; c<SLONG(Airport.Runes.AnzEntries()); c++)
+                           for (c=0; c<SLONG(Airport.Runes.AnzEntries()); c++)
                               if (Airport.Runes[c].BrickId==(RUNE_2SHOP|0x10000000) && Airport.Runes[c].Par==ROOM_BELT_X1+n)
                               {
                                  State    = PERSON_2SHOP;

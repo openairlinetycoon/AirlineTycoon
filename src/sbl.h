@@ -3,8 +3,8 @@
 #include <list>
 #include <map>
 
-typedef UWORD word;
-typedef ULONG dword;
+typedef unsigned short word;
+typedef unsigned int dword;
 
 // Can you spot the bug? (x is executed two more times just to get the error codes)
 // Bonus points if you spot that FAILED() should've been used to check the HRESULT.

@@ -12,6 +12,7 @@ if(MSVC)
 else()
     add_compile_options("-fno-for-scope")
     add_compile_options("-fpermissive")
+    add_compile_options("-Wno-conversion-null")
 endif()
 
 # Add source to this project's executable.

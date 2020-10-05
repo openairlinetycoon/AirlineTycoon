@@ -5,6 +5,11 @@
 #include "cd_prot.h"
 #include "SecurityManager.h"
 #include "fillfile.h"
+
+// Avoid conflict with STL headers
+#undef min
+#undef max
+
 #include <chrono>
 
 extern SLONG IconsPos[];  //Referenziert globe.cpp

@@ -184,7 +184,7 @@ CGlobe::CGlobe (BOOL bHandy, ULONG PlayerNum) : CPlaner (bHandy, PlayerNum, Sim.
       qBlock.RefreshData (PlayerNum);
       qBlock.Refresh (PlayerNum, FALSE);
 
-      Limit (SLONG(-Sim.Players.Players[(SLONG)PlayerNum].Blocks[Id].Bitmap.Size.x/2), (SLONG)Sim.Players.Players[(SLONG)PlayerNum].Blocks[Id].ScreenPos.x, (SLONG)(640-Sim.Players.Players[(SLONG)PlayerNum].Blocks[Id].Bitmap.Size.x/2));
+      Limit (SLONG(-Sim.Players.Players[(SLONG)PlayerNum].Blocks[Id].Bitmap.Size.x/2), Sim.Players.Players[(SLONG)PlayerNum].Blocks[Id].ScreenPos.x, (SLONG)(640-Sim.Players.Players[(SLONG)PlayerNum].Blocks[Id].Bitmap.Size.x/2));
       Limit ((SLONG)-20, Sim.Players.Players[(SLONG)PlayerNum].Blocks[Id].ScreenPos.y, (SLONG)400);
    }
 
@@ -207,7 +207,7 @@ CGlobe::CGlobe (BOOL bHandy, ULONG PlayerNum) : CPlaner (bHandy, PlayerNum, Sim.
       qBlock.Refresh (PlayerNum, FALSE);
 
       Limit (SLONG(-qBlock.Bitmap.Size.x/2), qBlock.ScreenPos.x, (SLONG)(640-qBlock.Bitmap.Size.x/2));
-      Limit ((SLONG)-20, (SLONG)qBlock.ScreenPos.y, (SLONG)400);
+      Limit ((SLONG)-20, qBlock.ScreenPos.y, (SLONG)400);
    }
 
    Sim.Players.Players[Sim.localPlayer].UpdateAuftragsUsage();

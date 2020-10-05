@@ -627,7 +627,8 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                      Array.ReSize (maybeArray.AnzEntries());
 
-                     for (long c=0, d=0; c<(SLONG)maybeArray.AnzEntries(); c++)
+                     long c, d;
+                     for (c=0, d=0; c<(SLONG)maybeArray.AnzEntries(); c++)
                      {
                         CXPlane plane;
 

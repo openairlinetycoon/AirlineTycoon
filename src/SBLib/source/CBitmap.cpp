@@ -394,7 +394,7 @@ SLONG SB_CPrimaryBitmap::Flip()
     return 0;
 }
 
-void SB_CPrimaryBitmap::SetPos(struct tagPOINT&)
+void SB_CPrimaryBitmap::SetPos(POINT)
 {
 }
 

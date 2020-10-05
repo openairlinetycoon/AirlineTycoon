@@ -237,7 +237,7 @@ public:
     SLONG Create(SDL_Renderer**, SDL_Window*, unsigned short, SLONG, SLONG, unsigned char, unsigned short);
     virtual ULONG Release(void);
     SLONG Flip(void);
-    void SetPos(struct tagPOINT&);
+    void SetPos(POINT);
     struct IDirectDrawSurface* GetLastPage(void);
 
     void AssignCursor(SB_CCursor* c) { Cursor = c; }

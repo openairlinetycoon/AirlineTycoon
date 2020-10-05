@@ -25,11 +25,11 @@ class CPlanePartRelation
       long  Note3;          // [CSV] dito
       long  zAdd;
       long  Noise;          // [CSV] Zusätzlicher Lärm
-      char *Slot;           // Dieser Slot wird benötigt (BCHLMR)
-      char *RulesOutSlots;  // Und diese Slots werden blockiert
+      const char *Slot;           // Dieser Slot wird benötigt (BCHLMR)
+      const char *RulesOutSlots;  // Und diese Slots werden blockiert
 
    public:
-      CPlanePartRelation (long _Id, ULONG _FromBuildIndex, ULONG _ToBuildIndex, XY _Offset2d, XY _Offset3d, long _Note1, long _Note2, long _Note3, long _zAdd, long _Noise, char *_Slot, char *_RulesOutSlots)
+      CPlanePartRelation (long _Id, ULONG _FromBuildIndex, ULONG _ToBuildIndex, XY _Offset2d, XY _Offset3d, long _Note1, long _Note2, long _Note3, long _zAdd, long _Noise, const char *_Slot, const char *_RulesOutSlots)
       { Id=_Id; FromBuildIndex=_FromBuildIndex; ToBuildIndex=_ToBuildIndex; Offset2d=_Offset2d; Offset3d=_Offset3d; Note1=_Note1; Note2=_Note2; Note3=_Note3; zAdd=_zAdd; Noise=_Noise, Slot=_Slot; RulesOutSlots=_RulesOutSlots; }
 
       void    FromString (CString str);
@@ -41,7 +41,7 @@ class CPlaneBuild
 {
    public:
       long  Id;          // [csv]
-      char *Shortname;   // [csv] z.B. B1
+      const char *Shortname;   // [csv] z.B. B1
       long  Cost;        // [CSV] Soviel kostet das hier
       long  Weight;      // [CSV] Soviel wiegt dieses Teil (Beispiel 149pass=62t 170pass=68t 272pass=148t 440pass=135t 550pass=160t)
       long  Power;       // [CSV] Soviel Power hat es, falls es ein Triebwerk ist
@@ -55,7 +55,7 @@ class CPlaneBuild
    public:
       CPlaneBuild () { Shortname=NULL; }
 
-      CPlaneBuild (long _Id, char *_Shortname, long _Cost, long _Weight, long _Power, long _Noise, long _Wartung, long _Passagiere, long _Verbrauch, long _BitmapIndex, long _zPos)
+      CPlaneBuild (long _Id, const char *_Shortname, long _Cost, long _Weight, long _Power, long _Noise, long _Wartung, long _Passagiere, long _Verbrauch, long _BitmapIndex, long _zPos)
       { Id=_Id; Shortname=_Shortname; Cost=_Cost; Weight=_Weight; Power=_Power; Noise=_Noise; Wartung=_Wartung; Passagiere=_Passagiere; Verbrauch=_Verbrauch; BitmapIndex=_BitmapIndex; zPos=_zPos; }
 
       void    FromString (CString str);

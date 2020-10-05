@@ -888,13 +888,13 @@ void CLaptop::OnPaint()
       ///////////////////////////////////////////////////////////////////////////////////////////
       if (CurrentPostItType!=0)
       {
-         XY PostItPos = gMousePosition-PostItBm.Size/2l;
+         XY PostItPos = gMousePosition-PostItBm.Size/SLONG(2);
 
          if (ClientPos.IfIsWithin (24,17,167,149))
          {
             //An diese Stelle (links vom Cursor) kommt der Flug hin:
-            SLONG Date=Sim.Date+((ClientPos-PostItBm.Size/2l+XY(3,9)).y-17)/19;
-            SLONG Time=((ClientPos-PostItBm.Size/2l+XY(3,9)).x-24)/6;
+            SLONG Date=Sim.Date+((ClientPos-PostItBm.Size/SLONG(2)+XY(3,9)).y-17)/19;
+            SLONG Time=((ClientPos-PostItBm.Size/SLONG(2)+XY(3,9)).x-24)/6;
 
             PostItPos.x = Time*6+24+1;
             PostItPos.y = (Date-Sim.Date)*19+17+1;

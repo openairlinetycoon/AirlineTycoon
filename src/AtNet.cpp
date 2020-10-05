@@ -7,8 +7,8 @@
 #include "atnet.h"
 #include "Buero.h"
 
-#include "sblib\include\SbLib.h"
-#include "sblib\include\network.h"
+#include "SbLib.h"
+#include "network.h"
 extern SBNetwork gNetwork;
 
 #define GFX_MENU			 (0x00000000554e454d)
@@ -1895,7 +1895,8 @@ void NetGenericSync (long SyncId)
 
     while (1)
     {
-       for (long c=0; c<4; c++)
+       long c;
+       for (c=0; c<4; c++)
           if (Sim.Players.Players[c].Owner!=1 && GenericSyncIds[c]!=SyncId && !Sim.Players.Players[c].IsOut)
              break;
 

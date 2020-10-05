@@ -96,7 +96,7 @@ CRouteBox::CRouteBox(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum
                   if (Routen[c].VonCity==Routen[d].VonCity || Routen[c].VonCity==Routen[d].NachCity || Routen[c].NachCity==Routen[d].VonCity || Routen[c].NachCity==Routen[d].NachCity)
                      IsBuyable[d]=TRUE;
          }
-   for (d=Routen.AnzEntries()-1; d>=0; d--)
+   for (SLONG d=Routen.AnzEntries()-1; d>=0; d--)
       if (Routen.IsInAlbum(d) && qRRouten.RentRouten[d].Rang==0 && qRRouten.RentRouten[d].TageMitGering<7)
          IsBuyable[d]=FALSE;
 
@@ -211,8 +211,8 @@ void CRouteBox::OnPaint()
             XY von  = XY(Cities[Routen[c].VonCity].MapPosition);
             XY nach = XY(Cities[Routen[c].NachCity].MapPosition);
 
-            XY p1 = von*MapScale/1000l;
-            XY p2 = nach*MapScale/1000l;
+            XY p1 = von*MapScale/SLONG(1000);
+            XY p2 = nach*MapScale/SLONG(1000);
 
             p1.x=p1.x*42/60;  p1.y=p1.y*95/90;
             p2.x=p2.x*42/60;  p2.y=p2.y*95/90;
@@ -449,12 +449,12 @@ void CRouteBox::RepaintTip (void)
             for (c=0; c<4; c++)
                if (Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang)
                   if (Sim.Players.Players[(SLONG)PlayerNum].HasBerater(BERATERTYP_INFO))
-                     TipBm.PrintAt ((CString)bprintf ("%li. %s (%li%%)", (LPCTSTR)Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang, (LPCTSTR)Sim.Players.Players[c].AirlineX, (LPCTSTR)Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].RoutenAuslastung), FontSmallBlack, TEC_FONT_LEFT, XY(4,114+Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang*12), XY(172,166));
+                     TipBm.PrintAt ((CString)bprintf ("%li. %s (%li%%)", Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang, (LPCTSTR)Sim.Players.Players[c].AirlineX, Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].RoutenAuslastung), FontSmallBlack, TEC_FONT_LEFT, XY(4,114+Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang*12), XY(172,166));
                   else
                      if (c==PlayerNum)
-                        TipBm.PrintAt ((CString)bprintf ("%li. %s", (LPCTSTR)Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang, (LPCTSTR)Sim.Players.Players[c].AirlineX), FontSmallBlack, TEC_FONT_LEFT, XY(4,114+Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang*12), XY(172,166));
+                        TipBm.PrintAt ((CString)bprintf ("%li. %s", Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang, (LPCTSTR)Sim.Players.Players[c].AirlineX), FontSmallBlack, TEC_FONT_LEFT, XY(4,114+Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang*12), XY(172,166));
                      else
-                        TipBm.PrintAt ((CString)bprintf ("%li. %s", (LPCTSTR)Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang, StandardTexte.GetS (TOKEN_ROUTE, 997)), FontSmallBlack, TEC_FONT_LEFT, XY(4,114+Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang*12), XY(172,166));
+                        TipBm.PrintAt ((CString)bprintf ("%li. %s", Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang, StandardTexte.GetS (TOKEN_ROUTE, 997)), FontSmallBlack, TEC_FONT_LEFT, XY(4,114+Sim.Players.Players[c].RentRouten.RentRouten[(SLONG)Routen(CurrentTip)].Rang*12), XY(172,166));
             break;
          }
    }
@@ -500,13 +500,13 @@ void CRouteBox::RepaintMap (void)
                if (!Sim.Players.Players[d].IsOut && Sim.Players.Players[d].RentRouten.RentRouten[c].Rang && (DisplayPlayer&(1<<d)))
                   HardwareColors[NumHardwareColors++]=MapBm.pBitmap->GetHardwarecolor (AktienKursLineColor[d]);
 
-            if (NumHardwareColors==0) HardwareColors[NumHardwareColors++]=MapBm.pBitmap->GetHardwarecolor (CanHaveIt ? 0xffffff : (0x5e5e5e+0xd0a890)/2);
+            if (NumHardwareColors==0) HardwareColors[NumHardwareColors++]=MapBm.pBitmap->GetHardwarecolor (CanHaveIt ? 0xffffff : (0x5e5e5e + 0xd0a890)/2);
 
             XY von  = XY(Cities[Routen[c].VonCity].MapPosition);
             XY nach = XY(Cities[Routen[c].NachCity].MapPosition);
 
-            XY p1 = von*MapScale/1000l;
-            XY p2 = nach*MapScale/1000l;
+            XY p1 = von*MapScale/SLONG(1000);
+            XY p2 = nach*MapScale/SLONG(1000);
 
             p1.x=p1.x*42/60;  p1.y=p1.y*95/90;
             p2.x=p2.x*42/60;  p2.y=p2.y*95/90;
@@ -537,7 +537,7 @@ void CRouteBox::RepaintMap (void)
    if (Sim.Difficulty==DIFF_NORMAL)
       for (c=0; c<=5; c++)
       {
-         XY p1 = XY(Cities[Sim.MissionCities[c]].MapPosition)*MapScale/1000l;
+         XY p1 = XY(Cities[Sim.MissionCities[c]].MapPosition)*MapScale/SLONG(1000);
 
          p1.x=p1.x*42/60;  p1.y=p1.y*95/90;
 

@@ -5,9 +5,14 @@
 #include "Editor.h"
 #include "glEditor.h"
 #include "atnet.h"
+
+#undef min
+#undef max
+
 #include <string>
 #include <fstream>
 #include <filesystem>
+#include <algorithm>
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -833,7 +838,7 @@ void CEditor::OnPaint()
       GripRelation     = -1;
       GripRelationB    = -1;
       GripRelationPart = -1;
-      GripAtPos        = gMousePosition-PartBms[GetPlaneBuild(PartUnderCursor).BitmapIndex].Size/2l;
+      GripAtPos        = gMousePosition-PartBms[GetPlaneBuild(PartUnderCursor).BitmapIndex].Size/SLONG(2);
 
       if (PartUnderCursorB!="")
          GripAtPosB = GripAtPos+XY(PartBms[GetPlaneBuild(PartUnderCursor).BitmapIndex].Size.x*3/4, -PartBms[GetPlaneBuild(PartUnderCursorB).BitmapIndex].Size.y);
@@ -849,7 +854,7 @@ void CEditor::OnPaint()
                //Ist die Von-Seite ein Part oder der Desktop?
                if (gPlanePartRelations[c].FromBuildIndex==-1)
                {
-                  GripToSpot   =gPlanePartRelations[c].Offset3d-PartBms[GetPlaneBuild(PartUnderCursor).BitmapIndex].Size/2l;
+                  GripToSpot   =gPlanePartRelations[c].Offset3d-PartBms[GetPlaneBuild(PartUnderCursor).BitmapIndex].Size/SLONG(2);
                   GripToSpot2d =gPlanePartRelations[c].Offset2d;
 
                   if ((gMousePosition-GripToSpot).abs()<BestDist*2)
@@ -878,9 +883,9 @@ void CEditor::OnPaint()
                            GripToSpot   = Plane.Parts[d].Pos3d+gPlanePartRelations[c].Offset3d;
                            GripToSpot2d = Plane.Parts[d].Pos2d+gPlanePartRelations[c].Offset2d;
 
-                           if ((gMousePosition-GripToSpot-PartBms[GetPlaneBuild(PartUnderCursor).BitmapIndex].Size/2l).abs()<BestDist)
+                           if ((gMousePosition-GripToSpot-PartBms[GetPlaneBuild(PartUnderCursor).BitmapIndex].Size/SLONG(2)).abs()<BestDist)
                            {
-                              BestDist         = (gMousePosition-GripToSpot-PartBms[GetPlaneBuild(PartUnderCursor).BitmapIndex].Size/2l).abs();
+                              BestDist         = (gMousePosition-GripToSpot-PartBms[GetPlaneBuild(PartUnderCursor).BitmapIndex].Size/SLONG(2)).abs();
                               GripAtPos        = GripToSpot;
                               GripAtPos2d      = GripToSpot2d;
                               GripRelation     = c;
@@ -1351,7 +1356,8 @@ void CEditor::DoLButtonWork (UINT nFlags, CPoint point)
 
          while (1)
          {
-            for (long c=0; c<(long)Plane.Parts.AnzEntries(); c++)
+            long c;
+            for (c=0; c<(long)Plane.Parts.AnzEntries(); c++)
                if (Plane.Parts.IsInAlbum(c))
                   //if ((Plane.Parts[c].ParentShortname!="" && !Plane.Parts.IsShortnameInAlbum(Plane.Parts[c].ParentShortname)) || (Plane.Parts[c].ParentShortname!="" && PartUnderCursor[0]=='R' && ((gPlanePartRelations[Plane.Parts[c].ParentRelationId].Id==rel+200 && rel>=400 && rel<600) || (gPlanePartRelations[Plane.Parts[c].ParentRelationId].Id==rel-200 && rel>=600 && rel<800))))
                   if ((Plane.Parts[c].ParentShortname!="" && !Plane.Parts.IsShortnameInAlbum(Plane.Parts[c].ParentShortname)) || (Plane.Parts[c].ParentShortname!="" && PartUnderCursor[0]=='R' && (gPlanePartRelations[Plane.Parts[c].ParentRelationId].Id==rel+200 && rel>=400 && rel<600) || (gPlanePartRelations[Plane.Parts[c].ParentRelationId].Id==rel-200 && rel>=600 && rel<800) || (PartUnderCursor[0]=='M' && rel>=700 && rel<=1400 && abs(gPlanePartRelations[Plane.Parts[c].ParentRelationId].Id-rel)==10 && abs(relnr-Plane.Parts[c].ParentRelationId)==1)))
@@ -1454,8 +1460,8 @@ again_w:
 //--------------------------------------------------------------------------------------------
 void CEditor::DeleteCurrent(void)
 {
-   //try { unlink (FullFilename (Plane.Name+".plane", MyPlanePath)); }
-   try { unlink (PlaneFilename); }
+   //try { std::remove (FullFilename (Plane.Name+".plane", MyPlanePath)); }
+   try { std::remove (PlaneFilename); }
    catch (...) {}
 
    Plane.Clear();
@@ -1515,7 +1521,8 @@ void CEditor::OnRButtonDown(UINT nFlags, CPoint point)
 
                while (1)
                {
-                  for (long c=0; c<(long)Plane.Parts.AnzEntries(); c++)
+                  long c;
+                  for (c=0; c<(long)Plane.Parts.AnzEntries(); c++)
                      if (Plane.Parts.IsInAlbum(c))
                         if ((Plane.Parts[c].ParentShortname!="" && !Plane.Parts.IsShortnameInAlbum(Plane.Parts[c].ParentShortname)) || (Plane.Parts[c].ParentShortname!="" && PartUnderCursor[0]=='R' && (gPlanePartRelations[Plane.Parts[c].ParentRelationId].Id==rel+200 && rel>=400 && rel<600) || (gPlanePartRelations[Plane.Parts[c].ParentRelationId].Id==rel-200 && rel>=600 && rel<800) || (PartUnderCursor[0]=='M' && rel>=700 && rel<=1400 && abs(gPlanePartRelations[Plane.Parts[c].ParentRelationId].Id-rel)==10 && abs(relnr-Plane.Parts[c].ParentRelationId)==1)))
                         {
@@ -1766,7 +1773,7 @@ long CXPlane::CalcPiloten (void)
 {
    long c, piloten=0;
 
-   for (c=0; c<(SLONG)Parts.AnzEntries(); c++)
+   for (c=0; c<Parts.AnzEntries(); c++)
       if (Parts.IsInAlbum(c))
       {
          for (long pass=1; pass<=3; pass++)
@@ -1786,7 +1793,7 @@ long CXPlane::CalcPiloten (void)
          }
       }
 
-   return (max(1,piloten));
+   return (std::max(1l,piloten));
 }
 
 //--------------------------------------------------------------------------------------------
@@ -1796,7 +1803,7 @@ long CXPlane::CalcBegleiter (void)
 {
    long c, begleiter=0;
 
-   for (c=0; c<(SLONG)Parts.AnzEntries(); c++)
+   for (c=0; c<Parts.AnzEntries(); c++)
       if (Parts.IsInAlbum(c))
       {
          for (long pass=1; pass<=3; pass++)
@@ -1816,7 +1823,7 @@ long CXPlane::CalcBegleiter (void)
          }
       }
 
-   return (max(1,begleiter));
+   return (std::max(1l,begleiter));
 }
 
 //--------------------------------------------------------------------------------------------

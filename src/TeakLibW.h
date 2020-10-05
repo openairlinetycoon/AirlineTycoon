@@ -994,7 +994,21 @@ public:
         return Id;
     }
 
+    unsigned long operator*=(T&& rhs)
+    {
+        unsigned long Id = TeakAlbumFrontAddT(Ids, Values->AnzEntries(), Name, GetUniqueId());
+        (*this)[Id] = rhs;
+        return Id;
+    }
+
     unsigned long operator+=(T& rhs)
+    {
+        unsigned long Id = TeakAlbumAddT(Ids, Values->AnzEntries(), Name, GetUniqueId());
+        (*this)[Id] = rhs;
+        return Id;
+    }
+
+    unsigned long operator+=(T&& rhs)
     {
         unsigned long Id = TeakAlbumAddT(Ids, Values->AnzEntries(), Name, GetUniqueId());
         (*this)[Id] = rhs;

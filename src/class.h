@@ -9,6 +9,7 @@ typedef BUFFER<UBYTE> BUFFER_UBYTE;
 
 class  CPlane;
 class  CPlaner;
+class  CStdRaum;
 
 extern SLONG                   MouseWait;
 //SLONG  ReadTimeStampCounter (void);

@@ -17,8 +17,8 @@ public:
 
     SLONG        FrameNum;
     DWORD        FrameNext;
-    ULONG        Width;
-    ULONG        Height;
+    unsigned long Width;
+    unsigned long Height;
 
 // Overrides
 	// ClassWizard generated virtual function overrides

@@ -594,7 +594,7 @@ void DrawAuftragTipContents (SLONG PlayerNum, SBBM &TipBm, SBBMS *pPlaneTips, CA
       }
 
       Pos=NachPos-VonPos;
-      if (Pos.abs()>0) Pos=Pos*10l/SLONG(Pos.abs());
+      if (Pos.abs()>0) Pos=Pos*SLONG(10/Pos.abs());
 
       p.x= ((-Pos.y)+Pos.x)/2;
       p.y= (( Pos.x)+Pos.y)/2;
@@ -782,7 +782,7 @@ void DrawFrachtTipContents (SLONG PlayerNum, SBBM &TipBm, SBBMS *pPlaneTips, CFr
       }
 
       Pos=NachPos-VonPos;
-      if (Pos.abs()>0) Pos=Pos*10l/SLONG(Pos.abs());
+      if (Pos.abs()>0) Pos=Pos*SLONG(10/Pos.abs());
 
       p.x= ((-Pos.y)+Pos.x)/2;
       p.y= (( Pos.x)+Pos.y)/2;

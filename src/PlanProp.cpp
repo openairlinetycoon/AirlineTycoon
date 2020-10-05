@@ -177,8 +177,8 @@ void CPlaneProps::OnPaint()
          //Groﬂes Fenster (links):
          if (qPlane.DecoTarget<2) RoomBm.BlitFrom (Floors[qPlane.DecoTarget], 0+ScrollOffsetX, 27);
          RoomBm.BlitFromT (Seats[qPlane.SitzeTarget*3+qPlane.TablettsTarget], SeatOffsets[qPlane.SitzeTarget]+ScrollOffset);
-         RoomBm.BlitFromT (Food[qPlane.EssenTarget*2], SeatOffsets[qPlane.SitzeTarget]+FoodOffsets[(qPlane.SitzeTarget*3+qPlane.TablettsTarget)*2]-Food[qPlane.EssenTarget*2].Size/2l+ScrollOffset);
-         RoomBm.BlitFromT (Food[qPlane.EssenTarget*2+1], SeatOffsets[qPlane.SitzeTarget]+FoodOffsets[(qPlane.SitzeTarget*3+qPlane.TablettsTarget)*2+1]-Food[qPlane.EssenTarget*2+1].Size/2l+ScrollOffset);
+         RoomBm.BlitFromT (Food[qPlane.EssenTarget*2], SeatOffsets[qPlane.SitzeTarget]+FoodOffsets[(qPlane.SitzeTarget*3+qPlane.TablettsTarget)*2]-Food[qPlane.EssenTarget*2].Size/SLONG(2)+ScrollOffset);
+         RoomBm.BlitFromT (Food[qPlane.EssenTarget*2+1], SeatOffsets[qPlane.SitzeTarget]+FoodOffsets[(qPlane.SitzeTarget*3+qPlane.TablettsTarget)*2+1]-Food[qPlane.EssenTarget*2+1].Size/SLONG(2)+ScrollOffset);
 
          //Sterne:
          RoomBm.BlitFrom (StarBms[qPlane.Sitze],    StarOffsets[0] + XY(qPlane.Sitze*47+ScrollOffsetX, 0));
@@ -221,7 +221,7 @@ void CPlaneProps::OnPaint()
          //RoomBm.PrintAt (bprintf ("%s %s", (LPCTSTR)(CString)Einheiten[EINH_DM].bString (PlaneTypes[qPlane.TypeId].Passagiere*FoodCosts[qPlane.EssenTarget]), (LPCTSTR)StandardTexte.GetS (TOKEN_SCHED, 1801)),    FontSmallBlack, TEC_FONT_RIGHT, XY(502,334)+ScrollOffset, XY(631,353)+ScrollOffset);
 
          //Kosten f¸r aktuelle Auswahl
-         for (c=0; c<3; c++)
+         for (SLONG c=0; c<3; c++)
             for (SLONG d=0; d<4; d++)
                if (gMousePosition.IfIsWithin (StarOffsets[d].x+c*47+ScrollOffsetX,StarOffsets[d].y,StarOffsets[d].x+43+c*47+ScrollOffsetX,StarOffsets[d].y+36))
                   switch (d)

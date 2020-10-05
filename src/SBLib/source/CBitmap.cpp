@@ -218,24 +218,22 @@ SB_Hardwarecolor SB_CBitmapCore::GetHardwarecolor(ULONG color)
 #endif
 }
 
-ULONG SB_CBitmapCore::Clear(SB_Hardwarecolor pColor, const RECT* pRect)
+ULONG SB_CBitmapCore::Clear(SB_Hardwarecolor color, const RECT* pRect)
 {
-    dword color = (dword)pColor;
     if (pRect)
     {
         const CRect& rect = *(const CRect*)pRect;
         SDL_Rect dst = { rect.left, rect.top, rect.Width(), rect.Height() };
-        return SDL_FillRect(lpDDSurface, &dst, color);
+        return SDL_FillRect(lpDDSurface, &dst, color.Color);
     }
     else
     {
-        return SDL_FillRect(lpDDSurface, NULL, color);
+        return SDL_FillRect(lpDDSurface, NULL, color.Color);
     }
 }
 
-ULONG SB_CBitmapCore::SetPixel(SLONG x, SLONG y, SB_Hardwarecolor pColor)
+ULONG SB_CBitmapCore::SetPixel(SLONG x, SLONG y, SB_Hardwarecolor color)
 {
-    dword color = (dword)pColor;
 #if 0
     if (SDL_SetRenderTarget(lpDD, lpDDSurface) < 0)
         return -1;
@@ -244,7 +242,7 @@ ULONG SB_CBitmapCore::SetPixel(SLONG x, SLONG y, SB_Hardwarecolor pColor)
     return SDL_RenderDrawPoint(lpDD, x, y);
 #else
     SDL_Rect rect = { x, y, 1, 1 };
-    return SDL_FillRect(lpDDSurface, &rect, color);
+    return SDL_FillRect(lpDDSurface, &rect, color.Color);
 #endif
 }
 

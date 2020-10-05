@@ -2789,7 +2789,7 @@ void CStdRaum::PostPaint (void)
          if (CurrentMenu==MENU_GAMEOVER && timeGetTime()-MenuInfo<270)
          {
             PlayUniversalFx ("cam.raw", Sim.Options.OptionEffekte);
-            PrimaryBm.PrimaryBm.Clear ((SB_CHardwarecolorHelper *)0xffffff); //Flash-Effekt
+            PrimaryBm.PrimaryBm.Clear ((SB_Hardwarecolor)0xffffff); //Flash-Effekt
          }
          else
          {

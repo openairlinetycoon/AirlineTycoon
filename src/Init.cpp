@@ -5,7 +5,13 @@
 #include "Checkup.h"
 #include "cd_prot.h"
 #include "Editor.h"
+
+// Avoid conflict with STL headers
+#undef min
+#undef max
+
 #include <fstream>
+#include <algorithm>
 
 extern SLONG IconsPos[];  //Referenziert globe.cpp
 
@@ -482,8 +488,8 @@ void InitTipBms (void)
 //--------------------------------------------------------------------------------------------
 void InitGlobeMapper (void)
 {
-   SLONG x,y, xs;
-   ULONG Color;
+   int x,y, xs;
+   dword Color;
 
    //Dafault-Positionen der Laptop-Fenster:
    GlobeWindows.ReSize (5);
@@ -503,9 +509,9 @@ void InitGlobeMapper (void)
    for (x=0; x<256; x++)
       for (y=0; y<64; y++)
       {
-         Color  = min(EarthPal.Pal[x].b*(y+5)/40,255);
-         Color += min(EarthPal.Pal[x].r*(y+5)/40+(max(EarthPal.Pal[x].b*(y+5)/40-255,0)),255)<<16;
-         Color += min(EarthPal.Pal[x].g*(y+5)/40+(max(EarthPal.Pal[x].b*(y+5)/40-255,0)),255)<<8;
+         Color  = std::min(EarthPal.Pal[x].b*(y+5)/40,255);
+         Color += std::min(EarthPal.Pal[x].r*(y+5)/40+(std::max(EarthPal.Pal[x].b*(y+5)/40-255,0)),255)<<16;
+         Color += std::min(EarthPal.Pal[x].g*(y+5)/40+(std::max(EarthPal.Pal[x].b*(y+5)/40-255,0)),255)<<8;
 
          GlobeMixTab [x+(y<<8)] = (UWORD)TmpBm.pBitmap->GetHardwarecolor (Color);
          if (GlobeMixTab [x+(y<<8)]==0)

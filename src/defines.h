@@ -17,20 +17,21 @@
 //#define VOICES_OPTIONAL //Voices werden verwendet, wenn sie da sind; ansonsten auch nicht schlimm
 
 //Meine (konsequenten) Variablentypen
-typedef   signed long SLONG;
-typedef unsigned long ULONG;
-
 typedef unsigned short UWORD;
 typedef   signed short SWORD;
 
 typedef unsigned char UBYTE;
 typedef   signed char SBYTE;
 
-#ifndef WIN32
-typedef          long LONG;
-typedef          long LPARAM;
-typedef unsigned long DWORD;
-typedef unsigned long COLORREF;
+#ifdef WIN32
+typedef   signed long SLONG;
+#else
+typedef   signed int SLONG;
+typedef unsigned int ULONG;
+typedef          int LONG;
+typedef          int LPARAM;
+typedef unsigned int DWORD;
+typedef unsigned int COLORREF;
 
 typedef          short SHORT;
 typedef unsigned short USHORT;

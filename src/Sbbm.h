@@ -204,7 +204,7 @@
          void  ReSize (GfxLib* gfxLibrary, const CString &graphicIDs, SLONG Anzahl);
          SLONG AnzEntries() const { return (Bitmaps.AnzEntries()); }
 
-         SB1BM& operator [](const SLONG Index) const { return Bitmaps[Index]; }
+         //SB1BM& operator [](const SLONG Index) const { return Bitmaps[Index]; }
          SB1BM& operator [](const int Index) const { return Bitmaps[Index]; }
    };
 

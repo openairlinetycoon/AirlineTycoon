@@ -221,26 +221,32 @@ public:
     long MemPointer;
     ULONG MemBufferUsed;
 
-    friend TEAKFILE& operator << (TEAKFILE& File, const BOOL& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
-    friend TEAKFILE& operator >> (TEAKFILE& File, BOOL& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }
+    friend TEAKFILE& operator << (TEAKFILE& File, const bool& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
+    friend TEAKFILE& operator >> (TEAKFILE& File, bool& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }
 
-    friend TEAKFILE& operator << (TEAKFILE& File, const UBYTE& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
-    friend TEAKFILE& operator >> (TEAKFILE& File, UBYTE& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }
+    friend TEAKFILE& operator << (TEAKFILE& File, const signed char& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
+    friend TEAKFILE& operator >> (TEAKFILE& File, signed char& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }
 
-    friend TEAKFILE& operator << (TEAKFILE& File, const SBYTE& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
-    friend TEAKFILE& operator >> (TEAKFILE& File, SBYTE& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }
+    friend TEAKFILE& operator << (TEAKFILE& File, const unsigned char& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
+    friend TEAKFILE& operator >> (TEAKFILE& File, unsigned char& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }
 
-    friend TEAKFILE& operator << (TEAKFILE& File, const UWORD& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
-    friend TEAKFILE& operator >> (TEAKFILE& File, UWORD& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }
+    friend TEAKFILE& operator << (TEAKFILE& File, const unsigned short& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
+    friend TEAKFILE& operator >> (TEAKFILE& File, unsigned short& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }
 
-    friend TEAKFILE& operator << (TEAKFILE& File, const SWORD& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
-    friend TEAKFILE& operator >> (TEAKFILE& File, SWORD& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }
+    friend TEAKFILE& operator << (TEAKFILE& File, const signed short& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
+    friend TEAKFILE& operator >> (TEAKFILE& File, signed short& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }
 
-    friend TEAKFILE& operator << (TEAKFILE& File, const ULONG& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
-    friend TEAKFILE& operator >> (TEAKFILE& File, ULONG& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }
+    friend TEAKFILE& operator << (TEAKFILE& File, const unsigned int& b) { File.Write((UBYTE*)&b, sizeof(b)); return File; }
+    friend TEAKFILE& operator >> (TEAKFILE& File, unsigned int& b) { File.Read((UBYTE*)&b, sizeof(b)); return File; }
 
-    friend TEAKFILE& operator << (TEAKFILE& File, const SLONG& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
-    friend TEAKFILE& operator >> (TEAKFILE& File, SLONG& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }
+    friend TEAKFILE& operator << (TEAKFILE& File, const signed int& b) { File.Write((UBYTE*)&b, sizeof(b)); return File; }
+    friend TEAKFILE& operator >> (TEAKFILE& File, signed int& b) { File.Read((UBYTE*)&b, sizeof(b)); return File; }
+
+    friend TEAKFILE& operator << (TEAKFILE& File, const unsigned long& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
+    friend TEAKFILE& operator >> (TEAKFILE& File, unsigned long& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }
+
+    friend TEAKFILE& operator << (TEAKFILE& File, const signed long& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
+    friend TEAKFILE& operator >> (TEAKFILE& File, signed long& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }
 
     friend TEAKFILE& operator << (TEAKFILE& File, const __int64& b) { File.Write((UBYTE*)& b, sizeof(b)); return File; }
     friend TEAKFILE& operator >> (TEAKFILE& File, __int64& b) { File.Read((UBYTE*)& b, sizeof(b)); return File; }

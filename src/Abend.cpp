@@ -26,7 +26,7 @@ SLONG bCAbendOpen=0;
 //--------------------------------------------------------------------------------------------
 //Der Feierabend beginnt
 //--------------------------------------------------------------------------------------------
-CAbend::CAbend(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum, CString(bprintf("abend%li.gli", Sim.GetSeason())), NULL)
+CAbend::CAbend(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum, CString(bprintf("abend%li.gli", Sim.GetSeason())), 0)
 {
    LastTime = 0xffffffff;
 

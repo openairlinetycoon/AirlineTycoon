@@ -118,7 +118,7 @@ void Options::UpdateSavegameNames (void)
    SLONG   c;
    CString Filename;
 
-   char *pNamebaseStr;
+   const char *pNamebaseStr;
 
    if (Sim.bNetwork) pNamebaseStr = "Net%li.dat";
                 else pNamebaseStr = "Game%li.dat";

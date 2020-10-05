@@ -209,57 +209,6 @@ void Bank::OnPaint()
 {
    SLONG c;
 
-#ifdef _DEBUG___
-   WORD inbuf[256];
-   CFile f ("E:\\sb-projekt\\AtPlatin\\docs\\This is a test text in unicode.txt", CFile::modeRead);
-   f.Read ((void*)inbuf, 70);
-   f.Close();
-   inbuf[70]=0;
-
-   char buf[256];
-   //strcpy ((char*)inbuf+2, "¡m²§ºØ¡Ð¯}Ãµ¦Ó¥X¡n");
-   inbuf[1]=0xFEC4;
-   inbuf[2]=0xFEB6;
-   /*inbuf[1]+=256*1;
-   inbuf[2]+=256*1;
-   inbuf[3]+=256*1;
-   inbuf[4]+=256*1;
-   inbuf[5]+=256*1;*/
- 
-   //¡m²§ºØ¡Ð¯}Ãµ¦Ó¥X¡n
-   {
-      CFont f;
-      f.CreateFont (-20,   //Height
-                    0,           //Width
-                    0,           //Escapement
-                    0,           //Orientation
-                    FW_NORMAL,   //Weight
-                    (BYTE)false, //Italic
-                    0,           //Unterline
-                    0,           //Strikeout
-                    0,           //Charset
-                    0,           //OutPrecision
-                    0,           //ClipPrecision
-                    0,           //Quality
-                    FF_DONTCARE,
-                    "Arial"); //Lucida Sans Unicode");
-
-
-      CFont *pOldFont = dc.SelectObject(&f);
-
-      int rc = WideCharToMultiByte (CP_ACP, 0, L"ÿ?, -1, buf, 256, NULL, NULL);
-      TextOut(dc, 100,100, buf, 2);
-      TextOutW(dc, 100,130, L"ÿ??, 2);
-
-      int rd = WideCharToMultiByte (CP_ACP, 0, inbuf, -1, buf, 256, NULL, NULL);
-      TextOut(dc, 100,160, buf, 35);
-      TextOutW(dc, 100,190, inbuf, 35);
-      TextOut(dc, 100,220, (char*)inbuf, 35);
-
-      dc.SelectObject(pOldFont);
-   }
-#endif
-
    if (Sim.Date>5) Sim.GiveHint (HINT_BANK);
 
    //Die Standard Paint-Sachen kann der Basisraum erledigen

@@ -10,8 +10,6 @@
 #include "cd_prot.h"
 #include "fillfile.h"
 #include "atnet.h"
-#include <io.h>
-#include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
 

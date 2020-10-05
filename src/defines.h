@@ -999,8 +999,6 @@ inline bool operator!=(const CPoint& lhs, const CPoint& rhs)
 #define VK_F11                      SDLK_F11
 #define VK_F12                      SDLK_F12
 
-#define max(a,b) (((a) > (b)) ? (a) : (b))
-#define min(a,b) (((a) < (b)) ? (a) : (b))
 #define RGB(r,g,b) ((COLORREF)(((BYTE)(r)|((WORD)((BYTE)(g))<<8))|(((DWORD)(BYTE)(b))<<16)))
 #define GetRValue(rgb) ((rgb)&0xFF)
 #define GetGValue(rgb) ((((WORD)(rgb)) >> 8)&0xFF)

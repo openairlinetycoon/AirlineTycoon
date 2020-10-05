@@ -506,7 +506,7 @@ void GameFrame::OnPaint()
       for (c=0; c<Sim.Players.Players.AnzEntries(); c++)
          if (Sim.Players.Players[c].Owner==0)
          {
-            if (Sim.Players.Players[c].CursorPos==CPoint(-1,-1)) Sim.Players.Players[c].CursorPos=CPoint((Sim.Players.Players[c].WinP1+Sim.Players.Players[c].WinP2)/2l);
+            if (Sim.Players.Players[c].CursorPos==CPoint(-1,-1)) Sim.Players.Players[c].CursorPos=CPoint((Sim.Players.Players[c].WinP1+Sim.Players.Players[c].WinP2)/SLONG(2));
             if (Sim.Players.Players[c].CursorPos.x<Sim.Players.Players[c].WinP1.x) Sim.Players.Players[c].CursorPos.x=Sim.Players.Players[c].WinP1.x;
             if (Sim.Players.Players[c].CursorPos.y<Sim.Players.Players[c].WinP1.y) Sim.Players.Players[c].CursorPos.y=Sim.Players.Players[c].WinP1.y;
             if (Sim.Players.Players[c].CursorPos.x>Sim.Players.Players[c].WinP2.x) Sim.Players.Players[c].CursorPos.x=Sim.Players.Players[c].WinP2.x;
@@ -586,7 +586,7 @@ void GameFrame::OnPaint()
                gToolTipBm.BlitFrom (gToolTipBms[2], SizeX-28, 0);
 
                gToolTipBm.PrintAt (str, FontBigGrey, TEC_FONT_CENTERED, 0, 2, SizeX, 28);
-               Limit (0l, ToolTipPos.x, 639-SizeX);
+               Limit (SLONG(0), ToolTipPos.x, 639-SizeX);
 
                ToolTipState=TRUE;
             }

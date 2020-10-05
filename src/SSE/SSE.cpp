@@ -1,10 +1,8 @@
 #include "stdafx.h"
 
-// Avoid conflict with STL headers on non-Windows platforms
-#ifndef WIN32
+// Avoid conflict with STL headers
 #undef min
 #undef max
-#endif
 
 #include <vector>
 #include <algorithm>

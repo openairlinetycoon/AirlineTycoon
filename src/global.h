@@ -7,8 +7,8 @@ extern void __cdecl Msg( LPSTR fmt, ... );
 //--------------------------------------------------------------------------------------------
 //Zu erst die Ausnahmen:
 //--------------------------------------------------------------------------------------------
-extern char                   *ExcNever;         //Interne Dinge; Sicherheitshalber abgefragt
-extern char                   *ExcCreateWindow;  //Fenster konnte nicht erzeugt werden
+extern const char             *ExcNever;         //Interne Dinge; Sicherheitshalber abgefragt
+extern const char             *ExcCreateWindow;  //Fenster konnte nicht erzeugt werden
 
 //--------------------------------------------------------------------------------------------
 //Dinge für den Überblendeffekt:
@@ -169,9 +169,9 @@ extern CTakeOffApp             theApp;
 //--------------------------------------------------------------------------------------------
 //Einfache globale Variablen:
 //--------------------------------------------------------------------------------------------
-extern char                   *TabSeparator;          //Zum Import der Excel-Tabellen
-extern char                   *DateSeparator;         //Erlaubte Datums-Separatoren
-extern char                   *HallFilenames[];       //Die Filenamen der Airport-Hallen
+extern const char             *TabSeparator;          //Zum Import der Excel-Tabellen
+extern const char             *DateSeparator;         //Erlaubte Datums-Separatoren
+extern const char             *HallFilenames[];       //Die Filenamen der Airport-Hallen
 
 
 //--------------------------------------------------------------------------------------------

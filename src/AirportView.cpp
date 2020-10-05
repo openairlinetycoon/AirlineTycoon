@@ -49,7 +49,7 @@ extern SLONG SaveVersionSub;
 //--------------------------------------------------------------------------------------------
 //AirportView::AirportView():
 //--------------------------------------------------------------------------------------------
-AirportView::AirportView (BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "", 0)
+AirportView::AirportView (BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "", NULL)
 {
    //Per Default kein Objekt für den Editor angeben und keine Personen hinzufügen:
    EditObject    = 0xffffffff;
@@ -1515,9 +1515,9 @@ void AirportView::OnLButtonDown(UINT nFlags, CPoint point)
 
                                        if (Sim.bNetwork)
                                        {
-                                          Sim.SendSimpleMessage (ATNET_DIALOG_LOCK, 0, qPlayer.PlayerNum);
-                                          Sim.SendSimpleMessage (ATNET_DIALOG_LOCK, 0, Sim.Players.Players[Sim.localPlayer].PlayerNum);
-                                          Sim.SendSimpleMessage (ATNET_PLAYERLOOK, 0, qPerson.State, Phase);
+                                          Sim.SendSimpleMessage (ATNET_DIALOG_LOCK, NULL, qPlayer.PlayerNum);
+                                          Sim.SendSimpleMessage (ATNET_DIALOG_LOCK, NULL, Sim.Players.Players[Sim.localPlayer].PlayerNum);
+                                          Sim.SendSimpleMessage (ATNET_PLAYERLOOK, NULL, qPerson.State, Phase);
                                           qPlayer.BroadcastPosition ();
                                           Sim.Players.Players[Sim.localPlayer].BroadcastPosition ();
                                        }
@@ -3326,7 +3326,7 @@ void AIRPORT::TryDoor (XY ArrayPos, BOOL Player, SLONG PlayerNum)
                               SetConditionBlock (20+OfficeNum, 1);
 
                               if (Sim.bNetwork && qPlayer.Owner==0)
-                                 Sim.SendSimpleMessage (ATNET_ADD_EXPLOSION, 0, OfficeNum);
+                                 Sim.SendSimpleMessage (ATNET_ADD_EXPLOSION, NULL, OfficeNum);
 
                               for (SLONG d=Sim.Persons.AnzEntries()-1; d>=0; d--)
                                  if (Sim.Persons.IsInAlbum (d) && Clans[(SLONG)Sim.Persons[d].ClanId].Type>=CLAN_PLAYER1 && Clans[(SLONG)Sim.Persons[d].ClanId].Type<=CLAN_PLAYER4)

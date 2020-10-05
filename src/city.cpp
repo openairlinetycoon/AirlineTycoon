@@ -242,11 +242,10 @@ ULONG CITIES::GetIdFromName (char *Name)
 // Für jedes Argument aus einer ... Parameterreihe
 //  SMPL: foreacharg (long, Value1, 0)
 //--------------------------------------------------------------------------------------------
-#define foreacharg(type, firstargname, finalvalue) \
-   if (va_list va_marker = (va_list)true) \
-      for (long arghelper1=0, arghelper2=0, arghelper3=0; arghelper1==0; arghelper1=1) \
-         for (type q##type=firstargname; arghelper2==0; arghelper2=1) \
-            for (va_start (va_marker, firstargname); q##type!=finalvalue; q##type=va_arg(va_marker, type))
+#define foreacharg(marker, type, firstargname, finalvalue) \
+   for (long arghelper1=0, arghelper2=0, arghelper3=0; arghelper1==0; arghelper1=1) \
+      for (type q##type=firstargname; arghelper2==0; arghelper2=1) \
+         for (va_start (marker, firstargname); q##type!=finalvalue; q##type=va_arg(va_marker, type))
 
 //--------------------------------------------------------------------------------------------
 //Gibt die Nummer der Stadt mit dem angegebnen Namen zurück:
@@ -255,7 +254,8 @@ ULONG CITIES::GetIdFromNames (char *Name, ...)
 {
    SLONG c;
 
-   foreacharg (LPSTR, Name, NULL)
+   va_list va_marker;
+   foreacharg (va_marker, LPSTR, Name, NULL)
    {
       for (c=0; c<(SLONG)AnzEntries(); c++)
          if (IsInAlbum(c) && stricmp (qLPSTR, (LPCTSTR)Cities[c].Name)==0)

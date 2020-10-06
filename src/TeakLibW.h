@@ -81,6 +81,13 @@ public:
         ::Swap(Size, rhs.Size);
     }
 
+    BUFFER(BUFFER&& rhs)
+        : MemPointer(std::move(rhs.MemPointer))
+        , DelPointer(std::move(rhs.DelPointer))
+        , Size(std::move(rhs.Size))
+    {
+    }
+
     BUFFER(void) : MemPointer(NULL), DelPointer(NULL), Size(0) {}
 
     ~BUFFER()
@@ -177,6 +184,13 @@ public:
         ::Swap(MemPointer, rhs.MemPointer);
         ::Swap(DelPointer, rhs.DelPointer);
         ::Swap(Size, rhs.Size);
+    }
+
+    void operator=(BUFFER<T>&& rhs)
+    {
+        MemPointer = std::move(rhs.MemPointer);
+        DelPointer = std::move(rhs.DelPointer);
+        Size = std::move(rhs.Size);
     }
 
     T* MemPointer;
@@ -339,7 +353,13 @@ public:
 
     FBUFFER(FBUFFER& buffer) : BUFFER<T>(buffer) {}
 
+    FBUFFER(FBUFFER&& buffer) : BUFFER<T>(buffer) {}
+
     FBUFFER(SLONG anz) : BUFFER<T>(anz) {}
+
+    void operator=(FBUFFER<T>& rhs) { *this = rhs; }
+
+    void operator=(FBUFFER<T>&& rhs) { *this = rhs; }
 };
 
 class TEAKRAND

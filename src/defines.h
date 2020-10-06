@@ -1015,4 +1015,6 @@ inline bool operator!=(const CPoint& lhs, const CPoint& rhs)
 #define HTNOWHERE 0
 #define HTCLIENT  1
 
+#define __forceinline inline
+
 #endif

@@ -9,7 +9,12 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#ifdef WIN32
 #include <io.h>
+#else
+#include <unistd.h>
+#define O_BINARY 0
+#endif
 #include <stdio.h>
 #include <time.h>
 #include "Abend.h"
@@ -45,12 +50,11 @@
 #include "World.h"
 
 #include "glTitel.h"
-#include <process.h>
 #include "cd_prot.h"
 
 #include "AtNet.h"
-#include "sblib\include\SbLib.h"
-#include "sblib\include\network.h"
+#include "SbLib.h"
+#include "network.h"
 extern SBNetwork gNetwork;
 
 CHLPool HLPool;
@@ -256,7 +260,7 @@ int SDL_main(int argc, char* argv[])
 
    long vv = v.GetValue();
 
-	char* pText = "Hallo, ich bin ein Text";
+	const char* pText = "Hallo, ich bin ein Text";
 
 	// eigentlich wurde UCharToReadableAnsi ja geschaffen um Daten-Streams zu konvertieren, aber man kann es natürlich auch mit einem String machen!
 	char* pEncoded = UCharToReadableAnsi( ( unsigned char * )pText, strlen( pText ) + 1 );
@@ -265,7 +269,7 @@ int SDL_main(int argc, char* argv[])
 	char* pDecodeBack = ( char * ) ReadableAnsiToUChar( ( char * ) pEncoded2, strlen( pEncoded2 ) + 1 );
 	char* pDecodeBack2 = ( char * ) ReadableAnsiToUChar( ( char * ) pDecodeBack , strlen( pDecodeBack  ) + 1 );
 
-	char* pText2 = "DMCPRCZ5F5Y3D4XV1OHFY4B3HLIQJBP4LIS6STCBSQUUOKL3KSONUPTOGF2BZLXGAZGXEYLSORUW3CIHIR1W3Z3SMVXW3IGOHMAAAAIJL6STTMVMQFBKDYBGC5VP5MMWV5QJQ";   
+	const char* pText2 = "DMCPRCZ5F5Y3D4XV1OHFY4B3HLIQJBP4LIS6STCBSQUUOKL3KSONUPTOGF2BZLXGAZGXEYLSORUW3CIHIR1W3Z3SMVXW3IGOHMAAAAIJL6STTMVMQFBKDYBGC5VP5MMWV5QJQ";   
 	char* pDecodeBack3 = ( char * ) ReadableAnsiToUChar( ( char * ) pText2, strlen( pText2 ) );
 
 	delete [] pEncoded;
@@ -468,7 +472,7 @@ BOOL CTakeOffApp::InitInstance(int argc, char* argv[])
 
    DoAppPath();
    gLanguage=LANGUAGE_D;
-   SLONG ifil=open (AppPath+"misc\\sabbel.dat", _O_RDONLY|_O_BINARY);
+   SLONG ifil=open (AppPath+"misc\\sabbel.dat", O_RDONLY|O_BINARY);
    if (ifil>0)
    {
       read (ifil, &gLanguage, sizeof (gLanguage));
@@ -2080,7 +2084,7 @@ void CTakeOffApp::CheckSystem (void)
                 Emergency=TRUE;
          }
 
-         for (d=0; d<Sim.Players.Players[c].Statistiken.AnzEntries(); d++)
+         for (SLONG d=0; d<Sim.Players.Players[c].Statistiken.AnzEntries(); d++)
          {
             if (Sim.Players.Players[c].Statistiken[d].Days.AnzEntries()==0)
                 Emergency=TRUE;
@@ -2099,7 +2103,7 @@ void CTakeOffApp::CheckSystem (void)
 //--------------------------------------------------------------------------------------------
 BOOL InitDirectX (void)
 {
-   HRESULT ddrval;
+   //HRESULT ddrval;
 
    gPhysicalCdRomBitlist.Pump();
 

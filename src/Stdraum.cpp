@@ -339,7 +339,7 @@ CStdRaum::CStdRaum (BOOL bHandy, ULONG PlayerNum, CString GfxLibName, __int64 gr
    CurrentTextGroupId    = NULL;
    LastTextGroupId       = *(ULONG*)"none";
 
-   if (graficId==NULL) PicBitmap.ReSize (0l,0l);
+   if (graficId==NULL) PicBitmap.ReSize (SLONG(0),SLONG(0));
                   else PicBitmap.ReSize (pRoomLib, graficId, CREATE_SYSMEM);
 
    RoomBm.ReSize (PicBitmap.Size, CREATE_SYSMEM);
@@ -483,7 +483,7 @@ void CStdRaum::ReSize (CString GfxLibName, __int64 graficId)
    else
       pRoomLib=NULL;
 
-   if (graficId==NULL) PicBitmap.ReSize (0l,0l);
+   if (graficId==NULL) PicBitmap.ReSize (SLONG(0),SLONG(0));
                   else PicBitmap.ReSize (pRoomLib, graficId, CREATE_SYSMEM);
 
    RoomBm.ReSize (PicBitmap.Size, CREATE_SYSMEM);
@@ -494,7 +494,7 @@ void CStdRaum::ReSize (CString GfxLibName, __int64 graficId)
 //--------------------------------------------------------------------------------------------
 void CStdRaum::ReSize (__int64 graficId)
 {
-   if (graficId==NULL) PicBitmap.ReSize (0l,0l);
+   if (graficId==NULL) PicBitmap.ReSize (SLONG(0),SLONG(0));
                   else PicBitmap.ReSize (pRoomLib, graficId, CREATE_SYSMEM);
 
    RoomBm.ReSize (PicBitmap.Size, CREATE_SYSMEM);
@@ -1022,7 +1022,7 @@ void CStdRaum::CloseTextWindow (void)
    for (SLONG c=0; c<10; c++)
    {
       Optionen[c].Empty();
-      TextAreaSizeY[c]=0l;
+      TextAreaSizeY[c]=SLONG(0);
    }
 
    //Die Bitmap aktualisieren:
@@ -4007,7 +4007,7 @@ void CStdRaum::RepaintTip (void)
 BOOL CStdRaum::ConvertMousePosition (const XY &WindowsBased, XY *RoomBased)
 {
    //Koordinaten für kleine Fenster konvertieren:
-   *RoomBased = WindowsBased + CPoint(-WinP1.x, -WinP1.y);
+   *RoomBased = WindowsBased + XY(-WinP1.x, -WinP1.y);
 
    //Klick außerhalb vom Fenster?
    if (WindowsBased.x<WinP1.x || WindowsBased.y<WinP1.y || WindowsBased.x>WinP2.x || WindowsBased.y>WinP2.y)
@@ -4430,7 +4430,7 @@ void CStdRaum::MenuStart (SLONG MenuType, SLONG MenuPar1, SLONG MenuPar2, SLONG 
    }
 
    MenuRepaint ();
-   MenuPos = (XY(640, 440) - OnscreenBitmap.Size)/2l;
+   MenuPos = (XY(640, 440) - OnscreenBitmap.Size)/SLONG(2);
 }
 
 //--------------------------------------------------------------------------------------------
@@ -4847,7 +4847,7 @@ void CStdRaum::MenuRepaint (void)
             if (OnscreenBitmap.Size!=MenuBms[8].Size)
             {
                OnscreenBitmap.ReSize (MenuBms[8].Size);
-               MenuPos = (XY(640, 440) - OnscreenBitmap.Size)/2l;
+               MenuPos = (XY(640, 440) - OnscreenBitmap.Size)/SLONG(2);
             }
 
             OnscreenBitmap.BlitFrom (MenuBms[8]);
@@ -7443,12 +7443,12 @@ phone_busy:
             SLONG Max=Sim.Players.Players[MenuPar1].AnzAktien;
             for (SLONG c=0; c<4; c++) Max-=Sim.Players.Players[c].OwnsAktien[MenuPar1];
 
-            Limit (0l, MenuInfo, Max);
+            Limit (SLONG(0), MenuInfo, Max);
             MenuRepaint ();
          }
          else if (MenuPar2==1) //verkaufen
          {
-            Limit (0l, MenuInfo, qPlayer.OwnsAktien[MenuPar1]);
+            Limit (SLONG(0), MenuInfo, qPlayer.OwnsAktien[MenuPar1]);
             MenuRepaint ();
          } */
          break;
@@ -7459,13 +7459,15 @@ phone_busy:
 
          if (MouseClickArea==-101 && MouseClickId==MENU_CHAT && MouseClickPar1==2)
          {
+            SLONG c;
+
             //Sind nur Zahlen im Text?
-            for (SLONG c=strlen(Optionen[0])-1; c>=0; c--)
+            for (c=strlen(Optionen[0])-1; c>=0; c--)
                if (Optionen[0].GetAt(c)<'0' || Optionen[0].GetAt(c)>'9') break;
 
-            if (c==-1 && Optionen[0].GetLength()>0 && _atoi64(Optionen[0])!=0)
+            if (c==-1 && Optionen[0].GetLength()>0 && atoll(Optionen[0])!=0)
             {
-               if (Sim.Players.Players[Sim.localPlayer].Money>=_atoi64(Optionen[0]) && _atoi64(Optionen[0])>0 && Optionen[0].GetLength()<9)
+               if (Sim.Players.Players[Sim.localPlayer].Money>=atoll(Optionen[0]) && atoll(Optionen[0])>0 && Optionen[0].GetLength()<9)
                {
                   Sim.Players.Players[MenuPar1].ChangeMoney (atoi(Optionen[0]), 3700, Sim.Players.Players[Sim.localPlayer].NameX);
                   Sim.Players.Players[Sim.localPlayer].ChangeMoney (-atoi(Optionen[0]), 3701, Sim.Players.Players[MenuPar1].NameX);
@@ -7807,12 +7809,12 @@ void CStdRaum::CalcStop (BOOL Cancel)
                if (!Sim.Players.Players[c].IsOut)
                   Max-=Sim.Players.Players[c].OwnsAktien[MenuPar1];
 
-            Limit (0l, MenuInfo, Max);
+            Limit (SLONG(0), MenuInfo, Max);
             MenuRepaint ();
          }
          else if (MenuPar2==1) //verkaufen
          {
-            Limit (0l, MenuInfo, Sim.Players.Players[(SLONG)PlayerNum].OwnsAktien[MenuPar1]);
+            Limit (SLONG(0), MenuInfo, Sim.Players.Players[(SLONG)PlayerNum].OwnsAktien[MenuPar1]);
             MenuRepaint ();
          }
       }
@@ -7848,7 +7850,7 @@ void CStdRaum::CalcStop (BOOL Cancel)
       {
          MenuInfo = CalculatorValue;
 
-         Limit (0l, MenuInfo, 25l);
+         Limit (SLONG(0), MenuInfo, SLONG(25));
          MenuRepaint ();
       }
       else if (CurrentMenu==MENU_BANK)

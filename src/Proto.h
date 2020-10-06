@@ -160,7 +160,7 @@ BOOL    CreateSpeechSBFX (CString String, SBFX *pFx, SLONG Player, BOOL *bAnyMis
 void  PlayUniversalFx (CString Filename, SLONG Volume);
 void  PlayFanfare (void);
 SLONG Prozent2Dezibel (SLONG Prozent);
-void  SetMidiVolume(long volume);
+void  SetMidiVolume(SLONG volume);
 BOOL  IsMidiAvailable (void);
 void  NextMidi (void);
 void  PlayMidi (const CString &Filename);

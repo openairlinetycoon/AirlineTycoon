@@ -384,7 +384,7 @@ SLONG Prozent2Dezibel (SLONG Prozent)
 //--------------------------------------------------------------------------------------------
 //Skala von 0-8
 //--------------------------------------------------------------------------------------------
-void SetMidiVolume(long volume)
+void SetMidiVolume(SLONG volume)
 {
    /*SLONG       midiVolume;
 

@@ -112,5 +112,8 @@ target_link_libraries(AT
     SDL2::SDL2_mixer
     SDL2::SDL2
     SDL2::SDL2main
-    ws2_32
-    Winmm)
+)
+
+if (WIN32)
+  target_link_libraries(AT ws2_32 Winmm)
+endif()

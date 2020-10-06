@@ -164,9 +164,9 @@ void CWeltAll::OnPaint()
 
             switch (Sternschnuppen[c].StartIndex)
             {
-               case 0: Sternschnuppen[c].Velocity = XY(5,9)*4l; break;
-               case 1: Sternschnuppen[c].Velocity = XY(-11,13)*4l; break;
-               case 2: Sternschnuppen[c].Velocity = XY(18,12)*4l; break;
+               case 0: Sternschnuppen[c].Velocity = XY(5,9)*SLONG(4); break;
+               case 1: Sternschnuppen[c].Velocity = XY(-11,13)*SLONG(4); break;
+               case 2: Sternschnuppen[c].Velocity = XY(18,12)*SLONG(4); break;
             }
 
             break;

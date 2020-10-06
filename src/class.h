@@ -1815,8 +1815,8 @@ class CSmack16
       SDL_Palette* PaletteMapper;          //Tabelle zum Mappen von 8 auf 16 Bit
       smk          pSmack;
       char         State;
-      ULONG        Width;
-      ULONG        Height;
+      unsigned long Width;
+      unsigned long Height;
       DWORD        FrameNext;
 
    public:

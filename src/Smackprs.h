@@ -73,10 +73,10 @@ class CSmackerClip
        SDL_Palette* PaletteMapper;       //Tabelle zum Mappen von 8 auf 16 Bit
 
        smk          pSmack;
-       ULONG        Width;
-       ULONG        Height;
-       ULONG        FrameNum;
-       ULONG        Frames;
+       unsigned long Width;
+       unsigned long Height;
+       unsigned long FrameNum;
+       unsigned long Frames;
        DWORD        FrameNext;
 
        SLONG        LastFrame;

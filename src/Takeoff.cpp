@@ -251,7 +251,7 @@ void protectedValue::SetScrambled( const int iValue )
 #ifdef __cplusplus
 extern "C"
 #endif
-int SDL_main(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
    protectedValue v;
 

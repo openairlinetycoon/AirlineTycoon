@@ -357,9 +357,9 @@ public:
 
     FBUFFER(SLONG anz) : BUFFER<T>(anz) {}
 
-    void operator=(FBUFFER<T>& rhs) { *this = rhs; }
+    void operator=(FBUFFER<T>& rhs) { BUFFER<T>::operator=(rhs); }
 
-    void operator=(FBUFFER<T>&& rhs) { *this = rhs; }
+    void operator=(FBUFFER<T>&& rhs) { BUFFER<T>::operator=(rhs); }
 };
 
 class TEAKRAND

@@ -1007,6 +1007,7 @@ inline bool operator!=(const CPoint& lhs, const CPoint& rhs)
 #define GetBValue(rgb) (((rgb)>>16)&0xFF)
 #define ZeroMemory(ptr,size) memset(ptr,0,size)
 #define stricmp strcasecmp
+#define strnicmp strncasecmp
 
 #define FALSE 0
 #define TRUE  1

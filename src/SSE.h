@@ -66,8 +66,8 @@ class MIDI;
 
 typedef struct _mixerBounds
 {
-	long	lMinimum;
-	long	lMaximum;
+	SLONG	lMinimum;
+	SLONG	lMaximum;
 	DWORD	dwSteps;
 
 } MIXERBOUNDS;
@@ -105,8 +105,8 @@ typedef struct _FXData
 	word		channels;			// Kanäle
 	word		bitsPerSample;	// Bits per Sample of mono data
 
-	long		pan;
-	long		volume;
+	SLONG		pan;
+	SLONG		volume;
 } FXData;
 	
 typedef struct _MusicData
@@ -136,7 +136,7 @@ typedef struct _MusicData
 	//DSBPOSITIONNOTIFY	*		pNotifyStructs;		// Die Notify-Strukturen
 	HANDLE						hEvent[EVENTS];		// Die Events, die bei den Notifies generiert werden
 
-	unsigned long				hThread;			// Das Handle des Hilfsthreads
+	unsigned SLONG				hThread;			// Das Handle des Hilfsthreads
 	unsigned int				threadId;			// Die ID des Threads
 	bool						threadStop;			// Wird der Thread aufgefordet zu stoppen
 	bool						threadWaiting;		// Der Thread wartet
@@ -152,8 +152,8 @@ typedef struct _MusicData
 	bool						looped;				// Soll der Sound geloopt werden?
 	bool						critical;			// Ist der Thread gerade im kritischen Teil
 
-	long						pan;				// Pan-Wert
-	long						volume;				// gemerkte Lautstärke
+	SLONG						pan;				// Pan-Wert
+	SLONG						volume;				// gemerkte Lautstärke
 
 } DigiMusicData;*/
 
@@ -204,14 +204,14 @@ class SSE
 
 		// Lautstärkefunktionen
 
-		DllExport int	SetMusicVolume(long volume);
-		DllExport int	GetMusicVolume(long* pVolume);
+		DllExport int	SetMusicVolume(SLONG volume);
+		DllExport int	GetMusicVolume(SLONG* pVolume);
 
-		DllExport int	SetSoundVolume(long volume);
-		DllExport int	GetSoundVolume(long* pVolume);
+		DllExport int	SetSoundVolume(SLONG volume);
+		DllExport int	GetSoundVolume(SLONG* pVolume);
 
-		//DllExport int	SetMixerVolume (char * device, long volume);
-		//DllExport int	GetMixerVolume(char * device, long* pVolume, MIXERBOUNDS* pMB = NULL);
+		//DllExport int	SetMixerVolume (char * device, SLONG volume);
+		//DllExport int	GetMixerVolume(char * device, SLONG* pVolume, MIXERBOUNDS* pMB = NULL);
 
 
 		DllExport void		SetMusicCallback(void (*callback)());
@@ -270,15 +270,15 @@ class DIGITAL
 
 	public:
 		virtual	~DIGITAL() {};
-		virtual  long Release() = 0;
-		virtual	int Play(dword dwFlags = 0, long pan = 0) = 0;
+		virtual  SLONG Release() = 0;
+		virtual	int Play(dword dwFlags = 0, SLONG pan = 0) = 0;
 		virtual	int Stop() = 0;
 		virtual	int Pause() { return Stop(); }
 		virtual	int Resume() = 0;
-		virtual	int GetVolume (long* pVolume) = 0;
-		virtual	int SetVolume (long volume) = 0;
-		virtual	int GetPan (long* pPan) = 0;
-		virtual	int SetPan (long pan) = 0;
+		virtual	int GetVolume (SLONG* pVolume) = 0;
+		virtual	int SetVolume (SLONG volume) = 0;
+		virtual	int GetPan (SLONG* pPan) = 0;
+		virtual	int SetPan (SLONG pan) = 0;
 		virtual	int Load (const char* file = NULL) = 0;
 		virtual	int Free () = 0;
 
@@ -306,27 +306,27 @@ class FX : public DIGITAL
 
 	public:
 		virtual	~FX();
-		virtual  long Release();
-		virtual	int Play(dword dwFlags = 0, long pan = 0);
+		virtual  SLONG Release();
+		virtual	int Play(dword dwFlags = 0, SLONG pan = 0);
 		virtual	int Stop();
 		virtual	int Pause();
 		virtual	int Resume();
-		virtual	int GetVolume (long* pVolume);
-		virtual	int SetVolume (long volume);
-		virtual	int GetPan (long* pPan);
-		virtual	int SetPan (long pan);
+		virtual	int GetVolume (SLONG* pVolume);
+		virtual	int SetVolume (SLONG volume);
+		virtual	int GetPan (SLONG* pPan);
+		virtual	int SetPan (SLONG pan);
 		virtual	int Load (const char* file = NULL);
-		virtual	int Fusion (const FX **Fx, long NumFx);
-		virtual	int Fusion (const FX *Fx, long *Von, long *Bis, long NumFx);
-		virtual	int Tokenize (__int64 Token, long *Von, long *Bis, long &rcAnzahl);
-		virtual	FX    **Tokenize (__int64 Token, long &rcAnzahl);
+		virtual	int Fusion (const FX **Fx, SLONG NumFx);
+		virtual	int Fusion (const FX *Fx, SLONG *Von, SLONG *Bis, SLONG NumFx);
+		virtual	int Tokenize (__int64 Token, SLONG *Von, SLONG *Bis, SLONG &rcAnzahl);
+		virtual	FX    **Tokenize (__int64 Token, SLONG &rcAnzahl);
 		virtual	int Free ();
 
 		virtual	int GetStatus(dword* pStatus);
-		virtual	bool	IsMouthOpen(long PreTime);
+		virtual	bool	IsMouthOpen(SLONG PreTime);
 		virtual	word	CountPlaying();
 		virtual	void	SetFormat (dword samplesPerSec = 0, word channels = 0, word bitsPerSample = 0);
-      long  GetByteLength (void) { return (_fxData.bufferSize); }
+      SLONG  GetByteLength (void) { return (_fxData.bufferSize); }
 
 	protected:
 		FXData	_fxData;
@@ -349,15 +349,15 @@ class MUSIC
 
 	public:
 		virtual	~MUSIC() {};
-		virtual  long Release() = 0;
-		DllExport virtual	int Play(dword dwFlags = 0, long pan = 0) = 0;
+		virtual  SLONG Release() = 0;
+		DllExport virtual	int Play(dword dwFlags = 0, SLONG pan = 0) = 0;
 		virtual	int Stop() = 0;
 		virtual	int Pause() { return Stop(); }
 		virtual	int Resume() = 0;
-		virtual	int GetVolume (long* pVolume) = 0;
-		virtual	int SetVolume (long volume) = 0;
-		virtual	int GetPan (long* pPan) = 0;
-		virtual	int SetPan (long pan) = 0;
+		virtual	int GetVolume (SLONG* pVolume) = 0;
+		virtual	int SetVolume (SLONG volume) = 0;
+		virtual	int GetPan (SLONG* pPan) = 0;
+		virtual	int SetPan (SLONG pan) = 0;
 		virtual	int Load (const char* file = NULL) = 0;
 		virtual	int Free () = 0;
 
@@ -384,15 +384,15 @@ class MIDI : public MUSIC
 
 	public:
 		virtual	~MIDI();
-		virtual  long Release();
-		DllExport virtual	int Play(dword dwFlags = 0, long pan = 0);
+		virtual  SLONG Release();
+		DllExport virtual	int Play(dword dwFlags = 0, SLONG pan = 0);
 		virtual	int Stop();
 		virtual	int Pause();
 		virtual	int Resume();
-		virtual	int GetVolume (long* pVolume);
-		virtual	int SetVolume (long volume);
-		virtual	int GetPan (long* pPan);
-		virtual	int SetPan (long pan);
+		virtual	int GetVolume (SLONG* pVolume);
+		virtual	int SetVolume (SLONG volume);
+		virtual	int GetPan (SLONG* pPan);
+		virtual	int SetPan (SLONG pan);
 		virtual	int Load (const char* file = NULL);
 		virtual	int Free ();
 
@@ -426,15 +426,15 @@ class MIDI : public MUSIC
 
 	public:
 		virtual	~DIGIMUSIC();
-		virtual  long Release();
-		DllExport virtual	int Play(dword dwFlags = 0, long pan = 0);
+		virtual  SLONG Release();
+		DllExport virtual	int Play(dword dwFlags = 0, SLONG pan = 0);
 		virtual	int Stop();
 		virtual	int Pause();
 		virtual	int Resume();
-		virtual	int GetVolume (long* pVolume);
-		virtual	int SetVolume (long volume);
-		virtual	int GetPan (long* pPan);
-		virtual	int SetPan (long pan);
+		virtual	int GetVolume (SLONG* pVolume);
+		virtual	int SetVolume (SLONG volume);
+		virtual	int GetPan (SLONG* pPan);
+		virtual	int SetPan (SLONG pan);
 		virtual	int Load (const char* file = NULL);
 		virtual	int Free ();
 

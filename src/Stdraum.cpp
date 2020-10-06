@@ -26,8 +26,8 @@
 #include "Designer.h"
 
 #include "AtNet.h"
-#include "sblib\include\SbLib.h"
-#include "sblib\include\network.h"
+#include "SbLib.h"
+#include "network.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

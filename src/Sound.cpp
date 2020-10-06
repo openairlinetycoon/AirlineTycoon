@@ -624,13 +624,13 @@ void SBFX::Fusion (const SBFX *Fx, const SLONG *Von, const SLONG *Bis, long NumF
    if (gpSSE)
    {
       gpSSE->CreateFX (&pFX);
-      pFX->Fusion (Fx->pFX, (long*)Von, (long*)Bis, NumFx);
+      pFX->Fusion (Fx->pFX, (SLONG*)Von, (SLONG*)Bis, NumFx);
    }
 }
 
 void SBFX::Tokenize (BUFFER<SBFX> &Effects)
 {
-   long  c, Anzahl;
+   SLONG  c, Anzahl;
    FX  **ppFx = pFX->Tokenize (0x80007FFF80007FFF, Anzahl);
 
    Effects.ReSize (0);

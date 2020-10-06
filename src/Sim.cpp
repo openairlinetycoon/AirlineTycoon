@@ -5,7 +5,12 @@
 #include "Checkup.h"
 #include "Sabotage.h"
 #include "AtNet.h"
+#ifdef WIN32
 #include <direct.h>
+#else
+#define _mkdir(x) mkdir(x, 0777)
+#include <sys/stat.h>
+#endif
 
                             //Für Menschen     Für Computer
                             //Money   Credit   Money    Credit
@@ -2106,7 +2111,7 @@ void SIM::DoTimeStep (void)
                                  qPlane.Problem = max (1, qPlane.Problem-15);
 
                                  qPlayer.Messages.AddMessage (BERATERTYP_GIRL, 
-                                    bprintf (StandardTexte.GetS (TOKEN_ADVICE, 2320), (LPCTSTR)Cities[qFPE.NachCity].Name, (LPCTSTR)qPlane.Problem));
+                                    bprintf (StandardTexte.GetS (TOKEN_ADVICE, 2320), (LPCTSTR)Cities[qFPE.NachCity].Name, qPlane.Problem));
                               }
                            }
                   }
@@ -2449,11 +2454,11 @@ void SIM::NewDay (void)
       if (KerosinRand.Rand(20)>2) Kerosin += Kerosin/4;
       else if (KerosinPast[8]>550 && KerosinPast[7]>550 && KerosinPast[6]>550)
          Kerosin -= Kerosin/2;
-      Limit (300l, Kerosin, 700l);
+      Limit (SLONG(300), Kerosin, SLONG(700));
       for (c=0; c<20; c++) Kerosin += (KerosinRand.Rand(21))-10 + (KerosinRand.Rand(20)<3)*((KerosinRand.Rand(41))-20);
    }
 
-   Limit (300l, Kerosin, 700l);
+   Limit (SLONG(300), Kerosin, SLONG(700));
    KerosinPast[9]=Kerosin;
 
    for (c=0; c<Sim.Players.AnzPlayers; c++)
@@ -3034,7 +3039,7 @@ TEAKFILE &operator >> (TEAKFILE &File, SIM &Sim)
 //--------------------------------------------------------------------------------------------
 BOOL SIM::LoadGame (SLONG Number)
 {
-   char *pNamebaseStr;
+   const char *pNamebaseStr;
 
    if (Sim.bNetwork) pNamebaseStr = "Net%li.dat";
                 else pNamebaseStr = "Game%li.dat";
@@ -3318,7 +3323,7 @@ reload_airport:
 //--------------------------------------------------------------------------------------------
 void SIM::SaveGame (SLONG Number, const CString &Name)
 {
-   char *pNamebaseStr;
+   const char *pNamebaseStr;
 
    if (Sim.bNetwork) pNamebaseStr = "Net%li.dat";
                 else pNamebaseStr = "Game%li.dat";
@@ -3435,7 +3440,7 @@ SLONG SIM::GetSavegameLocalPlayer (SLONG Index)
 {
    CString Filename;
 
-   char *pNamebaseStr;
+   const char *pNamebaseStr;
 
    if (Sim.bNetwork) pNamebaseStr = "Net%li.dat";
                 else pNamebaseStr = "Game%li.dat";
@@ -3477,7 +3482,7 @@ DWORD SIM::GetSavegameUniqueGameId (SLONG Index, bool bForceNetwork)
 {
    CString Filename;
 
-   char *pNamebaseStr;
+   const char *pNamebaseStr;
 
    if (Sim.bNetwork || bForceNetwork) pNamebaseStr = "Net%li.dat";
                                  else pNamebaseStr = "Game%li.dat";
@@ -3516,7 +3521,7 @@ SLONG SIM::GetSavegameNumHumans (SLONG Index)
 {
    CString Filename;
 
-   char *pNamebaseStr;
+   const char *pNamebaseStr;
 
    if (Sim.bNetwork) pNamebaseStr = "Net%li.dat";
                 else pNamebaseStr = "Game%li.dat";
@@ -3558,7 +3563,7 @@ CString SIM::GetSavegameSessionName (SLONG Index)
 {
    CString Filename;
 
-   char *pNamebaseStr;
+   const char *pNamebaseStr;
 
    if (Sim.bNetwork) pNamebaseStr = "Net%li.dat";
                 else pNamebaseStr = "Game%li.dat";
@@ -3608,7 +3613,7 @@ void SIM::ReadSavegameOwners (SLONG Index)
 {
    CString Filename;
 
-   char *pNamebaseStr;
+   const char *pNamebaseStr;
 
    if (Sim.bNetwork) pNamebaseStr = "Net%li.dat";
                 else pNamebaseStr = "Game%li.dat";
@@ -3899,11 +3904,11 @@ void SIM::LoadHighscores (void)
             Highscores[c].Name = strtok (Buffer, ";");
             Highscores[c].UniqueGameId2 = atoi (strtok (NULL, ";"));
 
-            __int64 k1 = _atoi64 (strtok (NULL, ";"));
-            __int64 k2 = _atoi64 (strtok (NULL, ";"));
-            __int64 k3 = _atoi64 (strtok (NULL, ";"));
-            __int64 k4 = _atoi64 (strtok (NULL, ";"));
-            __int64 k5 = _atoi64 (strtok (NULL, ";"));
+            __int64 k1 = atoll (strtok (NULL, ";"));
+            __int64 k2 = atoll (strtok (NULL, ";"));
+            __int64 k3 = atoll (strtok (NULL, ";"));
+            __int64 k4 = atoll (strtok (NULL, ";"));
+            __int64 k5 = atoll (strtok (NULL, ";"));
 
             if ((k4^k1^k3) == (k5^k2))
                Highscores[c].Score = k5^k2;

@@ -777,7 +777,7 @@ void CFlugplanEintrag::BookFlight (CPlane *Plane, SLONG PlayerNum)
             if (qPlayer.RentRouten.RentRouten[(SLONG)Routen(ObjectId)].Image>0)
                qPlayer.RentRouten.RentRouten[(SLONG)Routen(ObjectId)].Image--;
 
-         Limit (-1000l, qPlayerX.Image, 1000l);
+         Limit (SLONG(-1000), qPlayerX.Image, SLONG(1000));
       }
 
       //Zustand des Flugzeugs:
@@ -829,7 +829,7 @@ void CFlugplanEintrag::BookFlight (CPlane *Plane, SLONG PlayerNum)
 
          Limit ((UBYTE)0, qPlayer.RentRouten.RentRouten[(SLONG)Routen(ObjectId)].Image, (UBYTE)100);
       }
-      Limit (-1000l, qPlayerX.Image, 1000l);
+      Limit (SLONG(-1000), qPlayerX.Image, SLONG(1000));
    }
 
    if (ObjectType==1 || ObjectType==2)

@@ -748,7 +748,7 @@ class /**/CPlanePart
       XY      Pos3d;             // An dieser Stelle ist das Part untergebracht
       CString Shortname;         // z.B. C1
       CString ParentShortname;   // Identifiziert das Teil wo wir drankleben z.B. B1
-      long    ParentRelationId;  // Identifiziert die Relation durch die wir verbunden sind 100
+      SLONG   ParentRelationId;  // Identifiziert die Relation durch die wir verbunden sind 100
 
    public:
       SBBM &GetBm(SBBMS &PartBms);
@@ -781,7 +781,7 @@ class /**/CXPlane
 {
    public:
       CString     Name;        // Name des Flugzeuges
-      long        Cost;        // Soviel kostet es
+      SLONG       Cost;        // Soviel kostet es
       CPlaneParts Parts;       // Die Einzelteile des Flugzeugs
 
    public:
@@ -1016,7 +1016,7 @@ class /**/HEADLINES
 
       //Flexibles Zufallszeux:
       CString   FlexiCity[3];      //Zufallsstadt für einen Thread
-      long      FlexiNumber[3];    //Zufallszahl für einen Thread
+      SLONG     FlexiNumber[3];    //Zufallszahl für einen Thread
 
    public:
       BOOL      IsInteresting;     //Ist heute etwas interessantes dabei?
@@ -1311,7 +1311,7 @@ class /**/BRICKS : public ALBUM<BRICK>
 class /**/BUILD //Die Verwendung eines Bodenteils
 {
    private:
-      long   BrickId;         //Verweis in Brick-Tabelle
+      SLONG  BrickId;         //Verweis in Brick-Tabelle
       XY     ScreenPos;       //Position im Flughafen
       UBYTE  Par;             //Parameter, z.B. für die Raumnummer
 
@@ -1841,7 +1841,7 @@ class CAirportSmack : public CSmack16
 {
    public:
       SBBM         Bitmap;
-      long         BrickId;
+      SLONG        BrickId;
       XY           Offset;
 
    public:
@@ -1869,7 +1869,7 @@ class PLAYER
       __int64          Bonus;      //versteckter Bonus, den der Computerspieler noch erhält
       FBUFFER<__int64> MoneyPast;  //Vergangenheitslinie des Geldes
       __int64          Credit;     //Seine Schulden
-      long           Image;      //Firmenimage generell [-1000..1000]
+      SLONG          Image;      //Firmenimage generell [-1000..1000]
       SLONG          BadKerosin; //Soviel Liter schlechtes Kerosin wurde gekauft
       SLONG          KerosinKind;//Diese Art wird getankt
       SLONG          Tank;       //Soviel kann man auf Reserve Bunkern
@@ -2154,7 +2154,7 @@ class PLAYER
 class PLAYERS
 {
    public:
-      long            AnzPlayers;
+      SLONG           AnzPlayers;
       FBUFFER<PLAYER> Players;
       
    public:
@@ -2430,8 +2430,8 @@ class SIM //Die Simulationswelt; alles was zur aktuellen Partie gehört
 	   bool		   StatfGraphVisible;							// true -> Der Graph ist sichtbar, ansonsten die schnöden Zahlen
 	   bool		   StatplayerMask[4];							// Diese Spieler wurden zur Ansicht ausgewählt
 	   BYTE		   Statgroup;										// Die angewählte Gruppe (*0=Finanzen, 1=?, 2=?)
-	   long		   Statdays;										// Anzahl der darzustellenden Tage
-	   long		   StatnewDays;									// Für eine Animation
+	   SLONG	   Statdays;										// Anzahl der darzustellenden Tage
+	   SLONG	   StatnewDays;									// Für eine Animation
 	   bool		   StatiArray[3][16];		               // Merkt sich für jede Gruppe welche Einträge selektiert sind.
       SLONG       DropDownPosY;
 

@@ -4510,7 +4510,7 @@ _ehemals_2080:
                   break;
 
                case 2000: //Spieler will Image wissen:
-                  Limit (-1000l, qPlayer.Image, 1000l);
+                  Limit (SLONG(-1000), qPlayer.Image, SLONG(1000));
 
                   if (qPlayer.Image==0)
                      MakeSayWindow (0, TOKEN_WERBUNG, 2520, pFontPartner, qPlayer.AirlineX);
@@ -4575,7 +4575,7 @@ _ehemals_2080:
                      if (DialogPar1==0)
                      {
                         qPlayer.Image+=gWerbePrice[DialogPar1*6+id-5000]/10000*(id-5000+6)/55;
-                        Limit (-1000l, qPlayer.Image, 1000l);
+                        Limit (SLONG(-1000), qPlayer.Image, SLONG(1000));
 
                         if (id==5000)
                            for (c=0; c<Sim.Players.AnzPlayers; c++)
@@ -4614,7 +4614,7 @@ _ehemals_2080:
                      else if (DialogPar1==2)
                      {
                         qPlayer.Image+=gWerbePrice[DialogPar1*6+id-5000]/15000*(id-5000+6)/55;
-                        Limit (-1000l, qPlayer.Image, 1000l);
+                        Limit (SLONG(-1000), qPlayer.Image, SLONG(1000));
 
                         for (c=0; c<qPlayer.RentRouten.RentRouten.AnzEntries(); c++)
                            if (qPlayer.RentRouten.RentRouten[c].Rang)

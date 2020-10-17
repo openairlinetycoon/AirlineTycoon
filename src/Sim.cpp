@@ -1751,7 +1751,7 @@ void SIM::DoTimeStep (void)
                            SabotageActs[SabotageActs.AnzEntries()-1].Opfer    = Sim.Players.Players[c].ArabOpfer;
 
                            Sim.Headlines.AddOverride (0, bprintf (StandardTexte.GetS (TOKEN_MISC, 2000+Sim.Players.Players[c].ArabMode), (LPCTSTR)qOpfer.AirlineX), PictureId, (Sim.Players.Players[c].ArabOpfer==Sim.localPlayer)*50+Sim.Players.Players[c].ArabMode);
-                           Limit (-1000l, qOpfer.Image, 1000l);
+                           Limit (SLONG(-1000), qOpfer.Image, SLONG(1000));
 
                            //Araber meldet sich, oder Fax oder Brief sind da.
                            if (c==Sim.localPlayer && qLocalPlayer.IsOkayToCallThisPlayer ())
@@ -1899,7 +1899,7 @@ void SIM::DoTimeStep (void)
                               qPlane.AddPanne (r);
                               qPlayer.Messages.AddMessage (BERATERTYP_GIRL, bprintf (StandardTexte.GetS (TOKEN_ADVICE, 2360+r), (LPCTSTR)qPlane.Name));
 
-                              Limit (-1000l, qPlayer.Image, 1000l);
+                              Limit (SLONG(-1000), qPlayer.Image, SLONG(1000));
                               qPlayer.Kurse[0]*=0.7;
                               if (qPlayer.TrustedDividende>4) qPlayer.TrustedDividende-=1;
                            }
@@ -2192,7 +2192,7 @@ void SIM::DoTimeStep (void)
                      {
                         Sim.Players.Players[c].Messages.AddMessage (BERATERTYP_GIRL, bprintf(StandardTexte.GetS (TOKEN_ADVICE, 2353), (LPCTSTR)qPlane.Name, (LPCTSTR)Cities[qPlane.Flugplan.Flug[qPlane.Flugplan.NextFlight].VonCity].Name));
                         Sim.Players.Players[c].Image-=2;
-                        Limit (-1000l, Sim.Players.Players[c].Image, 1000l);
+                        Limit (SLONG(-1000), Sim.Players.Players[c].Image, SLONG(1000));
                         //log: hprintf ("Player[%li].Image! now = %li", c, (LPCTSTR)Sim.Players.Players[c].Image);
                      }
                   }

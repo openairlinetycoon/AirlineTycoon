@@ -379,7 +379,6 @@ UWORD ConvertString2Date (char *String)
 //--------------------------------------------------------------------------------------------
 void DoAppPath (void)
 {
-#ifdef NDEBUG
    //Vollen Programmnamen anfordern:
    char* buffer = SDL_strdup(SDL_GetBasePath());
 
@@ -387,14 +386,11 @@ void DoAppPath (void)
    while (strlen(buffer)>0 && buffer[(SLONG)(strlen(buffer)-1)]!='\\') buffer[(SLONG)(strlen(buffer)-1)]=0;
 
    //Verzeichnis-Namen der %§$@#"$! MS-Entwicklungsumgebung löschen:
-   if (strlen(buffer) > 6 && strnicmp(buffer + strlen(buffer) - 6, "debug\\", 6) == 0) buffer[(SLONG)(strlen(buffer) - 6)] = 0;
-   if (strlen(buffer) > 8 && strnicmp(buffer + strlen(buffer) - 8, "release\\", 8) == 0) buffer[(SLONG)(strlen(buffer) - 8)] = 0;
+   //if (strlen(buffer) > 6 && strnicmp(buffer + strlen(buffer) - 6, "debug\\", 6) == 0) buffer[(SLONG)(strlen(buffer) - 6)] = 0;
+   //if (strlen(buffer) > 8 && strnicmp(buffer + strlen(buffer) - 8, "release\\", 8) == 0) buffer[(SLONG)(strlen(buffer) - 8)] = 0;
 
    AppPath = buffer;
    SDL_free(buffer);
-#else
-   AppPath = std::filesystem::current_path().string() + "\\";
-#endif
 }
 
 //--------------------------------------------------------------------------------------------
@@ -402,12 +398,16 @@ void DoAppPath (void)
 //--------------------------------------------------------------------------------------------
 CString FullFilename (const CString &Filename, const CString &PathString)
 {
-   CString  tmp, rc;
+   CString  path, rc;
 
-   if (PathString[1]==':')
-      rc.Format (PathString, (const char*)Filename);
+   path = PathString;
+   if (std::filesystem::path::preferred_separator != '\\')
+      path.Replace('\\', std::filesystem::path::preferred_separator);
+
+   if (path[1]==':')
+      rc.Format (path, (const char*)Filename);
    else
-      rc.Format (AppPath + PathString, (const char*)Filename);
+      rc.Format (AppPath + path, (const char*)Filename);
 
    return (rc);
 }
@@ -417,14 +417,18 @@ CString FullFilename (const CString &Filename, const CString &PathString)
 //--------------------------------------------------------------------------------------------
 CString FullFilename (const CString &Filename, const CString &PathString, SLONG Num)
 {
-   CString  tmp, rc;
+   CString  tmp, path, rc;
 
    tmp.Format ((const char*)Filename, Num);
 
-   if (PathString[1]==':')
-      rc.Format (PathString, tmp);
+   path = PathString;
+   if (std::filesystem::path::preferred_separator != '\\')
+      path.Replace('\\', std::filesystem::path::preferred_separator);
+
+   if (path[1]==':')
+      rc.Format (path, tmp);
    else
-      rc.Format (AppPath + PathString, tmp);
+      rc.Format (AppPath + path, tmp);
 
    return (rc);
 }

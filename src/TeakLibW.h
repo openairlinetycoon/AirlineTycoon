@@ -32,7 +32,8 @@ inline void Limit(T min, T& value, T max)
 template <typename T>
 inline void Swap(T& a, T& b)
 {
-    T c(a);
+    T c;
+    c = a;
     a = b;
     b = c;
 }
@@ -129,7 +130,13 @@ public:
 
                 // This is *will* break self-referencing pointers
                 // ... please don't resize anything that uses ALBUM
-                memswap(m, MemPointer, sizeof(T) * num);
+                //memswap(m, MemPointer, sizeof(T) * num);
+                for (SLONG i = 0; i < num; i++)
+                {
+                    T tmp(m[i]);
+                    m[i] = MemPointer[i];
+                    MemPointer[i] = tmp;
+                }
                 delete[] MemPointer;
 
                 DelPointer = m + ((DelPointer - MemPointer) / sizeof(T));
@@ -949,12 +956,8 @@ public:
         if (b >= Ids.Size)
             b = (*this)(b);
 
-        UBYTE* tmp = new UBYTE[sizeof(T)];
         ::Swap(Ids[a], Ids[b]);
-        memcpy(tmp, &Values->MemPointer[a], sizeof(T));
-        memcpy(&Values->MemPointer[a], &Values->MemPointer[b], sizeof(T));
-        memcpy(&Values->MemPointer[b], tmp, sizeof(T));
-        delete [] tmp;
+        ::Swap(Values->MemPointer[a], Values->MemPointer[b]);
     }
 
     void ResetNextId()
@@ -964,18 +967,13 @@ public:
 
     void Sort()
     {
-        UBYTE* tmp = new UBYTE[sizeof(T)];
-        if (!tmp)
-            TeakLibW_Exception(FNL, ExcOutOfMem);
         TeakAlbumRefresh(Ids, Values->AnzEntries());
         for (SLONG i = 0; i < Values->AnzEntries() - 1; i++)
         {
             if (Ids[i] && Ids[i + 1] && Values->MemPointer[i] > Values->MemPointer[i + 1])
             {
                 ::Swap(Ids[i], Ids[i + 1]);
-                memcpy(tmp, &Values->MemPointer[i], sizeof(T));
-                memcpy(&Values->MemPointer[i], &Values->MemPointer[i + 1], sizeof(T));
-                memcpy(&Values->MemPointer[i + 1], tmp, sizeof(T));
+                ::Swap(Values->MemPointer[i], Values->MemPointer[i + 1]);
                 i -= 2;
                 if ( i < -1 )
                     i = -1;
@@ -985,17 +983,13 @@ public:
                 if (Ids[i + 1])
                 {
                     ::Swap(Ids[i], Ids[i + 1]);
-                    memcpy(tmp, &Values->MemPointer[i], sizeof(T));
-                    memcpy(&Values->MemPointer[i], &Values->MemPointer[i + 1], sizeof(T));
-                    memcpy(&Values->MemPointer[i + 1], tmp, sizeof(T));
+                    ::Swap(Values->MemPointer[i], Values->MemPointer[i + 1]);
                     i -= 2;
                     if (i < -1)
                         i = -1;
                 }
             }
         }
-        if (tmp)
-            delete [] tmp;
     }
 
     ULONG operator*=(ULONG id)

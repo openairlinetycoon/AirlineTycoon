@@ -5,11 +5,6 @@
 #include "Checkup.h"
 #include "cd_prot.h"
 #include "Editor.h"
-
-// Avoid conflict with STL headers
-#undef min
-#undef max
-
 #include <fstream>
 #include <algorithm>
 

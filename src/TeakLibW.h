@@ -22,14 +22,14 @@ extern unsigned char GerToUpper(unsigned char);
 extern unsigned char* RecapizalizeString(unsigned char*);
 extern const char* GetSuffix(const char*);
 
-template <class T>
+template <typename T>
 inline void Limit(T min, T& value, T max)
 {
     if (value < min) value = min;
     if (value > max) value = max;
 }
 
-template <class T>
+template <typename T>
 inline void Swap(T& a, T& b)
 {
     T c(a);
@@ -37,15 +37,26 @@ inline void Swap(T& a, T& b)
     b = c;
 }
 
-template <class T>
+template <typename T>
 inline const T& Min(const T& a, const T& b)
 {
     return (b < a) ? b : a;
 }
 
-
-template <class T>
+template <typename T>
 inline const T& Max(const T& a, const T& b)
+{
+    return (a < b) ? b : a;
+}
+
+template <typename A, typename B>
+inline A min(const A& a, const B& b)
+{
+    return (b < a) ? b : a;
+}
+
+template <typename A, typename B>
+inline A max(const A& a, const B& b)
 {
     return (a < b) ? b : a;
 }

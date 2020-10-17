@@ -470,7 +470,7 @@ BOOL CTakeOffApp::InitInstance(int argc, char* argv[])
    std::ifstream ifil = std::ifstream(App / "misc" / "sabbel.dat");
    if (ifil.is_open())
    {
-      ifil >> gLanguage;
+      ifil.read((char*)&gLanguage, sizeof(gLanguage));
       ifil.close();
    }
 

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 const char* ExcTextResNotOpened         = "TextRes not opened!";
-const char* ExcTextResStaticOverflow    = "TextRes is too long: %lx:%lx";
+const char* ExcTextResStaticOverflow    = "TextRes is too SLONG: %lx:%lx";
 const char* ExcTextResFormat            = "Bad TextRes format: %s (%li)";
 const char* ExcTextResNotFound          = "TextRes not found: %lx:%lx";
 
@@ -63,8 +63,8 @@ void TEXTRES::Open(char const* source, void* cached)
     Entries.Clear();
     if (cached)
     {
-        long Group = -1;
-        long Identifier = -1;
+        SLONG Group = -1;
+        SLONG Identifier = -1;
 
         // FIXME: Memory leak!
         BUFFER<BYTE> FileBuffer = *LoadCompleteFile(source);
@@ -72,14 +72,14 @@ void TEXTRES::Open(char const* source, void* cached)
         if (!String)
             TeakLibW_Exception(0, 0, ExcOutOfMem);
 
-        long AnzStrings = 0;
-        long AnzEntries = 0;
-        for (long i = 0, j = 0; i < FileBuffer.AnzEntries(); i += j)
+        SLONG AnzStrings = 0;
+        SLONG AnzEntries = 0;
+        for (SLONG i = 0, j = 0; i < FileBuffer.AnzEntries(); i += j)
         {
             if (FileBuffer[i] == '>' && FileBuffer[i + 1] == '>')
                 ++AnzEntries;
-            long AnzChars = 0;
-            long AnzNonSpace = 0;
+            SLONG AnzChars = 0;
+            SLONG AnzNonSpace = 0;
             for (j = 0; j + i < FileBuffer.AnzEntries() && FileBuffer[j + i] != '\r' &&
                 FileBuffer[j + i] != '\n' && FileBuffer[j + i] != '\x1A'; ++j)
             {
@@ -101,14 +101,14 @@ void TEXTRES::Open(char const* source, void* cached)
         Strings.ReSize(AnzStrings + 5);
         Entries.ReSize(AnzEntries);
 
-        for (long i = 0; i < Entries.AnzEntries(); ++i)
+        for (SLONG i = 0; i < Entries.AnzEntries(); ++i)
             Entries.DelPointer[i].Text = NULL;
 
         AnzStrings = 0;
         AnzEntries = -1;
-        for (long i = 0, j = 0; i < FileBuffer.AnzEntries(); i += j)
+        for (SLONG i = 0, j = 0; i < FileBuffer.AnzEntries(); i += j)
         {
-            long Size;
+            SLONG Size;
             if (FileBuffer.AnzEntries() - i <= 1023)
                 Size = FileBuffer.AnzEntries() - i;
             else
@@ -121,14 +121,14 @@ void TEXTRES::Open(char const* source, void* cached)
             if (String[0] == '>' && String[1] != '>')
             {
                 if (strlen(String + 1) == 4)
-                    Group = *(long*)(String + 1);
+                    Group = *(SLONG*)(String + 1);
                 else
                     Group = atoi(String + 1);
             }
             if (String[0] == '>' && String[1] == '>')
             {
                 if (strlen(String + 2) == 4)
-                    Identifier = *(long*)(String + 2);
+                    Identifier = *(SLONG*)(String + 2);
                 else
                     Identifier = atoi(String + 2);
                 ++AnzEntries;
@@ -168,10 +168,10 @@ void TEXTRES::Open(char const* source, void* cached)
     }
 }
 
-char* TEXTRES::GetP(unsigned long group, unsigned long id)
+char* TEXTRES::GetP(ULONG group, ULONG id)
 {
     char* text = NULL;
-    for (long i = 0; i < Entries.AnzEntries(); ++i)
+    for (SLONG i = 0; i < Entries.AnzEntries(); ++i)
     {
         if (Entries[i].Group == group && Entries[i].Id == id)
         {
@@ -189,7 +189,7 @@ char* TEXTRES::GetP(unsigned long group, unsigned long id)
     return buffer;
 }
 
-char* TEXTRES::GetS(unsigned long group, unsigned long id)
+char* TEXTRES::GetS(ULONG group, ULONG id)
 {
   char* str = TEXTRES::GetP(group, id);
   LanguageSpecifyString(str);

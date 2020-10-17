@@ -55,12 +55,12 @@ void HDU::HercPrintf(const char* format, ...)
     fflush(Log);
 }
 
-void here(char *file, long line)
+void here(char *file, SLONG line)
 {
     Hdu.HercPrintf(0, "Here in %s, line %li", file, line);
 }
 
-long TeakLibW_Exception(char* file, long line, const char* format, ...)
+SLONG TeakLibW_Exception(char* file, SLONG line, const char* format, ...)
 {
     char buffer[128];
     va_list args;

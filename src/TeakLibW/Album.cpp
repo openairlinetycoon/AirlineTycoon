@@ -11,7 +11,7 @@ XID::XID()
 {
 }
 
-void XID::SetValue(unsigned long val)
+void XID::SetValue(ULONG val)
 {
     if (val >= 0x1000000)
     {
@@ -37,7 +37,7 @@ TEAKFILE& operator>>(TEAKFILE& file, XID& id)
     return file;
 }
 
-void TeakAlbumRemoveT(FBUFFER<unsigned long>& ids, unsigned long anz, CString const& name, unsigned long id)
+void TeakAlbumRemoveT(FBUFFER<ULONG>& ids, ULONG anz, CString const& name, ULONG id)
 {
     if (id >= 0x1000000)
     {
@@ -59,9 +59,9 @@ void TeakAlbumRemoveT(FBUFFER<unsigned long>& ids, unsigned long anz, CString co
     TeakLibW_Exception(0, 0, ExcAlbumDelete, name);
 }
 
-void TeakAlbumRefresh(FBUFFER<unsigned long>& ids, unsigned long anz)
+void TeakAlbumRefresh(FBUFFER<ULONG>& ids, ULONG anz)
 {
-    unsigned long cur = ids.AnzEntries();
+    ULONG cur = ids.AnzEntries();
     if (anz != cur)
     {
         ids.ReSize(anz);
@@ -73,7 +73,7 @@ void TeakAlbumRefresh(FBUFFER<unsigned long>& ids, unsigned long anz)
     }
 }
 
-long TeakAlbumSearchT(FBUFFER<unsigned long>& ids, unsigned long anz, CString const& name, unsigned long id)
+SLONG TeakAlbumSearchT(FBUFFER<ULONG>& ids, ULONG anz, CString const& name, ULONG id)
 {
     if (id >= 0x1000000)
     {
@@ -92,7 +92,7 @@ long TeakAlbumSearchT(FBUFFER<unsigned long>& ids, unsigned long anz, CString co
     return 0;
 }
 
-long TeakAlbumXIdSearchT(FBUFFER<unsigned long>& ids, unsigned long anz, CString const& name, XID& id)
+SLONG TeakAlbumXIdSearchT(FBUFFER<ULONG>& ids, ULONG anz, CString const& name, XID& id)
 {
     TeakAlbumRefresh(ids, anz);
     if (id.Index < ids.AnzEntries() && ids[id.Index] == id.Value)
@@ -114,7 +114,7 @@ long TeakAlbumXIdSearchT(FBUFFER<unsigned long>& ids, unsigned long anz, CString
     }
 }
 
-int TeakAlbumIsInAlbum(FBUFFER<unsigned long>& ids, unsigned long anz, unsigned long id)
+int TeakAlbumIsInAlbum(FBUFFER<ULONG>& ids, ULONG anz, ULONG id)
 {
     if (id >= 0x1000000)
     {
@@ -132,7 +132,7 @@ int TeakAlbumIsInAlbum(FBUFFER<unsigned long>& ids, unsigned long anz, unsigned 
     return false;
 }
 
-unsigned long TeakAlbumAddT(FBUFFER<unsigned long>& ids, unsigned long anz, CString const& name, unsigned long id)
+ULONG TeakAlbumAddT(FBUFFER<ULONG>& ids, ULONG anz, CString const& name, ULONG id)
 {
     TeakAlbumRefresh(ids, anz);
     for (int i = ids.AnzEntries() - 1; i >= 0; --i)
@@ -147,7 +147,7 @@ unsigned long TeakAlbumAddT(FBUFFER<unsigned long>& ids, unsigned long anz, CStr
     return 0;
 }
 
-unsigned long TeakAlbumFrontAddT(FBUFFER<unsigned long>& ids, unsigned long anz, CString const& name, unsigned long id)
+ULONG TeakAlbumFrontAddT(FBUFFER<ULONG>& ids, ULONG anz, CString const& name, ULONG id)
 {
     TeakAlbumRefresh(ids, anz);
     for (int i = 0; i < ids.AnzEntries(); ++i)
@@ -162,9 +162,9 @@ unsigned long TeakAlbumFrontAddT(FBUFFER<unsigned long>& ids, unsigned long anz,
     return 0;
 }
 
-unsigned long TeakAlbumGetNumFree(FBUFFER<unsigned long>& ids, unsigned long anz)
+ULONG TeakAlbumGetNumFree(FBUFFER<ULONG>& ids, ULONG anz)
 {
-    unsigned long num = 0;
+    ULONG num = 0;
     TeakAlbumRefresh(ids, anz);
     for (int i = ids.AnzEntries() - 1; i >= 0; --i)
     {
@@ -174,9 +174,9 @@ unsigned long TeakAlbumGetNumFree(FBUFFER<unsigned long>& ids, unsigned long anz
     return num;
 }
 
-unsigned long TeakAlbumGetNumUsed(FBUFFER<unsigned long>& ids, unsigned long anz)
+ULONG TeakAlbumGetNumUsed(FBUFFER<ULONG>& ids, ULONG anz)
 {
-    unsigned long num = 0;
+    ULONG num = 0;
     TeakAlbumRefresh(ids, anz);
     for (int i = ids.AnzEntries() - 1; i >= 0; --i)
     {
@@ -186,15 +186,15 @@ unsigned long TeakAlbumGetNumUsed(FBUFFER<unsigned long>& ids, unsigned long anz
     return num;
 }
 
-unsigned long TeakAlbumRandom(FBUFFER<unsigned long>& ids, unsigned long anz, CString const& name, TEAKRAND* random)
+ULONG TeakAlbumRandom(FBUFFER<ULONG>& ids, ULONG anz, CString const& name, TEAKRAND* random)
 {
     TeakAlbumRefresh(ids, anz);
-    unsigned long used = TeakAlbumGetNumUsed(ids, anz);
+    ULONG used = TeakAlbumGetNumUsed(ids, anz);
     if (!used)
         TeakLibW_Exception(0, 0, ExcAlbumFind, name);
 
-    long target = random ? random->Rand(used) : rand() % 5;
-    long index = 0;
+    SLONG target = random ? random->Rand(used) : rand() % 5;
+    SLONG index = 0;
     for (int i = ids.AnzEntries() - 1; i >= 0; --i)
     {
         if (++index > target)

@@ -5,12 +5,7 @@
 #include "Checkup.h"
 #include "Sabotage.h"
 #include "AtNet.h"
-#ifdef WIN32
-#include <direct.h>
-#else
-#define _mkdir(x) mkdir(x, 0777)
-#include <sys/stat.h>
-#endif
+#include <filesystem>
 
                             //Für Menschen     Für Computer
                             //Money   Credit   Money    Credit
@@ -3334,7 +3329,7 @@ void SIM::SaveGame (SLONG Number, const CString &Name)
    SaveVersion=1;
    SaveVersionSub=107;  //Version 1.104
 
-   _mkdir (AppPath+SavegamePath.Left(SavegamePath.GetLength()-3));
+   std::filesystem::create_directory (LPCSTR(AppPath+SavegamePath.Left(SavegamePath.GetLength()-3)));
 
    TEAKFILE OutputFile (Filename, TEAKFILE_WRITE);
 

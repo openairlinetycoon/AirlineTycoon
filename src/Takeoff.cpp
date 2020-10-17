@@ -6,15 +6,6 @@
 #include "stdafx.h"
 #include "HLine.h"
 #include "Checkup.h"
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#ifdef WIN32
-#include <io.h>
-#else
-#include <unistd.h>
-#define O_BINARY 0
-#endif
 #include <stdio.h>
 #include <time.h>
 #include "Abend.h"
@@ -56,6 +47,9 @@
 #include "SbLib.h"
 #include "network.h"
 extern SBNetwork gNetwork;
+
+#include <fstream>
+#include <filesystem>
 
 CHLPool HLPool;
 
@@ -433,12 +427,12 @@ BOOL CTakeOffApp::InitInstance(int argc, char* argv[])
    Hdu.HercPrintf (0, "TakeOff.Cpp was compiled at %s at %s", __DATE__, __TIME__);
    Hdu.HercPrintf (0, "===============================================================================");
    Hdu.HercPrintf (0, "logging starts %s", asctime(localtime(&t)));
-   gCDPath.Pump();
+   //gCDPath.Pump();
 
 #ifdef CD_PROTECTION
    gPhysicalCdRomBitlist=GetPhysicalCdRomBitlist ();
 #endif
-   gCDPath.Pump(); gCDPath.Pump(); gCDPath.Pump(); gCDPath.Pump(); gCDPath.Pump();
+   //gCDPath.Pump(); gCDPath.Pump(); gCDPath.Pump(); gCDPath.Pump(); gCDPath.Pump();
 
    pTakeOffApp = this;
 
@@ -472,11 +466,12 @@ BOOL CTakeOffApp::InitInstance(int argc, char* argv[])
 
    DoAppPath();
    gLanguage=LANGUAGE_D;
-   SLONG ifil=open (AppPath+"misc\\sabbel.dat", O_RDONLY|O_BINARY);
-   if (ifil>0)
+   std::filesystem::path App((std::string)AppPath);
+   std::ifstream ifil = std::ifstream(App / "misc" / "sabbel.dat");
+   if (ifil.is_open())
    {
-      read (ifil, &gLanguage, sizeof (gLanguage));
-      close (ifil);
+      ifil >> gLanguage;
+      ifil.close();
    }
 
    gPhysicalCdRomBitlist.Pump();

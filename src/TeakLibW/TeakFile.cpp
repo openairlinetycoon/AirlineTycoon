@@ -14,7 +14,7 @@ TEAKFILE::TEAKFILE()
 {
 }
 
-TEAKFILE::TEAKFILE(char const* path, long mode)
+TEAKFILE::TEAKFILE(char const* path, SLONG mode)
     : Ctx(NULL)
     , Path(NULL)
     , MemPointer(0)
@@ -28,7 +28,7 @@ TEAKFILE::~TEAKFILE()
     Close();
 }
 
-void TEAKFILE::ReadLine(char* buffer, long size)
+void TEAKFILE::ReadLine(char* buffer, SLONG size)
 {
     int i;
     for (i = 0; i < size && !IsEof(); i++)
@@ -60,11 +60,11 @@ void TEAKFILE::Close()
     Path = NULL;
 }
 
-long TEAKFILE::GetFileLength(void) { return (long)SDL_RWsize(Ctx); }
+SLONG TEAKFILE::GetFileLength(void) { return (SLONG)SDL_RWsize(Ctx); }
 
-long TEAKFILE::GetPosition(void) { return (long)SDL_RWtell(Ctx); }
+SLONG TEAKFILE::GetPosition(void) { return (SLONG)SDL_RWtell(Ctx); }
 
-void TEAKFILE::Open(char const* path, long mode)
+void TEAKFILE::Open(char const* path, SLONG mode)
 {
     Ctx = SDL_RWFromFile(path, mode == TEAKFILE_WRITE ? "wb" : "rb");
     if (!Ctx)
@@ -76,11 +76,11 @@ void TEAKFILE::Open(char const* path, long mode)
 
 int TEAKFILE::IsOpen() { return Ctx != NULL; }
 
-void TEAKFILE::Read(unsigned char* buffer, long size)
+void TEAKFILE::Read(unsigned char* buffer, SLONG size)
 {
     if (MemBuffer.AnzEntries() > 0)
     {
-        long anz;
+        SLONG anz;
         if ( size >= MemBufferUsed - MemPointer )
             anz = MemBufferUsed - MemPointer;
         else
@@ -95,13 +95,13 @@ void TEAKFILE::Read(unsigned char* buffer, long size)
     }
 }
 
-void TEAKFILE::Write(unsigned char* buffer, long size)
+void TEAKFILE::Write(unsigned char* buffer, SLONG size)
 {
     if (MemBuffer.AnzEntries() > 0)
     {
         if (MemPointer + size > MemBuffer.AnzEntries())
         {
-            long slack = MemBuffer.AnzEntries() / 10;
+            SLONG slack = MemBuffer.AnzEntries() / 10;
             MemBuffer.ReSize(slack + size + MemPointer);
         }
         memcpy(MemBuffer + MemPointer, buffer, size);
@@ -115,24 +115,24 @@ void TEAKFILE::Write(unsigned char* buffer, long size)
     }
 }
 
-void TEAKFILE::ReadTrap(long trap)
+void TEAKFILE::ReadTrap(SLONG trap)
 {
     if (SDL_ReadLE32(Ctx) != trap)
         DebugBreak();
 }
 
-void TEAKFILE::WriteTrap(long trap)
+void TEAKFILE::WriteTrap(SLONG trap)
 {
     SDL_WriteLE32(Ctx, trap);
 }
 
-void TEAKFILE::SetPosition(long pos)
+void TEAKFILE::SetPosition(SLONG pos)
 {
     if (SDL_RWseek(Ctx, pos, RW_SEEK_SET) < 0)
         TeakLibW_Exception(0, 0, ExcSeek, Path, pos);
 }
 
-void TEAKFILE::Announce(long size)
+void TEAKFILE::Announce(SLONG size)
 {
     MemBuffer.ReSize(size);
 }
@@ -163,7 +163,7 @@ CRLEReader::CRLEReader(const char* path)
         }
         else
         {
-            Size = (long)SDL_RWsize(Ctx);
+            Size = (SLONG)SDL_RWsize(Ctx);
             SDL_RWseek(Ctx, 0, RW_SEEK_SET);
         }
     }
@@ -181,7 +181,7 @@ bool CRLEReader::Close()
     return SDL_RWclose(Ctx) == 0;
 }
 
-bool CRLEReader::Buffer(void* buffer, long size)
+bool CRLEReader::Buffer(void* buffer, SLONG size)
 {
     return SDL_RWread(Ctx, buffer, size, 1) > 0;
 }
@@ -210,12 +210,12 @@ bool CRLEReader::NextSeq()
     return true;
 }
 
-bool CRLEReader::Read(BYTE* buffer, long size, bool decode)
+bool CRLEReader::Read(BYTE* buffer, SLONG size, bool decode)
 {
     if (!decode || !IsRLE)
         return Buffer(buffer, size);
 
-    for (long i = 0; i < size; i++)
+    for (SLONG i = 0; i < size; i++)
     {
         if (!SeqLength && !NextSeq())
             return false;

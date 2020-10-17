@@ -6,22 +6,22 @@ void memswap(void* dst, void* src, ULONG size)
         Swap(((BYTE*)dst)[i - 1], ((BYTE*)src)[i - 1]);
 }
 
-long CalcInertiaVelocity(long a, long b)
+SLONG CalcInertiaVelocity(SLONG a, SLONG b)
 {
     if ( a <= b )
     {
         if ( a >= b )
             return 0;
         else
-            return -(long)sqrt((double)(b - a + 1) / 2.0 + 0.5);
+            return -(SLONG)sqrt((double)(b - a + 1) / 2.0 + 0.5);
     }
     else
     {
-        return (long)sqrt((double)(a - b + 1) / 2.0 + 0.5);
+        return (SLONG)sqrt((double)(a - b + 1) / 2.0 + 0.5);
     }
 }
 
-long Calc1nSum(long a)
+SLONG Calc1nSum(SLONG a)
 {
     return a * (a + 1) / 2;
 }

@@ -1,9 +1,4 @@
 #include "stdafx.h"
-
-// Avoid conflict with STL headers
-#undef min
-#undef max
-
 #include <vector>
 #include <algorithm>
 

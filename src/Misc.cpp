@@ -3,11 +3,6 @@
 //============================================================================================
 #include "stdafx.h"
 #include <assert.h>
-
-// Avoid conflict with STL headers
-#undef min
-#undef max
-
 #include <chrono>
 #include <filesystem>
 #include <locale>

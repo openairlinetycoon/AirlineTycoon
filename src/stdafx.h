@@ -6,6 +6,7 @@
 #pragma once
 
 #ifdef WIN32
+#define NOMINMAX
 #define _WINSOCKAPI_   /* Prevent inclusion of winsock.h in windows.h */
 #include <Windows.h>
 #endif

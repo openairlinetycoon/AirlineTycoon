@@ -5,11 +5,6 @@
 #include "Editor.h"
 #include "glEditor.h"
 #include "atnet.h"
-
-// Avoid conflict with STL headers
-#undef min
-#undef max
-
 #include <string>
 #include <fstream>
 #include <filesystem>

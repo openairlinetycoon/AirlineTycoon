@@ -531,7 +531,7 @@ void CStatistik::CalcGraph()
 				for (int p = 0 ; p < 4 ; p++)
                if (!Sim.Players.Players[p].IsOut)
 					   if (_playerMask[p])
-						   for (long d = 0 ; d <= min(11, ((_days+29)/30)) ; d++)
+						   for (long d = 0 ; d <= Min(11l, ((_days+29)/30)) ; d++)
 						   {
                         if (_iArray[_group][i].typOfItem == TYP_PERCENT)
                         {

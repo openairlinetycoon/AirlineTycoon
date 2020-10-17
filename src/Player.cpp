@@ -894,7 +894,7 @@ void PLAYER::NewDay (void)
    if (Owner==1 && RobotUse (ROBOT_USE_IMAGEBONUS))
    {
       Image+=(SLONG(Sim.Date)%3);
-      Limit (-1000l, Image, 1000l);
+      Limit (SLONG(-1000), Image, SLONG(1000));
    }
 
    if (Owner==1 && Bonus==0)
@@ -4970,7 +4970,7 @@ void PLAYER::RobotExecuteAction(void)
                }
 
                Image+=gWerbePrice[n]/10000*(n+6)/55;
-               Limit (-1000l, Image, 1000l);
+               Limit (SLONG(-1000), Image, SLONG(1000));
 
                if (n==0)
                   for (c=0; c<Sim.Players.AnzPlayers; c++)

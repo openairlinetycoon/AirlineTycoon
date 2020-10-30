@@ -386,7 +386,13 @@ SLONG SB_CPrimaryBitmap::Flip()
         Cursor->FlipBegin();
 
     //SDL_RenderPresent(lpDD);
-    SDL_BlitSurface(lpDDSurface, NULL, SDL_GetWindowSurface(Window), NULL);
+    int w, h;
+    const float aspect = 4.0f / 3.0f;
+    SDL_GetWindowSize(Window, &w, &h);
+    int aw = (float)w / h > aspect ? (h * 4) / 3 : w;
+    int ah = (float)w / h < aspect ? (w * 3) / 4 : h;
+    SDL_Rect dst = { (w - aw) / 2, (h - ah) / 2, aw, ah };
+    SDL_BlitScaled(lpDDSurface, NULL, SDL_GetWindowSurface(Window), &dst);
     SDL_UpdateWindowSurface(Window);
 
     if (Cursor)

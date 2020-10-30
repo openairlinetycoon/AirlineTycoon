@@ -4172,7 +4172,7 @@ _ehemals_2080:
                   }
                   break;
 
-               case 0xffffffff:
+               case (SLONG)0xffffffff:
                   break;
 
                default: //Standard: Dialog abbrechen

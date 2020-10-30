@@ -424,13 +424,13 @@ CStdRaum::~CStdRaum()
    }
 }
 
-void CStdRaum::ProcessEvent(const SDL_Event& event)
+void CStdRaum::ProcessEvent(const SDL_Event& event, CPoint position)
 {
    switch (event.type)
    {
    case SDL_MOUSEMOTION:
    {
-      OnMouseMove(0, CPoint(event.motion.x, event.motion.y));
+      OnMouseMove(0, position);
    }
    break;
    case SDL_KEYDOWN:
@@ -446,20 +446,20 @@ void CStdRaum::ProcessEvent(const SDL_Event& event)
       if (event.button.button == SDL_BUTTON_LEFT)
       {
          if (event.button.clicks > 1)
-            OnLButtonDblClk(WM_LBUTTONDBLCLK, CPoint(event.button.x, event.button.y));
+            OnLButtonDblClk(WM_LBUTTONDBLCLK, position);
          else
-            OnLButtonDown(WM_LBUTTONDOWN, CPoint(event.button.x, event.button.y));
+            OnLButtonDown(WM_LBUTTONDOWN, position);
       }
       else if (event.button.button == SDL_BUTTON_RIGHT)
-         OnRButtonDown(WM_RBUTTONDOWN, CPoint(event.button.x, event.button.y));
+         OnRButtonDown(WM_RBUTTONDOWN, position);
    }
    break;
    case SDL_MOUSEBUTTONUP:
    {
       if (event.button.button == SDL_BUTTON_LEFT)
-         OnLButtonUp(WM_LBUTTONUP, CPoint(event.button.x, event.button.y));
+         OnLButtonUp(WM_LBUTTONUP, position);
       else if (event.button.button == SDL_BUTTON_RIGHT)
-         OnRButtonUp(WM_RBUTTONUP, CPoint(event.button.x, event.button.y));
+         OnRButtonUp(WM_RBUTTONUP, position);
    }
    break;
    }

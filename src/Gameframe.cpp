@@ -314,6 +314,22 @@ GameFrame::~GameFrame()
    Hdu.HercPrintf (0, "logging ends..");
 }
 
+CPoint GameFrame::TranslatePoint(int x, int y)
+{
+    int w, h;
+    const float aspect = 4.0f / 3.0f;
+    SDL_GetWindowSize(m_hWnd, &w, &h);
+
+    CPoint point(x, y);
+    int aw = (float)w / h > aspect ? (h * 4) / 3 : w;
+    int ah = (float)w / h < aspect ? (w * 3) / 4 : h;
+    point.x -= (w - aw) / 2;
+    point.y -= (h - ah) / 2;
+    point.x = (point.x * 640) / aw;
+    point.y = (point.y * 480) / ah;
+    return point;
+}
+
 void GameFrame::ProcessEvent(const SDL_Event& event)
 {
    switch (event.type)
@@ -347,7 +363,7 @@ void GameFrame::ProcessEvent(const SDL_Event& event)
    break;
    case SDL_MOUSEMOTION:
    {
-      FrameWnd->OnMouseMove(0, CPoint(event.motion.x, event.motion.y));
+      FrameWnd->OnMouseMove(0, TranslatePoint(event.motion.x, event.motion.y));
    }
    break;
    case SDL_KEYDOWN:
@@ -363,12 +379,12 @@ void GameFrame::ProcessEvent(const SDL_Event& event)
       if (event.button.button == SDL_BUTTON_LEFT)
       {
          if (event.button.clicks > 1)
-            FrameWnd->OnLButtonDblClk(WM_LBUTTONDBLCLK, CPoint(event.button.x, event.button.y));
+            FrameWnd->OnLButtonDblClk(WM_LBUTTONDBLCLK, TranslatePoint(event.button.x, event.button.y));
          else
-            FrameWnd->OnLButtonDown(WM_LBUTTONDOWN, CPoint(event.button.x, event.button.y));
+            FrameWnd->OnLButtonDown(WM_LBUTTONDOWN, TranslatePoint(event.button.x, event.button.y));
       }
       else if (event.button.button == SDL_BUTTON_RIGHT)
-         FrameWnd->OnRButtonDown(WM_RBUTTONDOWN, CPoint(event.button.x, event.button.y));
+         FrameWnd->OnRButtonDown(WM_RBUTTONDOWN, TranslatePoint(event.button.x, event.button.y));
    }
    break;
    case SDL_KEYUP:
@@ -379,9 +395,9 @@ void GameFrame::ProcessEvent(const SDL_Event& event)
    case SDL_MOUSEBUTTONUP:
    {
       if (event.button.button == SDL_BUTTON_LEFT)
-         FrameWnd->OnLButtonUp(WM_LBUTTONUP, CPoint(event.button.x, event.button.y));
+         FrameWnd->OnLButtonUp(WM_LBUTTONUP, TranslatePoint(event.button.x, event.button.y));
       else if (event.button.button == SDL_BUTTON_RIGHT)
-         FrameWnd->OnRButtonUp(WM_RBUTTONUP, CPoint(event.button.x, event.button.y));
+         FrameWnd->OnRButtonUp(WM_RBUTTONUP, TranslatePoint(event.button.x, event.button.y));
    }
    break;
    }
@@ -416,7 +432,7 @@ void GameFrame::Invalidate(void)
 //--------------------------------------------------------------------------------------------
 //Die Nachricht an alle Sub-Fenster weiterleiten::
 //--------------------------------------------------------------------------------------------
-void GameFrame::RePostMessage (CPoint)
+void GameFrame::RePostMessage (CPoint Pos)
 {
    CStdRaum *w;    
    SLONG     c;
@@ -424,7 +440,7 @@ void GameFrame::RePostMessage (CPoint)
    //An alle direkten Sub-Windows schicken:
    if (TopWin)
    {
-      TopWin->ProcessEvent(Mess);
+      TopWin->ProcessEvent(Mess, Pos);
    }
    else 
    {
@@ -435,7 +451,7 @@ void GameFrame::RePostMessage (CPoint)
          if (w)
          {
             //if (XY(point).IfIsWithin (w->WinP1.x, w->WinP1.y, w->WinP2.x, w->WinP2.y))
-               w->ProcessEvent(Mess);
+               w->ProcessEvent(Mess, Pos);
          }
       }
    }

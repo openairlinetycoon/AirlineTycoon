@@ -163,7 +163,7 @@ GameFrame::GameFrame()
    if (DetectCurrentDisplayResolution().x<=640 || DetectCurrentDisplayResolution().y<=480)
       bFullscreen=TRUE;
 
-   SDL_Window* h = SDL_CreateWindow("Airline Tycoon", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, rect.Width(), rect.Height(), bFullscreen ? SDL_WINDOW_FULLSCREEN : 0);
+   SDL_Window* h = SDL_CreateWindow("Airline Tycoon", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, rect.Width(), rect.Height(), bFullscreen ? SDL_WINDOW_FULLSCREEN : SDL_WINDOW_RESIZABLE);
    if (!h)
    {
       MyMessageBox("ERROR", "CreateWindow failed");

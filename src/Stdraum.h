@@ -220,7 +220,7 @@ public:
 public:
 	virtual ~CStdRaum();
 
-   void ProcessEvent(const SDL_Event& event);
+   void ProcessEvent(const SDL_Event& event, CPoint position);
 
 	// Generated message map functions
 protected:

@@ -537,7 +537,7 @@ void Options::OnLButtonDown(UINT nFlags, CPoint point)
             else if (Line==7)
             {
                Sim.Options.OptionEnableDigi^=1;
-               gpSSE->EnableSound(Sim.Options.OptionEnableDigi);
+               if (Sim.Options.OptionEnableDigi) gpSSE->EnableDS(); else gpSSE->DisableDS();
                RefreshKlackerField();
                KlackerTafel.Warp ();
             }

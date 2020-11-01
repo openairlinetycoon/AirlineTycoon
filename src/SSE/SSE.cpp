@@ -11,18 +11,30 @@ SSE::SSE(void* hWnd, dword samplesPerSec, word channels, word bitsPerSample, wor
     , _fSoundEnabled(true)
     , _fMusicEnabled(true)
 {
-    if (Mix_OpenAudioDevice(samplesPerSec, SDL_AUDIO_MASK_SIGNED | (bitsPerSample & SDL_AUDIO_MASK_BITSIZE), channels, 1024, nullptr, 0) < 0)
-    {
-        printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
-    }
-
-    Mix_AllocateChannels(maxFX);
 }
 
 SSE::~SSE()
 {
+    DisableDS();
+}
+
+int SSE::EnableDS()
+{
+    if (Mix_OpenAudioDevice(_samplesPerSec, SDL_AUDIO_MASK_SIGNED | (_bitsPerSample & SDL_AUDIO_MASK_BITSIZE), _channels, 1024, nullptr, 0) < 0)
+    {
+        printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+        return SSE_DSOUND_NOINIT;
+    }
+
+    Mix_AllocateChannels(_maxSound);
+    return SSE_OK;
+}
+
+int SSE::DisableDS()
+{
     Mix_HookMusicFinished(nullptr);
     Mix_CloseAudio();
+    return SSE_OK;
 }
 
 int SSE::CreateFX(FX** ppFX, char* file, dword samplesPerSec, word channels, word bitsPerSample)

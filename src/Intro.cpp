@@ -28,6 +28,7 @@ CIntro::CIntro (BOOL bHandy, SLONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "",
    bWasIntroPlayed = false;
 
    StopMidi ();
+   gpSSE->DisableDS();
 
    gMouseStartup = TRUE;
 
@@ -56,6 +57,8 @@ CIntro::CIntro (BOOL bHandy, SLONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "",
       desired.callback = NULL;
       desired.userdata = NULL;
       audioDevice = SDL_OpenAudioDevice(NULL, 0, &desired, NULL, 0);
+      if (!audioDevice)
+          Hdu.HercPrintf(SDL_GetError());
 
       if (pSmack) bWasIntroPlayed=true;
 
@@ -111,6 +114,7 @@ CIntro::~CIntro()
    gMouseStartup = FALSE;
    pCursor->SetImage (gCursorBm.pBitmap);
 
+   if (Sim.Options.OptionEnableDigi) gpSSE->EnableDS();
    if (Sim.Options.OptionEnableMidi) NextMidi ();
    SetMidiVolume(Sim.Options.OptionMusik);
 }

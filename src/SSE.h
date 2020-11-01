@@ -176,8 +176,8 @@ class SSE
 		DllExport SSE(void *hWnd, dword samplesPerSec = 22050, word channels = 2, word bitsPerSample = 16, word maxFX = 8);
 		DllExport ~SSE();
 
-		//DllExport int	EnableDS ();
-		//DllExport int	DisableDS ();
+		DllExport int	EnableDS ();
+		DllExport int	DisableDS ();
 		DllExport int	CreateFX (FX** ppFX, char* file = 0, dword samplesPerSec = 0, word channels = 0, word bitsPerSample = 0);
 		DllExport int	CreateMidi (MIDI** ppMidi, char* file = 0);
 		//DllExport int	CreateDigimusic (DIGIMUSIC** ppDigimusic, char* file = 0, dword bufferSecs = 4, dword samplesPerSec = 0, word channels = 0, word bitsPerSample = 0);

@@ -42,22 +42,34 @@ SLONG SB_CCursor::FlipEnd(void)
 
 SLONG SB_CCursor::Show(bool show)
 {
+    if (!Cursor)
+        return -1;
+
     return SDL_ShowCursor(!show ? SDL_ENABLE : SDL_DISABLE);
 }
 
 SLONG SB_CCursor::BlitImage(SLONG x, SLONG y)
 {
+    if (!Cursor)
+        return -1;
+
     return Cursor->Blit(Primary, x, y);
 }
 
 SLONG SB_CCursor::RestoreBackground(struct SDL_Surface* surf)
 {
+    if (!Cursor)
+        return -1;
+
     SDL_Rect rect = { Position.x, Position.y, Cursor->GetXSize(), Cursor->GetYSize() };
     return SDL_BlitSurface(surf, NULL, Primary->GetSurface(), &rect);
 }
 
 SLONG SB_CCursor::SaveBackground(struct SDL_Surface* surf)
 {
+    if (!Cursor)
+        return -1;
+
     SDL_Rect src = { Position.x, Position.y, Cursor->GetXSize(), Cursor->GetYSize() };
     SDL_Rect dst = { 0, 0, Cursor->GetXSize(), Cursor->GetYSize() };
     return SDL_BlitSurface(Primary->GetSurface(), &src, surf, &dst);

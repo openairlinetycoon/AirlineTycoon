@@ -383,7 +383,7 @@ void DoAppPath (void)
    char* buffer = SDL_strdup(SDL_GetBasePath());
 
    //eigentlichen Programmteil löschen:
-   while (strlen(buffer)>0 && buffer[(SLONG)(strlen(buffer)-1)]!='\\') buffer[(SLONG)(strlen(buffer)-1)]=0;
+   //while (strlen(buffer)>0 && buffer[(SLONG)(strlen(buffer)-1)]!='\\') buffer[(SLONG)(strlen(buffer)-1)]=0;
 
    //Verzeichnis-Namen der %§$@#"$! MS-Entwicklungsumgebung löschen:
    //if (strlen(buffer) > 6 && strnicmp(buffer + strlen(buffer) - 6, "debug\\", 6) == 0) buffer[(SLONG)(strlen(buffer) - 6)] = 0;

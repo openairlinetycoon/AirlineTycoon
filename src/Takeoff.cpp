@@ -497,8 +497,6 @@ BOOL CTakeOffApp::InitInstance(int argc, char* argv[])
       if (bConfigNoDigiSound)    Sim.Options.OptionDigiSound = FALSE;
    }
 
-   bFirstClass = !DoesFileExist (CString(AppPath)+"data\\builds.csv") && !DoesFileExist (CString(AppPath)+"data\\relation.csv");
-
    //Schneller Mode zum Debuggen?
    for (int i = 0; i < argc; i++)
    {
@@ -576,6 +574,8 @@ BOOL CTakeOffApp::InitInstance(int argc, char* argv[])
    DoAppPath();
    InitPathVars();
    //UpdateSavegames ();
+
+   bFirstClass |= !DoesFileExist(FullFilename("builds.csv", ExcelPath)) && !DoesFileExist(FullFilename("relation.csv", ExcelPath));
 
    gPhysicalCdRomBitlist.Pump();
 

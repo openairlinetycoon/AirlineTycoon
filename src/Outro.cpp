@@ -24,6 +24,7 @@ COutro::COutro (BOOL bHandy, SLONG PlayerNum, CString SmackName) : CStdRaum (bHa
    FrameNext=0;
 
    StopMidi ();
+   gpSSE->DisableDS();
 
    gMouseStartup = TRUE;
 
@@ -45,6 +46,8 @@ COutro::COutro (BOOL bHandy, SLONG PlayerNum, CString SmackName) : CStdRaum (bHa
    desired.callback = NULL;
    desired.userdata = NULL;
    audioDevice = SDL_OpenAudioDevice(NULL, 0, &desired, NULL, 0);
+   if (!audioDevice)
+       Hdu.HercPrintf(SDL_GetError());
 
    State = smk_first(pSmack);
    Bitmap.ReSize (Width, Height);
@@ -71,12 +74,16 @@ COutro::COutro (BOOL bHandy, SLONG PlayerNum, CString SmackName) : CStdRaum (bHa
 //--------------------------------------------------------------------------------------------
 COutro::~COutro()
 {
+   if (audioDevice) SDL_CloseAudioDevice(audioDevice);
+   audioDevice = 0;
+
    if (pSmack) smk_close(pSmack);
    pSmack = NULL;
 
    gMouseStartup = FALSE;
    pCursor->SetImage (gCursorBm.pBitmap);
 
+   if (Sim.Options.OptionEnableDigi) gpSSE->EnableDS();
    if (Sim.Options.OptionEnableMidi) NextMidi ();
    SetMidiVolume(Sim.Options.OptionMusik);
 }

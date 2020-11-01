@@ -262,10 +262,11 @@ skip_search_demo_cd:
 void InitSoundSystem (SDL_Window *AppWnd)
 {
    gpSSE = new SSE(AppWnd, 22050, 1, 16);
-   gpSSE->EnableSound(Sim.Options.OptionEnableDigi);
 	
    if (Sim.Options.OptionDigiSound)
    {
+      if (Sim.Options.OptionEnableDigi) gpSSE->EnableDS();
+
       gpSSE->CreateFX(&gpClickFx);
       gpClickFx->Load((char*)(LPCTSTR)FullFilename ("click.raw", SoundPath));
       gDoorOpen.ReInit ("Tuerauf.raw");

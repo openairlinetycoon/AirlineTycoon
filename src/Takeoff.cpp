@@ -466,8 +466,7 @@ BOOL CTakeOffApp::InitInstance(int argc, char* argv[])
 
    DoAppPath();
    gLanguage=LANGUAGE_D;
-   std::filesystem::path App((std::string)AppPath);
-   std::ifstream ifil = std::ifstream(App / "misc" / "sabbel.dat");
+   std::ifstream ifil = std::ifstream(AppPath + "misc/sabbel.dat");
    if (ifil.is_open())
    {
       ifil.read((char*)&gLanguage, sizeof(gLanguage));

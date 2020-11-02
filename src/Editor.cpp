@@ -731,9 +731,7 @@ CEditor::CEditor(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "E
 
    Plane.Name = StandardTexte.GetS (TOKEN_MISC, 8210);
 
-   std::filesystem::path App((std::string)AppPath);
-   std::filesystem::path MyPlane((std::string)MyPlanePath);
-   std::filesystem::create_directory (App / MyPlane.parent_path() / MyPlane.stem());
+   std::filesystem::create_directory (LPCSTR(AppPath+MyPlanePath.Left(MyPlanePath.GetLength()-3)));
    PlaneFilename = FullFilename ("data.plane", MyPlanePath);
    if (DoesFileExist (PlaneFilename)) Plane.Load(PlaneFilename);
 

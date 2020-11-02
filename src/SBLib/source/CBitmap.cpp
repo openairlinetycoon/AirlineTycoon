@@ -276,14 +276,13 @@ ULONG SB_CBitmapCore::Blit(class SB_CBitmapCore* core, SLONG x, SLONG y, const R
         const CRect& rect = *(const CRect*)pRect;
         SDL_Rect src = { rect.left, rect.top, rect.Width(), rect.Height() };
         SDL_Rect dst = { x, y, rect.Width(), rect.Height() };
-        SDL_BlitSurface(lpDDSurface, &src, core->lpDDSurface, &dst);
+        return SDL_BlitSurface(lpDDSurface, &src, core->lpDDSurface, &dst);
     }
     else
     {
         SDL_Rect dst = { x, y, Size.x, Size.y };
-        SDL_BlitSurface(lpDDSurface, NULL, core->lpDDSurface, &dst);
+        return SDL_BlitSurface(lpDDSurface, NULL, core->lpDDSurface, &dst);
     }
-    return 0;
 }
 
 ULONG SB_CBitmapCore::BlitFast(class SB_CBitmapCore* core, SLONG x, SLONG y, const RECT* pRect, unsigned short)
@@ -313,14 +312,10 @@ ULONG SB_CBitmapCore::BlitFast(class SB_CBitmapCore* core, SLONG x, SLONG y, con
     return 0;
 }
 
-
-ULONG SB_CBitmapCore::BlitChar(SDL_Surface* font, SLONG x, SLONG y, const RECT* pRect, unsigned short flags)
+ULONG SB_CBitmapCore::BlitChar(SDL_Surface* font, SLONG x, SLONG y, const SDL_Rect* pRect, unsigned short flags)
 {
-    const CRect& rect = *(const CRect*)pRect;
-    SDL_Rect src = { rect.left, rect.top, rect.Width(), rect.Height() };
-    SDL_Rect dst = { x, y, rect.Width(), rect.Height() };
-    SDL_BlitSurface(font, &src, lpDDSurface, &dst);
-    return 0;
+    SDL_Rect dst = { x, y, pRect->w, pRect->h };
+    return SDL_BlitSurface(font, pRect, lpDDSurface, &dst);
 }
 
 void SB_CBitmapCore::InitClipRect()

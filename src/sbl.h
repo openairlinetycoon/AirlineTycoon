@@ -167,7 +167,7 @@ public:
     void SetColorKey(ULONG);
     virtual ULONG Release(void);
     ULONG BlitFast(class SB_CBitmapCore*, SLONG, SLONG, const RECT* = NULL, unsigned short = 0);
-    ULONG BlitChar(SDL_Surface*, SLONG, SLONG, const RECT* = NULL, unsigned short = 0);
+    ULONG BlitChar(SDL_Surface*, SLONG, SLONG, const SDL_Rect* = NULL, unsigned short = 0);
     ULONG Blit(class SB_CBitmapCore*, SLONG, SLONG, const RECT* = NULL, unsigned short = 0, ULONG = 0);
     SLONG BlitA(class SB_CBitmapCore*, SLONG, SLONG, const RECT*, SB_Hardwarecolor);
     SLONG BlitA(class SB_CBitmapCore*, SLONG, SLONG, const RECT*);

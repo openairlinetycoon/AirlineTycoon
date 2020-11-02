@@ -347,11 +347,11 @@ bool SB_CFont::DrawChar(char ch, bool)
     {
         if (this->Bitmap != (SB_CBitmapCore *)0x0)
         {
-            RECT srcRect;
-            srcRect.left = 0;
-            srcRect.top = (*(this->VarHeight + ch) - this->Header.LoChar) * this->Header.Height;
-            srcRect.right = this->Header.Width;
-            srcRect.bottom = srcRect.top + this->Header.Height;
+            SDL_Rect srcRect;
+            srcRect.x = 0;
+            srcRect.y = (*(this->VarHeight + ch) - this->Header.LoChar) * this->Header.Height;
+            srcRect.w = this->Header.Width;
+            srcRect.h = this->Header.Height;
             if (!this->Hidden)
                 this->Bitmap->BlitChar(Surface, Pos.x, Pos.y, &srcRect, 1);
         }

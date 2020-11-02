@@ -595,12 +595,16 @@ int MIDI::Load(const char* file)
         Free();
 
     _musicData.file = file;
-    _music = Mix_LoadMUS(file);
+    _music = Mix_LoadMUS(_musicData.file.c_str());
 
-    // Some version ship with ogg music as well, use it as a fall-back
+    // Some versions ship with ogg music as well, use it as a fall-back
     if (!_music)
+    {
+        std::transform(_musicData.file.begin(), _musicData.file.end(),
+            _musicData.file.begin(), ::tolower);
         _musicData.file.replace(_musicData.file.size() - 3, 3, "ogg");
-    _music = Mix_LoadMUS(file);
+        _music = Mix_LoadMUS(_musicData.file.c_str());
+    }
 
     _musicData.pSSE->_playingMusicObj = this;
     return SSE_OK;

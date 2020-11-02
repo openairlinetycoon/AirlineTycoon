@@ -49,11 +49,14 @@ ULONG SB_CBitmapMain::CreateBitmap(SB_CBitmapCore** out, SLONG w, SLONG h, ULONG
     Bitmaps.push_back(SB_CBitmapCore());
     SB_CBitmapCore* core = &Bitmaps.back();
     core->lpDD = Renderer;
-    core->lpDDSurface = SDL_CreateRGBSurfaceWithFormat(0, w, h, 16, SDL_PIXELFORMAT_RGB565);
     //core->Texture = NULL;
+    if (flags & CREATE_INDEXED)
+        core->lpDDSurface = SDL_CreateRGBSurfaceWithFormat(0, w, h, 8, SDL_PIXELFORMAT_INDEX8);
+    else
+        core->lpDDSurface = SDL_CreateRGBSurfaceWithFormat(0, w, h, 16, SDL_PIXELFORMAT_RGB565);
     core->Size.x = w;
     core->Size.y = h;
-    if ( !(flags & CREATE_USEALPHA) )
+    if (flags & CREATE_USECOLORKEY)
         core->SetColorKey(0);
     core->InitClipRect();
     *out = core;

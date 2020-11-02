@@ -20,6 +20,7 @@ extern SLONG GetHighestSetBit(SLONG mask);
 #define CREATE_USEZBUFFER  4
 #define CREATE_USEALPHA    8
 #define CREATE_FULLSCREEN  16
+#define CREATE_INDEXED     32
 
 class GfxLib
 {

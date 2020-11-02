@@ -15,17 +15,18 @@ void CalculatePalettemapper (const UBYTE *pPalette, SDL_Palette *pPaletteMapper)
    if (!pPalette)
       return;
 
-   SLONG c;
+   SDL_Color colors[256];
 
-   for (c = 0; c < 256; c++)
+   for (SLONG c = 0; c < 256; c++)
    {
       if (pPalette[c*3] + pPalette[c*3+1] + pPalette[c*3+2] == 0)
-         pPaletteMapper->colors[c] = SDL_Color{ 4, 4, 4, 0xFF };
+         colors[c] = SDL_Color{ 4, 4, 4, 0xFF };
       else
-         pPaletteMapper->colors[c] = SDL_Color{ pPalette[c*3], pPalette[c*3+1], pPalette[c*3+2], 0xFF };
+         colors[c] = SDL_Color{ pPalette[c*3], pPalette[c*3+1], pPalette[c*3+2], 0xFF };
    }
 
-   pPaletteMapper->colors[0] = SDL_Color{ 0 };
+   colors[0] = SDL_Color{ 0 };
+   SDL_SetPaletteColors(pPaletteMapper, colors, 0, 256);
 }
 
 //--------------------------------------------------------------------------------------------

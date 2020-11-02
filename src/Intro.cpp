@@ -39,10 +39,12 @@ CIntro::CIntro (BOOL bHandy, SLONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "",
 
    if (IntroPath.GetLength()!=0)
    {
-      pSmack = smk_open_file(FullFilename ("intro.smk", IntroPath), SMK_MODE_DISK);
+      pSmack = smk_open_file(FullFilename ("intro.smk", IntroPath), SMK_MODE_MEMORY);
       smk_enable_video(pSmack, true);
-      smk_info_video(pSmack, &Width, &Height, NULL);
-      Height *= 2;
+
+      smk_info_video(pSmack, &Width, &Height, &Scale);
+      if (Scale != SMK_FLAG_Y_NONE)
+        Height *= 2;
 
       unsigned char tracks, channels[7], depth[7];
       unsigned long rate[7];
@@ -57,26 +59,23 @@ CIntro::CIntro (BOOL bHandy, SLONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "",
       desired.callback = NULL;
       desired.userdata = NULL;
       audioDevice = SDL_OpenAudioDevice(NULL, 0, &desired, NULL, 0);
-      if (!audioDevice)
-          Hdu.HercPrintf(SDL_GetError());
+      if (!audioDevice) Hdu.HercPrintf(SDL_GetError());
 
       if (pSmack) bWasIntroPlayed=true;
 
       State = smk_first(pSmack);
-      Bitmap.ReSize(Width, Height);
-      SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormatFrom((void*)smk_get_video(pSmack), Width, Height / 2, 8, Width, SDL_PIXELFORMAT_INDEX8);
-      SDL_Palette* pal = SDL_AllocPalette(256);
-      CalculatePalettemapper(smk_get_palette(pSmack), pal);
-      SDL_SetSurfacePalette(surf, pal);
+      Bitmap.ReSize(XY(Width, Height), CREATE_SYSMEM | CREATE_INDEXED);
+      {
+         // Copy video frame with line-doubling if needed
+         SB_CBitmapKey Key(*Bitmap.pBitmap);
+         const unsigned char* pVideo = smk_get_video(pSmack);
+         int scale_mode = Scale == SMK_FLAG_Y_NONE ? 1 : 2;
+         for (unsigned long y = 0; y < Height; y++)
+            memcpy((BYTE*)Key.Bitmap + (y * Key.lPitch), pVideo + ((y / scale_mode) * Key.lPitch), Key.lPitch);
+      }
+      CalculatePalettemapper(smk_get_palette(pSmack), Bitmap.pBitmap->GetPixelFormat()->palette);
       SDL_QueueAudio(audioDevice, smk_get_audio(pSmack, 0), smk_get_audio_size(pSmack, 0));
-
-      SDL_Surface* scaleSurf = SDL_ConvertSurfaceFormat(surf, SDL_PIXELFORMAT_RGB565, 0);
-      SDL_FreePalette(pal);
-      SDL_FreeSurface(surf);
-
       State = smk_next(pSmack);
-      SDL_BlitScaled(scaleSurf, NULL, Bitmap.pBitmap->GetSurface(), NULL);
-      SDL_FreeSurface(scaleSurf);
    }
    else
    {
@@ -139,20 +138,18 @@ void CIntro::OnPaint()
       if (timeGetTime() >= FrameNext && State == SMK_MORE)
       {
          //Take the next frame:
-         Bitmap.ReSize(Width, Height);
-         SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormatFrom((void*)smk_get_video(pSmack), Width, Height / 2, 8, Width, SDL_PIXELFORMAT_INDEX8);
-         SDL_Palette* pal = SDL_AllocPalette(256);
-         CalculatePalettemapper(smk_get_palette(pSmack), pal);
-         SDL_SetSurfacePalette(surf, pal);
+         Bitmap.ReSize(XY(Width, Height), CREATE_SYSMEM | CREATE_INDEXED);
+         {
+            // Copy video frame with line-doubling if needed
+            SB_CBitmapKey Key(*Bitmap.pBitmap);
+            const unsigned char* pVideo = smk_get_video(pSmack);
+            int scale_mode = Scale == SMK_FLAG_Y_NONE ? 1 : 2;
+            for (unsigned long y = 0; y < Height; y++)
+               memcpy((BYTE*)Key.Bitmap + (y * Key.lPitch), pVideo + ((y / scale_mode) * Key.lPitch), Key.lPitch);
+         }
+         CalculatePalettemapper(smk_get_palette(pSmack), Bitmap.pBitmap->GetPixelFormat()->palette);
          SDL_QueueAudio(audioDevice, smk_get_audio(pSmack, 0), smk_get_audio_size(pSmack, 0));
-
-         SDL_Surface* scaleSurf = SDL_ConvertSurfaceFormat(surf, SDL_PIXELFORMAT_RGB565, 0);
-         SDL_FreeSurface(surf);
-         SDL_FreePalette(pal);
-
          State = smk_next(pSmack);
-         SDL_BlitScaled(scaleSurf, NULL, Bitmap.pBitmap->GetSurface(), NULL);
-         SDL_FreeSurface(scaleSurf);
 
          double usf;
          smk_info_all(pSmack, NULL, NULL, &usf);

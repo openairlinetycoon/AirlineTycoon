@@ -28,15 +28,20 @@ SLONG SB_CCursor::SetImage(class SB_CBitmapCore* cursor)
     return 0;
 }
 
-SLONG SB_CCursor::FlipBegin(void)
+SLONG SB_CCursor::FlipBegin(SDL_Renderer* renderer)
 {
-    if (SaveBackground(Background) == 0)
+    SDL_Rect dst = { Position.x, Position.y, Cursor->GetXSize(), Cursor->GetYSize() };
+    if (renderer)
+        return SDL_RenderCopy(renderer, Cursor->GetTexture(), NULL, &dst);
+    else if (SaveBackground(Background) == 0)
         return BlitImage(Position.x, Position.y);
     return -1;
 }
 
-SLONG SB_CCursor::FlipEnd(void)
+SLONG SB_CCursor::FlipEnd(SDL_Renderer* renderer)
 {
+    if (renderer)
+        return 0;
     return RestoreBackground(Background);
 }
 
@@ -95,7 +100,6 @@ SLONG SB_CCursor::CreateBackground(void)
 
 SLONG SB_CCursor::CreateSurface(struct SDL_Surface** out, SLONG w, SLONG h)
 {
-    SDL_PixelFormat* pFormat = Primary->GetPixelFormat();
-    *out = SDL_CreateRGBSurfaceWithFormat(0, w, h, pFormat->BitsPerPixel, pFormat->format);
+    *out = SDL_CreateRGBSurfaceWithFormat(0, w, h, 16, SDL_PIXELFORMAT_RGB565);
     return *out ? 0 : -1;
 }

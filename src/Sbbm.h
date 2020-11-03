@@ -199,9 +199,9 @@
          void  Destroy() { Bitmaps.ReSize(0); }
          void  ReSize (GfxLib* gfxLibrary, __int64 graphicID, ...);
          void  ReSize (CHLPool* pPool, const BUFFER<__int64> &graphicsIds);
-         void  ReSize (GfxLib* gfxLibrary, const BUFFER<__int64> &graphicsIds);
+         void  ReSize (GfxLib* gfxLibrary, const BUFFER<__int64> &graphicsIds, SLONG flags = CREATE_SYSMEM);
          void  ReSize (GfxLib* gfxLibrary, const CString &graphicIDs);
-         void  ReSize (GfxLib* gfxLibrary, const CString &graphicIDs, SLONG Anzahl);
+         void  ReSize (GfxLib* gfxLibrary, const CString &graphicIDs, SLONG Anzahl, SLONG flags = CREATE_SYSMEM);
          SLONG AnzEntries() const { return (Bitmaps.AnzEntries()); }
 
          //SB1BM& operator [](const SLONG Index) const { return Bitmaps[Index]; }

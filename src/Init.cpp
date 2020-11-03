@@ -427,8 +427,8 @@ void InitTipBms (void)
 {
    SLONG c;
 
-   gCursorFeetBms[0].ReSize (pGLibStd, "CWALKL01", 9);
-   gCursorFeetBms[1].ReSize (pGLibStd, "CWALKR01", 9);
+   gCursorFeetBms[0].ReSize (pGLibStd, "CWALKL01", 9, CREATE_VIDMEM);
+   gCursorFeetBms[1].ReSize (pGLibStd, "CWALKR01", 9, CREATE_VIDMEM);
 
    gNotepadButtonL.ReSize (pGLibStd, GFX_NOTEB1);
    gNotepadButtonM.ReSize (pGLibStd, GFX_NOTEB3);

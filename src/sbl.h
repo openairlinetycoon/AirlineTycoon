@@ -183,20 +183,16 @@ public:
     RECT GetClipRect() { const SDL_Rect& r = lpDDSurface->clip_rect; return CRect(r.x, r.y, r.x + r.w, r.y + r.h); }
     SDL_Surface* GetSurface() { return lpDDSurface; }
     SDL_PixelFormat* GetPixelFormat(void) { return lpDDSurface->format; }
+    SDL_Texture* GetTexture() { return lpTexture; }
 
 protected:
-    virtual SLONG Lock(struct _DDSURFACEDESC*) const;
-    virtual SLONG Unlock(struct _DDSURFACEDESC*) const;
-
     friend class SB_CBitmapMain;
     friend class SB_CBitmapKey;
 
     SDL_Renderer* lpDD;
     SDL_Surface* lpDDSurface;
-    SDL_Texture* Texture;
-    dword Unknown1[12];
+    SDL_Texture* lpTexture;
     XY Size;
-    dword Unknown2[5];
 };
 
 //static_assert(sizeof(SB_CBitmapCore) == 0x5Cu, "SB_CBitmapCore size check");
@@ -209,8 +205,8 @@ public:
     SLONG Create(class SB_CBitmapCore*);
     SLONG SetImage(class SB_CBitmapCore*);
     SLONG MoveImage(SLONG, SLONG);
-    SLONG FlipBegin(void);
-    SLONG FlipEnd(void);
+    SLONG FlipBegin(SDL_Renderer*);
+    SLONG FlipEnd(SDL_Renderer*);
     SLONG Show(bool);
 
 private:
@@ -239,7 +235,6 @@ public:
     virtual ULONG Release(void);
     SLONG Flip(void);
     void SetPos(POINT);
-    struct IDirectDrawSurface* GetLastPage(void);
 
     void AssignCursor(SB_CCursor* c) { Cursor = c; }
     SDL_Window* GetPrimarySurface() { return Window; }

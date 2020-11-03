@@ -196,15 +196,15 @@ GameFrame::GameFrame()
    bitmapMain = new SB_CBitmapMain(lpDD);
 
    pGfxMain->LoadLib ((char*)(LPCTSTR)FullFilename ("glbasis.gli", GliPath),  &pGLibBasis, L_LOCMEM);
-   gCursorBm.ReSize (pGLibBasis, GFX_CURSOR);
-   gCursorLBm.ReSize (pGLibBasis, GFX_CURSORL);
-   gCursorRBm.ReSize (pGLibBasis, GFX_CURSORR);
-   gCursorHotBm.ReSize (pGLibBasis, GFX_CURSORH);
-   gCursorExitBms.ReSize (pGLibBasis, "EXIT01", 12);
-   gCursorMoveHBm.ReSize (pGLibBasis, GFX_CURSORV);
-   gCursorMoveVBm.ReSize (pGLibBasis, GFX_CURSORW);
-   gCursorSandBm.ReSize (pGLibBasis, GFX_CURSORS);
-   gCursorNoBm.ReSize (10,10);
+   gCursorBm.ReSize (pGLibBasis, GFX_CURSOR, CREATE_VIDMEM);
+   gCursorLBm.ReSize (pGLibBasis, GFX_CURSORL, CREATE_VIDMEM);
+   gCursorRBm.ReSize (pGLibBasis, GFX_CURSORR, CREATE_VIDMEM);
+   gCursorHotBm.ReSize (pGLibBasis, GFX_CURSORH, CREATE_VIDMEM);
+   gCursorExitBms.ReSize (pGLibBasis, "EXIT01", 12, CREATE_VIDMEM);
+   gCursorMoveHBm.ReSize (pGLibBasis, GFX_CURSORV, CREATE_VIDMEM);
+   gCursorMoveVBm.ReSize (pGLibBasis, GFX_CURSORW, CREATE_VIDMEM);
+   gCursorSandBm.ReSize (pGLibBasis, GFX_CURSORS, CREATE_VIDMEM);
+   gCursorNoBm.ReSize (XY(10,10), CREATE_VIDMEM);
    gCursorNoBm.FillWith (0);
 
    CRect cliprect (2,2,638, 478);
@@ -310,6 +310,11 @@ GameFrame::~GameFrame()
       pGfxMain=NULL;
    }
 
+   if (m_hWnd)
+   {
+       SDL_DestroyWindow(m_hWnd);
+       m_hWnd=NULL;
+   }
    bLeaveGameLoop=TRUE;
    Hdu.HercPrintf (0, "logging ends..");
 }

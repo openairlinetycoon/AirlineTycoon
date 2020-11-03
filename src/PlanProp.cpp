@@ -66,7 +66,7 @@ CPlaneProps::CPlaneProps(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, Playe
    CockpitBms.ReSize (pRoomLib, "COCKPIT2", 2);
    TurbinenBms.ReSize (pRoomLib, "TURBINE2", 2);
 
-   CursorBms.ReSize (pRoomLib, "HIGH01", 8);
+   CursorBms.ReSize (pRoomLib, "HIGH01", 8, CREATE_VIDMEM);
    StarBms.ReSize (pRoomLib, "STERN1", 3);
    MenuBms.ReSize (pRoomLib, "LEFT COPY OK PASTE RIGHT MINUS PLUS USEL USER USELOFF USEROFF");
    DigitBms.ReSize (pRoomLib, "KL_0", 10);

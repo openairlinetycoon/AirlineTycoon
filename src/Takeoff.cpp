@@ -911,7 +911,8 @@ void CTakeOffApp::GameLoop(void*)
 
    while (!bLeaveGameLoop)
    {
-      Time=timeGetTime();
+      Time= SDL_GetTicks();
+      int timerFps = Time;
       if (LastTime==0xffffffff || bgJustDidLotsOfWork || bActive==FALSE) LastTime=Time;
 
       bgJustDidLotsOfWork=FALSE;
@@ -1974,11 +1975,18 @@ void CTakeOffApp::GameLoop(void*)
             FrameWnd->Invalidate();
 
             RefreshNeccessary=FALSE;
+         }else{
+            FrameWnd->Invalidate();
          }
 
          PumpNetwork ();
+      } else {
+          timerFps -= SDL_GetTicks();
+          if(timerFps < 1000 / 60){
+              SDL_Delay((1000 / 60) - timerFps);
       }
-      else SDL_Delay (100);
+
+      }
 
       /*for (c=0; c<Sim.Players.AnzPlayers; c++)
       {

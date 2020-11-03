@@ -110,7 +110,7 @@ void CheatSound (void)
 
 void MessagePump (void)
 {
-   while (SDL_PollEvent(&FrameWnd->Mess))
+   if (SDL_PollEvent(&FrameWnd->Mess))
       FrameWnd->ProcessEvent(FrameWnd->Mess);
 }
 

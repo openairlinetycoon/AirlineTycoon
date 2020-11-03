@@ -385,19 +385,13 @@ bool SB_CPrimaryBitmap::FastClip(CRect clipRect, POINT* pPoint, RECT* pRect)
 
 SLONG SB_CPrimaryBitmap::Flip()
 {
-    int w = Size.x, h = Size.y;
-    const float aspect = 4.0f / 3.0f;
-    int aw = (float)w / h > aspect ? (h * 4) / 3 : w;
-    int ah = (float)w / h < aspect ? (w * 3) / 4 : h;
-    SDL_Rect dst = { (w - aw) / 2, (h - ah) / 2, aw, ah };
-
     if (lpDD)
     {
         if (SDL_SetRenderTarget(lpDD, NULL) < 0)
             return -1;
 
         SDL_UnlockTexture(lpTexture);
-        if (SDL_RenderCopy(lpDD, lpTexture, NULL, &dst) < 0)
+        if (SDL_RenderCopy(lpDD, lpTexture, NULL, NULL) < 0)
             return -2;
     }
 
@@ -412,7 +406,8 @@ SLONG SB_CPrimaryBitmap::Flip()
     }
     else
     {
-        if (SDL_BlitScaled(lpDDSurface, NULL, SDL_GetWindowSurface(Window), NULL) < 0)
+        SDL_Rect dst = { 0, 0, Size.x, Size.y };
+        if (SDL_BlitScaled(lpDDSurface, NULL, SDL_GetWindowSurface(Window), &dst) < 0)
             return -4;
         SDL_Delay(10); // Ensure we don't run too fast without v-sync
     }
@@ -432,6 +427,7 @@ SLONG SB_CPrimaryBitmap::Create(SDL_Renderer** out, SDL_Window* Wnd, unsigned sh
     lpDD = SDL_CreateRenderer(Window, -1, SDL_RENDERER_PRESENTVSYNC);
     if (lpDD)
     {
+        SDL_RenderSetLogicalSize(lpDD, w, h);
         Hdu.HercPrintf("Using hardware accelerated presentation");
         lpTexture = SDL_CreateTexture(lpDD, SDL_PIXELFORMAT_RGB565, SDL_TEXTUREACCESS_STREAMING, w, h);
         if (SDL_LockTextureToSurface(lpTexture, NULL, &lpDDSurface) < 0)

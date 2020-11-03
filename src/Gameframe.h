@@ -37,7 +37,6 @@ public:
 public:
 	virtual ~GameFrame();
 
-	CPoint TranslatePoint(int x, int y);
 	void ProcessEvent(const SDL_Event& event);
 
 	// Generated message map functions

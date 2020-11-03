@@ -310,7 +310,7 @@ SLONG SB_CFont::GetWordLength(const char* str, SLONG offset)
 SLONG SB_CFont::GetWidth(char ch)
 {
     if ((this->Header.Flags & 1) == 1)
-        return *(this->VarWidth + ch);
+        return *(this->VarWidth +(unsigned char) ch);
     else
         return this->Header.Width;
 }
@@ -349,13 +349,13 @@ bool SB_CFont::DrawChar(char ch, bool)
         {
             RECT srcRect;
             srcRect.left = 0;
-            srcRect.top = (*(this->VarHeight + ch) - this->Header.LoChar) * this->Header.Height;
+            srcRect.top = (*(this->VarHeight + (unsigned char)ch) - this->Header.LoChar) * this->Header.Height;
             srcRect.right = this->Header.Width;
             srcRect.bottom = srcRect.top + this->Header.Height;
             if (!this->Hidden)
                 this->Bitmap->BlitChar(Surface, Pos.x, Pos.y, &srcRect, 1);
         }
-        this->Pos.x = this->Pos.x + GetWidth(ch);
+        this->Pos.x = this->Pos.x + GetWidth((unsigned char)ch);
         return true;
     }
     return false;

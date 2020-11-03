@@ -745,7 +745,7 @@ void GameFrame::OnActivateApp(BOOL bActive, DWORD hTask)
 
       if (bActive)
       {
-         #ifdef _DEBUG
+         #if 0
          #ifndef CD_PROTECTION
             if (gpSSE && Sim.Options.OptionEnableDigi) gpSSE->EnableDS ();
          #endif
@@ -785,7 +785,7 @@ void GameFrame::OnActivateApp(BOOL bActive, DWORD hTask)
       else
       {
          FlushTalkers ();
-         #ifdef _DEBUG
+         #if 0
          #ifndef CD_PROTECTION
             if (gpSSE) gpSSE->DisableDS ();
          #endif

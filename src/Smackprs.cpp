@@ -71,8 +71,6 @@ BOOL CSmack16::Next (SBBM *pTargetBm)
    if (timeGetTime() >= FrameNext && State == SMK_MORE)
    {
       //Take the next frame:
-      SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormatFrom((void*)smk_get_video(pSmack), Width, Height, 8, Width, SDL_PIXELFORMAT_INDEX8);
-      SDL_SetSurfacePalette(surf, PaletteMapper);
       State = smk_next(pSmack);
 
       double usf;
@@ -82,11 +80,11 @@ BOOL CSmack16::Next (SBBM *pTargetBm)
       if (pTargetBm)
       {
          if (SLONG(Width) != pTargetBm->Size.x || SLONG(Height) != pTargetBm->Size.y)
-            pTargetBm->ReSize(Width, Height);
-         SDL_BlitSurface(surf, NULL, pTargetBm->pBitmap->GetSurface(), NULL);
+            pTargetBm->ReSize(XY(Width, Height), CREATE_INDEXED);
+         SDL_SetPixelFormatPalette(pTargetBm->pBitmap->GetPixelFormat(), PaletteMapper);
+         SB_CBitmapKey key(*pTargetBm->pBitmap);
+         memcpy(key.Bitmap, smk_get_video(pSmack), key.lPitch * Height);
       }
-
-      SDL_FreeSurface(surf);
    }
 
    return State == SMK_MORE;
@@ -421,11 +419,12 @@ void CSmackerPerson::Pump (void)
 
       if (Clips[ActiveClip].pSmack!=NULL && ActiveClip!=-1)
       {
-         Bitmap.ReSize (Clips[ActiveClip].Width, Clips[ActiveClip].Height);
-         SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormatFrom((void*)smk_get_video(Clips[ActiveClip].pSmack), Clips[ActiveClip].Width, Clips[ActiveClip].Height, 8, Clips[ActiveClip].Width, SDL_PIXELFORMAT_INDEX8);
-         SDL_SetSurfacePalette(surf, Clips[ActiveClip].PaletteMapper);
-         SDL_BlitSurface(surf, NULL, Bitmap.pBitmap->GetSurface(), NULL);
-         SDL_FreeSurface(surf);
+         Bitmap.ReSize(XY(Clips[ActiveClip].Width, Clips[ActiveClip].Height), CREATE_INDEXED);
+         SDL_SetPixelFormatPalette(Bitmap.pBitmap->GetPixelFormat(), Clips[ActiveClip].PaletteMapper);
+         {
+            SB_CBitmapKey key(*Bitmap.pBitmap);
+            memcpy(key.Bitmap, smk_get_video(Clips[ActiveClip].pSmack), key.lPitch * Clips[ActiveClip].Height);
+         }
          BitmapPos = Clips[ActiveClip].ScreenOffset;
 
          if (Clips[ActiveClip].FrameNum==0 && !Clips[ActiveClip].IsFXPlaying)
@@ -452,11 +451,12 @@ void CSmackerPerson::Pump (void)
       if (Clips[ActiveClip].pSmack==NULL)
          return;
 
-      Bitmap.ReSize (Clips[ActiveClip].Width, Clips[ActiveClip].Height);
-      SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormatFrom((void*)smk_get_video(Clips[ActiveClip].pSmack), Clips[ActiveClip].Width, Clips[ActiveClip].Height, 8, Clips[ActiveClip].Width, SDL_PIXELFORMAT_INDEX8);
-      SDL_SetSurfacePalette(surf, Clips[ActiveClip].PaletteMapper);
-      SDL_BlitSurface(surf, NULL, Bitmap.pBitmap->GetSurface(), NULL);
-      SDL_FreeSurface(surf);
+      Bitmap.ReSize (XY(Clips[ActiveClip].Width, Clips[ActiveClip].Height), CREATE_INDEXED);
+      SDL_SetPixelFormatPalette(Bitmap.pBitmap->GetPixelFormat(), Clips[ActiveClip].PaletteMapper);
+      {
+         SB_CBitmapKey key(*Bitmap.pBitmap);
+         memcpy(key.Bitmap, smk_get_video(Clips[ActiveClip].pSmack), key.lPitch * Clips[ActiveClip].Height);
+      }
       BitmapPos = Clips[ActiveClip].ScreenOffset;
 
       if (Clips[ActiveClip].FrameNum==0 && !Clips[ActiveClip].IsFXPlaying)
@@ -482,11 +482,12 @@ void CSmackerPerson::Pump (void)
       if (timeGetTime() >= Clips[ActiveClip].FrameNext)
       {
          //Take the next frame:
-         Bitmap.ReSize (Clips[ActiveClip].Width, Clips[ActiveClip].Height);
-         SDL_Surface* surf = SDL_CreateRGBSurfaceWithFormatFrom((void*)smk_get_video(Clips[ActiveClip].pSmack), Clips[ActiveClip].Width, Clips[ActiveClip].Height, 8, Clips[ActiveClip].Width, SDL_PIXELFORMAT_INDEX8);
-         SDL_SetSurfacePalette(surf, Clips[ActiveClip].PaletteMapper);
-         SDL_BlitSurface(surf, NULL, Bitmap.pBitmap->GetSurface(), NULL);
-         SDL_FreeSurface(surf);
+         Bitmap.ReSize (XY(Clips[ActiveClip].Width, Clips[ActiveClip].Height), CREATE_INDEXED);
+         SDL_SetPixelFormatPalette(Bitmap.pBitmap->GetPixelFormat(), Clips[ActiveClip].PaletteMapper);
+         {
+            SB_CBitmapKey key(*Bitmap.pBitmap);
+            memcpy(key.Bitmap, smk_get_video(Clips[ActiveClip].pSmack), key.lPitch * Clips[ActiveClip].Height);
+         }
          BitmapPos = Clips[ActiveClip].ScreenOffset;
 
          //Variablenveränderung, während der Film läuft?

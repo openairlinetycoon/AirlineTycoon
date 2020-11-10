@@ -2074,7 +2074,7 @@ DWORD timeGetTime(void)
 
 DWORD GetTickCount(void)
 {
-   return SDL_GetTicks();
+   return clock() / (CLOCKS_PER_SEC / 1000);
 }
 
 BOOL OffsetRect(RECT* pRect, int dx, int dy)

@@ -28,20 +28,15 @@ SLONG SB_CCursor::SetImage(class SB_CBitmapCore* cursor)
     return 0;
 }
 
-SLONG SB_CCursor::FlipBegin(SDL_Renderer* renderer)
+SLONG SB_CCursor::FlipBegin()
 {
-    SDL_Rect dst = { Position.x, Position.y, Cursor->GetXSize(), Cursor->GetYSize() };
-    if (renderer)
-        return SDL_RenderCopy(renderer, Cursor->GetTexture(), NULL, &dst);
-    else if (SaveBackground(Background) == 0)
+    if (SaveBackground(Background) == 0)
         return BlitImage(Position.x, Position.y);
     return -1;
 }
 
-SLONG SB_CCursor::FlipEnd(SDL_Renderer* renderer)
+SLONG SB_CCursor::FlipEnd()
 {
-    if (renderer)
-        return 0;
     return RestoreBackground(Background);
 }
 
@@ -51,6 +46,14 @@ SLONG SB_CCursor::Show(bool show)
         return -1;
 
     return SDL_ShowCursor(!show ? SDL_ENABLE : SDL_DISABLE);
+}
+
+SLONG SB_CCursor::Render(SDL_Renderer* renderer)
+{
+    SDL_Rect dst = { Position.x, Position.y, Cursor->GetXSize(), Cursor->GetYSize() };
+    if (renderer)
+        return SDL_RenderCopy(renderer, Cursor->GetTexture(), NULL, &dst);
+    return -1;
 }
 
 SLONG SB_CCursor::BlitImage(SLONG x, SLONG y)

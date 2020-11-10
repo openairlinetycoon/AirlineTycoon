@@ -1975,6 +1975,7 @@ void CTakeOffApp::GameLoop(void*)
 
             RefreshNeccessary=FALSE;
          }
+         else { PrimaryBm.PrimaryBm.Present(); }
 
          PumpNetwork ();
       }

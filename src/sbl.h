@@ -205,9 +205,10 @@ public:
     SLONG Create(class SB_CBitmapCore*);
     SLONG SetImage(class SB_CBitmapCore*);
     SLONG MoveImage(SLONG, SLONG);
-    SLONG FlipBegin(SDL_Renderer*);
-    SLONG FlipEnd(SDL_Renderer*);
+    SLONG FlipBegin();
+    SLONG FlipEnd();
     SLONG Show(bool);
+    SLONG Render(SDL_Renderer*);
 
 private:
     SLONG BlitImage(SLONG, SLONG);
@@ -234,6 +235,7 @@ public:
     SLONG Create(SDL_Renderer**, SDL_Window*, unsigned short, SLONG, SLONG, unsigned char, unsigned short);
     virtual ULONG Release(void);
     SLONG Flip(void);
+    SLONG Present(void);
     void SetPos(POINT);
 
     void AssignCursor(SB_CCursor* c) { Cursor = c; }

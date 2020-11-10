@@ -387,33 +387,56 @@ SLONG SB_CPrimaryBitmap::Flip()
 {
     if (lpDD)
     {
-        if (SDL_SetRenderTarget(lpDD, NULL) < 0)
-            return -1;
-
+        /*
+         * None of the SDL renderers actually lock the GPU resource,
+         * they all use either staging memory or a staging texture.
+         * Thus we can still use the texture while it's locked and
+         * we simply cycle through lock/unlock to update the texture.
+         */
         SDL_UnlockTexture(lpTexture);
-        if (SDL_RenderCopy(lpDD, lpTexture, NULL, NULL) < 0)
-            return -2;
-    }
-
-    if (Cursor)
-        Cursor->FlipBegin(lpDD);
-
-    if (lpDD)
-    {
-        SDL_RenderPresent(lpDD);
         if (SDL_LockTextureToSurface(lpTexture, NULL, &lpDDSurface) < 0)
-            return -3;
+            return -1;
     }
     else
     {
+        if (Cursor)
+            Cursor->FlipBegin();
+
         SDL_Rect dst = { 0, 0, Size.x, Size.y };
         if (SDL_BlitScaled(lpDDSurface, NULL, SDL_GetWindowSurface(Window), &dst) < 0)
-            return -4;
-        SDL_Delay(10); // Ensure we don't run too fast without v-sync
+            return -2;
+
+        if (Cursor)
+            Cursor->FlipEnd();
     }
 
-    if (Cursor)
-        Cursor->FlipEnd(lpDD);
+    return Present();
+}
+
+SLONG SB_CPrimaryBitmap::Present()
+{
+    if (lpDD)
+    {
+        // Set the backbuffer as the render target
+        if (SDL_SetRenderTarget(lpDD, NULL) < 0)
+            return -1;
+
+        // Copy our primary texture to the backbuffer
+        if (SDL_RenderCopy(lpDD, lpTexture, NULL, NULL) < 0)
+            return -2;
+
+        // Render the cursor onto the backbuffer
+        if (Cursor)
+            Cursor->Render(lpDD);
+
+        SDL_RenderPresent(lpDD);
+    }
+    else
+    {
+        if (SDL_UpdateWindowSurface(Window) < 0)
+            return -3;
+        SDL_Delay(10); // Ensure we don't run too fast without v-sync
+    }
     return 0;
 }
 

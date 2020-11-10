@@ -16,10 +16,18 @@
 #define ReadRegistryKey(vp)  ReadRegistryKeyEx(vp,#vp)
 #define WriteRegistryKey(vp) WriteRegistryKeyEx(vp,#vp)
 
+#ifdef WIN32
+#define USE_JSON 0
+#else
+#define USE_JSON 1
+#endif // WIN32
+
 class CRegistryAccess
 {
    private:
-#ifdef WIN32
+#if USE_JSON
+      struct json_t* hKey;
+#else
       HKEY  hKey;
 #endif
 

@@ -3926,7 +3926,7 @@ void COptions::ReadOptions (void)
    SLONG c;
    char Buffer[80];
 
-   CRegistryAccess reg (chRegKey);
+   CRegistryAccess reg(chRegKey);
 
    // Falls Setup nicht geladen wurde dann Standard-Parameter initialisieren
    if (!reg.ReadRegistryKey (&OptionPlanes))          OptionPlanes          = TRUE;
@@ -4098,7 +4098,7 @@ void COptions::WriteOptions (void)
    Sim.MaxDifficulty2 = MissionKeys2[Sim.MaxDifficulty2-DIFF_ADDON01];
    Sim.MaxDifficulty3 = MissionKeys3[Sim.MaxDifficulty3-DIFF_ATFS01];
 
-   CRegistryAccess reg (chRegKey);
+   CRegistryAccess reg(chRegKey);
 
    reg.WriteRegistryKey (&OptionPlanes);
    reg.WriteRegistryKey (&OptionPassengers);

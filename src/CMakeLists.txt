@@ -116,4 +116,6 @@ target_link_libraries(AT
 
 if (WIN32)
   target_link_libraries(AT ws2_32 Winmm)
+else()
+  target_link_libraries(AT jansson)
 endif()

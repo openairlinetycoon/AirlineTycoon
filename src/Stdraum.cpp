@@ -684,17 +684,17 @@ void CStdRaum::MakeSayWindow (BOOL TextAlign, const char *GroupId, ULONG SubIdVo
       if (ParameterIndiziert==TRUE)
       {
          //Paramterindiziert (4-Byte Parameter, das ist wichtig):
-         tmp = va_arg (Vars, ULONG);
+          LPCSTR tmp1 = va_arg (Vars, LPCSTR);
 
-         sprintf (TmpString, DialogTexte.GetS (CurrentTextGroupId, c), tmp);
+         sprintf (TmpString, DialogTexte.GetS (CurrentTextGroupId, c), tmp1);
       }
       else if (ParameterIndiziert==2)
       {
          //Paramterindiziert (4-Byte Parameter, das ist wichtig):
-         tmp        = va_arg (Vars, ULONG);
-         SLONG tmp2 = va_arg (Vars, ULONG);
+          LPCSTR tmp1        = va_arg (Vars, LPCSTR);
+          LPCSTR tmp2 = va_arg (Vars, LPCSTR);
 
-         sprintf (TmpString, DialogTexte.GetS (CurrentTextGroupId, c), tmp, tmp2);
+         sprintf (TmpString, DialogTexte.GetS (CurrentTextGroupId, c), tmp1, tmp2);
       }
       else
       {
@@ -1881,8 +1881,8 @@ void CStdRaum::StartDialog (SLONG DialogPartner, BOOL Medium, SLONG DialogPar1, 
          BubbleStyle  = 1;
 
          if (DialogPar2<0 || DialogPar2>1) DialogPar2=0;
-         if (DialogPar2==0) MakeSayWindow (0, TOKEN_PLAYER, 1000+(DialogMedium==MEDIUM_AIR), pFontPartner, Sim.Players.Players[DialogPar1].AirlineX);
-                       else MakeSayWindow (1, TOKEN_PLAYER, 1000+(DialogMedium==MEDIUM_AIR), 1000+(DialogMedium==MEDIUM_AIR), FALSE, &FontDialog, &FontDialogLight, Sim.Players.Players[Sim.localPlayer].AirlineX);
+         if (DialogPar2==0) MakeSayWindow (0, TOKEN_PLAYER, 1000+(DialogMedium==MEDIUM_AIR), pFontPartner, (LPCSTR)Sim.Players.Players[DialogPar1].AirlineX);
+                       else MakeSayWindow (1, TOKEN_PLAYER, 1000+(DialogMedium==MEDIUM_AIR), 1000+(DialogMedium==MEDIUM_AIR), FALSE, &FontDialog, &FontDialogLight, (LPCSTR)Sim.Players.Players[Sim.localPlayer].AirlineX);
          break;
    }
 }
@@ -2516,6 +2516,8 @@ void CStdRaum::PostPaint (void)
       CRect     SrcRect (qRoom.HandyOffset, 0, qRoom.HandyOffset+340, 440);
       XY        Dest (qRoom.TempScreenScroll, 0);
 
+      SDL_FillRect(qPlayer.DialogWin->RoomBm.pBitmap->GetSurface(), NULL, SDL_MapRGB(qPlayer.DialogWin->RoomBm.pBitmap->GetPixelFormat(), 0, 0, 0));
+      qPlayer.DialogWin->OnPaint();
       //Handy-Screen einblenden; entweder direkt in die primary-Bitmap (wenn am Airport) oder in die Zwischenbitmap (wenn in einem Raum)
       if (RoomBm.Size.x>0)
       {
@@ -4510,7 +4512,7 @@ void CStdRaum::MenuRepaint (void)
          OnscreenBitmap.PrintAt (StandardTexte.GetS (TOKEN_TANK, 1020), FontSmallBlack, TEC_FONT_LEFT, 18, 130+13, 250, 320);
          break;
 
-      case MENU_FILOFAX:
+      case MENU_FILOFAX: //The telefone filofax:
          OnscreenBitmap.BlitFrom (MenuBms[0]);
          for (c=0; c<18; c++)
          {
@@ -6807,8 +6809,8 @@ phone_busy:
                      MenuStart (MENU_CALLITADAY);
                      Sim.Players.Players[Sim.localPlayer].WalkStopEx ();
                      Sim.SendSimpleMessage (ATNET_DAYFINISH, NULL, PlayerNum);
-                     Sim.SendSimpleMessage (ATNET_DAYFINISH, qPlayer.NetworkID, PlayerNum);
-                     Sim.SendChatBroadcast (bprintf (StandardTexte.GetS (TOKEN_MISC, 7020), Sim.Players.Players[Sim.localPlayer].NameX));
+                     //Sim.SendSimpleMessage (ATNET_DAYFINISH, qPlayer.NetworkID, PlayerNum);
+                     Sim.SendChatBroadcast (bprintf (StandardTexte.GetS (TOKEN_MISC, 7020), Sim.Players.Players[Sim.localPlayer].Name));
                   }
                }
                if (MouseClickArea==-101 && MouseClickId==MENU_REQUEST && MouseClickPar1==2)
@@ -7648,7 +7650,7 @@ void CStdRaum::MenuStop (void)
       if (Sim.CallItADayAt==0)
       {
          Sim.SendSimpleMessage (ATNET_DAYBACK, NULL, PlayerNum);
-         Sim.SendChatBroadcast (bprintf (StandardTexte.GetS (TOKEN_MISC, 7021), Sim.Players.Players[Sim.localPlayer].NameX));
+         Sim.SendChatBroadcast (bprintf (StandardTexte.GetS (TOKEN_MISC, 7021), (LPCSTR)Sim.Players.Players[Sim.localPlayer].NameX));
          qPlayer.CallItADay = FALSE;
       }
    }
@@ -7989,7 +7991,7 @@ void CStdRaum::OnChar(UINT nChar, UINT, UINT)
       {
          if (Optionen[0].GetLength()<20 || CurrentMenu==MENU_BROADCAST || CurrentMenu==MENU_CHAT)
          {
-            Optionen[0]+=bitoa(nChar);
+            Optionen[0]+=(char)(nChar);
             MenuRepaint();
          }
       }

@@ -21,6 +21,7 @@ public:
 // Operations
 public:
    void Invalidate (void);
+   void UpdateWindow ();
    void RePostMessage (CPoint point);
    void RePostClick (SLONG PlayerNum, UINT message, WPARAM wParam, LPARAM lParam);
    void PrepareFade (void);
@@ -37,7 +38,6 @@ public:
 public:
 	virtual ~GameFrame();
 
-	CPoint TranslatePoint(int x, int y);
 	void ProcessEvent(const SDL_Event& event);
 
 	// Generated message map functions

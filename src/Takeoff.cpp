@@ -909,9 +909,12 @@ void CTakeOffApp::GameLoop(void*)
 
    Sim.TimeSlice = 0;
 
+   int startTime = 0, lastTime = 0;
    while (!bLeaveGameLoop)
    {
       Time= SDL_GetTicks();
+      startTime = Time;
+
       int timerFps = Time;
       if (LastTime==0xffffffff || bgJustDidLotsOfWork || bActive==FALSE) LastTime=Time;
 
@@ -1976,16 +1979,10 @@ void CTakeOffApp::GameLoop(void*)
 
             RefreshNeccessary=FALSE;
          }else{
-            FrameWnd->Invalidate();
+             PrimaryBm.PrimaryBm.Present();
          }
 
          PumpNetwork ();
-      } else {
-          timerFps -= SDL_GetTicks();
-          if(timerFps < 1000 / 60){
-              SDL_Delay((1000 / 60) - timerFps);
-      }
-
       }
 
       /*for (c=0; c<Sim.Players.AnzPlayers; c++)

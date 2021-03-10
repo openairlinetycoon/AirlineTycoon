@@ -715,14 +715,14 @@ void SBBMS::ReSize (GfxLib* gfxLibrary, __int64 graphicID, ...)
    ReSize (gfxLibrary, graphicIds);
 }
 
-void SBBMS::ReSize (GfxLib* gfxLibrary, const BUFFER<__int64> &graphicIds)
+void SBBMS::ReSize (GfxLib* gfxLibrary, const BUFFER<__int64> &graphicIds, SLONG flags)
 {
    SLONG c;
 
    Bitmaps.ReSize (graphicIds.AnzEntries());
 
    for (c=0; c<graphicIds.AnzEntries(); c++)
-      Bitmaps[c].ReSize(gfxLibrary, graphicIds[c]);
+      Bitmaps[c].ReSize(gfxLibrary, graphicIds[c], flags);
 }
 
 void SBBMS::ReSize (CHLPool* pPool, const BUFFER<__int64> &graphicIds)
@@ -763,7 +763,7 @@ void SBBMS::ReSize (GfxLib* gfxLibrary, const CString &graphicstr)
    ReSize (gfxLibrary, graphicIds);
 }
 
-void SBBMS::ReSize (GfxLib* gfxLibrary, const CString &graphicstr, SLONG Anzahl)
+void SBBMS::ReSize (GfxLib* gfxLibrary, const CString &graphicstr, SLONG Anzahl, SLONG flags)
 {
    BUFFER<__int64> graphicIds;
    BUFFER<char>    Str (graphicstr.GetLength()+1);
@@ -786,7 +786,7 @@ void SBBMS::ReSize (GfxLib* gfxLibrary, const CString &graphicstr, SLONG Anzahl)
       }
    }
 
-   ReSize (gfxLibrary, graphicIds);
+   ReSize(gfxLibrary, graphicIds, flags);
 }
 
 SBBMS::~SBBMS () {}

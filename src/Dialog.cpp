@@ -751,10 +751,10 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                         }
 
                      MakeSayWindow (1, TOKEN_BANK, 2010, 2014, 2, &FontDialog, &FontDialogLight, 
-                        Sim.Players.Players[0].AirlineX, (LPCTSTR)Insert1000erDots (NumFree[0]), 
-                        Sim.Players.Players[1].AirlineX, (LPCTSTR)Insert1000erDots (NumFree[1]), 
-                        Sim.Players.Players[2].AirlineX, (LPCTSTR)Insert1000erDots (NumFree[2]), 
-                        Sim.Players.Players[3].AirlineX, (LPCTSTR)Insert1000erDots (NumFree[3]), 0);
+                         (LPCTSTR)Sim.Players.Players[0].AirlineX, (LPCTSTR)Insert1000erDots (NumFree[0]),
+                         (LPCTSTR)Sim.Players.Players[1].AirlineX, (LPCTSTR)Insert1000erDots (NumFree[1]),
+                         (LPCTSTR)Sim.Players.Players[2].AirlineX, (LPCTSTR)Insert1000erDots (NumFree[2]),
+                         (LPCTSTR)Sim.Players.Players[3].AirlineX, (LPCTSTR)Insert1000erDots (NumFree[3]), 0);
                   }
                   break;
                case 2030:
@@ -773,10 +773,10 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                         }
 
                      MakeSayWindow (1, TOKEN_BANK, 2020, 2024, 2, &FontDialog, &FontDialogLight, 
-                        Sim.Players.Players[0].AirlineX, (LPCTSTR)Insert1000erDots (NumFree[0]),
-                        Sim.Players.Players[1].AirlineX, (LPCTSTR)Insert1000erDots (NumFree[1]),
-                        Sim.Players.Players[2].AirlineX, (LPCTSTR)Insert1000erDots (NumFree[2]),
-                        Sim.Players.Players[3].AirlineX, (LPCTSTR)Insert1000erDots (NumFree[3]), 0);
+                         (LPCTSTR)Sim.Players.Players[0].AirlineX, (LPCTSTR)Insert1000erDots (NumFree[0]),
+                         (LPCTSTR)Sim.Players.Players[1].AirlineX, (LPCTSTR)Insert1000erDots (NumFree[1]),
+                         (LPCTSTR)Sim.Players.Players[2].AirlineX, (LPCTSTR)Insert1000erDots (NumFree[2]),
+                         (LPCTSTR)Sim.Players.Players[3].AirlineX, (LPCTSTR)Insert1000erDots (NumFree[3]), 0);
                   }
                   break;
                case 2010: case 2020:
@@ -810,18 +810,18 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                   break;
                case 2100: case 2116:
                   MakeSayWindow (1, TOKEN_BANK, 2110, 2114, 2, &FontDialog, &FontDialogLight, 
-                     Sim.Players.Players[0].AirlineX, (LPCTSTR)Insert1000erDots (qPlayer.OwnsAktien[0]),
-                     Sim.Players.Players[1].AirlineX, (LPCTSTR)Insert1000erDots (qPlayer.OwnsAktien[1]),
-                     Sim.Players.Players[2].AirlineX, (LPCTSTR)Insert1000erDots (qPlayer.OwnsAktien[2]),
-                     Sim.Players.Players[3].AirlineX, (LPCTSTR)Insert1000erDots (qPlayer.OwnsAktien[3]), 0);
+                      (LPCTSTR)Sim.Players.Players[0].AirlineX, (LPCTSTR)Insert1000erDots (qPlayer.OwnsAktien[0]),
+                      (LPCTSTR)Sim.Players.Players[1].AirlineX, (LPCTSTR)Insert1000erDots (qPlayer.OwnsAktien[1]),
+                      (LPCTSTR)Sim.Players.Players[2].AirlineX, (LPCTSTR)Insert1000erDots (qPlayer.OwnsAktien[2]),
+                      (LPCTSTR)Sim.Players.Players[3].AirlineX, (LPCTSTR)Insert1000erDots (qPlayer.OwnsAktien[3]), 0);
                   break;
                case 2130:
                case 2131:
                   MakeSayWindow (1, TOKEN_BANK, 2120, 2124, 2, &FontDialog, &FontDialogLight, 
-                     Sim.Players.Players[0].AirlineX, (LPCTSTR)Insert1000erDots (qPlayer.OwnsAktien[0]),
-                     Sim.Players.Players[1].AirlineX, (LPCTSTR)Insert1000erDots (qPlayer.OwnsAktien[1]),
-                     Sim.Players.Players[2].AirlineX, (LPCTSTR)Insert1000erDots (qPlayer.OwnsAktien[2]),
-                     Sim.Players.Players[3].AirlineX, (LPCTSTR)Insert1000erDots (qPlayer.OwnsAktien[3]), 0);
+                      (LPCTSTR)Sim.Players.Players[0].AirlineX, (LPCTSTR)Insert1000erDots (qPlayer.OwnsAktien[0]),
+                      (LPCTSTR)Sim.Players.Players[1].AirlineX, (LPCTSTR)Insert1000erDots (qPlayer.OwnsAktien[1]),
+                      (LPCTSTR)Sim.Players.Players[2].AirlineX, (LPCTSTR)Insert1000erDots (qPlayer.OwnsAktien[2]),
+                      (LPCTSTR)Sim.Players.Players[3].AirlineX, (LPCTSTR)Insert1000erDots (qPlayer.OwnsAktien[3]), 0);
                   break;
                case 2110: case 2120:
                   if (Sim.Players.Players[0].IsOut)
@@ -877,12 +877,12 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                   }
                   else if (Sim.Players.Players[DialogPar1].OwnsAktien[PlayerNum]>=qPlayer.AnzAktien*3/10)
                   {
-                     MakeSayWindow (0, TOKEN_BANK, 2523, pFontPartner, Sim.Players.Players[DialogPar1].AirlineX);
+                     MakeSayWindow (0, TOKEN_BANK, 2523, pFontPartner, (LPCTSTR)Sim.Players.Players[DialogPar1].AirlineX);
                      MakeNumberWindow (TOKEN_BANK, 9992523, bitoa (qPlayer.OwnsAktien[DialogPar1]*100/Sim.Players.Players[DialogPar1].AnzAktien));
                   }
                   else
                   {
-                     MakeSayWindow (0, TOKEN_BANK, 2524, pFontPartner, Sim.Players.Players[DialogPar1].AirlineX);
+                     MakeSayWindow (0, TOKEN_BANK, 2524, pFontPartner, (LPCTSTR)Sim.Players.Players[DialogPar1].AirlineX);
                      //MakeNumberWindow (TOKEN_BANK, 9992524, bitoa (qPlayer.OwnsAktien[DialogPar1]*100/Sim.Players.Players[DialogPar1].AnzAktien));
                   }
                   break;
@@ -1137,7 +1137,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                      if (!Sim.Players.Players[d].HasWon())
                      {
                         //Nein:
-                        MakeSayWindow (0, TOKEN_BOSS, 6002, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 6002, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -1161,7 +1161,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 6003, pFontPartner, Sim.Players.Players[d].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 6003, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                         }
                         else
                         {
@@ -1254,7 +1254,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                      if (!Sim.Players.Players[d].HasWon())
                      {
                         //Nein:
-                        MakeSayWindow (0, TOKEN_BOSS, 6102, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 6102, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -1278,7 +1278,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 6103, pFontPartner, Sim.Players.Players[d].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 6103, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                         }
                         else
                         {
@@ -1343,7 +1343,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                      if (!Sim.Players.Players[d].HasWon())
                      {
                         //Nein:
-                        MakeSayWindow (0, TOKEN_BOSS, 6202, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 6202, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -1366,7 +1366,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 6203, pFontPartner, Sim.Players.Players[d].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 6203, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                         }
                         else
                         {
@@ -1432,7 +1432,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                         //Nein:
                         if (Sim.Players.Players[d].ConnectFlags==0) goto _und_jetzt_weiter_mit_etc;
 
-                        MakeSayWindow (0, TOKEN_BOSS, 6302, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 6302, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -1455,7 +1455,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 6303, pFontPartner, Sim.Players.Players[d].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 6303, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                         }
                         else
                         {
@@ -1522,7 +1522,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                      if (!Sim.Players.Players[d].HasWon())
                      {
                         //Nein:
-                        MakeSayWindow (0, TOKEN_BOSS, 6402, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 6402, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -1545,7 +1545,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 6403, pFontPartner, Sim.Players.Players[d].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 6403, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                         }
                         else
                         {
@@ -1611,7 +1611,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                         //Nein:
                         if (GetAnzBits (Sim.Players.Players[d].RocketFlags)==0) goto _und_jetzt_weiter_mit_etc;
 
-                        MakeSayWindow (0, TOKEN_BOSS, 6502, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 6502, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -1628,7 +1628,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 6503, pFontPartner, Sim.Players.Players[d].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 6503, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                         }
                         else
                         {
@@ -1688,7 +1688,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                      if (!Sim.Players.Players[d].HasWon())
                      {
                         //Nein:
-                        MakeSayWindow (0, TOKEN_BOSS, 7102, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 7102, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -1712,7 +1712,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 7103, pFontPartner, Sim.Players.Players[d].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 7103, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                         }
                         else
                         {
@@ -1771,7 +1771,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                      if (!Sim.Players.Players[d].HasWon())
                      {
                         //Nein:
-                        MakeSayWindow (0, TOKEN_BOSS, 7202, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 7202, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -1794,7 +1794,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 7203, pFontPartner, Sim.Players.Players[d].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 7203, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                         }
                         else
                         {
@@ -1853,7 +1853,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                      if (Sim.Date<TARGET_DAYS)
                      {
                         //Nein;
-                        MakeSayWindow (0, TOKEN_BOSS, 7302, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 7302, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -1876,7 +1876,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 7303, pFontPartner, Sim.Players.Players[d].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 7303, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                         }
                         else
                         {
@@ -1935,7 +1935,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                      if (Sim.Date<TARGET_MILESDAYS)
                      {
                         //Nein;
-                        MakeSayWindow (0, TOKEN_BOSS, 7402, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 7402, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -1958,7 +1958,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 7403, pFontPartner, Sim.Players.Players[d].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 7403, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                         }
                         else
                         {
@@ -2017,7 +2017,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                      if (!Sim.Players.Players[d].HasWon())
                      {
                         //Nein:
-                        MakeSayWindow (0, TOKEN_BOSS, 7502, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 7502, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -2040,7 +2040,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 7503, pFontPartner, Sim.Players.Players[d].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 7503, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                         }
                         else
                         {
@@ -2101,7 +2101,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                      if (Sim.Date<TARGET_VALUEDAYS)
                      {
                         //Nein:
-                        MakeSayWindow (0, TOKEN_BOSS, 7602, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 7602, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -2124,7 +2124,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 7603, pFontPartner, Sim.Players.Players[d].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 7603, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                         }
                         else
                         {
@@ -2185,7 +2185,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                      if (!Sim.Players.Players[d].HasWon())
                      {
                         //Nein:
-                        MakeSayWindow (0, TOKEN_BOSS, 7702, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 7702, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -2208,7 +2208,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 7703, pFontPartner, Sim.Players.Players[d].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 7703, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                         }
                         else
                         {
@@ -2269,7 +2269,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                      if (!Sim.Players.Players[d].HasWon())
                      {
                         //Nein:
-                        MakeSayWindow (0, TOKEN_BOSS, 7802, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 7802, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -2291,7 +2291,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 7803, pFontPartner, Sim.Players.Players[d].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 7803, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                         }
                         else
                         {
@@ -2352,7 +2352,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                      if (!Sim.Players.Players[d].HasWon())
                      {
                         //Nein:
-                        MakeSayWindow (0, TOKEN_BOSS, 7902, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 7902, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -2375,7 +2375,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 7903, pFontPartner, Sim.Players.Players[d].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 7903, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                         }
                         else
                         {
@@ -2437,7 +2437,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                      if (!Sim.Players.Players[d].HasWon())
                      {
                         //Nein:
-                        MakeSayWindow (0, TOKEN_BOSS, 8002, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 8002, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -2451,7 +2451,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 8003, pFontPartner, Sim.Players.Players[d].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 8003, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                         }
                         else
                         {
@@ -2510,7 +2510,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                      if (!Sim.Players.Players[d].HasWon())
                      {
                         //Nein:
-                        MakeSayWindow (0, TOKEN_BOSS, 8502, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 8502, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -2532,7 +2532,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 8503, pFontPartner, Sim.Players.Players[d].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 8503, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                         }
                         else
                         {
@@ -2594,7 +2594,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                      if (bAnywon==false)
                      {
                         //Nein:
-                        MakeSayWindow (0, TOKEN_BOSS, 8602, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 8602, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -2616,7 +2616,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 8603, pFontPartner, Sim.Players.Players[won].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 8603, pFontPartner, (LPCTSTR)Sim.Players.Players[won].AirlineX);
                         }
                         else
                         {
@@ -2678,7 +2678,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                      if (bAnywon==false)
                      {
                         //Nein:
-                        MakeSayWindow (0, TOKEN_BOSS, 8702, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 8702, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -2700,7 +2700,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 8703, pFontPartner, Sim.Players.Players[won].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 8703, pFontPartner, (LPCTSTR)Sim.Players.Players[won].AirlineX);
                         }
                         else
                         {
@@ -2762,7 +2762,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                      if (bAnywon==false)
                      {
                         //Nein:
-                        MakeSayWindow (0, TOKEN_BOSS, 8802, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 8802, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -2784,7 +2784,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 8803, pFontPartner, Sim.Players.Players[won].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 8803, pFontPartner, (LPCTSTR)Sim.Players.Players[won].AirlineX);
                         }
                         else
                         {
@@ -2843,7 +2843,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                      if (!Sim.Players.Players[d].HasWon())
                      {
                         //Nein:
-                        MakeSayWindow (0, TOKEN_BOSS, 8902, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 8902, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -2865,7 +2865,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 8903, pFontPartner, Sim.Players.Players[d].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 8903, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                         }
                         else
                         {
@@ -2924,7 +2924,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                      if (!Sim.Players.Players[d].HasWon())
                      {
                         //Nein:
-                        MakeSayWindow (0, TOKEN_BOSS, 9002, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 9002, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -2946,7 +2946,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 9003, pFontPartner, Sim.Players.Players[d].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 9003, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                         }
                         else
                         {
@@ -3008,7 +3008,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                      if (bAnywon==false)
                      {
                         //Nein:
-                        MakeSayWindow (0, TOKEN_BOSS, 9102, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 9102, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -3030,7 +3030,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 9103, pFontPartner, Sim.Players.Players[won].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 9103, pFontPartner, (LPCTSTR)Sim.Players.Players[won].AirlineX);
                         }
                         else
                         {
@@ -3089,7 +3089,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                      if (!Sim.Players.Players[d].HasWon())
                      {
                         //Nein:
-                        MakeSayWindow (0, TOKEN_BOSS, 9202, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 9202, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -3111,7 +3111,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 9203, pFontPartner, Sim.Players.Players[d].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 9203, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                         }
                         else
                         {
@@ -3170,7 +3170,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                      if (Sim.Date<BTARGET_NDAYS9)
                      {
                         //Nein:
-                        MakeSayWindow (0, TOKEN_BOSS, 9302, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 9302, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -3192,7 +3192,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 9303, pFontPartner, Sim.Players.Players[d].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 9303, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                         }
                         else
                         {
@@ -3251,7 +3251,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                      if (Sim.Date<BTARGET_NDAYS10)
                      {
                         //Nein:
-                        MakeSayWindow (0, TOKEN_BOSS, 9402, pFontPartner, Sim.Players.Players[d].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 9402, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                      }
                      else
                      {
@@ -3265,7 +3265,7 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
 
                         if (Anz==1)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 9403, pFontPartner, Sim.Players.Players[d].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 9403, pFontPartner, (LPCTSTR)Sim.Players.Players[d].AirlineX);
                         }
                         else
                         {
@@ -3305,7 +3305,7 @@ _und_jetzt_weiter_mit_etc:
                   }
 
                   //"Beginnen wir mit ..." / "Und weiter mit ..."
-                  TmpStr += bprintf (DialogTexte.GetS (TOKEN_BOSS, 2010+DialogPar3), Sim.Players.Players[DialogPar1].AirlineX) + Space;
+                  TmpStr += bprintf (DialogTexte.GetS (TOKEN_BOSS, 2010+DialogPar3), (LPCSTR)Sim.Players.Players[DialogPar1].AirlineX) + Space;
 
                   if (Sim.Players.Players[DialogPar1].ImageGotWorse)
                   {
@@ -3344,7 +3344,7 @@ _und_jetzt_weiter_mit_etc:
                      MakeSayWindow (0, TOKEN_BOSS, 2023*10+rand()%2, pFontPartner);
                   }
                   else if (Sim.Players.Players[DialogPar1].Money<DEBT_GAMEOVER)
-                     MakeSayWindow (0, TOKEN_BOSS, 3000, pFontPartner, Sim.Players.Players[DialogPar1].AirlineX);
+                     MakeSayWindow (0, TOKEN_BOSS, 3000, pFontPartner, (LPCTSTR)Sim.Players.Players[DialogPar1].AirlineX);
                   else
                   {
                      //Äußerung zu den Flugzeugen:
@@ -3510,7 +3510,7 @@ _ehemals_2080:
                      for (c=0; c<DialogPar1; c++)
                         if (Sim.SabotageActs[c].Opfer==Sim.SabotageActs[DialogPar1].Opfer)
                         {
-                           MakeSayWindow (0, TOKEN_BOSS, 2055, pFontPartner, Sim.Players.Players[Sim.SabotageActs[DialogPar1].Opfer].AirlineX);
+                           MakeSayWindow (0, TOKEN_BOSS, 2055, pFontPartner, (LPCTSTR)Sim.Players.Players[Sim.SabotageActs[DialogPar1].Opfer].AirlineX);
                            break;
                         }
 
@@ -3518,7 +3518,7 @@ _ehemals_2080:
                      {
                         if (Sim.SabotageActs[DialogPar1].Player!=-2)
                            ((CAufsicht*)this)->SP_Player[Sim.SabotageActs[DialogPar1].Player].SetDesiredMood (SPM_HOLY);
-                        MakeSayWindow (0, TOKEN_BOSS, 2050+DialogPar2, pFontPartner, Sim.Players.Players[Sim.SabotageActs[DialogPar1].Opfer].AirlineX);
+                        MakeSayWindow (0, TOKEN_BOSS, 2050+DialogPar2, pFontPartner, (LPCTSTR)Sim.Players.Players[Sim.SabotageActs[DialogPar1].Opfer].AirlineX);
                      }
 
                      DialogPar2++;
@@ -3545,7 +3545,7 @@ _ehemals_2080:
                   else if (Sim.Players.Players[Sim.SabotageActs[DialogPar1].Player].ArabHints<100)
                      MakeSayWindow (0, TOKEN_BOSS, 2072, pFontPartner);
                   else
-                     MakeSayWindow (0, TOKEN_BOSS, 2073, pFontPartner, Sim.Players.Players[Sim.SabotageActs[DialogPar1].Player].AirlineX);
+                     MakeSayWindow (0, TOKEN_BOSS, 2073, pFontPartner, (LPCTSTR)Sim.Players.Players[Sim.SabotageActs[DialogPar1].Player].AirlineX);
                   break;
                case 2070:
                case 2071:
@@ -3572,8 +3572,8 @@ _ehemals_2080:
                case 2073:
                   if (DialogPar1<Sim.SabotageActs.AnzEntries())
                   {
-                     MakeSayWindow (0, TOKEN_BOSS, 2074, pFontPartner, Sim.Players.Players[Sim.SabotageActs[DialogPar1].Opfer].AirlineX);
-                     MakeNumberWindow (TOKEN_BOSS, 9992074, bitoa (Sim.Players.Players[Sim.SabotageActs[DialogPar1].Player].ArabHints*10000), Sim.Players.Players[Sim.SabotageActs[DialogPar1].Opfer].AirlineX);
+                     MakeSayWindow (0, TOKEN_BOSS, 2074, pFontPartner, (LPCTSTR)Sim.Players.Players[Sim.SabotageActs[DialogPar1].Opfer].AirlineX);
+                     MakeNumberWindow (TOKEN_BOSS, 9992074, bitoa (Sim.Players.Players[Sim.SabotageActs[DialogPar1].Player].ArabHints*10000), (LPCTSTR)Sim.Players.Players[Sim.SabotageActs[DialogPar1].Opfer].AirlineX);
                      Sim.Players.Players[Sim.SabotageActs[DialogPar1].Player].Statistiken[STAT_A_STRAFEN].AddAtPastDay (0, -Sim.Players.Players[Sim.SabotageActs[DialogPar1].Player].ArabHints*10000);
                      Sim.Players.Players[Sim.SabotageActs[DialogPar1].Player].ChangeMoney (-Sim.Players.Players[Sim.SabotageActs[DialogPar1].Player].ArabHints*10000, 2200, "");
                      Sim.Players.Players[Sim.SabotageActs[DialogPar1].Opfer].ChangeMoney (Sim.Players.Players[Sim.SabotageActs[DialogPar1].Player].ArabHints*10000, 2201, "");
@@ -3586,7 +3586,7 @@ _ehemals_2080:
 
                //Zu wenig Geld:
                case 3000:
-                  MakeSayWindow (0, TOKEN_BOSS, 3001, pFontPartner, Sim.Players.Players[DialogPar1].AirlineX);
+                  MakeSayWindow (0, TOKEN_BOSS, 3001, pFontPartner, (LPCTSTR)Sim.Players.Players[DialogPar1].AirlineX);
                   break;
                case 3001:
                   if (DialogPar1==Sim.localPlayer)
@@ -3697,10 +3697,10 @@ _ehemals_2080:
 
                //Übernamedialog:
                case 5000:
-                  MakeSayWindow (0, TOKEN_BOSS, 5001, pFontPartner, CString(Sim.Players.Players[Sim.OvertakerAirline].AirlineX), CString(Sim.Players.Players[Sim.OvertakenAirline].AirlineX));
+                  MakeSayWindow (0, TOKEN_BOSS, 5001, pFontPartner, (LPCTSTR)Sim.Players.Players[Sim.OvertakerAirline].AirlineX, (LPCTSTR)(Sim.Players.Players[Sim.OvertakenAirline].AirlineX));
                   break;
                case 5001:
-                  MakeSayWindow (0, TOKEN_BOSS, 5000+Sim.Overtake*10, pFontPartner, CString(Sim.Players.Players[Sim.OvertakerAirline].AirlineX), CString(Sim.Players.Players[Sim.OvertakenAirline].AirlineX), CString(Sim.Players.Players[Sim.OvertakerAirline].AirlineX));
+                  MakeSayWindow (0, TOKEN_BOSS, 5000+Sim.Overtake*10, pFontPartner, (LPCTSTR)(Sim.Players.Players[Sim.OvertakerAirline].AirlineX), (LPCTSTR)(Sim.Players.Players[Sim.OvertakenAirline].AirlineX), (LPCTSTR)(Sim.Players.Players[Sim.OvertakerAirline].AirlineX));
                   break;
                case 5010: case 5020:
                   {
@@ -3936,7 +3936,7 @@ _ehemals_2080:
 
                         for (c=0; c<4; c++)
                            if (!Sim.Players.Players[c].IsOut && Sim.Players.Players[c].OwnsAktien[Sim.OvertakenAirline])
-                              Sim.Players.Players[c].ChangeMoney (__int64((Overtaken.Money-Overtaken.Credit)*(__int64)Sim.Players.Players[c].OwnsAktien[Sim.OvertakenAirline]/d), 3181, Overtaken.AirlineX);
+                              Sim.Players.Players[c].ChangeMoney (__int64((Overtaken.Money-Overtaken.Credit)*(__int64)Sim.Players.Players[c].OwnsAktien[Sim.OvertakenAirline]/d), 3181, (LPCTSTR)Overtaken.AirlineX);
                               //                            Changed: ^ war SLONG und damit vermutlich für einen Bug verantwortlich
 
                         //Von dem Übernommenen hat keiner mehr Aktien:
@@ -3949,7 +3949,7 @@ _ehemals_2080:
                      Overtaker.UpdateStatistics();
                      Overtaken.UpdateStatistics();
                   }
-                  MakeSayWindow (0, TOKEN_BOSS, 5030, pFontPartner, CString(Sim.Players.Players[Sim.OvertakenAirline].AirlineX));
+                  MakeSayWindow (0, TOKEN_BOSS, 5030, pFontPartner, (LPCTSTR)(Sim.Players.Players[Sim.OvertakenAirline].AirlineX));
                   break;
                case 5030:
                   if (Sim.OvertakenAirline==Sim.localPlayer)
@@ -4513,15 +4513,15 @@ _ehemals_2080:
                   Limit (SLONG(-1000), qPlayer.Image, SLONG(1000));
 
                   if (qPlayer.Image==0)
-                     MakeSayWindow (0, TOKEN_WERBUNG, 2520, pFontPartner, qPlayer.AirlineX);
+                     MakeSayWindow (0, TOKEN_WERBUNG, 2520, pFontPartner, (LPCTSTR)qPlayer.AirlineX);
                   else if (qPlayer.Image<0)
                   {
-                     MakeSayWindow (0, TOKEN_WERBUNG, 2503+qPlayer.Image/251, pFontPartner, qPlayer.AirlineX);
+                     MakeSayWindow (0, TOKEN_WERBUNG, 2503+qPlayer.Image/251, pFontPartner, (LPCTSTR)qPlayer.AirlineX);
                      MakeNumberWindow (TOKEN_WERBUNG, 9992050, -qPlayer.Image);
                   }
                   else
                   {
-                     MakeSayWindow (0, TOKEN_WERBUNG, 2504+qPlayer.Image/167, pFontPartner, qPlayer.AirlineX);
+                     MakeSayWindow (0, TOKEN_WERBUNG, 2504+qPlayer.Image/167, pFontPartner, (LPCTSTR)qPlayer.AirlineX);
                      MakeNumberWindow (TOKEN_WERBUNG, 9992050, qPlayer.Image);
                   }
                   break;

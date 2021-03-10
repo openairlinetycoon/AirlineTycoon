@@ -126,7 +126,7 @@ endif()
 
 # Define options for searching SDL2_mixer Library in a custom path
 
-set(SDL2_MIXER_PATH "" CACHE STRING "Custom SDL2_mixer Library path")
+set(SDL2_MIXER_PATH "${CMAKE_SOURCE_DIR}/cmake/sdl2-mixer" CACHE STRING "Custom SDL2_mixer Library path")
 
 set(_SDL2_MIXER_NO_DEFAULT_PATH OFF)
 if(SDL2_MIXER_PATH)

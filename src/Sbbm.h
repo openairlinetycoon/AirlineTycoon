@@ -105,7 +105,7 @@
          }
 
          void  ReSize (SLONG xs, SLONG ys) { ReSize (XY(xs, ys)); if (pBitmap) { SBBM::Size.x = pBitmap->GetXSize(); SBBM::Size.y = pBitmap->GetYSize(); } else { SBBM::Size.x=0; SBBM::Size.y=0; } }
-         SLONG ReSize (XY Size, SLONG flags=CREATE_SYSMEM) { if (Size!=SBBM::Size) {Destroy(); SLONG rc=bitmapMain->CreateBitmap(&pBitmap, Size.x,Size.y,CREATE_USECOLORKEY|flags); SBBM::Size.x = pBitmap->GetXSize(); SBBM::Size.y = pBitmap->GetYSize(); return (rc);} return (0);}
+         SLONG ReSize (XY Size, SLONG flags=CREATE_SYSMEM) { if (Size!=SBBM::Size) {Destroy(); SLONG rc=bitmapMain->CreateBitmap(&pBitmap, Size.x,Size.y,0,CREATE_USECOLORKEY|flags); SBBM::Size.x = pBitmap->GetXSize(); SBBM::Size.y = pBitmap->GetYSize(); return (rc);} return (0);}
          void  ReSize (CHLPool *pHLPool, CString graphicID);
          void  ReSize (CHLPool *pHLPool, __int64 graphicID);
          void  ReSize (GfxLib *gfxLibrary, CString graphicID);
@@ -199,9 +199,9 @@
          void  Destroy() { Bitmaps.ReSize(0); }
          void  ReSize (GfxLib* gfxLibrary, __int64 graphicID, ...);
          void  ReSize (CHLPool* pPool, const BUFFER<__int64> &graphicsIds);
-         void  ReSize (GfxLib* gfxLibrary, const BUFFER<__int64> &graphicsIds);
-         void  ReSize (GfxLib* gfxLibrary, const CString &graphicIDs);
-         void  ReSize (GfxLib* gfxLibrary, const CString &graphicIDs, SLONG Anzahl);
+         void  ReSize(GfxLib* gfxLibrary, const BUFFER<__int64>& graphicsIds, SLONG flags = CREATE_SYSMEM);
+         void  ReSize(GfxLib* gfxLibrary, const CString& graphicIDs);
+         void  ReSize(GfxLib* gfxLibrary, const CString& graphicIDs, SLONG Anzahl, SLONG flags = CREATE_SYSMEM);
          SLONG AnzEntries() const { return (Bitmaps.AnzEntries()); }
 
          //SB1BM& operator [](const SLONG Index) const { return Bitmaps[Index]; }

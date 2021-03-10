@@ -148,13 +148,45 @@ void MessagePump (void)
    }
 }*/
 
+void GameFrame::UpdateWindow() {
+    //windowed size:
+    int width = 640;
+    int height = 480;
+    
+    SDL_DisplayMode DM;
+    SDL_GetDesktopDisplayMode(0, &DM);
+    int screenWidth = DM.w;
+    int screenheight = DM.h;
+
+    switch (Sim.Options.OptionFullscreen)
+    {
+    case(0): //Fullscreen
+        SDL_SetWindowSize(m_hWnd, screenWidth, screenheight);
+        SDL_SetWindowFullscreen(m_hWnd, SDL_TRUE);
+        break;
+    case(1): //Windowed
+        SDL_SetWindowFullscreen(m_hWnd, 0);
+        SDL_SetWindowResizable(m_hWnd, SDL_TRUE);
+        SDL_SetWindowBordered(m_hWnd, SDL_TRUE);
+        SDL_SetWindowSize(m_hWnd, width, height);
+        break;
+    case(2): //Borderless Fullscreen
+        SDL_SetWindowFullscreen(m_hWnd, SDL_FALSE);
+        SDL_SetWindowResizable(m_hWnd, SDL_FALSE);
+        SDL_SetWindowBordered(m_hWnd, SDL_FALSE);
+        SDL_SetWindowPosition(m_hWnd, 0, 0);
+        SDL_SetWindowSize(m_hWnd, screenWidth, screenheight);
+        break;
+    }
+
+
+}
+
 //--------------------------------------------------------------------------------------------
 //Konstruktor:
 //--------------------------------------------------------------------------------------------
 GameFrame::GameFrame()
 {
-   CRect  rect (0,0,640,480);
-
    pGLibPause = NULL;
    PauseFade  = 0;
 
@@ -163,7 +195,36 @@ GameFrame::GameFrame()
    if (DetectCurrentDisplayResolution().x<=640 || DetectCurrentDisplayResolution().y<=480)
       bFullscreen=TRUE;
 
-   SDL_Window* h = SDL_CreateWindow("Airline Tycoon", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, rect.Width(), rect.Height(), bFullscreen ? SDL_WINDOW_FULLSCREEN : SDL_WINDOW_RESIZABLE);
+   //Base backup screen size - only used in windowed mode
+   int width = 640;
+   int height = 480;
+
+   if(bFullscreen == false || Sim.Options.OptionFullscreen == 0 || Sim.Options.OptionFullscreen == 2){
+       SDL_DisplayMode DM;
+       SDL_GetDesktopDisplayMode(0, &DM);
+       width = DM.w;
+       height = DM.h;
+   }
+   CRect  rect(0, 0, width, height);
+
+   SDL_SetHint(SDL_HINT_TOUCH_MOUSE_EVENTS, "1");
+   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
+   SDL_Window* h;
+
+   switch (Sim.Options.OptionFullscreen)
+   {
+   default:
+   case(0): //Fullscreen
+       h = SDL_CreateWindow("Airline Tycoon", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, rect.Width(), rect.Height(), SDL_WINDOW_FULLSCREEN);
+       break;
+   case(1): //Windowed
+       h = SDL_CreateWindow("Airline Tycoon", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, rect.Width(), rect.Height(), SDL_WINDOW_RESIZABLE);
+       break;
+   case(2): //Borderless Fullscreen
+       h = SDL_CreateWindow("Airline Tycoon", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, rect.Width(), rect.Height(), SDL_WINDOW_BORDERLESS);
+       break;
+   }
+   
    if (!h)
    {
       MyMessageBox("ERROR", "CreateWindow failed");
@@ -196,14 +257,14 @@ GameFrame::GameFrame()
    bitmapMain = new SB_CBitmapMain(lpDD);
 
    pGfxMain->LoadLib ((char*)(LPCTSTR)FullFilename ("glbasis.gli", GliPath),  &pGLibBasis, L_LOCMEM);
-   gCursorBm.ReSize (pGLibBasis, GFX_CURSOR);
-   gCursorLBm.ReSize (pGLibBasis, GFX_CURSORL);
-   gCursorRBm.ReSize (pGLibBasis, GFX_CURSORR);
-   gCursorHotBm.ReSize (pGLibBasis, GFX_CURSORH);
-   gCursorExitBms.ReSize (pGLibBasis, "EXIT01", 12);
-   gCursorMoveHBm.ReSize (pGLibBasis, GFX_CURSORV);
-   gCursorMoveVBm.ReSize (pGLibBasis, GFX_CURSORW);
-   gCursorSandBm.ReSize (pGLibBasis, GFX_CURSORS);
+   gCursorBm.ReSize(pGLibBasis, GFX_CURSOR, CREATE_VIDMEM);
+   gCursorLBm.ReSize(pGLibBasis, GFX_CURSORL, CREATE_VIDMEM);
+   gCursorRBm.ReSize(pGLibBasis, GFX_CURSORR, CREATE_VIDMEM);
+   gCursorHotBm.ReSize(pGLibBasis, GFX_CURSORH, CREATE_VIDMEM);
+   gCursorExitBms.ReSize(pGLibBasis, "EXIT01", 12, CREATE_VIDMEM);
+   gCursorMoveHBm.ReSize(pGLibBasis, GFX_CURSORV, CREATE_VIDMEM);
+   gCursorMoveVBm.ReSize(pGLibBasis, GFX_CURSORW, CREATE_VIDMEM);
+   gCursorSandBm.ReSize(pGLibBasis, GFX_CURSORS, CREATE_VIDMEM);
    gCursorNoBm.ReSize (10,10);
    gCursorNoBm.FillWith (0);
 
@@ -310,24 +371,14 @@ GameFrame::~GameFrame()
       pGfxMain=NULL;
    }
 
+   if (m_hWnd)
+   {
+       SDL_DestroyWindow(m_hWnd);
+       m_hWnd = NULL;
+   }
+
    bLeaveGameLoop=TRUE;
    Hdu.HercPrintf (0, "logging ends..");
-}
-
-CPoint GameFrame::TranslatePoint(int x, int y)
-{
-    int w, h;
-    const float aspect = 4.0f / 3.0f;
-    SDL_GetWindowSize(m_hWnd, &w, &h);
-
-    CPoint point(x, y);
-    int aw = (float)w / h > aspect ? (h * 4) / 3 : w;
-    int ah = (float)w / h < aspect ? (w * 3) / 4 : h;
-    point.x -= (w - aw) / 2;
-    point.y -= (h - ah) / 2;
-    point.x = (point.x * 640) / aw;
-    point.y = (point.y * 480) / ah;
-    return point;
 }
 
 void GameFrame::ProcessEvent(const SDL_Event& event)
@@ -351,8 +402,8 @@ void GameFrame::ProcessEvent(const SDL_Event& event)
          }
          else if (event.window.event == SDL_WINDOWEVENT_FOCUS_LOST)
          {
-            FrameWnd->OnActivateApp(FALSE, 0);
-            FrameWnd->OnSetCursor(NULL, HTNOWHERE, 0);
+            //FrameWnd->OnActivateApp(FALSE, 0);
+            //FrameWnd->OnSetCursor(NULL, HTNOWHERE, 0);
          }
          else if (event.window.event == SDL_WINDOWEVENT_ENTER)
             FrameWnd->OnSetCursor(NULL, HTCLIENT, 0);
@@ -363,15 +414,15 @@ void GameFrame::ProcessEvent(const SDL_Event& event)
    break;
    case SDL_MOUSEMOTION:
    {
-      FrameWnd->OnMouseMove(0, TranslatePoint(event.motion.x, event.motion.y));
+       FrameWnd->OnMouseMove(0, CPoint(event.motion.x, event.motion.y));
    }
    break;
    case SDL_KEYDOWN:
    {
-      UINT nFlags = event.key.keysym.scancode | ((SDL_GetModState() & KMOD_LALT) << 5);
-      FrameWnd->OnKeyDown(toupper(event.key.keysym.sym), event.key.repeat, nFlags);
-      FrameWnd->OnChar(SDL_GetModState() & KMOD_SHIFT ? toupper(event.key.keysym.sym) : event.key.keysym.sym,
-         event.key.repeat, nFlags);
+       UINT nFlags = event.key.keysym.scancode | ((SDL_GetModState() & KMOD_LALT) << 5);
+       FrameWnd->OnKeyDown(toupper(event.key.keysym.sym), event.key.repeat, nFlags);
+       FrameWnd->OnChar(SDL_GetModState() & KMOD_SHIFT ? toupper(event.key.keysym.sym) : event.key.keysym.sym,
+           event.key.repeat, nFlags);
    }
    break;
    case SDL_MOUSEBUTTONDOWN:
@@ -379,12 +430,12 @@ void GameFrame::ProcessEvent(const SDL_Event& event)
       if (event.button.button == SDL_BUTTON_LEFT)
       {
          if (event.button.clicks > 1)
-            FrameWnd->OnLButtonDblClk(WM_LBUTTONDBLCLK, TranslatePoint(event.button.x, event.button.y));
+            FrameWnd->OnLButtonDblClk(WM_LBUTTONDBLCLK, CPoint(event.button.x, event.button.y));
          else
-            FrameWnd->OnLButtonDown(WM_LBUTTONDOWN, TranslatePoint(event.button.x, event.button.y));
+            FrameWnd->OnLButtonDown(WM_LBUTTONDOWN, CPoint(event.button.x, event.button.y));
       }
       else if (event.button.button == SDL_BUTTON_RIGHT)
-         FrameWnd->OnRButtonDown(WM_RBUTTONDOWN, TranslatePoint(event.button.x, event.button.y));
+         FrameWnd->OnRButtonDown(WM_RBUTTONDOWN, CPoint(event.button.x, event.button.y));
    }
    break;
    case SDL_KEYUP:
@@ -395,9 +446,9 @@ void GameFrame::ProcessEvent(const SDL_Event& event)
    case SDL_MOUSEBUTTONUP:
    {
       if (event.button.button == SDL_BUTTON_LEFT)
-         FrameWnd->OnLButtonUp(WM_LBUTTONUP, TranslatePoint(event.button.x, event.button.y));
+         FrameWnd->OnLButtonUp(WM_LBUTTONUP, CPoint(event.button.x, event.button.y));
       else if (event.button.button == SDL_BUTTON_RIGHT)
-         FrameWnd->OnRButtonUp(WM_RBUTTONUP, TranslatePoint(event.button.x, event.button.y));
+         FrameWnd->OnRButtonUp(WM_RBUTTONUP, CPoint(event.button.x, event.button.y));
    }
    break;
    }
@@ -883,7 +934,7 @@ void GameFrame::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
    if (gLanguage==LANGUAGE_D || gLanguage==LANGUAGE_N)
    {
       // Deutsch, Niederländisch
-      switch (nChar)
+      switch (toupper(nChar))
       {
          case 'J': nTargetRoom = 'J'; break;
          case 'T': nTargetRoom = ROOM_REISEBUERO;  break;
@@ -912,7 +963,7 @@ void GameFrame::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
    else if (gLanguage==LANGUAGE_O)
    {
       // Portugisisch
-      switch (nChar)
+      switch (toupper(nChar))
       {
          case 'J': nTargetRoom = 'J'; break;
          case 'T': nTargetRoom = ROOM_REISEBUERO;  break;
@@ -939,7 +990,7 @@ void GameFrame::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
    else
    {
       // Englisch, Sonstige:
-      switch (nChar)
+      switch (toupper(nChar))
       {
          case 'J': nTargetRoom = 'J'; break;
          case 'T': nTargetRoom = ROOM_REISEBUERO;  break;
@@ -1457,7 +1508,7 @@ void GameFrame::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
             CheatBerater^=1;
             CheatSound ();
 
-            Sim.SendChatBroadcast (bprintf (StandardTexte.GetS (TOKEN_MISC, 7010), Sim.Players.Players[Sim.localPlayer].NameX));
+            Sim.SendChatBroadcast (bprintf (StandardTexte.GetS (TOKEN_MISC, 7010), (LPCTSTR)Sim.Players.Players[Sim.localPlayer].NameX));
          }
       }
 
@@ -1535,7 +1586,7 @@ void GameFrame::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
             qPlayer.Money+=10000000;
             CheatSound ();
 
-            Sim.SendChatBroadcast (bprintf (StandardTexte.GetS (TOKEN_MISC, 7011), Sim.Players.Players[Sim.localPlayer].NameX));
+            Sim.SendChatBroadcast (bprintf (StandardTexte.GetS (TOKEN_MISC, 7011), (LPCTSTR)Sim.Players.Players[Sim.localPlayer].NameX));
             Sim.SendSimpleMessage (ATNET_CHEAT, NULL, Sim.localPlayer, 0);
          }
       }
@@ -1560,7 +1611,7 @@ void GameFrame::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
             qPlayer.Money+=1000000000;
             CheatSound ();
 
-            Sim.SendChatBroadcast (bprintf (StandardTexte.GetS (TOKEN_MISC, 7011), Sim.Players.Players[Sim.localPlayer].NameX));
+            Sim.SendChatBroadcast (bprintf (StandardTexte.GetS (TOKEN_MISC, 7011), (LPCTSTR)Sim.Players.Players[Sim.localPlayer].NameX));
             Sim.SendSimpleMessage (ATNET_CHEAT, NULL, Sim.localPlayer, 0);
          }
       }
@@ -1607,7 +1658,7 @@ void GameFrame::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
             CheatSound ();
 
-            Sim.SendChatBroadcast (bprintf (StandardTexte.GetS (TOKEN_MISC, 7015), Sim.Players.Players[Sim.localPlayer].NameX));
+            Sim.SendChatBroadcast (bprintf (StandardTexte.GetS (TOKEN_MISC, 7015), (LPCTSTR)Sim.Players.Players[Sim.localPlayer].NameX));
             Sim.SendSimpleMessage (ATNET_CHEAT, NULL, Sim.localPlayer, 0);
          }
       }
@@ -1631,7 +1682,7 @@ void GameFrame::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
             CheatSound ();
 
-            Sim.SendChatBroadcast (bprintf (StandardTexte.GetS (TOKEN_MISC, 7016), Sim.Players.Players[Sim.localPlayer].NameX));
+            Sim.SendChatBroadcast (bprintf (StandardTexte.GetS (TOKEN_MISC, 7016), (LPCTSTR)Sim.Players.Players[Sim.localPlayer].NameX));
             Sim.SendSimpleMessage (ATNET_CHEAT, NULL, Sim.localPlayer, 0);
          }
       }
@@ -1655,7 +1706,7 @@ void GameFrame::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
             qPlayer.ReformIcons ();
             CheatSound ();
 
-            Sim.SendChatBroadcast (bprintf (StandardTexte.GetS (TOKEN_MISC, 7012), Sim.Players.Players[Sim.localPlayer].NameX));
+            Sim.SendChatBroadcast (bprintf (StandardTexte.GetS (TOKEN_MISC, 7012), (LPCTSTR)Sim.Players.Players[Sim.localPlayer].NameX));
          }
       }
 
@@ -1674,7 +1725,7 @@ void GameFrame::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
             qPlayer.Credit=0;
             CheatSound ();
 
-            Sim.SendChatBroadcast (bprintf (StandardTexte.GetS (TOKEN_MISC, 7013), Sim.Players.Players[Sim.localPlayer].NameX));
+            Sim.SendChatBroadcast (bprintf (StandardTexte.GetS (TOKEN_MISC, 7013), (LPCTSTR)Sim.Players.Players[Sim.localPlayer].NameX));
             Sim.SendSimpleMessage (ATNET_CHEAT, NULL, Sim.localPlayer, 1);
          }
       }
@@ -1693,7 +1744,7 @@ void GameFrame::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
             qPlayer.Image=1000;
             CheatSound ();
 
-            Sim.SendChatBroadcast (bprintf (StandardTexte.GetS (TOKEN_MISC, 7014), Sim.Players.Players[Sim.localPlayer].NameX));
+            Sim.SendChatBroadcast (bprintf (StandardTexte.GetS (TOKEN_MISC, 7014), (LPCTSTR)Sim.Players.Players[Sim.localPlayer].NameX));
             Sim.SendSimpleMessage (ATNET_CHEAT, NULL, Sim.localPlayer, 2);
          }
       }

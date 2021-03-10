@@ -1,38 +1,39 @@
-// Intro.cpp : Der Render-Intro
+﻿// Intro.cpp : Der Render-Intro
 
 /////////////////////////////////////////////////////////////////////////////
 // CIntro window
 
 class CIntro : public CStdRaum
 {
-// Construction
+	// Construction
 public:
 	CIntro(BOOL bHandy, SLONG PlayerNum);
 
-// Attributes
+	// Attributes
 public:
-    smk          pSmack;
-    char         State;
-    SBBM         Bitmap;
+	smk          pSmack;
+	char         State;
+	SBBM         Bitmap;
 
-    SBBM         FadeFrom;
-    SBBM         FadeTo;
-    bool         bWasIntroPlayed;
+	SBBM         FadeFrom;
+	SBBM         FadeTo;
+	bool         bWasIntroPlayed;
 
-    GfxLib      *pRoomLib;               //Library f�r den Raum
+	GfxLib* pRoomLib;               //Library für den Raum
 
-    SLONG        FrameNum;
-    SLONG        FadeCount;
-    DWORD        FrameNext;
-    unsigned long Width;
-    unsigned long Height;
+	SLONG        FrameNum;
+	SLONG        FadeCount;
+	DWORD        FrameNext;
+	unsigned long Width;
+	unsigned long Height;
+	unsigned char Scale;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CIntro)
-	//}}AFX_VIRTUAL
+	// Overrides
+		// ClassWizard generated virtual function overrides
+		//{{AFX_VIRTUAL(CIntro)
+		//}}AFX_VIRTUAL
 
-// Implementation
+	// Implementation
 public:
 	virtual ~CIntro();
 

@@ -52,11 +52,13 @@ SLONG SBNetwork::GetMessageCount()
 		{
 			if (info.hostID != mLocalID)
 			{
+                if(mSessionInfo.GetNumberOfElements() > 0){
                 /* Check if we already know about the session */
-                for (mSessionInfo.GetFirst(); !mSessionInfo.IsLast() &&
-                    mSessionInfo.GetLastAccessed().hostID != info.hostID; mSessionInfo.GetNext());
+                    for (mSessionInfo.GetFirst(); !mSessionInfo.IsLast() &&
+                        mSessionInfo.GetLastAccessed().hostID != info.hostID; mSessionInfo.GetNext());
+                }
 
-                if (mSessionInfo.IsLast())
+                if (mSessionInfo.GetNumberOfElements() == 0 || mSessionInfo.IsLast())
                 {
 				    info.address.host = address.host;
 				    mSessionInfo.Add(info);
@@ -132,12 +134,14 @@ SLONG SBNetwork::GetMessageCount()
                 ENetPacket* packet = enet_packet_create (&dp, sizeof(DPPacket), ENET_PACKET_FLAG_RELIABLE);
                 mPackets.Add(packet);
 
-                for (mPlayers.GetNext(); !mPlayers.IsLast(); mPlayers.GetNext())
-                {
-                    if (mPlayers.GetLastAccessed().ID == player->ID)
+                if(mPlayers.GetNumberOfElements() > 0){
+                    for (mPlayers.GetFirst(); !mPlayers.IsLast(); mPlayers.GetNext())
                     {
-                        mPlayers.RemoveLastAccessed();
-                        break;
+                        if (mPlayers.GetLastAccessed().ID == player->ID)
+                        {
+                            mPlayers.RemoveLastAccessed();
+                            break;
+                        }
                     }
                 }
             }

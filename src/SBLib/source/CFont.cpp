@@ -21,10 +21,10 @@ SB_CFont::~SB_CFont(void)
         SDL_FreeSurface(Surface);
 
     if (VarWidth)
-        delete [] VarWidth;
+        delete[] VarWidth;
 
     if (VarHeight)
-        delete [] VarHeight;
+        delete[] VarHeight;
 }
 
 bool SB_CFont::Load(SDL_Renderer* renderer, const char* path, struct HPALETTE__*)
@@ -60,8 +60,8 @@ bool SB_CFont::Load(SDL_Renderer* renderer, const char* path, struct HPALETTE__*
     Surface = SDL_ConvertSurfaceFormat(surf, SDL_PIXELFORMAT_RGB565, 0);
     SDL_SetColorKey(Surface, SDL_TRUE, 0);
     SDL_FreeSurface(surf);
-    delete [] colors;
-    delete [] pixels;
+    delete[] colors;
+    delete[] pixels;
     return true;
 }
 
@@ -79,20 +79,20 @@ SLONG SB_CFont::DrawTextBlock(class SB_CBitmapCore* bmp, RECT* block, const char
         this->Start.x = this->Pos.x;
         this->Pos.y = block->top;
         while (length != 0) {
-            SLONG i = GetWordLength(str,length);
+            SLONG i = GetWordLength(str, length);
             if (i > 0) {
-                if (block->right < this->Pos.x + GetWidth(str,i)) {
+                if (block->right < this->Pos.x + GetWidth(str, i)) {
                     this->Pos.y = this->Pos.y + SLONG(this->Header.Height * LineSpace);
                     this->Pos.x = block->left;
                 }
                 if (block->bottom < this->Pos.y + this->Header.Height) {
                     return offset;
                 }
-                if (!DrawWord(str,i)) {
+                if (!DrawWord(str, i)) {
                     return offset;
                 }
             }
-            switch(str[i]) {
+            switch (str[i]) {
             case '\0':
                 break;
             case '\n':
@@ -141,22 +141,22 @@ void SB_CFont::DrawTextWithTabs(class SB_CBitmapCore* bmp, SLONG x, SLONG y, con
         length = strlen(str);
     }
     while (0 < length) {
-        switch(*str) {
+        switch (*str) {
         case '\t':
             if (i < this->NumTabs && this->Tabulator) {
                 str++;
-                switch(this->Tabulator[i].Style) {
+                switch (this->Tabulator[i].Style) {
                 case 1:
                     this->Pos.x = this->Tabulator[i].Width;
                     break;
                 case 2:
-                    this->Pos.x = this->Tabulator[i].Width - GetWidthAt(str, length - 1,'.');
+                    this->Pos.x = this->Tabulator[i].Width - GetWidthAt(str, length - 1, '.');
                     break;
                 case 3:
-                    this->Pos.x = this->Tabulator[i].Width - (GetWidthAt(str, length - 1,'\t') / 2);
+                    this->Pos.x = this->Tabulator[i].Width - (GetWidthAt(str, length - 1, '\t') / 2);
                     break;
                 case 4:
-                    this->Pos.x = this->Tabulator[i].Width - GetWidthAt(str, length - 1,'\t');
+                    this->Pos.x = this->Tabulator[i].Width - GetWidthAt(str, length - 1, '\t');
                     break;
                 }
                 i++;
@@ -188,7 +188,7 @@ void SB_CFont::DrawTextWithTabs(class SB_CBitmapCore* bmp, SLONG x, SLONG y, con
 void SB_CFont::SetTabulator(TABS* pTabs, ULONG szTabs)
 {
     if (this->Tabulator) {
-        delete [] this->Tabulator;
+        delete[] this->Tabulator;
         this->Tabulator = NULL;
     }
     this->NumTabs = (word)(szTabs / sizeof(TABS));
@@ -197,7 +197,7 @@ void SB_CFont::SetTabulator(TABS* pTabs, ULONG szTabs)
     return;
 }
 
-SLONG SB_CFont::PreviewTextBlock(class SB_CBitmapCore * bmp, RECT * block, const char* str, SLONG length, SLONG offset, bool hidden)
+SLONG SB_CFont::PreviewTextBlock(class SB_CBitmapCore* bmp, RECT* block, const char* str, SLONG length, SLONG offset, bool hidden)
 {
     this->Bitmap = bmp;
     this->Hidden = hidden;
@@ -223,7 +223,7 @@ SLONG SB_CFont::PreviewTextBlock(class SB_CBitmapCore * bmp, RECT * block, const
                 }
                 this->Pos.x += width;
             }
-            switch(str[i]) {
+            switch (str[i]) {
             case '\0':
                 break;
             case '\n':
@@ -259,21 +259,21 @@ SLONG SB_CFont::PreviewTextBlock(class SB_CBitmapCore * bmp, RECT * block, const
 
 SLONG SB_CFont::DrawTextBlock(class SB_CBitmapCore* bmp, SLONG l, SLONG t, SLONG r, SLONG b, const char* str, SLONG length, SLONG offset, bool hidden)
 {
-   RECT rect{ l, t, r, b };
-   return DrawTextBlock(bmp, &rect, str, length, offset, hidden);
+    RECT rect{ l, t, r, b };
+    return DrawTextBlock(bmp, &rect, str, length, offset, hidden);
 }
 
 SLONG SB_CFont::PreviewTextBlock(class SB_CBitmapCore* bmp, SLONG l, SLONG t, SLONG r, SLONG b, const char* str, SLONG length, SLONG offset, bool hidden)
 {
-   RECT rect{ l, t, r, b };
-   return PreviewTextBlock(bmp, &rect, str, length, offset, hidden);
+    RECT rect{ l, t, r, b };
+    return PreviewTextBlock(bmp, &rect, str, length, offset, hidden);
 }
 
 SLONG SB_CFont::GetWidthAt(const char* str, SLONG offset, char ch)
 {
     int i = 0;
-    while( true ) {
-        switch(*str) {
+    while (true) {
+        switch (*str) {
         case -0x4b:
         case '\0':
         case '\t':
@@ -291,7 +291,7 @@ SLONG SB_CFont::GetWordLength(const char* str, SLONG offset)
 {
     dword length = 0;
     while (offset != 0) {
-        switch(str[length]) {
+        switch (str[length]) {
         case -0x4b:
         case '\0':
         case '\t':
@@ -307,10 +307,10 @@ SLONG SB_CFont::GetWordLength(const char* str, SLONG offset)
     return length;
 }
 
-SLONG SB_CFont::GetWidth(char ch)
+SLONG SB_CFont::GetWidth(unsigned char ch)
 {
     if ((this->Header.Flags & 1) == 1)
-        return *(this->VarWidth +(unsigned char) ch);
+        return *(this->VarWidth + ch);
     else
         return this->Header.Width;
 }
@@ -324,7 +324,7 @@ SLONG SB_CFont::GetWidth(const char* str, SLONG offset)
     }
     while (offset != 0)
     {
-        switch(*str)
+        switch (*str)
         {
         case -0x4b:
         case '\0':
@@ -341,21 +341,21 @@ SLONG SB_CFont::GetWidth(const char* str, SLONG offset)
     return width;
 }
 
-bool SB_CFont::DrawChar(char ch, bool)
+bool SB_CFont::DrawChar(unsigned char ch, bool)
 {
     if (this->VarHeight)
     {
-        if (this->Bitmap != (SB_CBitmapCore *)0x0)
+        if (this->Bitmap != (SB_CBitmapCore*)0x0)
         {
-            RECT srcRect;
-            srcRect.left = 0;
-            srcRect.top = (*(this->VarHeight + (unsigned char)ch) - this->Header.LoChar) * this->Header.Height;
-            srcRect.right = this->Header.Width;
-            srcRect.bottom = srcRect.top + this->Header.Height;
+            SDL_Rect srcRect;
+            srcRect.x = 0;
+            srcRect.y = (*(this->VarHeight + ch) - this->Header.LoChar) * this->Header.Height;
+            srcRect.w = this->Header.Width;
+            srcRect.h = this->Header.Height;
             if (!this->Hidden)
                 this->Bitmap->BlitChar(Surface, Pos.x, Pos.y, &srcRect, 1);
         }
-        this->Pos.x = this->Pos.x + GetWidth((unsigned char)ch);
+        this->Pos.x = this->Pos.x + GetWidth(ch);
         return true;
     }
     return false;
@@ -388,5 +388,5 @@ bool SB_CFont::DrawWord(const char* str, SLONG offset)
         }
         str++;
         offset--;
-    } while( true );
+    } while (true);
 }

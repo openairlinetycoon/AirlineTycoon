@@ -101,6 +101,8 @@ Options::~Options()
    if (nOptionsOpen>0) nOptionsOpen--;
    if (Sim.bNetwork) SetNetworkBitmap ((nOptionsOpen>0)*1);
 
+   FrameWnd->UpdateWindow();
+
    Sim.SaveOptions ();
 
    if (NewgameWantsToLoad==1) NewgameWantsToLoad=FALSE;
@@ -198,7 +200,10 @@ void Options::RefreshKlackerField(void)
       KlackerTafel.PrintAt (0, 6, StandardTexte.GetS (TOKEN_MISC, 4022+Sim.Options.OptionFlipping));
       KlackerTafel.PrintAt (0, 7, StandardTexte.GetS (TOKEN_MISC, 4024+Sim.Options.OptionTransparenz));
       KlackerTafel.PrintAt (0, 8, StandardTexte.GetS (TOKEN_MISC, 4026+Sim.Options.OptionSchatten));
-      KlackerTafel.PrintAt (0, 10, StandardTexte.GetS (TOKEN_MISC, 4099));
+      
+      KlackerTafel.PrintAt (0, 10, Sim.Options.OptionFullscreen == 0 ? "# Display : Fullscreen" : Sim.Options.OptionFullscreen == 1 ? "# Display : Windowed" : Sim.Options.OptionFullscreen == 2 ? "# Display : Borderless" : "???");
+
+      KlackerTafel.PrintAt (0, 12, StandardTexte.GetS (TOKEN_MISC, 4099));
    }
    else if (PageNum==3) //Musik-Optionen
    {
@@ -514,7 +519,14 @@ void Options::OnLButtonDown(UINT nFlags, CPoint point)
             if (Line==6) Sim.Options.OptionFlipping^=1;
             if (Line==7) Sim.Options.OptionTransparenz^=1;
             if (Line==8) Sim.Options.OptionSchatten^=1;
-            if (Line==10) PageNum=1;
+
+            if (Line == 10){
+                Sim.Options.OptionFullscreen++;
+                if(Sim.Options.OptionFullscreen > 2)
+                    Sim.Options.OptionFullscreen = 0;
+            } //Fullscreen Option
+
+            if (Line==12) PageNum=1;
             RefreshKlackerField();
             break;
 
@@ -690,7 +702,7 @@ void Options::OnLButtonDown(UINT nFlags, CPoint point)
             {
                if (Sim.bNetwork)
                {
-                  Sim.SendChatBroadcast (bprintf (StandardTexte.GetS (TOKEN_MISC, 7022), Sim.Players.Players[Sim.localPlayer].NameX));
+                  Sim.SendChatBroadcast (bprintf (StandardTexte.GetS (TOKEN_MISC, 7022), (LPCSTR)Sim.Players.Players[Sim.localPlayer].NameX));
                   gNetwork.DisConnect ();
                   Sim.bNetwork = false;
                }

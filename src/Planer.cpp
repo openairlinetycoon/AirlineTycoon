@@ -1659,7 +1659,7 @@ void CPlaner::HandleLButtonDown (void)
          else if (CurrentPostItType!=0 && ClientPos.IfIsWithin (24,17,167,149))
          {
             SLONG      tmpObjectType=0;
-            SLONG      tmpObjectId;
+            SLONG      tmpObjectId=0;
 
             //An diese Stelle (links vom Cursor) kommt der Flug hin:
             SLONG      Date=Sim.Date+((ClientPos-PostItBm.Size/SLONG(2)+XY(3,9)).y-17)/19;
@@ -2439,7 +2439,7 @@ void CPlaner::HandleLButtonUp (void)
          if (IsInClientArea && ClientPos.IfIsWithin (24,17,167,149))
          {
             SLONG      tmpObjectType=0;
-            SLONG      tmpObjectId;
+            SLONG      tmpObjectId = -1;
 
             //An diese Stelle (links vom Cursor) kommt der Flug hin:
             SLONG      Date=Sim.Date+((ClientPos-PostItBm.Size/SLONG(2)+XY(3,9)).y-17)/19;
@@ -2506,6 +2506,7 @@ void CPlaner::HandleLButtonUp (void)
                else
                {
                   SLONG c;
+
                   for (c=qPlan.Flug.AnzEntries()-1; c>=0; c--)
                      if (qPlan.Flug[c].ObjectType)
                      {

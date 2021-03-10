@@ -2874,7 +2874,7 @@ TEAKFILE &operator << (TEAKFILE &File, const SIM &Sim)
    File << SimDate           << Sim.Time       << Sim.Month;
    File << Sim.MonthDay      << Sim.QuitCountDown;
    File << Sim.TickerTime    << Sim.TimeSlice  << Sim.StartWeekday << Sim.Weekday;
-   File.Write ((UBYTE*)&Sim.StartTime, sizeof (Sim.StartTime));
+   File.Write ((UBYTE*)&Sim.StartTime, sizeof (4));//64Bit Size change!
 
    //Sonstiges:
    File.WriteTrap (100);
@@ -2990,7 +2990,7 @@ TEAKFILE &operator >> (TEAKFILE &File, SIM &Sim)
    File >> SimDate           >> Sim.Time       >> Sim.Month;
    File >> Sim.MonthDay      >> Sim.QuitCountDown;
    File >> Sim.TickerTime    >> Sim.TimeSlice  >> Sim.StartWeekday >> Sim.Weekday;
-   File.Read ((UBYTE*)&Sim.StartTime, sizeof (Sim.StartTime));
+   File.Read ((UBYTE*)&Sim.StartTime, 4); //sizeof (Sim.StartTime)
    Sim.Date=SimDate;
 
    //Sonstiges:
@@ -3928,6 +3928,9 @@ void COptions::ReadOptions (void)
 
    CRegistryAccess reg (chRegKey);
 
+   //New Settings:
+   if (!reg.ReadRegistryKey (&OptionFullscreen))      OptionFullscreen      = 0;
+
    // Falls Setup nicht geladen wurde dann Standard-Parameter initialisieren
    if (!reg.ReadRegistryKey (&OptionPlanes))          OptionPlanes          = TRUE;
    if (!reg.ReadRegistryKey (&OptionPassengers))      OptionPassengers      = TRUE;
@@ -4100,6 +4103,7 @@ void COptions::WriteOptions (void)
 
    CRegistryAccess reg (chRegKey);
 
+   reg.WriteRegistryKey(&OptionFullscreen);
    reg.WriteRegistryKey (&OptionPlanes);
    reg.WriteRegistryKey (&OptionPassengers);
    reg.WriteRegistryKey (&OptionEnableMidi);

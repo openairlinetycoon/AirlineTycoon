@@ -128,7 +128,7 @@ endif()
 
 # Define options for searching SDL2_ttf Library in a custom path
 
-set(SDL2_TTF_PATH "" CACHE STRING "Custom SDL2_ttf Library path")
+set(SDL2_TTF_PATH "${CMAKE_SOURCE_DIR}/cmake/sdl2-ttf" CACHE STRING "Custom SDL2_ttf Library path")
 
 set(_SDL2_TTF_NO_DEFAULT_PATH OFF)
 if(SDL2_TTF_PATH)

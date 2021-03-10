@@ -10,7 +10,7 @@ typedef unsigned int dword;
 // Bonus points if you spot that FAILED() should've been used to check the HRESULT.
 #define DD_ERROR(x) if (!(x)) ODS("DDError in File: %s Line: %d Code: %d [%x]",__FILE__,__LINE__,x,x);
 
-extern void ODS(const char *, ...);
+extern void ODS(const char*, ...);
 extern SLONG GetLowestSetBit(SLONG mask);
 extern SLONG GetHighestSetBit(SLONG mask);
 
@@ -20,6 +20,7 @@ extern SLONG GetHighestSetBit(SLONG mask);
 #define CREATE_USEZBUFFER  4
 #define CREATE_USEALPHA    8
 #define CREATE_FULLSCREEN  16
+#define CREATE_INDEXED     32
 
 class GfxLib
 {
@@ -95,7 +96,7 @@ public:
     SB_CString(char*);
     ~SB_CString(void);
     int operator==(class SB_CString const&);
-	operator char*() { return Buffer; }
+    operator char* () { return Buffer; }
     class SB_CString const& operator=(class SB_CString const&);
     class SB_CString const& operator=(char const*);
     class SB_CString const& operator=(int b) { Empty(); *this += b; return *this; }
@@ -121,7 +122,7 @@ public:
     void MakeUpper(void);
     void MakeLower(void);
     void Show(void) const;
-	ULONG Length() { return Anz; }
+    ULONG Length() { return Anz; }
 
     static SB_CString& Format(char const*, ...);
 
@@ -136,16 +137,16 @@ protected:
     void SafeDelete(char*);
 
 private:
-	ULONG Anz;
-	ULONG Size;
-	char* Buffer;
+    ULONG Anz;
+    ULONG Size;
+    char* Buffer;
 };
 
 struct SB_Hardwarecolor
 {
     word Color;
 
-    SB_Hardwarecolor(word c=0) : Color(c) {}
+    SB_Hardwarecolor(word c = 0) : Color(c) {}
     operator word() { return Color; }
 };
 
@@ -167,7 +168,7 @@ public:
     void SetColorKey(ULONG);
     virtual ULONG Release(void);
     ULONG BlitFast(class SB_CBitmapCore*, SLONG, SLONG, const RECT* = NULL, unsigned short = 0);
-    ULONG BlitChar(SDL_Surface*, SLONG, SLONG, const RECT* = NULL, unsigned short = 0);
+    ULONG BlitChar(SDL_Surface*, SLONG, SLONG, const SDL_Rect* = NULL, unsigned short = 0);
     ULONG Blit(class SB_CBitmapCore*, SLONG, SLONG, const RECT* = NULL, unsigned short = 0, ULONG = 0);
     SLONG BlitA(class SB_CBitmapCore*, SLONG, SLONG, const RECT*, SB_Hardwarecolor);
     SLONG BlitA(class SB_CBitmapCore*, SLONG, SLONG, const RECT*);
@@ -182,20 +183,16 @@ public:
     RECT GetClipRect() { const SDL_Rect& r = lpDDSurface->clip_rect; return CRect(r.x, r.y, r.x + r.w, r.y + r.h); }
     SDL_Surface* GetSurface() { return lpDDSurface; }
     SDL_PixelFormat* GetPixelFormat(void) { return lpDDSurface->format; }
+    SDL_Texture* GetTexture() { return lpTexture; }
 
 protected:
-    virtual SLONG Lock(struct _DDSURFACEDESC*) const;
-    virtual SLONG Unlock(struct _DDSURFACEDESC*) const;
-
     friend class SB_CBitmapMain;
     friend class SB_CBitmapKey;
 
     SDL_Renderer* lpDD;
     SDL_Surface* lpDDSurface;
-    SDL_Texture* Texture;
-    dword Unknown1[12];
+    SDL_Texture* lpTexture;
     XY Size;
-    dword Unknown2[5];
 };
 
 //static_assert(sizeof(SB_CBitmapCore) == 0x5Cu, "SB_CBitmapCore size check");
@@ -208,9 +205,10 @@ public:
     SLONG Create(class SB_CBitmapCore*);
     SLONG SetImage(class SB_CBitmapCore*);
     SLONG MoveImage(SLONG, SLONG);
-    SLONG FlipBegin(void);
-    SLONG FlipEnd(void);
+    SLONG FlipBegin();
+    SLONG FlipEnd();
     SLONG Show(bool);
+    SLONG Render(SDL_Renderer*);
 
 private:
     SLONG BlitImage(SLONG, SLONG);
@@ -237,8 +235,8 @@ public:
     SLONG Create(SDL_Renderer**, SDL_Window*, unsigned short, SLONG, SLONG, unsigned char, unsigned short);
     virtual ULONG Release(void);
     SLONG Flip(void);
+    SLONG Present(void);
     void SetPos(POINT);
-    struct IDirectDrawSurface* GetLastPage(void);
 
     void AssignCursor(SB_CCursor* c) { Cursor = c; }
     SDL_Window* GetPrimarySurface() { return Window; }
@@ -354,7 +352,7 @@ public:
     SLONG GetWidthAt(const char*, SLONG, char);
     SLONG GetWordLength(const char*, SLONG);
     SLONG GetWidth(const char*, SLONG);
-    SLONG GetWidth(char);
+    SLONG GetWidth(unsigned char);
     bool Load(SDL_Renderer*, const char*, struct HPALETTE__* = NULL);
     bool CopyMemToSurface(struct HPALETTE__*);
     void SetTabulator(struct tagTabs*, ULONG);
@@ -366,7 +364,7 @@ protected:
     void Delete(void);
     bool GetSurface(struct _DDSURFACEDESC*);
     void ReleaseSurface(struct _DDSURFACEDESC*);
-    bool DrawChar(char, bool);
+    bool DrawChar(unsigned char, bool);
     bool DrawWord(const char*, SLONG);
     unsigned char* GetDataPtr(void);
     bool CreateFontSurface(SDL_Renderer*);

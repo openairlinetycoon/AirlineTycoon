@@ -2,9 +2,8 @@
 
 project (AirlineTycoon)
 
-if(NOT WIN32)
-	set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
-endif()
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2-mixer REQUIRED)

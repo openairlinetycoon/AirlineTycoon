@@ -208,7 +208,7 @@ void PLAYER::NetSynchronizePlanes (void)
       TEAKFILE Message;
       SLONG    c;
 
-      Message.Announce(64);
+      Message.Announce(1024);
 
       long count=0;
       for (c=0; c<4; c++)

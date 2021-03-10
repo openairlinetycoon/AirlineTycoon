@@ -2258,6 +2258,7 @@ class COptions
 {
    //Die Optionen:
    public:
+      SLONG       OptionFullscreen;
       BOOL        OptionPlanes;
       BOOL        OptionPassengers;
       BOOL        OptionEnableMidi;

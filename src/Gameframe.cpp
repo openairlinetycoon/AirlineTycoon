@@ -156,12 +156,12 @@ void GameFrame::UpdateWindow() {
     SDL_DisplayMode DM;
     SDL_GetDesktopDisplayMode(0, &DM);
     int screenWidth = DM.w;
-    int screenheight = DM.h;
+    int screenHeight = DM.h;
 
     switch (Sim.Options.OptionFullscreen)
     {
     case(0): //Fullscreen
-        SDL_SetWindowSize(m_hWnd, screenWidth, screenheight);
+        SDL_SetWindowSize(m_hWnd, screenWidth, screenHeight);
         SDL_SetWindowFullscreen(m_hWnd, SDL_TRUE);
         break;
     case(1): //Windowed
@@ -169,13 +169,14 @@ void GameFrame::UpdateWindow() {
         SDL_SetWindowResizable(m_hWnd, SDL_TRUE);
         SDL_SetWindowBordered(m_hWnd, SDL_TRUE);
         SDL_SetWindowSize(m_hWnd, width, height);
+        SDL_SetWindowPosition(m_hWnd, screenWidth/2 - width / 2, screenHeight/2 - height / 2);
         break;
     case(2): //Borderless Fullscreen
         SDL_SetWindowFullscreen(m_hWnd, SDL_FALSE);
         SDL_SetWindowResizable(m_hWnd, SDL_FALSE);
         SDL_SetWindowBordered(m_hWnd, SDL_FALSE);
         SDL_SetWindowPosition(m_hWnd, 0, 0);
-        SDL_SetWindowSize(m_hWnd, screenWidth, screenheight);
+        SDL_SetWindowSize(m_hWnd, screenWidth, screenHeight);
         break;
     }
 

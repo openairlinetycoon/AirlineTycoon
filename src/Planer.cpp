@@ -2730,8 +2730,8 @@ void CPlaner::ButtonIndex (void)
                if (pBlock->BlockType!=2) cy=13*(c-pBlock->Page)-6;
                                     else cy=26*(c-pBlock->Page);
 
-               if (IsLaptop) SDL_WarpMouseGlobal(pBlock->ScreenPos.x+48+90-40, pBlock->ScreenPos.y+72+13-50+cy);
-               else          SDL_WarpMouseGlobal(pBlock->ScreenPos.x+104+90-40-21, pBlock->ScreenPos.y+195+13-50-76+cy);
+               //if (IsLaptop) SDL_WarpMouseGlobal(pBlock->ScreenPos.x+48+90-40, pBlock->ScreenPos.y+72+13-50+cy);
+               //else          SDL_WarpMouseGlobal(pBlock->ScreenPos.x+104+90-40-21, pBlock->ScreenPos.y+195+13-50-76+cy);
             }
 
             pBlock->Refresh (PlayerNum, IsLaptop);
@@ -2770,8 +2770,8 @@ void CPlaner::ButtonIndexB (void)
 
             if (bFullscreen)
             {
-               if (IsLaptop) SDL_WarpMouseGlobal(pBlock->ScreenPos.x+232+48+48+15-40, pBlock->ScreenPos.y+72+13-50+26*(c-pBlock->Page));
-               else          SDL_WarpMouseGlobal(pBlock->ScreenPos.x+232+104+48+90-40-48-21, pBlock->ScreenPos.y+195+13-50-80+26*(c-pBlock->Page));
+               //if (IsLaptop) SDL_WarpMouseGlobal(pBlock->ScreenPos.x+232+48+48+15-40, pBlock->ScreenPos.y+72+13-50+26*(c-pBlock->Page));
+               //else          SDL_WarpMouseGlobal(pBlock->ScreenPos.x+232+104+48+90-40-48-21, pBlock->ScreenPos.y+195+13-50-80+26*(c-pBlock->Page));
             }
 
             pBlock->Refresh (PlayerNum, IsLaptop);

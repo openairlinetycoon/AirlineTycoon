@@ -290,9 +290,9 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                case 1045:
                case 1500:
                   MakeSayWindow (1, TOKEN_SABOTAGE, 1030, 1033, TRUE, &FontDialog, &FontDialogLight, 
-                     CString(bprintf ("%s (%s)", (LPCTSTR)Sim.Players.Players[0+(PlayerNum<=0)].AirlineX, (LPCTSTR)Sim.Players.Players[0+(PlayerNum<=0)].NameX)),
-                     CString(bprintf ("%s (%s)", (LPCTSTR)Sim.Players.Players[1+(PlayerNum<=1)].AirlineX, (LPCTSTR)Sim.Players.Players[1+(PlayerNum<=1)].NameX)),
-                     CString(bprintf ("%s (%s)", (LPCTSTR)Sim.Players.Players[2+(PlayerNum<=2)].AirlineX, (LPCTSTR)Sim.Players.Players[2+(PlayerNum<=2)].NameX)),
+                     CString(bprintf ("%s (%s)", (LPCTSTR)Sim.Players.Players[0+(PlayerNum<=0)].AirlineX, (LPCTSTR)Sim.Players.Players[0+(PlayerNum<=0)].NameX)).c_str(),
+                     CString(bprintf ("%s (%s)", (LPCTSTR)Sim.Players.Players[1+(PlayerNum<=1)].AirlineX, (LPCTSTR)Sim.Players.Players[1+(PlayerNum<=1)].NameX)).c_str(),
+                     CString(bprintf ("%s (%s)", (LPCTSTR)Sim.Players.Players[2+(PlayerNum<=2)].AirlineX, (LPCTSTR)Sim.Players.Players[2+(PlayerNum<=2)].NameX)).c_str(),
                      0);
                   break;
 

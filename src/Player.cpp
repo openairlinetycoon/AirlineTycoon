@@ -1753,9 +1753,21 @@ void PLAYER::UpdateFrachtauftragsUsage (void)
                      qFPE.Passagiere = Planes[c].ptPassagiere/10;
 
                      //Flug nur beachten, wenn er noch nicht gestartet ist:
-                     if (qFPE.Startdate>Sim.Date || qFPE.Startzeit>Sim.GetHour() || (qFPE.Startzeit==Sim.GetHour() && (Sim.GetHour()<30 || Planes[c].Ort!=-5)))
+                     //Heute ist Tag 5 15:00
+                     //Flug ging an Tag 4 16:00 los. Tag < 5
+                     //Flug 2 geht an Tag 5 18:00 los
 
-                     qFracht.TonsOpen -= Planes[c].ptPassagiere/10;
+                     BOOL ignoreFlight = false;
+                     if (qFPE.Startdate < Sim.Date){
+                        ignoreFlight = true;
+                     }// (qFPE.Startzeit==Sim.GetHour() && (Sim.GetHour()<30 || Planes[c].Ort!=-5)))
+                     if (qFPE.Startdate == Sim.Date && qFPE.Startzeit < Sim.GetHour()) {
+                         ignoreFlight = true;
+                     }
+
+                     if(ignoreFlight == false)
+                        qFracht.TonsOpen -= Planes[c].ptPassagiere/10;
+
                      if (qFracht.TonsOpen<=0)
                      {
                         qFPE.Passagiere-=UWORD(-qFracht.TonsOpen);

@@ -10,6 +10,9 @@ class Options : public CStdRaum
 public:
 	Options(BOOL bHandy, SLONG PlayerNum);
 
+private:
+   BOOL          ChangedDisplay;
+
 // Attributes
 public:
    BOOL           TimerFailure;

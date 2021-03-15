@@ -32,6 +32,8 @@ Options::Options (BOOL bHandy, SLONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "
 {
    nLocalOptionsOption++;
 
+   ChangedDisplay = false;
+
    //Das Optionen-Fenster ist offen! Alles anhalten!
    nOptionsOpen++;
    if (Sim.bNetwork) Sim.SendSimpleMessage (ATNET_OPTIONS, NULL, 1, Sim.localPlayer);
@@ -101,7 +103,6 @@ Options::~Options()
    if (nOptionsOpen>0) nOptionsOpen--;
    if (Sim.bNetwork) SetNetworkBitmap ((nOptionsOpen>0)*1);
 
-   FrameWnd->UpdateWindow();
 
    Sim.SaveOptions ();
 
@@ -387,7 +388,7 @@ void Options::OnPaint()
             break;
 
          case 2: //Grafik:
-            if ((Line>=2 && Line<=8) || Line==10) SetMouseLook (CURSOR_HOT, 0, -100, 0);
+            if ((Line>=2 && Line<=8) || Line==10 || Line == 12) SetMouseLook (CURSOR_HOT, 0, -100, 0);
             break;
 
          case 3: //Sound:
@@ -521,12 +522,18 @@ void Options::OnLButtonDown(UINT nFlags, CPoint point)
             if (Line==8) Sim.Options.OptionSchatten^=1;
 
             if (Line == 10){
+                ChangedDisplay = true;
+
                 Sim.Options.OptionFullscreen++;
                 if(Sim.Options.OptionFullscreen > 2)
                     Sim.Options.OptionFullscreen = 0;
             } //Fullscreen Option
 
-            if (Line==12) PageNum=1;
+            if (Line==12) {
+                if (ChangedDisplay)
+                    FrameWnd->UpdateWindow();
+                PageNum=1;
+            }
             RefreshKlackerField();
             break;
 

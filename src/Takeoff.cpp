@@ -1417,9 +1417,12 @@ void CTakeOffApp::GameLoop(void*)
                      }
                   }
 
-                  if (Sim.Players.Players[Sim.localPlayer].IsDrunk>0)
+                  if (nOptionsOpen == 0 && Sim.Players.Players[Sim.localPlayer].IsDrunk>0 && ((SDL_GetWindowFlags(FrameWnd->m_hWnd) & SDL_WINDOW_MOUSE_FOCUS) == SDL_WINDOW_MOUSE_FOCUS))
                   {
-                     SDL_WarpMouseGlobal(SLONG(gMousePosition.x+sin(Sim.TimeSlice*70/200.0)*cos(Sim.TimeSlice*70/160.0)*Sim.Players.Players[Sim.localPlayer].IsDrunk/30), SLONG(gMousePosition.y+cos(Sim.TimeSlice*70/230.0)*sin(Sim.TimeSlice*70/177.0)*Sim.Players.Players[Sim.localPlayer].IsDrunk/30));
+                     int mouseX = 0,mouseY = 0;
+                     SDL_GetGlobalMouseState(&mouseX, &mouseY);
+
+                     SDL_WarpMouseGlobal(SLONG(mouseX +sin(Sim.TimeSlice*70/200.0)*cos(Sim.TimeSlice*70/160.0)*Sim.Players.Players[Sim.localPlayer].IsDrunk/30), SLONG(mouseY +cos(Sim.TimeSlice*70/230.0)*sin(Sim.TimeSlice*70/177.0)*Sim.Players.Players[Sim.localPlayer].IsDrunk/30));
                      Sim.Players.Players[Sim.localPlayer].IsDrunk--;
                   }
 
@@ -1979,6 +1982,7 @@ void CTakeOffApp::GameLoop(void*)
 
             RefreshNeccessary=FALSE;
          }else{
+             MessagePump();
              PrimaryBm.PrimaryBm.Present();
          }
 

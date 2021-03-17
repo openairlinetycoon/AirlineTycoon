@@ -88,6 +88,9 @@ void BLOCK::BlitAt (SBBM &RoomBm)
       }
       else
       {
+         if (!Bitmap.pBitmap) //safety net to prevent crashes
+            return;
+
          if (DoubleBlock)
          {
             if (Phase<38)

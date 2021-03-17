@@ -824,6 +824,10 @@ void CLaptop::OnPaint()
                BLOCK &qBlock=qPlayer.Blocks[c];
 
                qBlock.UpdateTip(PlayerNum, TRUE);
+               if (qBlock.Bitmap.pBitmap == NULL) { //fixes crash, when opening flight plan on laptop
+                   qBlock.Refresh(PlayerNum, TRUE);
+               }
+
                qBlock.BlitAt (RoomBm);
 
                //Jump-Bms

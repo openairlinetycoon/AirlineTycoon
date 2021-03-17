@@ -290,7 +290,7 @@ bool SBNetwork::Send(BUFFER<UBYTE>& buffer, ULONG length, ULONG peerID, bool com
     if (peerID)
     {
         for (mPlayers.GetFirst(); !mPlayers.IsLast(); mPlayers.GetNext())
-            if (mPlayers.GetLastAccessed().ID == peerID)
+            if (mPlayers.GetLastAccessed().ID == peerID && mPlayers.GetLastAccessed().peer != NULL)
                 enet_peer_send (mPlayers.GetLastAccessed().peer, 0, packet);
 
         if (mPlayers.IsLast())

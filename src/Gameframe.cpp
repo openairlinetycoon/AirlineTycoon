@@ -110,7 +110,7 @@ void CheatSound (void)
 
 void MessagePump (void)
 {
-   while (SDL_PollEvent(&FrameWnd->Mess))
+   if (SDL_PollEvent(&FrameWnd->Mess))
       FrameWnd->ProcessEvent(FrameWnd->Mess);
 }
 
@@ -430,7 +430,7 @@ void GameFrame::ProcessEvent(const SDL_Event& event)
    {
       if (event.button.button == SDL_BUTTON_LEFT)
       {
-         if (event.button.clicks > 1)
+         if (event.button.clicks == 2)
             FrameWnd->OnLButtonDblClk(WM_LBUTTONDBLCLK, CPoint(event.button.x, event.button.y));
          else
             FrameWnd->OnLButtonDown(WM_LBUTTONDOWN, CPoint(event.button.x, event.button.y));

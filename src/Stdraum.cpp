@@ -445,7 +445,7 @@ void CStdRaum::ProcessEvent(const SDL_Event& event, CPoint position)
    {
       if (event.button.button == SDL_BUTTON_LEFT)
       {
-         if (event.button.clicks > 1)
+         if (event.button.clicks == 2)
             OnLButtonDblClk(WM_LBUTTONDBLCLK, position);
          else
             OnLButtonDown(WM_LBUTTONDOWN, position);
@@ -2515,8 +2515,9 @@ void CStdRaum::PostPaint (void)
       CStdRaum &qRoom=*(CStdRaum*)qPlayer.DialogWin;
       CRect     SrcRect (qRoom.HandyOffset, 0, qRoom.HandyOffset+340, 440);
       XY        Dest (qRoom.TempScreenScroll, 0);
-
-      SDL_FillRect(qPlayer.DialogWin->RoomBm.pBitmap->GetSurface(), NULL, SDL_MapRGB(qPlayer.DialogWin->RoomBm.pBitmap->GetPixelFormat(), 0, 0, 0));
+       
+      SDL_SetColorKey(qPlayer.DialogWin->RoomBm.pBitmap->GetSurface(), 0,0);
+      SDL_FillRect(qPlayer.DialogWin->RoomBm.pBitmap->GetSurface(), NULL, SDL_MapRGB(qPlayer.DialogWin->RoomBm.pBitmap->GetPixelFormat(), 1, 1, 1));
       qPlayer.DialogWin->OnPaint();
       //Handy-Screen einblenden; entweder direkt in die primary-Bitmap (wenn am Airport) oder in die Zwischenbitmap (wenn in einem Raum)
       if (RoomBm.Size.x>0)

@@ -558,9 +558,9 @@ void SB_CColorFX::BlitWhiteTrans (BOOL DoMessagePump, SB_CBitmapCore *SrcBitmap,
       Rect.bottom-=(t.y+Rect.bottom-Rect.top+1)-TgtBitmap->GetYSize();
    }
 
-   SB_CBitmapKey *Key=new SB_CBitmapKey(*TgtBitmap);
-   SB_CBitmapKey *Key2=new SB_CBitmapKey(*SrcBitmap);
-   if (Key->Bitmap==NULL || Key2->Bitmap==NULL)
+   SB_CBitmapKey Key(*TgtBitmap);
+   SB_CBitmapKey Key2(*SrcBitmap);
+   if (Key.Bitmap==NULL || Key2.Bitmap==NULL)
    {
       IsPaintingTextBubble = FALSE;
       return;
@@ -574,7 +574,7 @@ void SB_CColorFX::BlitWhiteTrans (BOOL DoMessagePump, SB_CBitmapCore *SrcBitmap,
          //Zwischendurch mal einen Message-Pump einlegen:
          if ((cy&15)==15 && DoMessagePump)
          {
-            delete Key; delete Key2;
+            //delete Key; delete Key2;
 
             SLONG LastSize = SrcBitmap->GetXSize();
 
@@ -592,30 +592,30 @@ void SB_CColorFX::BlitWhiteTrans (BOOL DoMessagePump, SB_CBitmapCore *SrcBitmap,
                return;
             }
 
-            Key2=new SB_CBitmapKey(*SrcBitmap);
+            Key2=SB_CBitmapKey(*SrcBitmap);
 
             //Falls der Key nicht mehr erhältlich ist, wurde die Sprechblase inzwischen geschlossen:
-            if (Key2->Bitmap==0)
+            if (Key2.Bitmap==0)
             {
-               delete Key2;
+               //delete Key2;
                IsPaintingTextBubble = FALSE;
                return;
             }
 
-            Key=new SB_CBitmapKey(*TgtBitmap);
+            Key= SB_CBitmapKey(*TgtBitmap);
 
             //Falls der Key nicht mehr erhältlich ist, wurde die Sprechlblase inzwischen geschlossen:
-            if (Key->Bitmap==0 || Key2->Bitmap==0)
+            if (Key.Bitmap==0 || Key2.Bitmap==0)
             {
-               delete Key;
-               delete Key2;
+               //delete Key;
+               //delete Key2;
                IsPaintingTextBubble = FALSE;
                return;
             }
          }
 
-         p = (UWORD*) (((char*)Key->Bitmap) + t.x*2 + (cy+t.y)*Key->lPitch);
-         pp = (UWORD*) (((char*)Key2->Bitmap) + Rect.left*2 + (cy+Rect.top)*Key2->lPitch);
+         p = (UWORD*) (((char*)Key.Bitmap) + t.x*2 + (cy+t.y)*Key.lPitch);
+         pp = (UWORD*) (((char*)Key2.Bitmap) + Rect.left*2 + (cy+Rect.top)*Key2.lPitch);
 
          if (bVgaRam)
          {
@@ -663,11 +663,11 @@ void SB_CColorFX::BlitWhiteTrans (BOOL DoMessagePump, SB_CBitmapCore *SrcBitmap,
          }
 
          if (bVgaRam)
-            memcpy ((((char*)Key->Bitmap) + t.x*2 + (cy+t.y)*Key->lPitch), PixelBuffer, sizex*2);
+            memcpy ((((char*)Key.Bitmap) + t.x*2 + (cy+t.y)*Key.lPitch), PixelBuffer, sizex*2);
       }
 
-   delete Key;
-   delete Key2;
+   //delete Key;
+   //delete Key2;
 
    IsPaintingTextBubble = FALSE;
 }
@@ -706,9 +706,9 @@ void SB_CColorFX::BlitOutline (SB_CBitmapCore *SrcBitmap, SB_CBitmapCore *TgtBit
       Rect.bottom-=(t.y+Rect.bottom-Rect.top+1)-TgtBitmap->GetYSize();
    }
 
-   SB_CBitmapKey *Key=new SB_CBitmapKey(*TgtBitmap);
-   SB_CBitmapKey *Key2=new SB_CBitmapKey(*SrcBitmap);
-   if (Key->Bitmap==NULL || Key2->Bitmap==NULL)
+   SB_CBitmapKey Key(*TgtBitmap);
+   SB_CBitmapKey Key2(*SrcBitmap);
+   if (Key.Bitmap==NULL || Key2.Bitmap==NULL)
       return;
 
    long sizex=Rect.right-Rect.left+1;
@@ -717,8 +717,8 @@ void SB_CColorFX::BlitOutline (SB_CBitmapCore *SrcBitmap, SB_CBitmapCore *TgtBit
    if (sizex>0 && sizex<=640)
       for (cy=0; cy<sizey; cy++)
       {
-         p = (UWORD*) (((char*)Key->Bitmap) + t.x*2 + (cy+t.y)*Key->lPitch);
-         pp = (UWORD*) (((char*)Key2->Bitmap) + Rect.left*2 + (cy+Rect.top)*Key2->lPitch);
+         p = (UWORD*) (((char*)Key.Bitmap) + t.x*2 + (cy+t.y)*Key.lPitch);
+         pp = (UWORD*) (((char*)Key2.Bitmap) + Rect.left*2 + (cy+Rect.top)*Key2.lPitch);
 
          for (cx=sizex; cx>0; cx--)
          {
@@ -729,20 +729,20 @@ void SB_CColorFX::BlitOutline (SB_CBitmapCore *SrcBitmap, SB_CBitmapCore *TgtBit
                if (cx>1)
                {
                   if (pp[1]) goto draw;
-                  if (cy>0 && pp[1-Key2->lPitch/2]) goto draw;
-                  if (cy<sizey-1 && pp[1+Key2->lPitch/2]) goto draw;
+                  if (cy>0 && pp[1-Key2.lPitch/2]) goto draw;
+                  if (cy<sizey-1 && pp[1+Key2.lPitch/2]) goto draw;
                   if (cx>2 && pp[2]) goto draw;
                }
                if (cx<sizex)
                {
                   if (pp[-1]) goto draw;
-                  if (cy>0 && pp[-1-Key2->lPitch/2]) goto draw;
-                  if (cy<sizey-1 && pp[-1+Key2->lPitch/2]) goto draw;
+                  if (cy>0 && pp[-1-Key2.lPitch/2]) goto draw;
+                  if (cy<sizey-1 && pp[-1+Key2.lPitch/2]) goto draw;
                   if (cx<sizex-1 && pp[-2]) goto draw;
                }
 
-               if (cy>1 && pp[-Key2->lPitch])      goto draw;
-               if (cy<sizey-2 && pp[Key2->lPitch]) goto draw;
+               if (cy>1 && pp[-Key2.lPitch])      goto draw;
+               if (cy<sizey-2 && pp[Key2.lPitch]) goto draw;
 
                goto next;
 draw:
@@ -755,8 +755,8 @@ next:;
          }
       }
 
-   delete Key;
-   delete Key2;
+   //delete Key;
+   //delete Key2;
 }
 #pragma optimize("", off)
 

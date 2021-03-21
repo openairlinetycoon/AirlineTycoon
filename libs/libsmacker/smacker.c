@@ -1276,10 +1276,10 @@ static char smk_render(smk s)
 		size = 4 * (*p);
 
 		/* If video rendering enabled, kick this off for decode. */
-		if (s->video.enable)
-		{
+		//if (s->video.enable)
+		//{
 			smk_render_palette(&(s->video),p + 1,size - 1);
-		}
+		//}
 		p += size;
 		i -= size;
 	}
@@ -1341,6 +1341,8 @@ error:
 char smk_first(smk s)
 {
 	smk_assert(s);
+
+	memset(s->video.palette, 0x00, 256*3);
 
 	s->cur_frame = 0;
 	if ( smk_render(s) < 0)

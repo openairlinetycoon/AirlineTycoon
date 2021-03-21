@@ -870,6 +870,7 @@ void CEditor::OnPaint()
                   //else if (gPlaneBuilds[OtherParent].Shortname[0]=='R') OtherParent+=(5+8);
 
                   //Für alle eingebauten Planeparts:
+                  
                   for (d=0; d<(long)Plane.Parts.AnzEntries(); d++)
                      if (Plane.Parts.IsInAlbum(d))
                         if (gPlanePartRelations[c].FromBuildIndex==GetPlaneBuildIndex(Plane.Parts[d].Shortname))
@@ -1064,7 +1065,8 @@ void CEditor::OnPaint()
       CString error = Plane.GetError();
       if (error!="") RoomBm.PrintAt (error, FontNormalRed, TEC_FONT_LEFT, 480, 20+125+15+15, 580, 300);
    }
-
+   
+   //BROKEN:
    if (PartUnderCursor!="" && bCursorBlitted==false)   RoomBm.BlitFromT (PartBms[GetPlaneBuild(PartUnderCursor).BitmapIndex], GripAtPos);
    //if (PartUnderCursorB!="" && bCursorBlittedB==false) RoomBm.BlitFromT (PartBms[GetPlaneBuild(PartUnderCursorB).BitmapIndex], GripAtPosB);
 
@@ -1080,7 +1082,7 @@ void CEditor::OnPaint()
 
    //Flugzeugname:
    RoomBm.PrintAt (Plane.Name, FontNormalGreen, TEC_FONT_CENTERED, 193, 4+3, 471, 25+3);
-
+   
    //Die aktuell gewählten Parts:
    if (bAllowB) RoomBm.BlitFromT (SelPartBms[index_b],  66-SelPartBms[index_b].Size.x/2, 399-SelPartBms[index_b].Size.y/2);
    else         ColorFX.BlitTrans (SelPartBms[index_b].pBitmap, RoomBm.pBitmap, XY(66-SelPartBms[index_b].Size.x/2, 399-SelPartBms[index_b].Size.y/2), NULL, 5);
@@ -1092,7 +1094,7 @@ void CEditor::OnPaint()
    else         ColorFX.BlitTrans (SelPartBms[index_w].pBitmap, RoomBm.pBitmap, XY(447-SelPartBms[index_w].Size.x/2, 399-SelPartBms[index_w].Size.y/2), NULL, 5);
    if (bAllowM) RoomBm.BlitFromT (SelPartBms[index_m], 574-SelPartBms[index_m].Size.x/2, 399-SelPartBms[index_m].Size.y/2);
    else         ColorFX.BlitTrans (SelPartBms[index_m].pBitmap, RoomBm.pBitmap, XY(574-SelPartBms[index_m].Size.x/2, 399-SelPartBms[index_m].Size.y/2), NULL, 5);
-
+   
    if (!IsDialogOpen() && !MenuIsOpen())
    {
       //Ok, Cancel:
@@ -1118,7 +1120,7 @@ void CEditor::OnPaint()
          if (gMousePosition.IfIsWithin (  4+c*127,370, 27+c*127,426)) SetMouseLook (CURSOR_HOT, 0, ROOM_EDITOR, c*100+100);
          if (gMousePosition.IfIsWithin (101+c*127,370,124+c*127,426)) SetMouseLook (CURSOR_HOT, 0, ROOM_EDITOR, c*100+101);
          if (gMousePosition.IfIsWithin ( 27+c*127,363,101+c*127,436)) SetMouseLook (CURSOR_HOT, 0, ROOM_EDITOR, c*100+105);
-
+         
          if (gMousePosition.IfIsWithin (  4+c*127,363,124+c*127,436))
          {
             CString part;
@@ -1140,6 +1142,8 @@ void CEditor::OnPaint()
          }
       }
    }
+   
+   test:
 
    //Select Part Buttons:
    for (c=0; c<5; c++)
@@ -1159,7 +1163,7 @@ void CEditor::OnPaint()
    //Prev, Next:
    RoomBm.BlitFromT (ButtonPlaneLRBms[0+(MouseClickId==800)+(MouseClickId==800 && gMouseLButton)], 185, 0);
    RoomBm.BlitFromT (ButtonPlaneLRBms[3+(MouseClickId==801)+(MouseClickId==801 && gMouseLButton)], 438, 0);
-
+   
    if (!IsDialogOpen() && !MenuIsOpen())
    {
       bool bHotPartFound=false;
@@ -1180,7 +1184,7 @@ void CEditor::OnPaint()
                      }
             }
    }
-
+   
    CStdRaum::PostPaint ();
    CStdRaum::PumpToolTips ();
 }

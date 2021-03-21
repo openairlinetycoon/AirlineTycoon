@@ -487,13 +487,15 @@ ULONG SB_CPrimaryBitmap::Release()
 
 SB_CBitmapKey::SB_CBitmapKey(class SB_CBitmapCore& core)
     : Surface(core.lpDDSurface)
-    , Bitmap(Surface->pixels)
-    , lPitch(Surface->pitch)
 {
-    SDL_LockSurface(Surface);
+    if(SDL_MUSTLOCK(Surface))
+        SDL_LockSurface(Surface);
+    Bitmap = Surface->pixels;
+    lPitch = Surface->pitch;
 }
 
 SB_CBitmapKey::~SB_CBitmapKey()
 {
-    SDL_UnlockSurface(Surface);
+    if (SDL_MUSTLOCK(Surface))
+        SDL_UnlockSurface(Surface);
 }

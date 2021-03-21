@@ -419,6 +419,7 @@ void CSmackerPerson::Pump (void)
 
       if (Clips[ActiveClip].pSmack!=NULL && ActiveClip!=-1)
       {
+         CalculatePalettemapper(smk_get_palette(Clips[ActiveClip].pSmack), Clips[ActiveClip].PaletteMapper);
          Bitmap.ReSize(XY(Clips[ActiveClip].Width, Clips[ActiveClip].Height), CREATE_INDEXED);
          SDL_SetPixelFormatPalette(Bitmap.pBitmap->GetPixelFormat(), Clips[ActiveClip].PaletteMapper);
          {
@@ -451,6 +452,7 @@ void CSmackerPerson::Pump (void)
       if (Clips[ActiveClip].pSmack==NULL)
          return;
 
+      CalculatePalettemapper(smk_get_palette(Clips[ActiveClip].pSmack), Clips[ActiveClip].PaletteMapper);
       Bitmap.ReSize (XY(Clips[ActiveClip].Width, Clips[ActiveClip].Height), CREATE_INDEXED);
       SDL_SetPixelFormatPalette(Bitmap.pBitmap->GetPixelFormat(), Clips[ActiveClip].PaletteMapper);
       {
@@ -482,6 +484,7 @@ void CSmackerPerson::Pump (void)
       if (timeGetTime() >= Clips[ActiveClip].FrameNext)
       {
          //Take the next frame:
+         CalculatePalettemapper(smk_get_palette(Clips[ActiveClip].pSmack), Clips[ActiveClip].PaletteMapper);
          Bitmap.ReSize (XY(Clips[ActiveClip].Width, Clips[ActiveClip].Height), CREATE_INDEXED);
          SDL_SetPixelFormatPalette(Bitmap.pBitmap->GetPixelFormat(), Clips[ActiveClip].PaletteMapper);
          {

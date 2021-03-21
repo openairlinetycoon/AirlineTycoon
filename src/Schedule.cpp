@@ -414,16 +414,16 @@ void CFlugplanEintrag::CalcPassengers (SLONG PlayerNum, CPlane &qPlane)
             if (qRentRoute.Rang!=0)
             {
                //Ticketpreis ist Basis der Rechnung:
-               if (Ticketpreis!=0)
-                  Gewichte[c]=10000/Ticketpreis;
+               if (TicketpreisFC!=0)
+                  Gewichte[c]=10000/ TicketpreisFC;
                else 
                   Gewichte[c]=100000;
 
                SLONG Costs = CalculateFlightCost (Routen[ObjectId].VonCity, Routen[ObjectId].NachCity, 800, 800, -1)*3/180*2;
 
-               if (Ticketpreis>Costs*3*3) Gewichte[c]=Gewichte[c]*9/10;
-               if (Ticketpreis>Costs*3*5) Gewichte[c]=Gewichte[c]*9/10;
-               if (Ticketpreis>Costs*3*6) Gewichte[c]=Gewichte[c]*8/10;
+               if (TicketpreisFC >Costs*3*3) Gewichte[c]=Gewichte[c]*9/10;
+               if (TicketpreisFC >Costs*3*5) Gewichte[c]=Gewichte[c]*9/10;
+               if (TicketpreisFC >Costs*3*6) Gewichte[c]=Gewichte[c]*8/10;
 
                if (Gewichte[c]==0) Gewichte[c]=1;
 
@@ -469,8 +469,8 @@ void CFlugplanEintrag::CalcPassengers (SLONG PlayerNum, CPlane &qPlane)
          SLONG Cost = CalculateFlightCost (qRoute.VonCity, qRoute.NachCity, 800, 800, -1)*3/180*2;
 
          Cost*=3;
-         if (Ticketpreis>Cost*3 && Cost>10 && Ticketpreis>0)
-            tmp=tmp * (Cost-10) / Ticketpreis;
+         if (TicketpreisFC >Cost*3 && Cost>10 && TicketpreisFC >0)
+            tmp=tmp * (Cost-10) / TicketpreisFC;
 
          //Schlechte Zeiten? Das gibt Abstriche!
          if (Startzeit<5 || Startzeit>22) tmp=tmp*5/6;
@@ -758,7 +758,7 @@ void CFlugplanEintrag::BookFlight (CPlane *Plane, SLONG PlayerNum)
       {
          pn=Sim.Players.Players[qPlayer.PlayerNum].WerbeBroschuere;
          if (Sim.Players.Players[qPlayer.PlayerNum].Owner==0)
-            Sim.Players.Players[qPlayer.PlayerNum].Messages.AddMessage (BERATERTYP_GIRL, bprintf(StandardTexte.GetS (TOKEN_ADVICE, 2357), Plane->Name, Sim.Players.Players[pn].AirlineX));
+            Sim.Players.Players[qPlayer.PlayerNum].Messages.AddMessage (BERATERTYP_GIRL, bprintf(StandardTexte.GetS (TOKEN_ADVICE, 2357), Plane->Name.c_str(), Sim.Players.Players[pn].AirlineX.c_str()));
       }
 
       PLAYER &qPlayerX = Sim.Players.Players[pn];

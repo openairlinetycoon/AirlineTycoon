@@ -1965,9 +1965,9 @@ long CountMatchingFilelist (CString DirAndWildcards)
 //--------------------------------------------------------------------------------------------
 void GetMatchingFilelist (CString DirAndWildcards, BUFFER<CString> &Array)
 {
-   int Pos = DirAndWildcards.Find('*');
+   int Pos = DirAndWildcards.Find("*");
    CString Dir = DirAndWildcards.Left(Pos);
-   CString Ext = DirAndWildcards.Right(Pos);
+   CString Ext = DirAndWildcards.Right(DirAndWildcards.GetLength() - Pos - 1);
 
    Array.ReSize (0);
 

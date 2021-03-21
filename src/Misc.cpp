@@ -826,7 +826,7 @@ void HEADLINES::InterpolateHeadline (void)
          //Number of the Airline
          else if (atoi(Extrakt)>0)
          {
-            Headline[c*10].Headline = Headline[c*10].Headline.Mid(0, von) + Sim.Players.Players[(atoi(Extrakt)-1)%Sim.Players.AnzPlayers].Airline + Headline[c*10].Headline.Mid(bis+1, Headline[c*10].Headline.GetLength()-bis-1);
+            Headline[c*10].Headline = Headline[c*10].Headline.Mid(0, von) + Sim.Players.Players[(atoi(Extrakt)-1)%Sim.Players.AnzPlayers].Airline.c_str() + Headline[c*10].Headline.Mid(bis+1, Headline[c*10].Headline.GetLength()-bis-1);
          }
       }
       while (von!=-1);

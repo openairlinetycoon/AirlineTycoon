@@ -1037,13 +1037,13 @@ void CEditor::OnPaint()
             RoomBm.PrintAt (bprintf(StandardTexte.GetS (TOKEN_MISC, 8200), weight), FontSmallBlack, TEC_FONT_LEFT, 480+cx, 20+cy, 640+cx, 200+cy);
             if (passa>0)     RoomBm.PrintAt (bprintf(StandardTexte.GetS (TOKEN_MISC, 8201), passa, passa/10), FontSmallBlack, TEC_FONT_LEFT, 480+cx, 20+15+cy, 640+cx, 200+cy);
             if (verbrauch>0) RoomBm.PrintAt (bprintf(StandardTexte.GetS (TOKEN_MISC, 8202), verbrauch), FontSmallBlack, TEC_FONT_LEFT, 480+cx, 20+30+cy, 640+cx, 200+cy);
-            if (noise!=0)    RoomBm.PrintAt (bprintf(CString(StandardTexte.GetS (TOKEN_MISC, 8204)), loudnesstext, abs(noise)), FontSmallBlack, TEC_FONT_LEFT, 480+cx, 20+45+cy, 640+cx, 200+cy);
-            RoomBm.PrintAt (bprintf(StandardTexte.GetS (TOKEN_MISC, 8206), wartungtext), FontSmallBlack, TEC_FONT_LEFT, 480+cx, 20+60+cy, 640+cx, 200+cy);
-            if (speed>0)     RoomBm.PrintAt (bprintf(StandardTexte.GetS (TOKEN_MISC, 8207), (CString)Einheiten[EINH_KMH].bString (speed)), FontSmallBlack, TEC_FONT_LEFT, 480+cx, 20+75+cy, 640+cx, 200+cy);
-            if (tank>0)      RoomBm.PrintAt (CString(StandardTexte.GetS (TOKEN_PLANE, 1008))+": "+(CString)Einheiten[EINH_L].bString (tank), FontSmallBlack, TEC_FONT_LEFT, 480+cx, 20+75+15+cy, 640+cx, 200+cy);
-            if (reichw>0)    RoomBm.PrintAt (CString(StandardTexte.GetS (TOKEN_PLANE, 1001))+": "+(CString)Einheiten[EINH_KM].bString (reichw), FontSmallBlack, TEC_FONT_LEFT, 480+cx, 20+75+30+cy, 640+cx, 200+cy);
+            if (noise!=0)    RoomBm.PrintAt (bprintf(CString(StandardTexte.GetS (TOKEN_MISC, 8204)), loudnesstext.c_str(), abs(noise)), FontSmallBlack, TEC_FONT_LEFT, 480+cx, 20+45+cy, 640+cx, 200+cy);
+            RoomBm.PrintAt (bprintf(StandardTexte.GetS (TOKEN_MISC, 8206), wartungtext.c_str()), FontSmallBlack, TEC_FONT_LEFT, 480+cx, 20+60+cy, 640+cx, 200+cy);
+            if (speed>0)     RoomBm.PrintAt (bprintf(StandardTexte.GetS (TOKEN_MISC, 8207), CString(Einheiten[EINH_KMH].bString(speed)).c_str()), FontSmallBlack, TEC_FONT_LEFT, 480+cx, 20+75+cy, 640+cx, 200+cy);
+            if (tank>0)      RoomBm.PrintAt (CString(StandardTexte.GetS (TOKEN_PLANE, 1008))+": "+ CString(Einheiten[EINH_L].bString (tank)).c_str(), FontSmallBlack, TEC_FONT_LEFT, 480+cx, 20+75+15+cy, 640+cx, 200+cy);
+            if (reichw>0)    RoomBm.PrintAt (CString(StandardTexte.GetS (TOKEN_PLANE, 1001))+": "+ CString(Einheiten[EINH_KM].bString (reichw)).c_str(), FontSmallBlack, TEC_FONT_LEFT, 480+cx, 20+75+30+cy, 640+cx, 200+cy);
             //if (verbrauch2>0) RoomBm.PrintAt (bprintf("Verbrauch: %li l/100/100", verbrauch2), FontSmallBlack, TEC_FONT_LEFT, 480, 20+75+15, 640, 200);
-            RoomBm.PrintAt (bprintf(StandardTexte.GetS (TOKEN_MISC, 8203), (CString)Einheiten[EINH_DM].bString (cost)), FontSmallBlack, TEC_FONT_LEFT, 480+cx, 20+100+15+15+cy, 640+cx, 200+cy);
+            RoomBm.PrintAt (bprintf(StandardTexte.GetS (TOKEN_MISC, 8203), CString(Einheiten[EINH_DM].bString (cost)).c_str()), FontSmallBlack, TEC_FONT_LEFT, 480+cx, 20+100+15+15+cy, 640+cx, 200+cy);
          }
    }
    #define FontSmallBlack FontYellow
@@ -1054,13 +1054,13 @@ void CEditor::OnPaint()
       RoomBm.PrintAt (bprintf(StandardTexte.GetS (TOKEN_MISC, 8200), weight), FontSmallBlack, TEC_FONT_LEFT, 480, 20, 640, 200);
       if (passa>0)     RoomBm.PrintAt (bprintf(StandardTexte.GetS (TOKEN_MISC, 8201), passa, passa/10), FontSmallBlack, TEC_FONT_LEFT, 480, 20+15, 640, 200);
       if (verbrauch>0) RoomBm.PrintAt (bprintf(StandardTexte.GetS (TOKEN_MISC, 8202), verbrauch), FontSmallBlack, TEC_FONT_LEFT, 480, 20+30, 640, 200);
-      if (noise!=0)    RoomBm.PrintAt (bprintf(CString(StandardTexte.GetS (TOKEN_MISC, 8204)), loudnesstext, abs(noise)), FontSmallBlack, TEC_FONT_LEFT, 480, 20+45, 640, 200);
-      RoomBm.PrintAt (bprintf(StandardTexte.GetS (TOKEN_MISC, 8206), wartungtext), FontSmallBlack, TEC_FONT_LEFT, 480, 20+60, 640, 200);
-      if (speed>0)     RoomBm.PrintAt (bprintf(StandardTexte.GetS (TOKEN_MISC, 8207), (CString)Einheiten[EINH_KMH].bString (speed)), FontSmallBlack, TEC_FONT_LEFT, 480, 20+75, 640, 200);
-      if (tank>0)      RoomBm.PrintAt (CString(StandardTexte.GetS (TOKEN_PLANE, 1008))+": "+(CString)Einheiten[EINH_L].bString (tank), FontSmallBlack, TEC_FONT_LEFT, 480, 20+75+15, 640, 200);
-      if (reichw>0)    RoomBm.PrintAt (CString(StandardTexte.GetS (TOKEN_PLANE, 1001))+": "+(CString)Einheiten[EINH_KM].bString (reichw), FontSmallBlack, TEC_FONT_LEFT, 480, 20+75+30, 640, 200);
+      if (noise!=0)    RoomBm.PrintAt (bprintf(CString(StandardTexte.GetS (TOKEN_MISC, 8204)), loudnesstext.c_str(), abs(noise)), FontSmallBlack, TEC_FONT_LEFT, 480, 20+45, 640, 200);
+      RoomBm.PrintAt (bprintf(StandardTexte.GetS (TOKEN_MISC, 8206), wartungtext.c_str()), FontSmallBlack, TEC_FONT_LEFT, 480, 20+60, 640, 200);
+      if (speed>0)     RoomBm.PrintAt (bprintf(StandardTexte.GetS (TOKEN_MISC, 8207), CString(Einheiten[EINH_KMH].bString (speed)).c_str()), FontSmallBlack, TEC_FONT_LEFT, 480, 20+75, 640, 200);
+      if (tank>0)      RoomBm.PrintAt (CString(StandardTexte.GetS (TOKEN_PLANE, 1008))+": "+ CString(Einheiten[EINH_L].bString (tank)).c_str(), FontSmallBlack, TEC_FONT_LEFT, 480, 20+75+15, 640, 200);
+      if (reichw>0)    RoomBm.PrintAt (CString(StandardTexte.GetS (TOKEN_PLANE, 1001))+": "+ CString(Einheiten[EINH_KM].bString (reichw)).c_str(), FontSmallBlack, TEC_FONT_LEFT, 480, 20+75+30, 640, 200);
       //if (verbrauch2>0) RoomBm.PrintAt (bprintf("Verbrauch: %li l/100/100", verbrauch2), FontSmallBlack, TEC_FONT_LEFT, 480, 20+75+15, 640, 200);
-      RoomBm.PrintAt (bprintf(StandardTexte.GetS (TOKEN_MISC, 8203), (CString)Einheiten[EINH_DM].bString (cost)), FontSmallBlack, TEC_FONT_LEFT, 480, 20+100+15+15, 640, 200);
+      RoomBm.PrintAt (bprintf(StandardTexte.GetS (TOKEN_MISC, 8203), CString(Einheiten[EINH_DM].bString (cost)).c_str()), FontSmallBlack, TEC_FONT_LEFT, 480, 20+100+15+15, 640, 200);
 
       CString error = Plane.GetError();
       if (error!="") RoomBm.PrintAt (error, FontNormalRed, TEC_FONT_LEFT, 480, 20+125+15+15, 580, 300);

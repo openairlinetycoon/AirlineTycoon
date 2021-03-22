@@ -217,20 +217,21 @@ bool SBNetwork::Connect(SBStr medium, char* host)
 void SBNetwork::DisConnect()
 {
     CloseSession();
-    mSessions.Clear();
-    mSessionInfo.Clear();
     enet_host_destroy(mHost);
     enet_deinitialize();
     mHost = NULL;
+    mSessions.Clear();
+    mSessionInfo.Clear();
 }
 
 bool SBNetwork::CreateSession(SBStr name, SBNetworkCreation* create)
 {
     SBSessionInfo info;
-    strcpy(info.sessionName, create->sessionName);
+    strcpy(info.sessionName, create->sessionName.c_str());
     info.hostID = mLocalID;
     info.address.host = ENET_HOST_ANY;
     info.address.port = 0xA113;
+    mSessionInfo.Clear();
     mSessionInfo.Add(info);
     mState = SBNETWORK_SESSION_MASTER;
     mSearchTime = enet_time_get();

@@ -220,6 +220,9 @@ class GfxLib* GfxLib::ReleaseSurface(__int64 name)
 
 void GfxLib::Release()
 {
+    if(Surfaces.size() <= 0)
+        return;
+
     for (std::map<__int64, SDL_Surface*>::iterator it = Surfaces.begin(); it != Surfaces.end(); ++it)
     {
         delete[](char*)it->second->pixels;

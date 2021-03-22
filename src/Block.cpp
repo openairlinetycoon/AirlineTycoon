@@ -47,12 +47,12 @@ BLOCK::BLOCK ()
 //--------------------------------------------------------------------------------------------
 BLOCK::~BLOCK ()
 {
-   if (pGLibPicture && pGfxMain)
-   {
-      Bitmap.Destroy();
-      pGfxMain->ReleaseLib (pGLibPicture);
-      pGLibPicture = NULL;
-   }
+   //if (pGLibPicture && pGfxMain)
+   //{
+   //   Bitmap.Destroy();
+   //   pGfxMain->ReleaseLib (pGLibPicture);
+   //   pGLibPicture = NULL;
+   //}
 }
 
 //--------------------------------------------------------------------------------------------

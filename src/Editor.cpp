@@ -2240,9 +2240,12 @@ void CXPlane::operator = (const CXPlane &plane)
       f << plane;
       f.MemPointer = 0;
 
-      Clear();
+      if(this->Cost != -1){
+          Clear();
 
-      Parts.Repair (Parts.PlaneParts);
+          Parts.Repair (Parts.PlaneParts);
+      }
+
       Parts.PlaneParts.ReSize (100);
       f >> (*this);
    }

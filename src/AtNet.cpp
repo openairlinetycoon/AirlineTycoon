@@ -1135,6 +1135,8 @@ void PumpNetwork (void)
                    SLONG PlayerNum, PlaneId;
               
                    Message >> PlayerNum >> PlaneId;
+                   if(PlayerNum > 4)
+                    break;
                    Message >> Sim.Players.Players[PlayerNum].MechMode;
 
                    if (PlaneId!=-1)

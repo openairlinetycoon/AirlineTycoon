@@ -283,6 +283,9 @@ BOOL  SBPRIMARYBM::BlitFromT (SBBM &TecBitmap, XY Target)
 {
    Bench.BlitTime.Start(); 
 
+   if(&TecBitmap == nullptr)
+    return false;
+
    if (TecBitmap.pBitmap)
       TecBitmap.pBitmap->BlitT (&PrimaryBm, Target.x, Target.y);
    if (TecBitmap.pHLObj)

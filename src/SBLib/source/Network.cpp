@@ -340,6 +340,7 @@ bool SBNetwork::JoinSession(SBStr session, SBStr nickname)
     player.ID = info->hostID;
     player.peer = enet_host_connect (mHost, &info->address, 2, mLocalID);
     player.peer->data = &mPlayers.Add(player);
+    enet_peer_timeout(player.peer, 100000,0,100000000);
     mMaster = player.peer;
     mState = SBNETWORK_SESSION_CLIENT;
     return enet_host_service (mHost, &event, 5000) > 0 &&

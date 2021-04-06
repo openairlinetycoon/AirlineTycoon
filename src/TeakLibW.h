@@ -133,13 +133,14 @@ public:
                 //memswap(m, MemPointer, sizeof(T) * num);
                 for (SLONG i = 0; i < num; i++)
                 {
-                    T tmp(m[i]);
+                    //std::swap(m[i], MemPointer[i]);
+                    T tmp = T();
+                    //memcpy(&m[i], &MemPointer[i], sizeof(T));
                     m[i] = MemPointer[i];
                     MemPointer[i] = tmp;
                 }
-                delete[] MemPointer;
-
                 DelPointer = m + ((DelPointer - MemPointer) / sizeof(T));
+                delete[] MemPointer;
             }
             else
             {

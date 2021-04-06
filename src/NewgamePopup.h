@@ -39,6 +39,8 @@ private:
    SBList<SBStr>           *pNetworkConnections;
    SBList<SBNetworkPlayer> *pNetworkPlayers;
 
+   int						SessionMissionID;
+
    ULONG                    PlayerID;
    bool                     bThisIsSessionMaster;
 
@@ -70,6 +72,7 @@ protected:
 	//{{AFX_MSG(NewGamePopup)
 	virtual void OnPaint();
 	virtual void OnLButtonDown(UINT nFlags, CPoint point);
+	void CheckNetEvents();
 	virtual void OnTimer(UINT nIDEvent);
 	virtual void OnRButtonDown(UINT nFlags, CPoint point);
 	virtual void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);

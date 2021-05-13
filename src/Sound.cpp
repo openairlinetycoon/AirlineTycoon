@@ -226,7 +226,10 @@ BOOL CreateSpeechSBFX (CString String, SBFX *pFx, SLONG PlayerNum, BOOL *bAnyMis
 
                UndoWait=TRUE;
                pCursor->SetImage (gCursorSandBm.pBitmap);
-               pCursor->MoveImage(gMousePosition.x-16, gMousePosition.y-16);
+               int _x = gMousePosition.x;
+               int _y = gMousePosition.y;
+               FrameWnd->TranslatePointToScreenSpace(_x, _y);
+               pCursor->MoveImage(_x - 16, _y - 16);
                FrameWnd->Invalidate(); MessagePump();
 
                //SynthesizeNumber (Effects[m++], path+"\\", Number*Mult, DM);
@@ -270,8 +273,11 @@ BOOL CreateSpeechSBFX (CString String, SBFX *pFx, SLONG PlayerNum, BOOL *bAnyMis
 
    if (UndoWait && MouseWait==0)
    {
-      pCursor->SetImage (gCursorBm.pBitmap);
-      pCursor->MoveImage(gMousePosition.x, gMousePosition.y);
+      pCursor->SetImage (gCursorBm.pBitmap);                  
+      int _x = gMousePosition.x;
+      int _y = gMousePosition.y;
+      FrameWnd->TranslatePointToScreenSpace(_x, _y);
+      pCursor->MoveImage(_x, _y);
    }
 
    for (c=0; c<50; c++)

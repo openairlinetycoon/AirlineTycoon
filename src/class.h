@@ -2259,6 +2259,7 @@ class COptions
    //Die Optionen:
    public:
       SLONG       OptionFullscreen;
+      BOOL        OptionKeepAspectRatio;
       BOOL        OptionPlanes;
       BOOL        OptionPassengers;
       BOOL        OptionEnableMidi;

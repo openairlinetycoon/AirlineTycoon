@@ -180,7 +180,19 @@ void GameFrame::UpdateWindow() {
         break;
     }
 
+    UpdateFrameSize();
+}
 
+void GameFrame::UpdateFrameSize()
+{
+    if (Sim.Options.OptionKeepAspectRatio) {
+        SDL_RenderSetLogicalSize(lpDD, 640, 480);
+    }
+    else {
+        int screenW, screenH;
+        SDL_GetWindowSize(m_hWnd, &screenW, &screenH);
+        SDL_RenderSetLogicalSize(lpDD, screenW, screenH);
+    }
 }
 
 //--------------------------------------------------------------------------------------------
@@ -208,6 +220,7 @@ GameFrame::GameFrame()
    }
    CRect  rect(0, 0, width, height);
 
+   SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO);
    SDL_SetHint(SDL_HINT_TOUCH_MOUSE_EVENTS, "1");
    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
    SDL_Window* h;
@@ -249,9 +262,8 @@ GameFrame::GameFrame()
 
    SLONG x= DDCAPS_BLT ;
    SLONG y= DDCAPS_COLORKEY;*/
-
    PrimaryBm.ReSize (h, bFullscreen, XY(640,480));
-   PrimaryBm.ReSizePartB (h, bFullscreen, XY(640,480));
+   PrimaryBm.ReSizePartB (h, bFullscreen, XY(640, 480));
    pCursor=new SB_CCursor(&PrimaryBm.PrimaryBm);
    PrimaryBm.PrimaryBm.AssignCursor (pCursor);
 
@@ -382,6 +394,39 @@ GameFrame::~GameFrame()
    Hdu.HercPrintf (0, "logging ends..");
 }
 
+void GameFrame::TranslatePointToGameSpace(CPoint* p) {
+    if(Sim.Options.OptionKeepAspectRatio)
+        return;
+
+    int screenW, screenH;
+    SDL_GetRendererOutputSize(SDL_GetRenderer(m_hWnd), &screenW, &screenH);
+    float x = p->x;
+    float y = p->y;
+    x /= screenW;
+    x *= 640;
+    y /= screenH;
+    y *= 480;
+
+    p->x = (LONG)x;
+    p->y = (LONG)y;
+}
+void GameFrame::TranslatePointToScreenSpace(int& x, int& y) {
+    if (Sim.Options.OptionKeepAspectRatio)
+        return;
+
+    int screenW, screenH;
+    SDL_GetRendererOutputSize(SDL_GetRenderer(m_hWnd), &screenW, &screenH);
+    float _x = x;
+    float _y = y;
+    _x /= 640;
+    _x *= screenW;
+    _y /= 480;
+    _y *= screenH;
+
+    x = (LONG)_x;
+    y = (LONG)_y;
+}
+
 void GameFrame::ProcessEvent(const SDL_Event& event)
 {
    switch (event.type)
@@ -396,7 +441,12 @@ void GameFrame::ProcessEvent(const SDL_Event& event)
             Sim.Gamestate = GAMESTATE_QUIT;
             bLeaveGameLoop = TRUE;
          }
-         else if (event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED)
+         else if(event.window.event == SDL_WINDOWEVENT_RESIZED){
+            if(Sim.Options.OptionKeepAspectRatio)
+                SDL_RenderSetLogicalSize(lpDD, 640,480);
+            else
+             SDL_RenderSetLogicalSize(lpDD, event.window.data1, event.window.data2);
+         }else if (event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED)
          {
             FrameWnd->OnActivateApp(TRUE, 0);
             FrameWnd->OnSetCursor(NULL, HTCLIENT, 0);
@@ -415,7 +465,9 @@ void GameFrame::ProcessEvent(const SDL_Event& event)
    break;
    case SDL_MOUSEMOTION:
    {
-       FrameWnd->OnMouseMove(0, CPoint(event.motion.x, event.motion.y));
+       CPoint pos = CPoint(event.motion.x, event.motion.y);
+       TranslatePointToGameSpace(&pos);
+       FrameWnd->OnMouseMove(0, pos);
    }
    break;
    case SDL_KEYDOWN:
@@ -428,15 +480,17 @@ void GameFrame::ProcessEvent(const SDL_Event& event)
    break;
    case SDL_MOUSEBUTTONDOWN:
    {
+      CPoint pos = CPoint(event.button.x, event.button.y);
+      TranslatePointToGameSpace(&pos);
       if (event.button.button == SDL_BUTTON_LEFT)
       {
          if (event.button.clicks == 2)
-            FrameWnd->OnLButtonDblClk(WM_LBUTTONDBLCLK, CPoint(event.button.x, event.button.y));
+            FrameWnd->OnLButtonDblClk(WM_LBUTTONDBLCLK, pos);
          else
-            FrameWnd->OnLButtonDown(WM_LBUTTONDOWN, CPoint(event.button.x, event.button.y));
+            FrameWnd->OnLButtonDown(WM_LBUTTONDOWN, pos);
       }
       else if (event.button.button == SDL_BUTTON_RIGHT)
-         FrameWnd->OnRButtonDown(WM_RBUTTONDOWN, CPoint(event.button.x, event.button.y));
+         FrameWnd->OnRButtonDown(WM_RBUTTONDOWN, pos);
    }
    break;
    case SDL_KEYUP:
@@ -446,10 +500,12 @@ void GameFrame::ProcessEvent(const SDL_Event& event)
    break;
    case SDL_MOUSEBUTTONUP:
    {
+       CPoint pos = CPoint(event.button.x, event.button.y);
+       TranslatePointToGameSpace(&pos);
       if (event.button.button == SDL_BUTTON_LEFT)
-         FrameWnd->OnLButtonUp(WM_LBUTTONUP, CPoint(event.button.x, event.button.y));
+         FrameWnd->OnLButtonUp(WM_LBUTTONUP, pos);
       else if (event.button.button == SDL_BUTTON_RIGHT)
-         FrameWnd->OnRButtonUp(WM_RBUTTONUP, CPoint(event.button.x, event.button.y));
+         FrameWnd->OnRButtonUp(WM_RBUTTONUP, pos);
    }
    break;
    }
@@ -727,8 +783,10 @@ void GameFrame::OnPaint()
                   else if (MouseLook==CURSOR_RIGHT)  { pCursor->SetImage (gCursorRBm.pBitmap); MouseCursorOffset=XY(29,16); }
                   else if (MouseLook==CURSOR_MOVE_H) { pCursor->SetImage (gCursorMoveHBm.pBitmap); MouseCursorOffset=XY(16,0); }
                   else if (MouseLook==CURSOR_MOVE_V) { pCursor->SetImage (gCursorMoveVBm.pBitmap); MouseCursorOffset=XY(0,16); }
-
-                  pCursor->MoveImage(gMousePosition.x-MouseCursorOffset.x, gMousePosition.y-MouseCursorOffset.y);
+                  int _x = gMousePosition.x;
+                  int _y = gMousePosition.y;
+                  TranslatePointToScreenSpace(_x, _y);
+                  pCursor->MoveImage(_x -MouseCursorOffset.x, _y -MouseCursorOffset.y);
                }
             }
          }
@@ -904,8 +962,14 @@ void GameFrame::OnMouseMove(UINT nFlags, CPoint point)
    
    gKlackerPlanes.TimeSinceStart=0;
 
-   if (!gUseWindowsMouse)
-      if (bActive && pCursor && bNoQuickMouse==FALSE) pCursor->MoveImage(gMousePosition.x-MouseCursorOffset.x, gMousePosition.y-MouseCursorOffset.y);
+   if (!gUseWindowsMouse){
+      if (bActive && pCursor && bNoQuickMouse==FALSE){
+          int _x = gMousePosition.x;
+          int _y = gMousePosition.y;
+          FrameWnd->TranslatePointToScreenSpace(_x, _y);
+          pCursor->MoveImage(_x - MouseCursorOffset.x, _y - MouseCursorOffset.y);
+      }
+   }
 }
 
 void GameFrame::OnCaptureChanged (void*)

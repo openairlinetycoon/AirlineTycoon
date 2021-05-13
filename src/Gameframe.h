@@ -18,14 +18,18 @@ public:
    SDL_Event Mess;
    SDL_Window *m_hWnd;
 
+
 // Operations
 public:
    void Invalidate (void);
    void UpdateWindow ();
+   void UpdateFrameSize();
    void RePostMessage (CPoint point);
    void RePostClick (SLONG PlayerNum, UINT message, WPARAM wParam, LPARAM lParam);
    void PrepareFade (void);
    bool Pause(bool fPause);	// AG
+   void TranslatePointToGameSpace(CPoint* p);
+   void TranslatePointToScreenSpace(int &x, int &y);
 
 // Overrides
 	// ClassWizard generated virtual function overrides

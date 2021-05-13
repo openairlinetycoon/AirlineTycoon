@@ -3929,7 +3929,8 @@ void COptions::ReadOptions (void)
    CRegistryAccess reg (chRegKey);
 
    //New Settings:
-   if (!reg.ReadRegistryKey (&OptionFullscreen))      OptionFullscreen      = 0;
+   if (!reg.ReadRegistryKey(&OptionFullscreen))       OptionFullscreen = 0;
+   if (!reg.ReadRegistryKey(&OptionKeepAspectRatio))  OptionKeepAspectRatio = true;
 
    // Falls Setup nicht geladen wurde dann Standard-Parameter initialisieren
    if (!reg.ReadRegistryKey (&OptionPlanes))          OptionPlanes          = TRUE;
@@ -4103,7 +4104,8 @@ void COptions::WriteOptions (void)
 
    CRegistryAccess reg (chRegKey);
 
-   reg.WriteRegistryKey(&OptionFullscreen);
+   reg.WriteRegistryKey (&OptionFullscreen);
+   reg.WriteRegistryKey (&OptionKeepAspectRatio);
    reg.WriteRegistryKey (&OptionPlanes);
    reg.WriteRegistryKey (&OptionPassengers);
    reg.WriteRegistryKey (&OptionEnableMidi);

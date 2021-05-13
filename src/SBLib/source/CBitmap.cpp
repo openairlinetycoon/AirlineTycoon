@@ -415,8 +415,10 @@ SLONG SB_CPrimaryBitmap::Flip()
 
 SLONG SB_CPrimaryBitmap::Present()
 {
-    if (lpDD)
-    {
+    if (lpDD) {
+        SDL_SetRenderDrawColor(lpDD, 0, 0, 0, 255);
+        SDL_RenderClear(lpDD);
+
         // Set the backbuffer as the render target
         if (SDL_SetRenderTarget(lpDD, NULL) < 0)
             return -1;
@@ -448,10 +450,9 @@ SLONG SB_CPrimaryBitmap::Create(SDL_Renderer** out, SDL_Window* Wnd, unsigned sh
 {
     Window = Wnd;
     lpDD = SDL_CreateRenderer(Window, -1, SDL_RENDERER_PRESENTVSYNC);
-    
+
     if (lpDD)
     {
-        SDL_RenderSetLogicalSize(lpDD, w, h);
         Hdu.HercPrintf("Using hardware accelerated presentation");
         lpTexture = SDL_CreateTexture(lpDD, SDL_PIXELFORMAT_RGB565, SDL_TEXTUREACCESS_STREAMING, w, h);
         if (SDL_LockTextureToSurface(lpTexture, NULL, &lpDDSurface) < 0)

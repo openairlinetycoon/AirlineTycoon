@@ -202,9 +202,10 @@ void Options::RefreshKlackerField(void)
       KlackerTafel.PrintAt (0, 7, StandardTexte.GetS (TOKEN_MISC, 4024+Sim.Options.OptionTransparenz));
       KlackerTafel.PrintAt (0, 8, StandardTexte.GetS (TOKEN_MISC, 4026+Sim.Options.OptionSchatten));
       
-      KlackerTafel.PrintAt (0, 10, Sim.Options.OptionFullscreen == 0 ? "# Display : Fullscreen" : Sim.Options.OptionFullscreen == 1 ? "# Display : Windowed" : Sim.Options.OptionFullscreen == 2 ? "# Display : Borderless" : "???");
+      KlackerTafel.PrintAt(0, 10, Sim.Options.OptionFullscreen == 0 ? "# Display : Fullscreen" : Sim.Options.OptionFullscreen == 1 ? "# Display : Windowed" : Sim.Options.OptionFullscreen == 2 ? "# Display : Borderless" : "???");
+      KlackerTafel.PrintAt(0, 11, ((Sim.Options.OptionKeepAspectRatio == true) ? "# Aspect Ratio: Keep" : "# Aspect Ratio: Stretch"));
 
-      KlackerTafel.PrintAt (0, 12, StandardTexte.GetS (TOKEN_MISC, 4099));
+      KlackerTafel.PrintAt (0, 13, StandardTexte.GetS (TOKEN_MISC, 4099));
    }
    else if (PageNum==3) //Musik-Optionen
    {
@@ -388,7 +389,7 @@ void Options::OnPaint()
             break;
 
          case 2: //Grafik:
-            if ((Line>=2 && Line<=8) || Line==10 || Line == 12) SetMouseLook (CURSOR_HOT, 0, -100, 0);
+            if ((Line>=2 && Line<=8) || Line == 10 || Line == 11 || Line == 13) SetMouseLook (CURSOR_HOT, 0, -100, 0);
             break;
 
          case 3: //Sound:
@@ -529,7 +530,12 @@ void Options::OnLButtonDown(UINT nFlags, CPoint point)
                     Sim.Options.OptionFullscreen = 0;
             } //Fullscreen Option
 
-            if (Line==12) {
+            if (Line == 11) {
+                Sim.Options.OptionKeepAspectRatio = !Sim.Options.OptionKeepAspectRatio;
+                FrameWnd->UpdateFrameSize();
+            } //Aspect Ratio Option
+
+            if (Line==13) {
                 if (ChangedDisplay)
                     FrameWnd->UpdateWindow();
                 PageNum=1;

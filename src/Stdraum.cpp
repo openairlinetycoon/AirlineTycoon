@@ -4165,7 +4165,7 @@ void CStdRaum::MenuStart (SLONG MenuType, SLONG MenuPar1, SLONG MenuPar2, SLONG 
          OnscreenBitmap.ReSize (MenuBms[0].Size);
          MenuPage=0;
          MenuDataTable.FillWithPlaneTypes ();
-         MenuPageMax=(MenuDataTable.AnzRows-1)/13;
+         MenuPageMax=((MenuDataTable.AnzRows-1)/13)* 13;
          break;
 
       case MENU_BUYXPLANE:

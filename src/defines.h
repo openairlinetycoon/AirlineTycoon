@@ -168,7 +168,7 @@ inline bool operator!=(const CPoint& lhs, const CPoint& rhs)
 //Der Einfachheit halber Maximalwerte für ein paar Tabellen:
 #define MAX_BODIES     30
 #define MAX_TYCOONS    30
-#define MAX_PLANETYPES 30
+#define MAX_PLANETYPES 80
 #define MAX_BRICKS     340
 #define MAX_CITIES     80
 #define MAX_CLANS      90

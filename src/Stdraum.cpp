@@ -423,9 +423,32 @@ CStdRaum::~CStdRaum()
       pRoomLib=NULL;
    }
 }
+int
+UTF8Toisolat1(unsigned char* out, int outlen, unsigned char* in, int inlen)
+{
+    unsigned char* outstart = out;
+    unsigned char* outend = out + outlen;
+    unsigned char* inend = in + inlen;
+    unsigned char c;
+
+    while (in < inend) {
+        c = *in++;
+        if (c < 0x80) {
+            if (out >= outend)  return -1;
+            *out++ = c;
+        }
+        else if (((c & 0xFE) == 0xC2) && in < inend) {
+            if (out >= outend)  return -1;
+            *out++ = ((c & 0x03) << 6) | (*in++ & 0x3F);
+        }
+        else  return -2;
+    }
+    return out - outstart;
+}
 
 void CStdRaum::ProcessEvent(const SDL_Event& event, CPoint position)
 {
+	//SDL_Log("%d",event.type);
    switch (event.type)
    {
    case SDL_MOUSEMOTION:
@@ -433,12 +456,23 @@ void CStdRaum::ProcessEvent(const SDL_Event& event, CPoint position)
       OnMouseMove(0, position);
    }
    break;
+   case SDL_TEXTINPUT:
+   case SDL_TEXTEDITING:
+   {
+		unsigned char testValue = 'ä';
+   		UTF8Toisolat1(&testValue, 1, (unsigned char*)&event.text.text,2);
+   		SDL_Log("%hhc",testValue);
+   		OnChar(testValue, 1, (SDL_GetModState() & KMOD_LALT) << 5);
+   }
+   break;
    case SDL_KEYDOWN:
    {
       UINT nFlags = event.key.keysym.scancode | ((SDL_GetModState() & KMOD_LALT) << 5);
       OnKeyDown(toupper(event.key.keysym.sym), event.key.repeat, nFlags);
-      OnChar(SDL_GetModState() & KMOD_SHIFT ? toupper(event.key.keysym.sym) : event.key.keysym.sym,
-         event.key.repeat, nFlags);
+
+      //bool upper = SDL_GetModState() & KMOD_SHIFT || SDL_GetModState() & KMOD_CAPS;
+      //OnChar(upper ? toupper(test) : event.key.keysym.sym,
+      //   event.key.repeat, nFlags);
    }
    break;
    case SDL_MOUSEBUTTONDOWN:
@@ -6811,7 +6845,7 @@ phone_busy:
                      Sim.Players.Players[Sim.localPlayer].WalkStopEx ();
                      Sim.SendSimpleMessage (ATNET_DAYFINISH, NULL, PlayerNum);
                      //Sim.SendSimpleMessage (ATNET_DAYFINISH, qPlayer.NetworkID, PlayerNum);
-                     Sim.SendChatBroadcast (bprintf (StandardTexte.GetS (TOKEN_MISC, 7020), Sim.Players.Players[Sim.localPlayer].Name));
+                     Sim.SendChatBroadcast (bprintf (StandardTexte.GetS (TOKEN_MISC, 7020), Sim.Players.Players[Sim.localPlayer].NameX.c_str()));
                   }
                }
                if (MouseClickArea==-101 && MouseClickId==MENU_REQUEST && MouseClickPar1==2)
@@ -7992,84 +8026,8 @@ void CStdRaum::OnChar(UINT nChar, UINT, UINT)
       {
          if (Optionen[0].GetLength()<20 || CurrentMenu==MENU_BROADCAST || CurrentMenu==MENU_CHAT)
          {
-            Optionen[0]+=(char)(nChar);
+            Optionen[0]+=(unsigned char)(nChar);
             MenuRepaint();
-         }
-      }
-
-      if (nChar==VK_RETURN)
-      {
-         if (CurrentMenu==MENU_ENTERTCPIP)
-         {
-            gHostIP=Optionen[0];
-            MenuStop ();
-         }
-         else if (CurrentMenu==MENU_ENTERPROTECT)
-         {
-            MenuInfo2++;
-
-            if (stricmp(Optionen[0], Optionen[1])==0)
-            {
-               Sim.ProtectionState=1;
-               MenuStop ();
-            }
-            else
-            {
-               Optionen[0]="";
-               MenuRepaint();
-               if (MenuInfo2==3)
-               {
-                  PLAYER &qPlayer = Sim.Players.Players[(SLONG)PlayerNum];
-                  qPlayer.CallItADay=TRUE;
-                  Sim.DayState=2;
-                  Sim.ProtectionState=-1;
-                  MenuStop ();
-               }
-            }
-         }
-         else if (Optionen[0].GetLength()>0)
-         {
-            PLAYER &qPlayer = Sim.Players.Players[(SLONG)PlayerNum];
-
-            if (CurrentMenu==MENU_CHAT)
-            {
-               TEAKFILE Message;
-               SLONG c=Sim.localPlayer;
-
-               MenuBms[1].ShiftUp (10);
-               MenuBms[1].PrintAt (Optionen[0], FontSmallBlack, TEC_FONT_LEFT, 6, 119, 279, 147);
-
-               Message.Announce(30);
-               Message << ATNET_CHATMESSAGE << Optionen[0];
-               Sim.SendMemFile (Message, Sim.Players.Players[MenuPar1].NetworkID);
-
-               Optionen[0].Empty ();
-               MenuRepaint();
-            }
-            else if (CurrentMenu==MENU_BROADCAST)
-            {
-               for (SLONG c=0; c<4; c++)
-                  if ((MenuPar1&(1<<c)) && Sim.Players.Players[c].Owner==2 && strlen(Optionen[0]))
-                  {
-                     TEAKFILE Message;
-                     SLONG d=Sim.localPlayer;
-
-                     Sim.SendChatBroadcast (Optionen[0], true, Sim.Players.Players[c].NetworkID);
-                  }
-
-               DisplayBroadcastMessage (Optionen[0], Sim.localPlayer);
-               MenuStop ();
-            }
-            else if (CurrentMenu==MENU_RENAMEPLANE)
-            {
-               qPlayer.Planes[MenuPar1].Name=Optionen[0];
-               MenuStop ();
-            }
-            else if (CurrentMenu==MENU_RENAMEEDITPLANE && qPlayer.GetRoom()==ROOM_EDITOR)
-            {
-               MenuStop ();
-               ((CEditor*)qPlayer.LocationWin)->Plane.Name=Optionen[0]; 
-            }
          }
       }
    }
@@ -8111,12 +8069,88 @@ void CStdRaum::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
       }
    }
 
-   if (MenuIsOpen() && (CurrentMenu==MENU_RENAMEPLANE || CurrentMenu==MENU_ENTERTCPIP || CurrentMenu==MENU_ENTERPROTECT || CurrentMenu==MENU_BROADCAST || CurrentMenu==MENU_CHAT || CurrentMenu==MENU_RENAMEEDITPLANE))
+   if (MenuIsOpen() && (CurrentMenu==MENU_RENAMEPLANE || CurrentMenu == MENU_RENAMEEDITPLANE || CurrentMenu==MENU_ENTERTCPIP || CurrentMenu==MENU_ENTERPROTECT || CurrentMenu==MENU_BROADCAST || CurrentMenu==MENU_CHAT))
    {
       if (nChar==VK_BACK && Optionen[0].GetLength()>0)
       {
          Optionen[0]=Optionen[0].Left (Optionen[0].GetLength()-1);
          MenuRepaint();
+      }
+
+      if (nChar == VK_RETURN)
+      {
+          if (CurrentMenu == MENU_ENTERTCPIP)
+          {
+              gHostIP = Optionen[0];
+              MenuStop();
+          }
+          else if (CurrentMenu == MENU_ENTERPROTECT)
+          {
+              MenuInfo2++;
+
+              if (stricmp(Optionen[0], Optionen[1]) == 0)
+              {
+                  Sim.ProtectionState = 1;
+                  MenuStop();
+              }
+              else
+              {
+                  Optionen[0] = "";
+                  MenuRepaint();
+                  if (MenuInfo2 == 3)
+                  {
+                      PLAYER& qPlayer = Sim.Players.Players[(SLONG)PlayerNum];
+                      qPlayer.CallItADay = TRUE;
+                      Sim.DayState = 2;
+                      Sim.ProtectionState = -1;
+                      MenuStop();
+                  }
+              }
+          }
+          else if (Optionen[0].GetLength() > 0)
+          {
+              PLAYER& qPlayer = Sim.Players.Players[(SLONG)PlayerNum];
+
+              if (CurrentMenu == MENU_CHAT)
+              {
+                  TEAKFILE Message;
+                  SLONG c = Sim.localPlayer;
+
+                  MenuBms[1].ShiftUp(10);
+                  MenuBms[1].PrintAt(Optionen[0], FontSmallBlack, TEC_FONT_LEFT, 6, 119, 279, 147);
+
+                  Message.Announce(30);
+                  Message << ATNET_CHATMESSAGE << Optionen[0];
+                  Sim.SendMemFile(Message, Sim.Players.Players[MenuPar1].NetworkID);
+
+                  Optionen[0].Empty();
+                  MenuRepaint();
+              }
+              else if (CurrentMenu == MENU_BROADCAST)
+              {
+                  for (SLONG c = 0; c < 4; c++)
+                      if ((MenuPar1 & (1 << c)) && Sim.Players.Players[c].Owner == 2 && strlen(Optionen[0]))
+                      {
+                          TEAKFILE Message;
+                          SLONG d = Sim.localPlayer;
+
+                          Sim.SendChatBroadcast(Optionen[0], true, Sim.Players.Players[c].NetworkID);
+                      }
+
+                  DisplayBroadcastMessage(Optionen[0], Sim.localPlayer);
+                  MenuStop();
+              }
+              else if (CurrentMenu == MENU_RENAMEPLANE)
+              {
+                  qPlayer.Planes[MenuPar1].Name = Optionen[0];
+                  MenuStop();
+              }
+              else if (CurrentMenu == MENU_RENAMEEDITPLANE && qPlayer.GetRoom() == ROOM_EDITOR)
+              {
+                  MenuStop();
+                  ((CEditor*)qPlayer.LocationWin)->Plane.Name = Optionen[0];
+              }
+          }
       }
    }
 }

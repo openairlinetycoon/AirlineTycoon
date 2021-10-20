@@ -10,11 +10,13 @@ add_library (SBLib
     source/GfxLib.cpp
     source/Network.cpp
     source/Tool2.cpp
-)
+    source/NetworkTypes/RAKNetNetwork.cpp
+    )
 
 target_include_directories(SBLib PUBLIC include)
 
 target_link_libraries(SBLib
+    raknet
     enet
     SDL2::SDL2_ttf
     SDL2::SDL2_image

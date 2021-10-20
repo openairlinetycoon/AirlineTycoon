@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ALL_BUILD", "ALL_BUILD.vcxproj", "{94897EEC-1784-32C5-A600-45FA05D5F631}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F54A8E0F-69C9-340F-9F94-84E4FDD326B6} = {F54A8E0F-69C9-340F-9F94-84E4FDD326B6}
+		{64BAAE15-C869-3429-8B72-C0E381C5D505} = {64BAAE15-C869-3429-8B72-C0E381C5D505}
+		{4AA2C8BF-0465-3DBE-98E0-5FE3CE95A284} = {4AA2C8BF-0465-3DBE-98E0-5FE3CE95A284}
+		{5682DE50-17AD-3C98-88EA-1A9C016081B1} = {5682DE50-17AD-3C98-88EA-1A9C016081B1}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZERO_CHECK", "..\..\\ZERO_CHECK.vcxproj", "{F54A8E0F-69C9-340F-9F94-84E4FDD326B6}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "driver", "driver.vcxproj", "{64BAAE15-C869-3429-8B72-C0E381C5D505}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F54A8E0F-69C9-340F-9F94-84E4FDD326B6} = {F54A8E0F-69C9-340F-9F94-84E4FDD326B6}
+		{4AA2C8BF-0465-3DBE-98E0-5FE3CE95A284} = {4AA2C8BF-0465-3DBE-98E0-5FE3CE95A284}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libsmacker", "libsmacker.vcxproj", "{4AA2C8BF-0465-3DBE-98E0-5FE3CE95A284}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F54A8E0F-69C9-340F-9F94-84E4FDD326B6} = {F54A8E0F-69C9-340F-9F94-84E4FDD326B6}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "smk2avi", "smk2avi.vcxproj", "{5682DE50-17AD-3C98-88EA-1A9C016081B1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F54A8E0F-69C9-340F-9F94-84E4FDD326B6} = {F54A8E0F-69C9-340F-9F94-84E4FDD326B6}
+		{4AA2C8BF-0465-3DBE-98E0-5FE3CE95A284} = {4AA2C8BF-0465-3DBE-98E0-5FE3CE95A284}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{94897EEC-1784-32C5-A600-45FA05D5F631}.Debug|x64.ActiveCfg = Debug|x64
+		{F54A8E0F-69C9-340F-9F94-84E4FDD326B6}.Debug|x64.ActiveCfg = Debug|x64
+		{F54A8E0F-69C9-340F-9F94-84E4FDD326B6}.Debug|x64.Build.0 = Debug|x64
+		{64BAAE15-C869-3429-8B72-C0E381C5D505}.Debug|x64.ActiveCfg = Debug|x64
+		{64BAAE15-C869-3429-8B72-C0E381C5D505}.Debug|x64.Build.0 = Debug|x64
+		{4AA2C8BF-0465-3DBE-98E0-5FE3CE95A284}.Debug|x64.ActiveCfg = Debug|x64
+		{4AA2C8BF-0465-3DBE-98E0-5FE3CE95A284}.Debug|x64.Build.0 = Debug|x64
+		{5682DE50-17AD-3C98-88EA-1A9C016081B1}.Debug|x64.ActiveCfg = Debug|x64
+		{5682DE50-17AD-3C98-88EA-1A9C016081B1}.Debug|x64.Build.0 = Debug|x64
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AEEECA75-C71C-3052-A25A-4A16F7DB330B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

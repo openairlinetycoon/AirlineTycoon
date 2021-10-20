@@ -9,11 +9,13 @@ include_directories(${PROJECT_SOURCE_DIR})
 
 if(MSVC)
     add_compile_options("/Zc:forScope-")
+    add_compile_options("/MP")
 else()
     add_compile_options("-fno-for-scope")
     add_compile_options("-fpermissive")
     add_compile_options("-Wno-conversion-null")
 endif()
+add_compile_options("-m")
 
 # Add source to this project's executable.
 add_executable (AT
@@ -96,7 +98,23 @@ add_executable (AT
     Res/Script2.rc
 )
 
-set_property(TARGET AT PROPERTY CXX_STANDARD 17)
+set_target_properties(AT PROPERTIES
+                      RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/../BUILD/"
+)
+
+set_target_properties(
+    AT PROPERTIES
+    VS_DEBUGGER_WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}/../BUILD/")
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+if(MSVC)
+    target_compile_features(AT PUBLIC cxx_std_17)
+    target_compile_options(AT PUBLIC "/Zc:__cplusplus")
+    target_compile_options(AT PUBLIC "/std:c++17")
+endif()
+
 if(NOT ${CMAKE_VERSION} VERSION_LESS "3.16.0")
     target_precompile_headers(AT PUBLIC Stdafx.h)
 endif()
@@ -117,3 +135,9 @@ target_link_libraries(AT
 if (WIN32)
   target_link_libraries(AT ws2_32 Winmm)
 endif()
+
+add_custom_command(TARGET AT POST_BUILD 
+  COMMAND "${CMAKE_COMMAND}" -E copy 
+     "$<TARGET_FILE:AT>"
+     "BUILD/$<TARGET_FILE_NAME:AT>" 
+  COMMENT "Copying to output directory")

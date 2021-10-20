@@ -331,7 +331,7 @@ void MyMessageBox (LPCTSTR Title, LPCTSTR String, ...)
    };
    const SDL_MessageBoxData Data = {
        SDL_MESSAGEBOX_INFORMATION,
-       FrameWnd->m_hWnd,
+       NULL,
        Title,
        Buffer,
        SDL_arraysize(Buttons),

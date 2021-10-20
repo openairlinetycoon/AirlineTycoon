@@ -18,6 +18,15 @@ static char THIS_FILE[] = __FILE__;
 //Zum debuggen:
 static const char FileId[] = "Secu";
 
+#if __cplusplus < 201703L // If the version of C++ is less than 17
+#include <experimental/filesystem>
+// It was still in the experimental:: namespace
+namespace fs = std::experimental::filesystem;
+#else
+#include <filesystem>
+namespace fs = std::filesystem;
+#endif
+
 //--------------------------------------------------------------------------------------------
 //Die Schalter wird eröffnet:
 //--------------------------------------------------------------------------------------------
@@ -26,6 +35,10 @@ CDesigner::CDesigner(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum
    SetRoomVisited (PlayerNum, ROOM_DESIGNER);
    HandyOffset = 320;
    Sim.FocusPerson=-1;
+
+   //The game expects in dialogue options, that this path exists
+   //Path will be "%AppPath%/myplanes/"
+   fs::create_directory(LPCSTR(AppPath + MyPlanePath.Left(MyPlanePath.GetLength() - 3)));
 
    if (!bHandy) AmbientManager.SetGlobalVolume (60);
 

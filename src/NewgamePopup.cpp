@@ -151,13 +151,13 @@ PUTSTARTMARK;
 
    Sim.HomeAirportId = Sim.Options.OptionAirport;
 
-   PageNum = 0;
+   PageNum = MAIN_MENU;
    CursorX = CursorY = -1;
    BlinkState = 0;
 
    if (NewgameWantsToLoad==2)
    {
-      PageNum=17;
+      PageNum=MULTIPLAYER_CREATE_SESSION;
       CursorX=0;
       Sim.bNetwork=false;
 
@@ -171,7 +171,7 @@ PUTSTARTMARK;
 
          cr.sessionName = NetworkSession;
          cr.maxPlayers  = 4;
-         cr.flags       = SBNETWORK_SESSION_DEFAULT;
+         cr.flags       = SBCreationFlags::SBNETWORK_CREATE_TRY_NAT;
 
          if (gNetwork.CreateSession (SBStr("somesession"), &cr))
          {
@@ -197,7 +197,7 @@ PUTSTARTMARK;
 
             Sim.Players.Players[localPlayer].NetworkID=gNetwork.GetLocalPlayerID ();
 
-            PageNum=18;
+            PageNum= SELECT_PLAYER_MULTIPLAYER;
             RefreshKlackerField();
          }
       }
@@ -663,8 +663,8 @@ void NewGamePopup::RefreshKlackerField(void)
                {
                   if (c==0) pNetworkPlayers->GetFirst ();
 
-                  if (Sim.Players.Players[d].NetworkID==pNetworkPlayers->GetLastAccessed().ID)
-                     if (pNetworkPlayers->GetLastAccessed().ID==gNetwork.GetLocalPlayerID ())
+                  if (Sim.Players.Players[d].NetworkID==pNetworkPlayers->GetLastAccessed()->ID)
+                     if (pNetworkPlayers->GetLastAccessed()->ID==gNetwork.GetLocalPlayerID ())
                         Sim.Players.Players[d].Owner=0;
                      else
                         Sim.Players.Players[d].Owner=2;
@@ -719,31 +719,35 @@ void NewGamePopup::RefreshKlackerField(void)
       {
          if (c==0) pNetworkConnections->GetFirst ();
 
-         SLONG id = gNetwork.GetProviderID((char*)(LPCTSTR)pNetworkConnections->GetLastAccessed());
+         SBStr inter = pNetworkConnections->GetLastAccessed();
+         //SLONG id = gNetwork.GetProviderID(inter.c_str());
 
-         if (id && id !=NET_MEDIUM_MODEM)
-         {
+         //if (id && id !=NET_MEDIUM_MODEM)
+         //{
             NetMediumMapper[NetMediumCount++]=c;
-         }
+         //}
+
+         KlackerTafel.PrintAt(3, 2 + c, (LPCTSTR)inter.c_str());
+         if (c == Selection) KlackerTafel.PrintAt(0, 2 + c, "==>");
 
          if (pNetworkConnections->IsLast()) break;
          pNetworkConnections->GetNext ();
       }
 
-      if (Selection>=(SLONG)NetMediumCount) Selection=(SLONG)NetMediumCount-1;
-      for (c=0; c<(SLONG)NetMediumCount; c++)
-      {
-         SLONG id = gNetwork.GetProviderID ((char*)(LPCTSTR)pNetworkConnections->Get(NetMediumMapper[c]+1));
+      //if (Selection>=(SLONG)NetMediumCount) Selection=(SLONG)NetMediumCount-1;
+      //for (c=0; c<(SLONG)NetMediumCount; c++)
+      //{
+      //   SLONG id = gNetwork.GetProviderID ((char*)(LPCTSTR)pNetworkConnections->Get(NetMediumMapper[c]+1));
 
-         CString Buffer;
-         if (id) Buffer=GetMediumName (id);
+      //   CString Buffer;
+      //   if (id) Buffer=GetMediumName (id);
 
-         for (SLONG d=0; d<Buffer.GetLength(); d++)
-            Buffer.SetAt (d, GerToUpper(Buffer[(int)d]));
+      //   for (SLONG d=0; d<Buffer.GetLength(); d++)
+      //      Buffer.SetAt (d, GerToUpper(Buffer[(int)d]));
 
-         KlackerTafel.PrintAt (3, 2+c, Buffer);
-         if (c==Selection) KlackerTafel.PrintAt (0, 2+c, "==>");
-      }
+      //   KlackerTafel.PrintAt (3, 2+c, Buffer);
+      //   if (c==Selection) KlackerTafel.PrintAt (0, 2+c, "==>");
+      //}
    }
    else if (PageNum==15) //Netzwerk: Session auswählen / erzeugen
    {
@@ -1121,8 +1125,11 @@ void NewGamePopup::OnPaint()
                   //Airport.LoadAirport (1,1,1,1,1,1,1,1,1,1);
                   Sim.Gamestate = UBYTE((Sim.Gamestate & (~GAMESTATE_WORKING)) | GAMESTATE_DONE);
 
-                  Routen.ReInit ("Routen.csv", true);
-                  Sim.ChooseStartup (bQuick);
+                  //We load the routes and Sim when recieving the net event to prevent race conditions
+                  if(Sim.bNetwork != true){
+                      Routen.ReInit ("Routen.csv", true);
+                      Sim.ChooseStartup (bQuick);
+                  }
 
                   Airport.LoadAirport (1,1,1,1,1,1,1,1,1,1);
                   Airport.UpdateStaticDoorImage ();
@@ -1207,19 +1214,19 @@ void NewGamePopup::OnLButtonDown(UINT nFlags, CPoint point)
 
       ClickFx.Play(DSBPLAY_NOSTOP, Sim.Options.OptionEffekte*100/7);
 
-      if (PageNum==0)
+      if (PageNum== MAIN_MENU)
       {
 #ifndef DEMO
          if (!gSpawnOnly && MouseClickId==133) //"Freies Spiel"
          {
-            PageNum=2;
+            PageNum= SELECT_PLAYER_SINGLEPLAYER;
             Sim.Difficulty = DIFF_FREEGAME;
             RefreshKlackerField();
          }
 #endif
          else if (!gSpawnOnly && MouseClickId==150) //"Spiel laden"
          {
-            PageNum=150;
+            PageNum= CAMPAIGN_SELECT;
             RefreshKlackerField();
          }
          else if (!gSpawnOnly && MouseClickId==2) //"Spiel laden"
@@ -1232,7 +1239,7 @@ void NewGamePopup::OnLButtonDown(UINT nFlags, CPoint point)
          }
          else if (MouseClickId==3) //"Heimatflughafen"
          {
-            PageNum = 5;
+            PageNum = SETTINGS_CHOOSE_AIRPORT;
             PageSub = 0;
 
 again_heimatflughafen:
@@ -1271,14 +1278,14 @@ again_heimatflughafen:
          }
          else if (MouseClickId==13) //"Netzwerkspiel"
          {
-            PageNum=13;
+            PageNum= MULTIPLAYER_SELECT_NETWORK;
             Selection=Sim.Options.OptionLastProvider;
             bNetworkUnderway = TRUE;
             RefreshKlackerField();
          }
          else if (MouseClickId==7) //Highscores
          {
-            PageNum=7;
+            PageNum= HIGHSCORES;
             RefreshKlackerField();
          }
          else if (MouseClickId==999) //"Game Over"
@@ -1296,7 +1303,7 @@ again_heimatflughafen:
          {
             if (!gSpawnOnly && MouseClickId==1) //"Neues Spiel"
             {
-               PageNum=1;
+               PageNum= MISSION_SELECT;
                Sim.Difficulty = UBYTE(Sim.Options.OptionLastMission);
 
 #ifdef DEMO
@@ -1315,16 +1322,16 @@ again_heimatflughafen:
                   Sim.Difficulty=min (DIFF_ADDON02, (UBYTE)Sim.MaxDifficulty2);
 #endif
 
-               PageNum=12;
+               PageNum= ADDON_MISSION_SELECT;
                RefreshKlackerField();
             }
          }
       }
-      else if (PageNum==150)
+      else if (PageNum== CAMPAIGN_SELECT)
       {
          if (!gSpawnOnly && MouseClickId==1) //"Neues Spiel"
          {
-            PageNum=1;
+            PageNum= MISSION_SELECT;
             Sim.Difficulty = UBYTE(Sim.Options.OptionLastMission);
 
 #ifdef DEMO
@@ -1343,7 +1350,7 @@ again_heimatflughafen:
                Sim.Difficulty=min (DIFF_ADDON02, (UBYTE)Sim.MaxDifficulty2);
 #endif
 
-            PageNum=12;
+            PageNum= ADDON_MISSION_SELECT;
             RefreshKlackerField();
          }
          else if (!gSpawnOnly && MouseClickId==122) //"Noch mehr Missionen"
@@ -1355,12 +1362,12 @@ again_heimatflughafen:
                Sim.Difficulty=min (DIFF_ATFS02, (UBYTE)Sim.MaxDifficulty3);
 #endif
 
-            PageNum=122;
+            PageNum= FLIGHT_SECURITY_MISSION_SELECT;
             RefreshKlackerField();
          }
          else if (MouseClickId==999) //"Game Over"
          {
-            PageNum=0;
+            PageNum= MAIN_MENU;
             RefreshKlackerField();
          }
       }
@@ -1376,16 +1383,16 @@ again_heimatflughafen:
             }
             else if (PageNum==1 || PageNum==12 || PageNum==122)
             {
-               PageNum=bFirstClass?0:150;
+               PageNum=bFirstClass? MAIN_MENU : CAMPAIGN_SELECT;
                RefreshKlackerField();
                return;
             }
-            else if (PageNum==2)
+            else if (PageNum== SELECT_PLAYER_SINGLEPLAYER)
             {
-               PageNum=1;
+               PageNum= MISSION_SELECT;
                if (Sim.Difficulty == DIFF_FREEGAME)
                {
-                  PageNum = 0;
+                  PageNum = MAIN_MENU;
                   Sim.Difficulty=min (DIFF_FIRST, (UBYTE)Sim.MaxDifficulty);
                }
 
@@ -1396,9 +1403,9 @@ again_heimatflughafen:
             else if (PageNum==14)
             {
                if (Sim.Difficulty>=DIFF_ATFS && Sim.Difficulty<=DIFF_ATFS10)
-                  PageNum=122;
+                  PageNum= FLIGHT_SECURITY_MISSION_SELECT;
                else
-                  PageNum=12;
+                  PageNum= ADDON_MISSION_SELECT;
 
                CursorX = CursorY = -1;
                RefreshKlackerField();
@@ -1410,25 +1417,25 @@ again_heimatflughafen:
          {
             if (PageNum==1)
             {
-               PageNum=2;
+               PageNum= SELECT_PLAYER_SINGLEPLAYER;
                RefreshKlackerField();
                return;
             }
             else if (PageNum==12)
             {
-               PageNum=14;
+               PageNum= SELECT_PLAYER_CAMPAIGN;
                RefreshKlackerField();
                return;
             }
             else if (PageNum==122)
             {
-               PageNum=14;
+               PageNum= SELECT_PLAYER_CAMPAIGN;
                RefreshKlackerField();
                return;
             }
             else if ((PageNum==2 || PageNum==14 || PageNum==18) && NamesOK && (PageNum!=18 || bThisIsSessionMaster))
             {
-               if (PageNum==18)
+               if (PageNum==SELECT_PLAYER_MULTIPLAYER)
                {
                   SLONG c;
 
@@ -1447,7 +1454,7 @@ again_heimatflughafen:
 
                   if (gNetworkSavegameLoading==-1)
                   {
-                     PageNum=99;
+                     PageNum= MP_LOADING;
                      PageSub=0;
                   }
 
@@ -1477,13 +1484,17 @@ again_heimatflughafen:
                      NewgameWantsToLoad      = FALSE;
                      return;
                   }
+                  else {
+                      Routen.ReInit("Routen.csv", true);
+                      Sim.ChooseStartup(bQuick);
+                  }
                }
 
                Sim.bThisIsSessionMaster = bThisIsSessionMaster;
                gNetworkSavegameLoading = -1;
                NewgameWantsToLoad      = FALSE;
 
-               PageNum=99;
+               PageNum= MP_LOADING;
                PageSub=0;
 
                RefreshKlackerField();
@@ -1631,7 +1642,7 @@ again_heimatflughafen:
 
          if (Line==15 && Column>=22 && Column<24)
          {
-            PageNum=0;
+            PageNum= MAIN_MENU;
             RefreshKlackerField();
          }
 
@@ -1649,7 +1660,7 @@ again_heimatflughafen:
             RefreshKlackerField();
          }
       }
-      else if (PageNum==13)  //Netzwerk: Provider-Medium wählen
+      else if (PageNum==MULTIPLAYER_SELECT_NETWORK)  //Netzwerk: Provider-Medium wählen
       {
          long c;
 
@@ -1677,7 +1688,7 @@ again_heimatflughafen:
          //Zurück:
          if (GridPos.IfIsWithin (1, 15, 7, 15))
          {
-            PageNum=0;
+            PageNum= MAIN_MENU;
             Sim.Options.OptionLastProvider=Selection;
             Sim.Options.WriteOptions ();
 
@@ -1699,15 +1710,24 @@ again_heimatflughafen:
                Sim.StartTime = time (NULL);
 
             SLONG id = gNetwork.GetProviderID ((char*)(LPCTSTR)pNetworkConnections->Get(NetMediumMapper[Selection]+1));
-            if (id && id==NET_MEDIUM_TCPIP)
+            gNetwork.SetProvider((SBTypeEnum)id);
+            if (id==SBNETWORK_RAKNET_DIRECT_JOIN || id == SBNETWORK_RAKNET_NAT_JOIN)
             {
                gHostIP=".";
                MenuStart (MENU_ENTERTCPIP);
                return;
             }
 
+         	if (id == SBNETWORK_RAKNET_DIRECT_HOST || id == SBNETWORK_RAKNET_NAT_HOST) {
+                PageNum = MULTIPLAYER_CREATE_SESSION;
+                CursorX = 0;
+                NetworkSession = bprintf("%-25s", StandardTexte.GetS(TOKEN_NEWGAME, 703));
+                RefreshKlackerField();
+                return;
+            }
+
             //lpDD->FlipToGDISurface ();
-            if (gNetwork.Connect (pNetworkConnections->Get(NetMediumMapper[Selection]+1)))
+            /*if (gNetwork.Connect (pNetworkConnections->Get(NetMediumMapper[Selection]+1)))
             {
                Sim.bIsHost=FALSE;
                PageNum=15;
@@ -1719,7 +1739,7 @@ again_heimatflughafen:
                   gNetwork.DisConnect ();
                   RefreshKlackerField();
                }
-            }
+            }*/
          }
       }
       else if (PageNum==15) //Netzwerk: Session auswählen / erzeugen
@@ -1735,7 +1755,7 @@ again_heimatflughafen:
          if (GridPos.IfIsWithin (1, 15, 7, 15))
          {
             gNetwork.DisConnect ();
-            PageNum=13;
+            PageNum= MULTIPLAYER_SELECT_NETWORK;
             NewgameWantsToLoad=0;
             Selection=Sim.Options.OptionLastProvider;
             RefreshKlackerField();
@@ -1764,14 +1784,14 @@ again_heimatflughafen:
 
                Sim.SendMemFile (Message);
 
-               PageNum=18;
+               PageNum= SELECT_PLAYER_MULTIPLAYER;
                RefreshKlackerField();
             }
          }
          //Eigene Session erzeugen:
          else if (!gSpawnOnly && GridPos.IfIsWithin (1, 13, 20, 13))
          {
-            PageNum=17;
+            PageNum= MULTIPLAYER_CREATE_SESSION;
             CursorX=0;
             NetworkSession=bprintf ("%-25s", StandardTexte.GetS (TOKEN_NEWGAME, 703));
             RefreshKlackerField();
@@ -1788,12 +1808,18 @@ again_heimatflughafen:
             KeepRoomLib ();
          }
       }
-      else if (PageNum==17) //Netzwerk: Session erzeugen
+      else if (PageNum== MULTIPLAYER_CREATE_SESSION) //Netzwerk: Session erzeugen
       {
          //Zurück:
          if (GridPos.IfIsWithin (1, 15, 7, 15))
          {
-            PageNum=15;
+            SLONG id = gNetwork.GetProviderID((char*)(LPCTSTR)pNetworkConnections->Get(NetMediumMapper[Selection] + 1));
+            if (id == SBNETWORK_RAKNET_DIRECT_HOST) {
+                PageNum = MULTIPLAYER_SELECT_NETWORK;
+                RefreshKlackerField();
+                return;
+            }
+            PageNum= MULTIPLAYER_SELECT_SESSION;
             if (pNetworkConnections==NULL) pNetworkConnections = gNetwork.GetConnectionList ();
             gNetwork.StartGetSessionListAsync ();
             RefreshKlackerField();
@@ -1806,7 +1832,7 @@ again_heimatflughafen:
             NewgameWantsToLoad=2;
             cr.sessionName = NetworkSession;
             cr.maxPlayers  = 4;
-            cr.flags       = SBNETWORK_SESSION_DEFAULT;
+            cr.flags       = SBCreationFlags::SBNETWORK_CREATE_TRY_NAT;
 
             if (gNetwork.CreateSession (SBStr("somesession"), &cr))
             {
@@ -1827,7 +1853,7 @@ again_heimatflughafen:
                Sim.Players.Players[Sim.Options.OptionLastPlayer].NetworkID = gNetwork.GetLocalPlayerID ();
                Sim.Players.Players[Sim.Options.OptionLastPlayer].Owner     = 0;
 
-               PageNum=18;
+               PageNum= SELECT_PLAYER_MULTIPLAYER;
                RefreshKlackerField();
             }
          }
@@ -1848,9 +1874,9 @@ again_heimatflughafen:
              RefreshKlackerField();
          }
       }
-      else if (PageNum==7) //Highscores
+      else if (PageNum== HIGHSCORES) //Highscores
       {
-         PageNum=0;
+         PageNum= MAIN_MENU;
          RefreshKlackerField();
       }
 
@@ -1864,10 +1890,10 @@ again_heimatflughafen:
             if (bThisIsSessionMaster)
             {
                if (gNetworkSavegameLoading==-1)
-                  PageNum=17;
+                  PageNum= MULTIPLAYER_CREATE_SESSION;
                else
                {
-                  PageNum=15;
+                  PageNum= MULTIPLAYER_SELECT_SESSION;
                   if (pNetworkConnections==NULL) pNetworkConnections = gNetwork.GetConnectionList ();
                }
 
@@ -1878,7 +1904,7 @@ again_heimatflughafen:
             else
             {
                gNetworkSavegameLoading=-1;
-               PageNum=15;
+               PageNum= MULTIPLAYER_SELECT_SESSION;
                gNetwork.StartGetSessionListAsync ();
                RefreshKlackerField();
             }
@@ -1907,7 +1933,7 @@ void NewGamePopup::OnRButtonDown(UINT nFlags, CPoint point)
 
       if (PageNum==5)
       {
-         PageNum=0;
+         PageNum= MAIN_MENU;
          RefreshKlackerField();
       }
       else if (PageNum == 17) {
@@ -1930,8 +1956,8 @@ void NewGamePopup::OnRButtonDown(UINT nFlags, CPoint point)
 }
 
 void NewGamePopup::CheckNetEvents() {
-    if (PageNum == 13 || PageNum == 15 || PageNum == 17 || PageNum == 18)
-        if (gNetwork.GetMessageCount())
+    if (PageNum == 13 || PageNum == MULTIPLAYER_SELECT_SESSION || PageNum == 17 || PageNum == 18)
+        if (gNetwork.IsInitialized() && gNetwork.GetMessageCount())
         {
             TEAKFILE Message;
 
@@ -2062,7 +2088,7 @@ void NewGamePopup::CheckNetEvents() {
                     }
                     else
                     {
-                        PageNum = 15;
+                        PageNum = MULTIPLAYER_SELECT_SESSION;
                         if (pNetworkConnections == NULL) pNetworkConnections = gNetwork.GetConnectionList();
                         gNetwork.StartGetSessionListAsync();
                         RefreshKlackerField();
@@ -2072,7 +2098,7 @@ void NewGamePopup::CheckNetEvents() {
                 break;
 
                 case ATNET_WANNAJOIN2NO:
-                    PageNum = 15;
+                    PageNum = MULTIPLAYER_SELECT_SESSION;
                     if (pNetworkConnections == NULL) pNetworkConnections = gNetwork.GetConnectionList();
                     gNetwork.StartGetSessionListAsync();
                     RefreshKlackerField();
@@ -2149,7 +2175,7 @@ void NewGamePopup::CheckNetEvents() {
                         SLONG Time;
                         SLONG difficulty;
 
-                        PageNum = 99;
+                        PageNum = MP_LOADING;
                         PageSub = 0;
 
                         gNetworkSavegameLoading = -1;
@@ -2167,7 +2193,8 @@ void NewGamePopup::CheckNetEvents() {
                         for (SLONG c = 0; c<4; c++) Sim.Players.Players[c].bReadyForMorning = false;
 
                         Sim.bThisIsSessionMaster = bThisIsSessionMaster;
-
+                        Routen.ReInit("Routen.csv", true);
+                        Sim.ChooseStartup(bQuick);
                         RefreshKlackerField();
                     }
                     break;
@@ -2208,7 +2235,7 @@ void NewGamePopup::CheckNetEvents() {
                     {
                         gNetworkSavegameLoading = -1;
                         gNetwork.CloseSession();
-                        PageNum = 15;
+                        PageNum = MULTIPLAYER_SELECT_SESSION;
                         gNetwork.StartGetSessionListAsync();
                         RefreshKlackerField();
                     }
@@ -2227,12 +2254,12 @@ void NewGamePopup::CheckNetEvents() {
                     gNetwork.CloseSession();
                     if (bThisIsSessionMaster)
                     {
-                        PageNum = 17;
+                        PageNum = MULTIPLAYER_CREATE_SESSION;
                         RefreshKlackerField();
                     }
                     else
                     {
-                        PageNum = 15;
+                        PageNum = MULTIPLAYER_SELECT_SESSION;
                         gNetwork.StartGetSessionListAsync();
                         RefreshKlackerField();
                     }
@@ -2242,7 +2269,7 @@ void NewGamePopup::CheckNetEvents() {
                     if (PageNum == 18)
                     {
                         gNetwork.CloseSession();
-                        PageNum = 15;
+                        PageNum = MULTIPLAYER_SELECT_SESSION;
                         gNetwork.StartGetSessionListAsync();
                         RefreshKlackerField();
                     }
@@ -2281,77 +2308,107 @@ void NewGamePopup::CheckNetEvents() {
 //--------------------------------------------------------------------------------------------
 void NewGamePopup::OnTimer(UINT nIDEvent) 
 {
-   SLONG c, l;
-   static int counter=0;
+    SLONG c, l;
+    static int counter=0;
 
-   if (!bNewGamePopupIsOpen) return;
+    if (!bNewGamePopupIsOpen) return;
 
-   l = strlen (KlackerFntDef);
+    l = strlen (KlackerFntDef);
 
-   if (!bNewGamePopupIsOpen) return;
+    if (!bNewGamePopupIsOpen) return;
 
-   //Mit 10 FPS die Anzeige rotieren lassen:
-   if (nIDEvent==1) KlackerTafel.Klack();
+    //Mit 10 FPS die Anzeige rotieren lassen:
+    if (nIDEvent==1) KlackerTafel.Klack();
 
-   //Logo-rotation korrigieren:
-   if (PageNum==2 || PageNum==14 || PageNum==18)
-      for (c=0; c<4; c++)
-      {
-         if (KlackerTafel.Haben[3+(c*2+2)*24]==l-1)
+    //Logo-rotation korrigieren:
+    if (PageNum==2 || PageNum==14 || PageNum==18)
+        for (c=0; c<4; c++)
+        {
+            if (KlackerTafel.Haben[3+(c*2+2)*24]==l-1)
             KlackerTafel.Haben[3+(c*2+2)*24]=UBYTE(LogoBms.AnzEntries()-1);
 
-         if (KlackerTafel.Haben[3+(c*2+2)*24]>=LogoBms.AnzEntries())
+            if (KlackerTafel.Haben[3+(c*2+2)*24]>=LogoBms.AnzEntries())
             KlackerTafel.Haben[3+(c*2+2)*24]=0;
-      }
+        }
 
-   if (PageNum==13)
-   {
-      if (gHostIP!=".")
-      {
-         //lpDD->FlipToGDISurface ();
-         if (gNetwork.Connect (pNetworkConnections->Get(NetMediumMapper[Selection]+1), (char*)(LPCTSTR)gHostIP))
-         {
-            Sim.bIsHost=FALSE;
-            PageNum=15;
-            RefreshKlackerField();
-            if (!gNetwork.StartGetSessionListAsync ())
-            {
-               PageNum=13;
-               Selection=Sim.Options.OptionLastProvider;
-               gNetwork.DisConnect ();
-               RefreshKlackerField();
+    if (PageNum==13)
+    {
+        if (gHostIP!=".")
+        {
+            //lpDD->FlipToGDISurface ();
+         
+            switch (SLONG id = gNetwork.GetProviderID((char*)(LPCTSTR)pNetworkConnections->Get(NetMediumMapper[Selection] + 1))) {
+                case(SBNETWORK_RAKNET_DIRECT_JOIN):
+                    if (gNetwork.Connect(pNetworkConnections->Get(NetMediumMapper[Selection] + 1), (char*)(LPCTSTR)gHostIP)) {
+                        
+                        hprintf("This computer is client.");
+
+                        NewgameWantsToLoad = FALSE;
+                        gNetworkSavegameLoading = -1;
+
+                        bThisIsSessionMaster = false;
+
+                        for (SLONG d = 0; d < 4; d++) Sim.Players.Players[d].NetworkID = 0;
+                        Sim.Players.Players[Sim.Options.OptionLastPlayer].NetworkID = gNetwork.GetLocalPlayerID();
+
+                        //"Please let me play with you"
+                        TEAKFILE Message;
+
+                        Message.Announce(30);
+                        Message << ATNET_WANNAJOIN << gNetwork.GetLocalPlayerID() << Sim.Options.OptionLastPlayer
+                            << CString(VersionString);
+
+                        Sim.SendMemFile(Message);
+
+                        PageNum = SELECT_PLAYER_MULTIPLAYER;
+                        RefreshKlackerField();
+                        
+                    }
+                break;
+                case(SBNETWORK_RAKNET_DIRECT_HOST):
+                    
+                break;
             }
-         }
 
-         gHostIP = ".";
-      }
-   }
+            //if (gNetwork.Connect (pNetworkConnections->Get(NetMediumMapper[Selection]+1), (char*)(LPCTSTR)gHostIP))
+            //    {
+            //    Sim.bIsHost=FALSE;
+            //    PageNum=15;
+            //    RefreshKlackerField();
+            //    if (!gNetwork.StartGetSessionListAsync ())
+            //    {
+            //        PageNum=13;
+            //        Selection=Sim.Options.OptionLastProvider;
+            //        gNetwork.DisConnect ();
+            //        RefreshKlackerField();
+            //    }
+            //}
 
-   if (((counter++)&15)==0)
-   {
-      if (PageNum==13)
-      {
-         pNetworkConnections = gNetwork.GetConnectionList ();
-      }
-      else if (PageNum==15)
-      {
-         if (gNetwork.IsEnumSessionFinished())
-         {
-            pNetworkSessions = gNetwork.GetSessionListAsync ();
-            gNetwork.StartGetSessionListAsync ();
+            gHostIP = ".";
+        }
+    }
+
+    if (((counter++)&15)==0)
+    {
+        if (PageNum==13) {
+            pNetworkConnections = gNetwork.GetConnectionList ();
+        }
+        else if (PageNum==15) {
+            if (gNetwork.IsEnumSessionFinished()) {
+	            pNetworkSessions = gNetwork.GetSessionListAsync ();
+	            gNetwork.StartGetSessionListAsync ();
+	            RefreshKlackerField();
+            }
+        }
+        else if (PageNum==18) {
+            pNetworkPlayers = gNetwork.GetAllPlayers ();
             RefreshKlackerField();
-         }
-      }
-      else if (PageNum==18)
-      {
-         pNetworkPlayers = gNetwork.GetAllPlayers ();
-         RefreshKlackerField();
-      }
+        }
 
-      if (PageNum==13 || PageNum==15) RefreshKlackerField ();
-   }
+        if (PageNum==13 || PageNum==15) RefreshKlackerField ();
+    }
 
-   BlinkState++;
+    BlinkState++;
 }
 
 //--------------------------------------------------------------------------------------------

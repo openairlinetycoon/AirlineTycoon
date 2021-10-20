@@ -1,5 +1,11 @@
 #pragma once
 
+#define RAKNET_NETWORK
+
+#include "BaseNetworkType.hpp"
+
+#ifdef ENET_NETWORK
+
 #ifdef WIN32
 #define _WINSOCK2API_   /* Prevent inclusion of winsock2.h in enet.h */
 #define INVALID_SOCKET (SOCKET)(~0)
@@ -43,6 +49,11 @@ enum SBSessionEnum
     SBNETWORK_SESSION_MASTER,
     SBNETWORK_SESSION_CLIENT,
     SBNETWORK_SESSION_FINISHED
+};
+
+enum SBTypeEnum
+{
+    SBNETWORK_ENET,
 };
 
 struct SBNetworkCreation
@@ -90,6 +101,7 @@ private:
     SBList<SBSessionInfo> mSessionInfo;
     SBList<SBNetworkPlayer> mPlayers;
 
+    SBTypeEnum mType;
     unsigned int mSearchTime;
     ENetAddress mServer;
     ENetHost* mHost;
@@ -97,3 +109,52 @@ private:
     ENetSocket mSocket;
     SBList<ENetPacket*> mPackets;
 };
+
+#endif
+
+#ifdef RAKNET_NETWORK
+
+
+enum SBMultiplayerStateEnum
+{
+    SBNETWORK_SEARCHING,
+	SBNETWORK_PLAYING,
+	SBNETWORK_IDLE,
+};
+
+
+class SBNetwork
+{
+public:
+    SBNetwork(bool);
+
+    SLONG GetMessageCount();
+    bool Connect(SBStr);
+    bool Connect(SBStr, const char*);
+    void DisConnect();
+    bool CreateSession(SBStr, SBNetworkCreation*);
+    void CloseSession();
+    ULONG GetLocalPlayerID();
+    SBList<SBStr>* GetConnectionList();
+    SBList<SBStr>* GetSessionListAsync();
+    bool StartGetSessionListAsync();
+    SLONG GetProviderID(char*);
+    void SetProvider(SBTypeEnum);
+    bool IsEnumSessionFinished() const;
+    bool IsInSession() const;
+	bool IsInitialized() const;
+    bool Send(BUFFER<UBYTE>&, ULONG, ULONG, bool);
+    bool Receive(UBYTE**, ULONG&);
+    bool JoinSession(const SBStr&, SBStr);
+    SBList<SBNetworkPlayer*>* GetAllPlayers();
+
+private:
+    SBList<SBStr> mConnections;
+
+    SBMultiplayerStateEnum mState;
+	
+	BaseNetworkType *mNetwork;
+    SBTypeEnum mType;
+};
+
+#endif

@@ -3835,6 +3835,9 @@ void SIM::AddHighscore (CString Name, DWORD UniqueGameId2, __int64 Score)
 //--------------------------------------------------------------------------------------------
 void SIM::SaveHighscores (void)
 {
+#ifdef _DEBUG
+	return; //Debug exit for better single installation multiplayer testing
+#endif
    CString  str;
    TEAKFILE OutputFile (AppPath+"misc\\xmlmap.fla", TEAKFILE_WRITE);
 

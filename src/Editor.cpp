@@ -7,7 +7,16 @@
 #include "atnet.h"
 #include <string>
 #include <fstream>
+
+#if __cplusplus < 201703L // If the version of C++ is less than 17
+#include <experimental/filesystem>
+    // It was still in the experimental:: namespace
+namespace fs = std::experimental::filesystem;
+#else
 #include <filesystem>
+namespace fs = std::filesystem;
+#endif
+
 #include <algorithm>
 
 #ifdef _DEBUG
@@ -731,7 +740,6 @@ CEditor::CEditor(BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, PlayerNum, "E
 
    Plane.Name = StandardTexte.GetS (TOKEN_MISC, 8210);
 
-   std::filesystem::create_directory (LPCSTR(AppPath+MyPlanePath.Left(MyPlanePath.GetLength()-3)));
    PlaneFilename = FullFilename ("data.plane", MyPlanePath);
    if (DoesFileExist (PlaneFilename)) Plane.Load(PlaneFilename);
 

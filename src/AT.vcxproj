@@ -1,0 +1,483 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E318F494-F778-3754-B59C-540034A81803}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>x64</Platform>
+    <ProjectName>AT</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+    <VcpkgEnabled>false</VcpkgEnabled>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="do_not_import_user.props" Condition="exists('do_not_import_user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="Project.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">P:/Projekte/Major Games/BASE/AirlineTycoon/src/../BUILD/</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x64'">P:/Projekte/Major Games/BASE/AirlineTycoon/src/../BUILD/</LocalDebuggerWorkingDirectory>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)BUILD\AT\$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)BUILD\AT\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)BUILD\Int\AT\$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)BUILD\Int\AT\$(Configuration)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">AT</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">AT</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.exe</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)src\SBLib\include;$(SolutionDir)libs\raknet\Include;$(SolutionDir)libs\enet\include;$(SolutionDir)libs\libsmacker;$(SolutionDir)cmake\sdl2-ttf\include;$(SolutionDir)cmake\sdl2\include;$(SolutionDir)cmake\sdl2-image\include;$(SolutionDir)cmake\sdl2-mixer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) -m /Zc:__cplusplus</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ForceConformanceInForLoopScope>false</ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;src\SBLib\include;libs\raknet\Include;libs\enet\include;libs\libsmacker;cmake\sdl2-ttf\include;cmake\sdl2\include;cmake\sdl2-image\include;cmake\sdl2-mixer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>src;src\SBLib\include;libs\raknet\Include;libs\enet\include;libs\libsmacker;cmake\sdl2-ttf\include;cmake\sdl2\include;cmake\sdl2-image\include;cmake\sdl2-mixer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>$(SolutionDir)BUILD\TeakLib\$(Configuration)\TeakLibW.lib;$(SolutionDir)BUILD\SSE\$(Configuration)\SSE.lib;$(SolutionDir)BUILD\SBLib\$(Configuration)\SBLib.lib;$(SolutionDir)BUILD\libsmacker\$(Configuration)\libsmacker.lib;$(SolutionDir)BUILD\raknet\$(Configuration)\raknet.lib;$(SolutionDir)BUILD\enet\$(Configuration)\enet.lib;$(SolutionDir)cmake\sdl2-ttf\lib\x64\SDL2_ttf.lib;$(SolutionDir)cmake\sdl2-image\lib\x64\SDL2_image.lib;$(SolutionDir)cmake\sdl2-mixer\lib\x64\SDL2_mixer.lib;$(SolutionDir)cmake\sdl2\lib\x64\SDL2.lib;$(SolutionDir)cmake\sdl2\lib\x64\SDL2main.lib;ws2_32.lib;Winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(SolutionDir)BUILD/AT/$(Configuration)/AT.lib</ImportLibrary>
+      <ProgramDataBaseFile>$(SolutionDir)BUILD\AT\$(Configuration)\AT.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)BUILD\AT\$(Configuration)\AT.exe" "$(SolutionDir)BUILD\Deployment\AT.exe" /Y</Command>
+      <Message>Copying AT.exe to Deployment folder</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)src\SBLib\include;$(SolutionDir)libs\raknet\Include;$(SolutionDir)libs\enet\include;$(SolutionDir)libs\libsmacker;$(SolutionDir)cmake\sdl2-ttf\include;$(SolutionDir)cmake\sdl2\include;$(SolutionDir)cmake\sdl2-image\include;$(SolutionDir)cmake\sdl2-mixer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) -m /Zc:__cplusplus</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ForceConformanceInForLoopScope>false</ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Full</Optimization>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;src\SBLib\include;libs\raknet\Include;libs\enet\include;libs\libsmacker;cmake\sdl2-ttf\include;cmake\sdl2\include;cmake\sdl2-image\include;cmake\sdl2-mixer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>src;src\SBLib\include;libs\raknet\Include;libs\enet\include;libs\libsmacker;cmake\sdl2-ttf\include;cmake\sdl2\include;cmake\sdl2-image\include;cmake\sdl2-mixer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>$(SolutionDir)BUILD\TeakLib\$(Configuration)\TeakLibW.lib;$(SolutionDir)BUILD\SSE\$(Configuration)\SSE.lib;$(SolutionDir)BUILD\SBLib\$(Configuration)\SBLib.lib;$(SolutionDir)BUILD\libsmacker\$(Configuration)\libsmacker.lib;$(SolutionDir)BUILD\raknet\$(Configuration)\raknet.lib;$(SolutionDir)BUILD\enet\$(Configuration)\enet.lib;$(SolutionDir)cmake\sdl2-ttf\lib\x64\SDL2_ttf.lib;$(SolutionDir)cmake\sdl2-image\lib\x64\SDL2_image.lib;$(SolutionDir)cmake\sdl2-mixer\lib\x64\SDL2_mixer.lib;$(SolutionDir)cmake\sdl2\lib\x64\SDL2.lib;$(SolutionDir)cmake\sdl2\lib\x64\SDL2main.lib;ws2_32.lib;Winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(SolutionDir)BUILD/AT/$(Configuration)/AT.lib</ImportLibrary>
+      <ProgramDataBaseFile>$(SolutionDir)BUILD\AT\$(Configuration)\AT.pdb</ProgramDataBaseFile>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)BUILD\AT\$(Configuration)\AT.exe" "$(SolutionDir)BUILD\Deployment\AT.exe" /Y</Command>
+      <Message>Copying AT.exe to Deployment folder</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Buero.cpp">
+    </ClCompile>
+    <ClCompile Include="city.cpp">
+    </ClCompile>
+    <ClCompile Include="DataTabl.cpp">
+    </ClCompile>
+    <ClCompile Include="Route.cpp">
+    </ClCompile>
+    <ClCompile Include="Tips.cpp">
+    </ClCompile>
+    <ClCompile Include="Abend.cpp">
+    </ClCompile>
+    <ClCompile Include="AirportView.cpp">
+    </ClCompile>
+    <ClCompile Include="ArabAir.cpp">
+    </ClCompile>
+    <ClCompile Include="Askbrick.cpp">
+    </ClCompile>
+    <ClCompile Include="AtNet.cpp">
+    </ClCompile>
+    <ClCompile Include="Aufsicht.cpp">
+    </ClCompile>
+    <ClCompile Include="Auftrag.cpp">
+    </ClCompile>
+    <ClCompile Include="Bank.cpp">
+    </ClCompile>
+    <ClCompile Include="Block.cpp">
+    </ClCompile>
+    <ClCompile Include="Brick.cpp">
+    </ClCompile>
+    <ClCompile Include="Checkup.cpp">
+    </ClCompile>
+    <ClCompile Include="Colorfx.cpp">
+    </ClCompile>
+    <ClCompile Include="Credits.cpp">
+    </ClCompile>
+    <ClCompile Include="DeltaVid.cpp">
+    </ClCompile>
+    <ClCompile Include="Designer.cpp">
+    </ClCompile>
+    <ClCompile Include="Dialog.cpp">
+    </ClCompile>
+    <ClCompile Include="DutyFree.cpp">
+    </ClCompile>
+    <ClCompile Include="Editor.cpp">
+    </ClCompile>
+    <ClCompile Include="Fracht.cpp">
+    </ClCompile>
+    <ClCompile Include="Gameframe.cpp">
+    </ClCompile>
+    <ClCompile Include="Global.cpp">
+    </ClCompile>
+    <ClCompile Include="Globe.cpp">
+    </ClCompile>
+    <ClCompile Include="HalldiskMenu.cpp">
+    </ClCompile>
+    <ClCompile Include="HLine.cpp">
+    </ClCompile>
+    <ClCompile Include="Init.cpp">
+    </ClCompile>
+    <ClCompile Include="Insel.cpp">
+    </ClCompile>
+    <ClCompile Include="Intro.cpp">
+    </ClCompile>
+    <ClCompile Include="Kiosk.cpp">
+    </ClCompile>
+    <ClCompile Include="Klacker.cpp">
+    </ClCompile>
+    <ClCompile Include="Laptop.cpp">
+    </ClCompile>
+    <ClCompile Include="Lastmin.cpp">
+    </ClCompile>
+    <ClCompile Include="Mainfrm.cpp">
+    </ClCompile>
+    <ClCompile Include="Makler.cpp">
+    </ClCompile>
+    <ClCompile Include="Misc.cpp">
+    </ClCompile>
+    <ClCompile Include="Museum.cpp">
+    </ClCompile>
+    <ClCompile Include="Nasa.cpp">
+    </ClCompile>
+    <ClCompile Include="NewgamePopup.cpp">
+    </ClCompile>
+    <ClCompile Include="Options.cpp">
+    </ClCompile>
+    <ClCompile Include="Outro.cpp">
+    </ClCompile>
+    <ClCompile Include="Person.cpp">
+    </ClCompile>
+    <ClCompile Include="Personal.cpp">
+    </ClCompile>
+    <ClCompile Include="Planer.cpp">
+    </ClCompile>
+    <ClCompile Include="Planetyp.cpp">
+    </ClCompile>
+    <ClCompile Include="PlanProp.cpp">
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+    </ClCompile>
+    <ClCompile Include="PNet.cpp">
+    </ClCompile>
+    <ClCompile Include="Protect.cpp">
+    </ClCompile>
+    <ClCompile Include="reise.cpp">
+    </ClCompile>
+    <ClCompile Include="Ricks.cpp">
+    </ClCompile>
+    <ClCompile Include="RouteBox.cpp">
+    </ClCompile>
+    <ClCompile Include="Rushmore.cpp">
+    </ClCompile>
+    <ClCompile Include="sabotage.cpp">
+    </ClCompile>
+    <ClCompile Include="SBBM.cpp">
+    </ClCompile>
+    <ClCompile Include="Schedule.cpp">
+    </ClCompile>
+    <ClCompile Include="Security.cpp">
+    </ClCompile>
+    <ClCompile Include="SecurityManager.cpp">
+    </ClCompile>
+    <ClCompile Include="Sim.cpp">
+    </ClCompile>
+    <ClCompile Include="Smackprs.cpp">
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+    </ClCompile>
+    <ClCompile Include="Statistk.cpp">
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+    </ClCompile>
+    <ClCompile Include="Stdraum.cpp">
+    </ClCompile>
+    <ClCompile Include="Synthese.cpp">
+    </ClCompile>
+    <ClCompile Include="Tafel.cpp">
+    </ClCompile>
+    <ClCompile Include="Takeoff.cpp">
+    </ClCompile>
+    <ClCompile Include="Talker.cpp">
+    </ClCompile>
+    <ClCompile Include="Titlepopup.cpp">
+    </ClCompile>
+    <ClCompile Include="WeltAll.cpp">
+    </ClCompile>
+    <ClCompile Include="Werbung.cpp">
+    </ClCompile>
+    <ClCompile Include="Werkstat.cpp">
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+    </ClCompile>
+    <ResourceCompile Include="Res\Script2.rc">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="$(SolutionDir)src\SBLib\SBLib.vcxproj">
+      <Project>{F86F7D12-DD3F-3C4D-9908-1DCC1AE0CF52}</Project>
+      <Name>SBLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="$(SolutionDir)src\SSE\SSE.vcxproj">
+      <Project>{886621EC-B808-3E1F-9DF7-C978B303DB34}</Project>
+      <Name>SSE</Name>
+    </ProjectReference>
+    <ProjectReference Include="$(SolutionDir)src\TeakLibW\TeakLibW.vcxproj">
+      <Project>{454F153F-B61F-31E2-9984-2745E3971ECB}</Project>
+      <Name>TeakLibW</Name>
+    </ProjectReference>
+    <ProjectReference Include="$(SolutionDir)libs\enet\enet.vcxproj">
+      <Project>{B898D422-B378-3905-8236-44CFE0782E95}</Project>
+      <Name>enet</Name>
+    </ProjectReference>
+    <ProjectReference Include="$(SolutionDir)libs\libsmacker\libsmacker.vcxproj">
+      <Project>{4AA2C8BF-0465-3DBE-98E0-5FE3CE95A284}</Project>
+      <Name>libsmacker</Name>
+    </ProjectReference>
+    <ProjectReference Include="$(SolutionDir)libs\raknet\raknet.vcxproj">
+      <Project>{C06FE35D-C5BE-37AE-B585-F88B766AA89A}</Project>
+      <Name>raknet</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Abend.h" />
+    <ClInclude Include="AirportView.h" />
+    <ClInclude Include="ArabAir.h" />
+    <ClInclude Include="AskBrick.h" />
+    <ClInclude Include="AtNet.h" />
+    <ClInclude Include="Aufsicht.h" />
+    <ClInclude Include="Bank.h" />
+    <ClInclude Include="Blenden.h" />
+    <ClInclude Include="Buero.h" />
+    <ClInclude Include="Cblenden.h" />
+    <ClInclude Include="cd_prot.h" />
+    <ClInclude Include="Checkup.h" />
+    <ClInclude Include="class.h" />
+    <ClInclude Include="Colorfx.h" />
+    <ClInclude Include="Credits.h" />
+    <ClInclude Include="defines.h" />
+    <ClInclude Include="Designer.h" />
+    <ClInclude Include="DutyFree.h" />
+    <ClInclude Include="Editor.h" />
+    <ClInclude Include="fillfile.h" />
+    <ClInclude Include="Fracht.h" />
+    <ClInclude Include="Gameframe.h" />
+    <ClInclude Include="glabend.h" />
+    <ClInclude Include="glarab.h" />
+    <ClInclude Include="glauf.h" />
+    <ClInclude Include="glbank.h" />
+    <ClInclude Include="glbasis.h" />
+    <ClInclude Include="glberatr.h" />
+    <ClInclude Include="glbrick.h" />
+    <ClInclude Include="glbuero.h" />
+    <ClInclude Include="glbueroa.h" />
+    <ClInclude Include="glbuerob.h" />
+    <ClInclude Include="glbueroc.h" />
+    <ClInclude Include="glbuerod.h" />
+    <ClInclude Include="glBueroDrk.h" />
+    <ClInclude Include="glclan.h" />
+    <ClInclude Include="glcredit.h" />
+    <ClInclude Include="gldesigner.h" />
+    <ClInclude Include="glduty.h" />
+    <ClInclude Include="gleditor.h" />
+    <ClInclude Include="glfracht.h" />
+    <ClInclude Include="glglobe.h" />
+    <ClInclude Include="glglobea.h" />
+    <ClInclude Include="glglobeb.h" />
+    <ClInclude Include="glglobec.h" />
+    <ClInclude Include="glglobed.h" />
+    <ClInclude Include="glglow.h" />
+    <ClInclude Include="glicon1.h" />
+    <ClInclude Include="glicon2.h" />
+    <ClInclude Include="glicon3.h" />
+    <ClInclude Include="glicon4.h" />
+    <ClInclude Include="glicon5.h" />
+    <ClInclude Include="glicon6.h" />
+    <ClInclude Include="glinsel.h" />
+    <ClInclude Include="glkiosk.h" />
+    <ClInclude Include="glklack.h" />
+    <ClInclude Include="gllast.h" />
+    <ClInclude Include="glmakler.h" />
+    <ClInclude Include="glmuseum.h" />
+    <ClInclude Include="glnasa.h" />
+    <ClInclude Include="glnoinsl.h" />
+    <ClInclude Include="glnowerb.h" />
+    <ClInclude Include="global.h" />
+    <ClInclude Include="Globe.h" />
+    <ClInclude Include="glpause.h" />
+    <ClInclude Include="glpers.h" />
+    <ClInclude Include="glplanes.h" />
+    <ClInclude Include="glplanpr.h" />
+    <ClInclude Include="glplanprop.h" />
+    <ClInclude Include="glrb.h" />
+    <ClInclude Include="glreiseb.h" />
+    <ClInclude Include="glrick.h" />
+    <ClInclude Include="glrush.h" />
+    <ClInclude Include="glsabo.h" />
+    <ClInclude Include="glscan.h" />
+    <ClInclude Include="glsecurity.h" />
+    <ClInclude Include="glstart.h" />
+    <ClInclude Include="glstat.h" />
+    <ClInclude Include="glstd.h" />
+    <ClInclude Include="gltafel.h" />
+    <ClInclude Include="gltitel.h" />
+    <ClInclude Include="gltitel2.h" />
+    <ClInclude Include="glweltall.h" />
+    <ClInclude Include="glwerbe.h" />
+    <ClInclude Include="glwerk.h" />
+    <ClInclude Include="glworld.h" />
+    <ClInclude Include="HalldiskMenu.h" />
+    <ClInclude Include="HLine.h" />
+    <ClInclude Include="Insel.h" />
+    <ClInclude Include="Intro.h" />
+    <ClInclude Include="Kiosk.h" />
+    <ClInclude Include="Laptop.h" />
+    <ClInclude Include="LastMin.h" />
+    <ClInclude Include="Mainfrm.h" />
+    <ClInclude Include="Makler.h" />
+    <ClInclude Include="Museum.h" />
+    <ClInclude Include="Nasa.h" />
+    <ClInclude Include="net.h" />
+    <ClInclude Include="NewgamePopup.h" />
+    <ClInclude Include="Options.h" />
+    <ClInclude Include="Outro.h" />
+    <ClInclude Include="Personal.h" />
+    <ClInclude Include="Planer.h" />
+    <ClInclude Include="PlanProp.h" />
+    <ClInclude Include="Proto.h" />
+    <ClInclude Include="reise.h" />
+    <ClInclude Include="Res\resource.h" />
+    <ClInclude Include="Ricks.h" />
+    <ClInclude Include="RouteBox.h" />
+    <ClInclude Include="Rushmore.h" />
+    <ClInclude Include="sabotage.h" />
+    <ClInclude Include="Sbbm.h" />
+    <ClInclude Include="sbl.h" />
+    <ClInclude Include="Schedule.h" />
+    <ClInclude Include="Security.h" />
+    <ClInclude Include="SecurityManager.h" />
+    <ClInclude Include="Smackprs.h" />
+    <ClInclude Include="SSE.h" />
+    <ClInclude Include="Statistk.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Stdraum.h" />
+    <ClInclude Include="stdstring.h" />
+    <ClInclude Include="Synthese.h" />
+    <ClInclude Include="Tafel.h" />
+    <ClInclude Include="TakeOff.h" />
+    <ClInclude Include="TeakLibW.h" />
+    <ClInclude Include="Titlepopup.h" />
+    <ClInclude Include="WeltAll.h" />
+    <ClInclude Include="Werbung.h" />
+    <ClInclude Include="Werkstat.h" />
+    <ClInclude Include="World.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -308,6 +308,10 @@ void PumpNetwork (void)
                       if (Sim.Players.GetAnzHumanPlayers()==1)
                       {
                          gNetwork.DisConnect ();
+                         nOptionsOpen = 0;
+                         nAppsDisabled = 0;
+                         nWaitingForPlayer = 0;
+                         SetNetworkBitmap(0);
                          Sim.bNetwork = false;
                          return;
                       }
@@ -676,7 +680,8 @@ void PumpNetwork (void)
                               >> qPlayer.Stunned         >> qPlayer.OfficeState     >> qPlayer.Koffein
                               >> qPlayer.NumFlights      >> qPlayer.WalkSpeed
                               >> qPlayer.WerbeBroschuere >> qPlayer.TelephoneDown   >> qPlayer.Presseerklaerung
-                              >> qPlayer.SecurityFlags   >> qPlayer.PlayerStinking;
+                              >> qPlayer.SecurityFlags   >> qPlayer.PlayerStinking
+                   			  >> qPlayer.RocketFlags     >> qPlayer.LastRocketFlags;
 
                       Anz--;
                    }
@@ -1139,7 +1144,7 @@ void PumpNetwork (void)
                     break;
                    Message >> Sim.Players.Players[PlayerNum].MechMode;
 
-                   if (PlaneId!=-1)
+                   if (PlaneId!=-1 && Sim.Players.Players[PlayerNum].Planes.IsInAlbum(PlaneId))
                    {
                       CPlane &qPlane = Sim.Players.Players[PlayerNum].Planes[PlaneId];
 

@@ -1,0 +1,662 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Abend.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AirportView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ArabAir.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Askbrick.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AtNet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Aufsicht.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Auftrag.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Bank.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Block.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Brick.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Buero.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Checkup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="city.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Colorfx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Credits.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DataTabl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DeltaVid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Designer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DutyFree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Fracht.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gameframe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Global.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Globe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HalldiskMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HLine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Init.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Insel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Intro.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Kiosk.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Klacker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Laptop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Lastmin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mainfrm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Makler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Misc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Museum.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Nasa.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NewgamePopup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Options.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Outro.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Person.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Personal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Planer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Planetyp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlanProp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PNet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Protect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="reise.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Ricks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Route.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RouteBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Rushmore.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sabotage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SBBM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Schedule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Security.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SecurityManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sim.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Smackprs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Statistk.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Stdraum.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Synthese.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tafel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Takeoff.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Talker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tips.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Titlepopup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WeltAll.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Werbung.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Werkstat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Precompile Header File">
+      <UniqueIdentifier>{7F37DDD5-2D6D-3E2F-87A9-F79E5248DDAD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{D107D969-73F2-3456-8ECA-FEACBFCD7F6E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{8a6dbdd1-f2df-4b20-b462-427fd5fdf4ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{b1dd5a10-7089-4b9e-87ac-15301d18ddc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Defines">
+      <UniqueIdentifier>{bbf5e5bd-481d-4927-b6aa-49796a5542b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Defines\gl Defines">
+      <UniqueIdentifier>{9bc95b4b-9590-49ae-a9af-ed97e9a357a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Rooms">
+      <UniqueIdentifier>{34fdea17-763d-4232-93e2-e7aae019b16c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Screens">
+      <UniqueIdentifier>{da5152e9-206c-47e7-b463-24f79d451234}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Old">
+      <UniqueIdentifier>{7f25e6d0-66a0-43b0-b34a-3bca73e906f2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AirportView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AskBrick.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Checkup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Colorfx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Gameframe.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HLine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlanProp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Proto.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sbbm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sbl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Smackprs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SSE.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Stdraum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdstring.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TakeOff.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TeakLibW.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Res\resource.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="glabend.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glarab.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glauf.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glbank.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glbasis.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glberatr.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glbrick.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glbuero.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glbueroa.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glbuerob.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glbueroc.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glbuerod.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glBueroDrk.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glclan.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glcredit.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="gldesigner.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glduty.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="gleditor.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glfracht.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glglobe.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glglobea.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glglobeb.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glglobec.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glglobed.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glglow.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glicon1.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glicon2.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glicon3.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glicon4.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glicon5.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glicon6.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glinsel.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glkiosk.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glklack.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="gllast.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glmakler.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glmuseum.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glnasa.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glnoinsl.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glnowerb.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glpause.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glpers.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glplanes.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glplanpr.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glplanprop.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glrb.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glreiseb.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glrick.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glrush.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glsabo.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glscan.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glsecurity.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glstart.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glstat.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glstd.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="gltafel.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="gltitel.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="gltitel2.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glweltall.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glwerbe.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glwerk.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="glworld.h">
+      <Filter>Header Files\Defines\gl Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="global.h">
+      <Filter>Header Files\Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="defines.h">
+      <Filter>Header Files\Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="ArabAir.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Aufsicht.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Bank.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Buero.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Designer.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="DutyFree.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Fracht.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Globe.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Insel.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Kiosk.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Laptop.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Makler.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Museum.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Nasa.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Planer.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Personal.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="reise.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Ricks.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="RouteBox.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Rushmore.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="sabotage.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Schedule.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Security.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Tafel.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="WeltAll.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Werbung.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Werkstat.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="AtNet.h">
+      <Filter>Header Files\Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="Abend.h">
+      <Filter>Header Files\Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="Blenden.h">
+      <Filter>Header Files\Old</Filter>
+    </ClInclude>
+    <ClInclude Include="Cblenden.h">
+      <Filter>Header Files\Old</Filter>
+    </ClInclude>
+    <ClInclude Include="cd_prot.h">
+      <Filter>Header Files\Old</Filter>
+    </ClInclude>
+    <ClInclude Include="class.h">
+      <Filter>Header Files\Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="Credits.h">
+      <Filter>Header Files\Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="fillfile.h">
+      <Filter>Header Files\Old</Filter>
+    </ClInclude>
+    <ClInclude Include="HalldiskMenu.h">
+      <Filter>Header Files\Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="Intro.h">
+      <Filter>Header Files\Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="LastMin.h">
+      <Filter>Header Files\Rooms</Filter>
+    </ClInclude>
+    <ClInclude Include="Mainfrm.h">
+      <Filter>Header Files\Old</Filter>
+    </ClInclude>
+    <ClInclude Include="net.h">
+      <Filter>Header Files\Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="NewgamePopup.h">
+      <Filter>Header Files\Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="Options.h">
+      <Filter>Header Files\Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="Outro.h">
+      <Filter>Header Files\Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="SecurityManager.h">
+      <Filter>Header Files\Old</Filter>
+    </ClInclude>
+    <ClInclude Include="Synthese.h">
+      <Filter>Header Files\Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="Titlepopup.h">
+      <Filter>Header Files\Screens</Filter>
+    </ClInclude>
+    <ClInclude Include="Statistk.h">
+      <Filter>Header Files\Screens</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Res\Script2.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

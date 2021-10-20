@@ -5257,8 +5257,7 @@ label_maindialog_players_again:
                   else
                   {
                      ((CNasa*)((qPlayer.DialogWin) ? qPlayer.DialogWin : this))->KommVarTippNow=12;
-                     qPlayer.RocketFlags |= ROCKET_BASE;
-                     qPlayer.ChangeMoney (-RocketPrices[0], 3400, "");
+                  	 qPlayer.AddRocketPart(ROCKET_BASE, -RocketPrices[0]);
                      MakeSayWindow (0, TOKEN_NASA, 5099, pFontPartner);
                      PlayFanfare();
                   }
@@ -5273,8 +5272,7 @@ label_maindialog_players_again:
                   else
                   {
                      ((CNasa*)((qPlayer.DialogWin) ? qPlayer.DialogWin : this))->KommVarTippNow=12;
-                     qPlayer.RocketFlags |= ROCKET_TOWER;
-                     qPlayer.ChangeMoney (-RocketPrices[1], 3400, "");
+                     qPlayer.AddRocketPart(ROCKET_TOWER, -RocketPrices[1]);
                      MakeSayWindow (0, TOKEN_NASA, 5099, pFontPartner);
                      PlayFanfare();
                   }
@@ -5287,8 +5285,7 @@ label_maindialog_players_again:
                   else
                   {                            
                      ((CNasa*)((qPlayer.DialogWin) ? qPlayer.DialogWin : this))->KommVarTippNow=12;
-                     qPlayer.RocketFlags |= ROCKET_ARM;
-                     qPlayer.ChangeMoney (-RocketPrices[2], 3400, "");
+                     qPlayer.AddRocketPart(ROCKET_ARM, -RocketPrices[2]);
                      MakeSayWindow (0, TOKEN_NASA, 5099, pFontPartner);
                      PlayFanfare();
                   }
@@ -5302,8 +5299,7 @@ label_maindialog_players_again:
                   else
                   {
                      ((CNasa*)((qPlayer.DialogWin) ? qPlayer.DialogWin : this))->KommVarTippNow=12;
-                     qPlayer.RocketFlags |= ROCKET_AIRFRAME;
-                     qPlayer.ChangeMoney (-RocketPrices[3], 3400, "");
+                     qPlayer.AddRocketPart(ROCKET_AIRFRAME, -RocketPrices[3]);
                      MakeSayWindow (0, TOKEN_NASA, 5099, pFontPartner);
                      PlayFanfare();
                   }
@@ -5318,8 +5314,7 @@ label_maindialog_players_again:
                   else
                   {
                      ((CNasa*)((qPlayer.DialogWin) ? qPlayer.DialogWin : this))->KommVarTippNow=12;
-                     qPlayer.RocketFlags |= ROCKET_WINGS;
-                     qPlayer.ChangeMoney (-RocketPrices[4], 3400, "");
+                     qPlayer.AddRocketPart(ROCKET_WINGS, -RocketPrices[4]);
                      MakeSayWindow (0, TOKEN_NASA, 5099, pFontPartner);
                      PlayFanfare();
                   }
@@ -5334,8 +5329,7 @@ label_maindialog_players_again:
                   else
                   {
                      ((CNasa*)((qPlayer.DialogWin) ? qPlayer.DialogWin : this))->KommVarTippNow=12;
-                     qPlayer.RocketFlags |= ROCKET_CAPSULE;
-                     qPlayer.ChangeMoney (-RocketPrices[5], 3400, "");
+                     qPlayer.AddRocketPart(ROCKET_CAPSULE, -RocketPrices[5]);
                      MakeSayWindow (0, TOKEN_NASA, 5099, pFontPartner);
                      PlayFanfare();
                   }
@@ -5350,8 +5344,7 @@ label_maindialog_players_again:
                   else
                   {
                      ((CNasa*)((qPlayer.DialogWin) ? qPlayer.DialogWin : this))->KommVarTippNow=12;
-                     qPlayer.RocketFlags |= ROCKET_HECK;
-                     qPlayer.ChangeMoney (-RocketPrices[6], 3400, "");
+                     qPlayer.AddRocketPart(ROCKET_HECK, -RocketPrices[6]);
                      MakeSayWindow (0, TOKEN_NASA, 5099, pFontPartner);
                      PlayFanfare();
                   }
@@ -5368,8 +5361,7 @@ label_maindialog_players_again:
                   else
                   {
                      ((CNasa*)((qPlayer.DialogWin) ? qPlayer.DialogWin : this))->KommVarTippNow=12;
-                     qPlayer.RocketFlags |= ROCKET_PROP;
-                     qPlayer.ChangeMoney (-RocketPrices[7], 3400, "");
+                     qPlayer.AddRocketPart(ROCKET_PROP, -RocketPrices[7]);
                      MakeSayWindow (0, TOKEN_NASA, 5099, pFontPartner);
                      PlayFanfare();
                   }
@@ -5384,8 +5376,7 @@ label_maindialog_players_again:
                   else
                   {
                      ((CNasa*)((qPlayer.DialogWin) ? qPlayer.DialogWin : this))->KommVarTippNow=12;
-                     qPlayer.RocketFlags |= ROCKET_MAINPROP;
-                     qPlayer.ChangeMoney (-RocketPrices[8], 3400, "");
+                     qPlayer.AddRocketPart(ROCKET_MAINPROP, -RocketPrices[8]);
                      MakeSayWindow (0, TOKEN_NASA, 5099, pFontPartner);
                      PlayFanfare();
                   }
@@ -5400,8 +5391,7 @@ label_maindialog_players_again:
                   else
                   {
                      ((CNasa*)((qPlayer.DialogWin) ? qPlayer.DialogWin : this))->KommVarTippNow=12;
-                     qPlayer.RocketFlags |= ROCKET_COCKPIT;
-                     qPlayer.ChangeMoney (-RocketPrices[9], 3400, "");
+                     qPlayer.AddRocketPart(ROCKET_COCKPIT, -RocketPrices[9]);
                      MakeSayWindow (0, TOKEN_NASA, 5099, pFontPartner);
                      PlayFanfare();
                   }
@@ -5440,8 +5430,7 @@ label_maindialog_players_again:
                      else
                      {
                         ((CNasa*)((qPlayer.DialogWin) ? qPlayer.DialogWin : this))->KommVarTippNow=12;
-                        qPlayer.RocketFlags |= Flag;
-                        qPlayer.ChangeMoney (-StationPrices[Index], 3400, "");
+                        qPlayer.AddRocketPart(Flag, -RocketPrices[Index]);
                         MakeSayWindow (0, TOKEN_NASA, 8302, pFontPartner);
                         PlayFanfare();
                      }

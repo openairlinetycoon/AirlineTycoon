@@ -1926,7 +1926,7 @@ void AirportView::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
          }
       }
 
-      switch (nChar)
+      switch (toupper(nChar))
       {
          case 'E':
             //if (Registration.GetMode()==1)

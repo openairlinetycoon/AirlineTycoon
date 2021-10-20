@@ -110,8 +110,12 @@ void CheatSound (void)
 
 void MessagePump (void)
 {
-   if (SDL_PollEvent(&FrameWnd->Mess))
+
+   SDL_StartTextInput();
+   bool help = SDL_IsTextInputActive();
+   while (SDL_PollEvent(&FrameWnd->Mess))
       FrameWnd->ProcessEvent(FrameWnd->Mess);
+   help = SDL_IsTextInputActive();
 }
 
 //LPDIRECTDRAWSURFACE FrontSurf=NULL;
@@ -470,12 +474,16 @@ void GameFrame::ProcessEvent(const SDL_Event& event)
        FrameWnd->OnMouseMove(0, pos);
    }
    break;
+   case SDL_TEXTINPUT:
+       FrameWnd->OnChar(event.text.text[0],
+           0, 0);
+
+       FrameWnd->OnKeyDown(event.text.text[0], 0,0);
+   break;
    case SDL_KEYDOWN:
    {
        UINT nFlags = event.key.keysym.scancode | ((SDL_GetModState() & KMOD_LALT) << 5);
        FrameWnd->OnKeyDown(toupper(event.key.keysym.sym), event.key.repeat, nFlags);
-       FrameWnd->OnChar(SDL_GetModState() & KMOD_SHIFT ? toupper(event.key.keysym.sym) : event.key.keysym.sym,
-           event.key.repeat, nFlags);
    }
    break;
    case SDL_MOUSEBUTTONDOWN:
@@ -996,6 +1004,33 @@ void GameFrame::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
    static char TypeBuffer[30];   //Für Cheats
    long nTargetRoom=0;
 
+   if(nChar== VK_RETURN) {
+	    if (Sim.localPlayer != -1 && Sim.Players.Players.AnzEntries() == 4 && Sim.Players.Players[Sim.localPlayer].LocationWin)
+	    {
+	        SLONG CurrentMenu = ((CStdRaum*)Sim.Players.Players[Sim.localPlayer].LocationWin)->CurrentMenu;
+
+	        if (CurrentMenu == MENU_REQUEST || CurrentMenu == MENU_BROADCAST)
+	        {
+	            if (CurrentMenu == MENU_BROADCAST && strlen(((CStdRaum*)Sim.Players.Players[Sim.localPlayer].LocationWin)->Optionen[0]) == 0)
+	            {
+	                ((CStdRaum*)Sim.Players.Players[Sim.localPlayer].LocationWin)->MenuStop();
+	            }
+	            else
+	            {
+	                ::MouseClickPar1 = 1;
+	                ::MouseClickArea = -101;
+	                ::MouseClickId = MENU_REQUEST;
+	                ((CStdRaum*)Sim.Players.Players[Sim.localPlayer].LocationWin)->MenuLeftClick(XY(0, 0));
+	            }
+	        }
+	        else if (CurrentMenu == MENU_NONE && Sim.Players.GetAnzHumanPlayers() > 1)
+	        {
+	            if (Sim.Time > 9 * 60000 && ((CStdRaum*)Sim.Players.Players[Sim.localPlayer].LocationWin)->IsDialogOpen() == 0)
+	                ((CStdRaum*)Sim.Players.Players[Sim.localPlayer].LocationWin)->MenuStart(MENU_BROADCAST);
+	        }
+	    }
+   }
+	
    if (gLanguage==LANGUAGE_D || gLanguage==LANGUAGE_N)
    {
       // Deutsch, Niederländisch
@@ -2313,33 +2348,6 @@ void GameFrame::OnChar(UINT nChar, UINT, UINT)
    {
       switch (nChar)
       {
-         case VK_RETURN:
-            if (Sim.localPlayer!=-1 && Sim.Players.Players.AnzEntries()==4 && Sim.Players.Players[Sim.localPlayer].LocationWin)
-            {
-               SLONG CurrentMenu = ((CStdRaum*)Sim.Players.Players[Sim.localPlayer].LocationWin)->CurrentMenu;
-
-               if (CurrentMenu==MENU_REQUEST || CurrentMenu==MENU_BROADCAST)
-               {
-                  if (CurrentMenu==MENU_BROADCAST && strlen (((CStdRaum*)Sim.Players.Players[Sim.localPlayer].LocationWin)->Optionen[0])==0)
-                  {
-                     ((CStdRaum*)Sim.Players.Players[Sim.localPlayer].LocationWin)->MenuStop ();
-                  }
-                  else
-                  {
-                     ::MouseClickPar1 = 1;
-                     ::MouseClickArea = -101;
-                     ::MouseClickId   = MENU_REQUEST;
-                     ((CStdRaum*)Sim.Players.Players[Sim.localPlayer].LocationWin)->MenuLeftClick (XY(0,0));
-                  }
-               }
-               else if (CurrentMenu==MENU_NONE && Sim.Players.GetAnzHumanPlayers()>1)
-               {
-                  if (Sim.Time>9*60000 && ((CStdRaum*)Sim.Players.Players[Sim.localPlayer].LocationWin)->IsDialogOpen()==0)
-                     ((CStdRaum*)Sim.Players.Players[Sim.localPlayer].LocationWin)->MenuStart (MENU_BROADCAST);
-               }
-            }
-            break;
-
          case '+':
             Sim.InvalidateHint(HINT_GAMESPEED);
             Sim.Players.Players[Sim.localPlayer].GameSpeed = (Sim.Players.Players[Sim.localPlayer].GameSpeed+1)%4;

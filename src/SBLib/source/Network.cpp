@@ -1,7 +1,10 @@
 #include "stdafx.h"
-#include "sblib.h"
+#include "SbLib.h"
 #include "network.h"
+#include "BitStream.h"
+#include "RAKNetNetwork.hpp"
 
+#ifdef ENET_NETWORK
 SBNetwork::SBNetwork(bool)
     : mState(SBNETWORK_SESSION_FINISHED)
     , mHost(NULL)
@@ -351,3 +354,142 @@ SBList<SBNetworkPlayer>* SBNetwork::GetAllPlayers()
 {
     return &mPlayers;
 }
+
+#endif
+
+#ifdef RAKNET_NETWORK
+
+SBNetwork::SBNetwork(bool)
+	: mState(SBNETWORK_IDLE)
+	  , mType(){
+
+    mNetwork = nullptr;
+	
+	mConnections.Add(RAKNET_TYPE_DIRECT_JOIN);
+	mConnections.Add(RAKNET_TYPE_DIRECT_HOST);
+    mConnections.Add(RAKNET_TYPE_NAT_JOIN);
+    mConnections.Add(RAKNET_TYPE_NAT_HOST);
+
+	SDL_Log("Started SBNetwork");
+}
+
+SLONG SBNetwork::GetMessageCount() {
+    return mNetwork->GetMessageCount();
+}
+
+bool SBNetwork::Connect(SBStr) {
+	return false; //No longer used..
+}
+
+bool SBNetwork::Connect(SBStr, const char* ip) {
+	return mNetwork->Connect(ip);
+}
+
+void SBNetwork::DisConnect() {
+	if(mNetwork != nullptr) {
+		mNetwork->Disconnect();
+		delete mNetwork;
+	}
+}
+
+bool SBNetwork::CreateSession(SBStr name, SBNetworkCreation* settings) {	
+    return mNetwork->CreateSession(settings);
+}
+
+void SBNetwork::CloseSession() {
+	mNetwork->CloseSession();
+}
+
+ULONG SBNetwork::GetLocalPlayerID() {
+	return mNetwork->GetLocalPlayerID();
+}
+
+SLONG SBNetwork::GetProviderID(char* name) {
+    if (strcmp(name, RAKNET_TYPE_DIRECT_JOIN) == 0) {
+        return SBNETWORK_RAKNET_DIRECT_JOIN;
+    }
+    if (strcmp(name, RAKNET_TYPE_DIRECT_HOST) == 0) {
+        return SBNETWORK_RAKNET_DIRECT_HOST;
+    }
+    if (strcmp(name, RAKNET_TYPE_NAT_JOIN) == 0) {
+        return SBNETWORK_RAKNET_NAT_JOIN;
+    }
+    if (strcmp(name, RAKNET_TYPE_NAT_HOST) == 0) {
+        return SBNETWORK_RAKNET_NAT_HOST;
+    }
+    return -1;
+}
+
+void SBNetwork::SetProvider(SBTypeEnum type) {
+    mType = type;
+    switch (type) {
+
+    case SBNETWORK_RAKNET_DIRECT_JOIN: 
+    case SBNETWORK_RAKNET_DIRECT_HOST:
+    case SBNETWORK_RAKNET_NAT_HOST:
+    case SBNETWORK_RAKNET_NAT_JOIN:
+        mNetwork = new RAKNetNetwork();
+		break;
+    case SBNETWORK_ENET_DIRECT_JOIN:
+    case SBNETWORK_ENET_DIRECT_HOST:
+        //mNetwork = new ENetNetwork();
+    	break;
+    }
+
+	mNetwork->Initialize();
+}
+
+bool SBNetwork::IsEnumSessionFinished() const {
+	return mNetwork->IsSessionFinished();
+}
+
+bool SBNetwork::IsInSession() const {
+    return mNetwork->IsInSession();
+}
+
+bool SBNetwork::IsInitialized() const {
+	return mNetwork != nullptr;
+}
+
+bool SBNetwork::Send(BUFFER<UBYTE>& buffer, ULONG length, ULONG peerId, bool compress) {
+    return mNetwork->Send(buffer, length, peerId, compress);
+}
+
+bool SBNetwork::Receive(UBYTE** buffer, ULONG& size) {
+	return mNetwork->Receive(buffer, size);
+}
+
+SBList<SBNetworkPlayer*>* SBNetwork::GetAllPlayers() {
+    return mNetwork->GetAllPlayers();
+}
+
+
+bool SBNetwork::JoinSession(const SBStr& name, SBStr user) {
+    if (mNetwork->IsServerSearchable()) {
+        return mNetwork->GetServerSearcher()->JoinSession(name, user);
+    }
+
+    return false;
+}
+
+SBList<SBStr>* SBNetwork::GetSessionListAsync() {
+    if (mNetwork->IsServerSearchable()) {
+        return mNetwork->GetServerSearcher()->GetSessionListAsync();
+    }
+
+    return nullptr;
+}
+
+bool SBNetwork::StartGetSessionListAsync() {
+    if (mNetwork->IsServerSearchable()) {
+        return mNetwork->GetServerSearcher()->StartGetSessionListAsync();
+    }
+
+    return false;
+}
+
+SBList<SBStr>* SBNetwork::GetConnectionList() {
+    return &mConnections;
+}
+
+#endif

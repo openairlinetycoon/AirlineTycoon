@@ -162,7 +162,8 @@ void PLAYER::NetSynchronizeFlags (void)
                  << qPlayer.Stunned         << qPlayer.OfficeState     << qPlayer.Koffein
                  << qPlayer.NumFlights      << qPlayer.WalkSpeed
                  << qPlayer.WerbeBroschuere << qPlayer.TelephoneDown   << qPlayer.Presseerklaerung
-                 << qPlayer.SecurityFlags   << qPlayer.PlayerStinking;
+                 << qPlayer.SecurityFlags   << qPlayer.PlayerStinking
+				 << qPlayer.RocketFlags     << qPlayer.LastRocketFlags;
       }
    }
 

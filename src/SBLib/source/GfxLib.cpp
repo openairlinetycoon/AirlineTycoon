@@ -110,6 +110,8 @@ GfxLib::GfxLib(void*, SDL_Renderer*, char* path, SLONG, SLONG, SLONG*)
             delete header;
         }
         SDL_RWclose(file);
+    }else {
+	    SDL_Log(SDL_GetError());
     }
 }
 

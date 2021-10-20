@@ -11,6 +11,7 @@ static char THIS_FILE[] = __FILE__;
 
 static ULONG   LastMidiPosition=0;
 static CString LastMidiFilename;
+static int     AudioMode = 0;
 
 extern FILE   *pSoundLogFile;
 extern SLONG   SoundLogFileStartTime;
@@ -392,6 +393,8 @@ SLONG Prozent2Dezibel (SLONG Prozent)
 //--------------------------------------------------------------------------------------------
 void SetMidiVolume(SLONG volume)
 {
+
+	gpSSE->SetMusicVolume(volume);
    /*SLONG       midiVolume;
 
    //CDebugEntryExit ("SetMidiVolume");
@@ -418,6 +421,7 @@ void SetMidiVolume(SLONG volume)
 //--------------------------------------------------------------------------------------------
 void SetWaveVolume(long volume)
 {
+	gpSSE->SetSoundVolume(volume);
    /*SLONG       waveVolume;
 
    //CDebugEntryExit ("SetMidiVolume");
@@ -446,7 +450,7 @@ void NextMidi (void)
 {
    static BOOL WasHere=0;
 
-   if (Sim.Options.OptionMusik && Sim.Options.OptionEnableMidi)
+   if (Sim.Options.OptionMusik && Sim.Options.OptionMusicType != 0)
    {
       if (WasHere)
          switch ((Sim.Options.OptionLoopMusik==0)?MidiRandom.Rand(0,8):(Sim.Options.OptionLoopMusik-1))
@@ -504,15 +508,18 @@ BOOL IsMidiAvailable (void)
 //--------------------------------------------------------------------------------------------
 void PlayMidi (const CString &Filename)
 {
-   //CDebugEntryExit ("PlayMidi");
+	//CDebugEntryExit ("PlayMidi");
 
-   if (IsMidiAvailable())
-   {
-      if (gpMidi) gpMidi->Stop();
-      if (gpMidi) gpMidi->Load (FullFilename(Filename, SoundPath));
-      if (gpMidi) gpMidi->Play();
-      gpSSE->SetMusicCallback(NextMidi);
-   }
+	if (IsMidiAvailable() || AudioMode == 2) {
+		if (!gpMidi)
+			return;
+		
+		gpMidi->Stop();
+		gpMidi->Load (FullFilename(Filename, SoundPath));
+		gpMidi->Play();
+		
+		gpSSE->SetMusicCallback(NextMidi);
+	}
 }
 
 //--------------------------------------------------------------------------------------------
@@ -575,7 +582,7 @@ void ResumeMidi (void)
 {
    //CDebugEntryExit ("ResumeMidi");
 
-   if (IsMidiAvailable() && Sim.Options.OptionMusik && Sim.Options.OptionEnableMidi)
+   if (IsMidiAvailable() && Sim.Options.OptionMusik && Sim.Options.OptionMusicType != 0)
    {
       if (gpMidi) gpMidi->Resume();
    }

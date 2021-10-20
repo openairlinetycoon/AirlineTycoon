@@ -758,8 +758,8 @@ BOOL CTakeOffApp::InitInstance(int argc, char* argv[])
       if (bMidiAvailable && gpSSE)
       {
          FrameWnd->Invalidate(); MessagePump(); //lpDD->FlipToGDISurface();
-		   gpSSE->CreateMidi(&gpMidi);
-
+		 gpSSE->CreateMidi(&gpMidi);
+      	
          if (gpMidi)
          {
                  if (gLanguage==LANGUAGE_N) LOADING_TEXT("Stelt het midi-volume in...")
@@ -768,6 +768,7 @@ BOOL CTakeOffApp::InitInstance(int argc, char* argv[])
 
             FrameWnd->Invalidate(); MessagePump(); //lpDD->FlipToGDISurface();
             SetMidiVolume(Sim.Options.OptionMusik);
+            gpMidi->SetMode(Sim.Options.OptionMusicType);
 
             if (Sim.Options.OptionViewedIntro)
             {

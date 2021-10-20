@@ -6,50 +6,55 @@
 
 class Options : public CStdRaum
 {
-// Construction
+	// Construction
 public:
 	Options(BOOL bHandy, SLONG PlayerNum);
 
 private:
-   BOOL          ChangedDisplay;
+	BOOL          ChangedDisplay;
+	enum PAGE_TYPE : UBYTE {
+		GRAPHICS,
+		MUSIC,
+		SOUND,
+	};
 
-// Attributes
+	// Attributes
 public:
-   BOOL           TimerFailure;
-   UBYTE          PageNum;       //Seite 1 oder 2
-   KLACKER        KlackerTafel;  //Die Tafel auf der alles angezeigt wird
-   ULONG          PlayerNum;
+	BOOL           TimerFailure;
+	UBYTE          PageNum;       //Seite 1 oder 2
+	KLACKER        KlackerTafel;  //Die Tafel auf der alles angezeigt wird
+	ULONG          PlayerNum;
 
-   SDL_TimerID     TimerId;
-   SB_CFont        VersionFont;
+	SDL_TimerID     TimerId;
+	SB_CFont        VersionFont;
 
-   SLONG           CursorX;
-   SLONG           CursorY;
-   CString         SavegameNames[12]; 
-   BOOL            SavenamesValid[12];
-   CString         SavegameInfos[12]; 
-   FBUFFER<SBBM>  *CursorBms;     //Die Eingabemarkierung
-   BOOL            BlinkState;
+	SLONG           CursorX;
+	SLONG           CursorY;
+	CString         SavegameNames[12];
+	BOOL            SavenamesValid[12];
+	CString         SavegameInfos[12];
+	FBUFFER<SBBM>* CursorBms;     //Die Eingabemarkierung
+	BOOL            BlinkState;
 
-   SBFX            AmbientFX;
-   SBFX            EffektFX;
-   SBFX            PlaneFX;
-   SBFX            TalkFX;
-   SBFX            DurchsagenFX;
-   SBFX            ClickFx;
+	SBFX            AmbientFX;
+	SBFX            EffektFX;
+	SBFX            PlaneFX;
+	SBFX            TalkFX;
+	SBFX            DurchsagenFX;
+	SBFX            ClickFx;
 
-// Operations
+	// Operations
 public:
-   void ReloadBitmaps (void);
-   void RefreshKlackerField(void);
-   void UpdateSavegameNames (void);
+	void ReloadBitmaps(void);
+	void RefreshKlackerField(void);
+	void UpdateSavegameNames(void);
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(Options)
-	//}}AFX_VIRTUAL
+	// Overrides
+		// ClassWizard generated virtual function overrides
+		//{{AFX_VIRTUAL(Options)
+		//}}AFX_VIRTUAL
 
-// Implementation
+	// Implementation
 public:
 	virtual ~Options();
 

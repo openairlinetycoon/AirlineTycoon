@@ -3938,7 +3938,7 @@ void COptions::ReadOptions (void)
    // Falls Setup nicht geladen wurde dann Standard-Parameter initialisieren
    if (!reg.ReadRegistryKey (&OptionPlanes))          OptionPlanes          = TRUE;
    if (!reg.ReadRegistryKey (&OptionPassengers))      OptionPassengers      = TRUE;
-   if (!reg.ReadRegistryKey (&OptionEnableMidi))      OptionEnableMidi      = TRUE;
+   if (!reg.ReadRegistryKey (&OptionMusicType))       OptionMusicType       = 2;
    if (!reg.ReadRegistryKey (&OptionEnableDigi))      OptionEnableDigi      = TRUE;
    if (!reg.ReadRegistryKey (&OptionMusik))           OptionMusik           = 3;
    if (!reg.ReadRegistryKey (&OptionMasterVolume))    OptionMasterVolume    = 7;
@@ -4111,7 +4111,7 @@ void COptions::WriteOptions (void)
    reg.WriteRegistryKey (&OptionKeepAspectRatio);
    reg.WriteRegistryKey (&OptionPlanes);
    reg.WriteRegistryKey (&OptionPassengers);
-   reg.WriteRegistryKey (&OptionEnableMidi);
+   reg.WriteRegistryKey (&OptionMusicType);
    reg.WriteRegistryKey (&OptionEnableDigi);
    reg.WriteRegistryKey (&OptionMusik);
    reg.WriteRegistryKey (&OptionLoopMusik);

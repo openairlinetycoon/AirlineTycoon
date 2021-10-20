@@ -82,7 +82,7 @@ COutro::~COutro()
     pCursor->SetImage(gCursorBm.pBitmap);
 
     if (Sim.Options.OptionEnableDigi) gpSSE->EnableDS();
-    if (Sim.Options.OptionEnableMidi) NextMidi();
+    if (Sim.Options.OptionMusicType != 0) NextMidi();
     SetMidiVolume(Sim.Options.OptionMusik);
 }
 

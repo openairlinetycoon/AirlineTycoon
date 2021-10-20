@@ -380,7 +380,7 @@ class MIDI : public MUSIC
 	protected:
 		MIDI();
 		int	Create(SSE* pSSE, char* file);
-		virtual	bool	StopPriority (dword flags);
+		virtual	bool StopPriority (dword flags);
 
 	public:
 		virtual	~MIDI();
@@ -395,12 +395,14 @@ class MIDI : public MUSIC
 		virtual	int SetPan (SLONG pan);
 		virtual	int Load (const char* file = NULL);
 		virtual	int Free ();
+		virtual void SetMode(int mode);
 
 		virtual	int GetStatus(dword* pStatus);
 		virtual	word	CountPlaying();
 
 	protected:
 		Mix_Music*		_music;
+		int				_mode;
 };
 /******************************************************************************\
 *

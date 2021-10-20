@@ -2263,10 +2263,10 @@ class COptions
       BOOL        OptionKeepAspectRatio;
       BOOL        OptionPlanes;
       BOOL        OptionPassengers;
-      BOOL        OptionEnableMidi;
+      SLONG       OptionMusicType;
       BOOL        OptionEnableDigi;
-      BOOL        OptionMusik;
-      BOOL        OptionMasterVolume;
+      SLONG       OptionMusik;
+      SLONG       OptionMasterVolume;
       SLONG       OptionLoopMusik;
       BOOL        OptionEffekte;
       BOOL        OptionAmbiente;

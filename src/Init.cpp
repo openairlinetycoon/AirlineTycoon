@@ -261,7 +261,7 @@ skip_search_demo_cd:
 //--------------------------------------------------------------------------------------------
 void InitSoundSystem (SDL_Window *AppWnd)
 {
-   gpSSE = new SSE(AppWnd, 22050, 1, 16);
+   gpSSE = new SSE(AppWnd, 44100, 1, 16);
 	
    if (Sim.Options.OptionDigiSound)
    {

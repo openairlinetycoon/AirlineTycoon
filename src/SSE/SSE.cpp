@@ -91,6 +91,8 @@ void SSE::StopMusic()
 
 int SSE::SetMusicVolume(SLONG volume)
 {
+    volume = min(MIX_MAX_VOLUME, (MIX_MAX_VOLUME / 7.0f) * volume);
+	
     Mix_VolumeMusic(volume);
     return SSE_OK;
 }
@@ -106,6 +108,8 @@ int SSE::GetMusicVolume(SLONG* pVolume)
 
 int SSE::SetSoundVolume(SLONG volume)
 {
+	volume = min(MIX_MAX_VOLUME, (MIX_MAX_VOLUME / 7.0f) * volume);
+	
     Mix_Volume(-1, volume);
     return SSE_OK;
 }
@@ -301,6 +305,49 @@ int FX::SetPan(SLONG pan)
     return SSE_OK;
 }
 
+int ChangeFrequency(Mix_Chunk* chunk, int freq) {
+
+    Uint16 format;
+    int channels;
+    Mix_QuerySpec(NULL, &format, &channels);
+
+    int channel;
+    SDL_AudioCVT cvt;
+
+    //Create a converter from the PLAY_FREQUENCY to "freq"
+    SDL_BuildAudioCVT(&cvt, format, channels, freq, format, channels, 44100);
+
+    if (cvt.needed) { //If need to convert
+
+        for (channel = 0; channel < MIX_CHANNELS; channel++)
+            if (!Mix_Playing(channel)) break; //Find a free channel
+
+        if (channel == MIX_CHANNELS) return -1; //If there is no channel return -1
+
+        //Set converter lenght and buffer
+        cvt.len = chunk->alen;
+        cvt.buf = (Uint8*)SDL_malloc(cvt.len * cvt.len_mult);
+        if (cvt.buf == NULL) return -1;
+
+        //Copy the Mix_Chunk data to the new chunk and make the conversion
+        SDL_memcpy(cvt.buf, chunk->abuf, chunk->alen);
+        if (SDL_ConvertAudio(&cvt) < 0) {
+            SDL_free(cvt.buf);
+            return -1;
+        }
+
+        //If it was sucessfull put it on the original Mix_Chunk
+        chunk->abuf = cvt.buf;
+        chunk->alen = cvt.len_cvt;
+
+        return channel;
+
+    }
+
+	return -1;
+}
+
+
 int FX::Load(const char* file)
 {
     if (_fxData.pBuffer)
@@ -309,6 +356,7 @@ int FX::Load(const char* file)
     _digitalData.file = file;
     Uint8* buf = (Uint8*)SDL_LoadFile(file, &_fxData.bufferSize);
     _fxData.pBuffer = Mix_QuickLoad_RAW(buf, _fxData.bufferSize);
+    ChangeFrequency(_fxData.pBuffer, 22050);
     return SSE_OK;
 }
 
@@ -516,6 +564,10 @@ int MIDI::Create(SSE* pSSE, char* file)
     return SSE_OK;
 }
 
+void MIDI::SetMode(int mode) {
+	_mode = mode;
+}
+
 bool MIDI::StopPriority(dword flags)
 {
     return false;
@@ -595,13 +647,14 @@ int MIDI::Load(const char* file)
         Free();
 
     _musicData.file = file;
-    _music = Mix_LoadMUS(_musicData.file.c_str());
 
-    // Some versions ship with ogg music as well, use it as a fall-back
-    if (!_music)
-    {
+	if(_mode == 1){
+	    _music = Mix_LoadMUS(_musicData.file.c_str());
+	    // Some versions ship with ogg music as well, use it as a fall-back
+    } else if(_mode == 2){
         std::transform(_musicData.file.begin(), _musicData.file.end(),
             _musicData.file.begin(), ::tolower);
+    	
         _musicData.file.replace(_musicData.file.size() - 3, 3, "ogg");
         _music = Mix_LoadMUS(_musicData.file.c_str());
     }

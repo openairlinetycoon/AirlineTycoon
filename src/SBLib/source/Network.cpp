@@ -401,6 +401,10 @@ void SBNetwork::CloseSession() {
 }
 
 ULONG SBNetwork::GetLocalPlayerID() {
+	if(mNetwork == nullptr) {
+		return 0;
+	}
+	
 	return mNetwork->GetLocalPlayerID();
 }
 

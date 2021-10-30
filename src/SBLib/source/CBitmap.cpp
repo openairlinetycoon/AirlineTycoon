@@ -283,6 +283,60 @@ ULONG SB_CBitmapCore::GetPixel(SLONG x, SLONG y)
     return result & (1 << bits) - 1;
 }
 
+Uint16 get_pixel16(SDL_Surface* surface, int x, int y)
+{
+    //Convert the pixels to 32 bit
+    Uint16* pixels = (Uint16*)surface->pixels;
+
+    //Get the requested pixel
+    return pixels[(y * surface->pitch / 2) + x];
+}
+
+void put_pixel16(SDL_Surface* surface, int x, int y, Uint16 pixel)
+{
+    //Convert the pixels to 32 bit
+    Uint16* pixels = (Uint16*)surface->pixels;
+
+    //Set the pixel
+    pixels[(y * surface->pitch / 2) + x] = pixel;
+}
+
+SDL_Surface* SB_CBitmapCore::GetFlippedSurface() {
+    if (flippedBufferSurface != nullptr)
+        return flippedBufferSurface;
+
+    flippedBufferSurface = SDL_CreateRGBSurfaceWithFormat(lpDDSurface->flags, lpDDSurface->w, lpDDSurface->h, lpDDSurface->format->BitsPerPixel, lpDDSurface->format->format);
+
+    if (SDL_MUSTLOCK(lpDDSurface)) {
+        //Lock the surface
+        SDL_LockSurface(lpDDSurface);
+        SDL_LockSurface(flippedBufferSurface);
+    }
+
+    for (int x = 0, rx = lpDDSurface->w - 1; x < lpDDSurface->w; x++, rx--) {
+        //Go through rows
+        for (int y = 0, ry = lpDDSurface->h - 1; y < lpDDSurface->h; y++, ry--) {
+            Uint16 pixel = get_pixel16(lpDDSurface, x, y);
+            put_pixel16(flippedBufferSurface, rx, y, pixel);
+        }
+    }
+
+    if (SDL_MUSTLOCK(lpDDSurface)) {
+        //Lock the surface
+        SDL_UnlockSurface(lpDDSurface);
+        SDL_UnlockSurface(flippedBufferSurface);
+    }
+	
+    UINT32 key;
+    if (SDL_GetColorKey(lpDDSurface, &key) == 0)
+    {
+        SDL_SetColorKey(flippedBufferSurface, true, key);
+    }
+
+    return flippedBufferSurface;
+}
+
+
 ULONG SB_CBitmapCore::Blit(class SB_CBitmapCore* core, SLONG x, SLONG y, const RECT* pRect, unsigned short, ULONG)
 {
     if (pRect)
@@ -341,6 +395,8 @@ ULONG SB_CBitmapCore::Release()
 {
     if (lpDDSurface)
         SDL_FreeSurface(lpDDSurface);
+    if (flippedBufferSurface)
+        SDL_FreeSurface(flippedBufferSurface);
     if (lpTexture)
         SDL_DestroyTexture(lpTexture);
     return 0;

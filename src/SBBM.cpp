@@ -360,7 +360,7 @@ BOOL SBPRIMARYBM::FlipBlitFromT (SBBM &TecBitmap, XY Target)
    SDL_Rect destRect = { pt.x, pt.y, srcRect.w, srcRect.h };
 
    // TODO: Mirror the blit
-   SDL_BlitSurface(TecBitmap.pBitmap->GetSurface(), &srcRect, PrimaryBm.GetSurface(), &destRect);
+   SDL_BlitSurface(TecBitmap.pBitmap->GetFlippedSurface(), &srcRect, PrimaryBm.GetSurface(), &destRect);
 	// Clippen
 	/*if (PrimaryBm.FastClip(PrimaryBm.GetClipRect(), &pt, &srcRect))
 		DD_ERROR (PrimaryBm.GetSurface()->Blt (&destRect, TecBitmap.pBitmap->GetSurface(), &srcRect, DDBLT_DDFX | DDBLT_KEYSRC | DDBLT_WAIT, &DDBltFx));

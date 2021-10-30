@@ -461,7 +461,6 @@ void CStdRaum::ProcessEvent(const SDL_Event& event, CPoint position)
    {
 		unsigned char testValue = 'ä';
    		UTF8Toisolat1(&testValue, 1, (unsigned char*)&event.text.text,2);
-   		SDL_Log("%hhc",testValue);
    		OnChar(testValue, 1, (SDL_GetModState() & KMOD_LALT) << 5);
    }
    break;

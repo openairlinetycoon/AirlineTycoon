@@ -131,16 +131,17 @@ public:
                 // This is *will* break self-referencing pointers
                 // ... please don't resize anything that uses ALBUM
                 //memswap(m, MemPointer, sizeof(T) * num);
-                for (SLONG i = 0; i < num; i++)
-                {
-                    //std::swap(m[i], MemPointer[i]);
-                    T tmp = T();
-                    //memcpy(&m[i], &MemPointer[i], sizeof(T));
-                    m[i] = MemPointer[i];
-                    MemPointer[i] = tmp;
-                }
+	            for (SLONG i = 0; i < num; i++)
+	            {
+	                //use aligned char buffer to prevent destructor calls that crash the game
+                    alignas(T) unsigned char buf[sizeof(T)];
+                    T* tmp = new(buf) T;
+
+	                m[i] = MemPointer[i];
+	                MemPointer[i] = *tmp;
+	            }
                 DelPointer = m + ((DelPointer - MemPointer) / sizeof(T));
-                delete[] MemPointer;
+                delete[](MemPointer);
             }
             else
             {

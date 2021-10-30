@@ -182,6 +182,7 @@ public:
     SLONG GetYSize() { return Size.y; }
     RECT GetClipRect() { const SDL_Rect& r = lpDDSurface->clip_rect; return CRect(r.x, r.y, r.x + r.w, r.y + r.h); }
     SDL_Surface* GetSurface() { return lpDDSurface; }
+    SDL_Surface* GetFlippedSurface();
     SDL_PixelFormat* GetPixelFormat(void) { return lpDDSurface->format; }
     SDL_Texture* GetTexture() { return lpTexture; }
 
@@ -191,6 +192,7 @@ protected:
 
     SDL_Renderer* lpDD;
     SDL_Surface* lpDDSurface;
+    SDL_Surface* flippedBufferSurface;
     SDL_Texture* lpTexture;
     XY Size;
 };

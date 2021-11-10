@@ -2,7 +2,9 @@
 #include "SbLib.h"
 #include "network.h"
 #include "BitStream.h"
+#include "BaseNetworkType.hpp"
 #include "RAKNetNetwork.hpp"
+#include "ENetNetwork.hpp"
 
 #ifdef ENET_NETWORK
 SBNetwork::SBNetwork(bool)
@@ -364,9 +366,11 @@ SBNetwork::SBNetwork(bool)
 	  , mType(){
 
     mNetwork = nullptr;
+
+    mConnections.Add(ENET_TYPE);
 	
-	mConnections.Add(RAKNET_TYPE_DIRECT_JOIN);
-	mConnections.Add(RAKNET_TYPE_DIRECT_HOST);
+    mConnections.Add(RAKNET_TYPE_DIRECT_JOIN);
+    mConnections.Add(RAKNET_TYPE_DIRECT_HOST);
     mConnections.Add(RAKNET_TYPE_NAT_JOIN);
     mConnections.Add(RAKNET_TYPE_NAT_HOST);
 
@@ -389,6 +393,7 @@ void SBNetwork::DisConnect() {
 	if(mNetwork != nullptr) {
 		mNetwork->Disconnect();
 		delete mNetwork;
+		mNetwork = nullptr;
 	}
 }
 
@@ -397,7 +402,7 @@ bool SBNetwork::CreateSession(SBStr name, SBNetworkCreation* settings) {
 }
 
 void SBNetwork::CloseSession() {
-	mNetwork->CloseSession();
+    mNetwork->CloseSession();
 }
 
 ULONG SBNetwork::GetLocalPlayerID() {
@@ -421,6 +426,9 @@ SLONG SBNetwork::GetProviderID(char* name) {
     if (strcmp(name, RAKNET_TYPE_NAT_HOST) == 0) {
         return SBNETWORK_RAKNET_NAT_HOST;
     }
+    if (strcmp(name, ENET_TYPE) == 0) {
+        return SBNETWORK_ENET;
+    }
     return -1;
 }
 
@@ -434,9 +442,8 @@ void SBNetwork::SetProvider(SBTypeEnum type) {
     case SBNETWORK_RAKNET_NAT_JOIN:
         mNetwork = new RAKNetNetwork();
 		break;
-    case SBNETWORK_ENET_DIRECT_JOIN:
-    case SBNETWORK_ENET_DIRECT_HOST:
-        //mNetwork = new ENetNetwork();
+    case SBNETWORK_ENET:
+        mNetwork = new ENetNetwork();
     	break;
     }
 

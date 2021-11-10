@@ -2,7 +2,6 @@
 #include "SbLib.h"
 #include "network.h"
 #include "BitStream.h"
-#include "BaseNetworkType.hpp"
 #include "RAKNetNetwork.hpp"
 
 using namespace RakNet;
@@ -30,7 +29,7 @@ void DeserializePacket(unsigned char* data, unsigned int length, ATPacket* packe
     }
 }
 
-RAKNetNetwork::RAKNetNetwork() {
+RAKNetNetwork::RAKNetNetwork() : mRoomCallbacks(this) {
     TEAKRAND rand;
     rand.SRandTime();
 	
@@ -90,10 +89,10 @@ void RAKNetNetwork::Disconnect() {
 }
 
 bool RAKNetNetwork::CreateSession(SBNetworkCreation* create) {
-    RAKSessionInfo info;
-    strcpy(info.sessionName, create->sessionName.c_str());
-    info.hostID = mLocalID;
-    info.address = mMaster->GetMyGUID();
+    RAKSessionInfo *info = new RAKSessionInfo();
+    strcpy(info->sessionName, create->sessionName.c_str());
+    info->hostID = mLocalID;
+    info->address = mMaster->GetMyGUID();
     mSessionInfo.Clear();
     mSessionInfo.Add(info);
 	
@@ -104,7 +103,7 @@ bool RAKNetNetwork::CreateSession(SBNetworkCreation* create) {
     {
     case SBCreationFlags::SBNETWORK_CREATE_TRY_NAT:
     default: //No need for a NAT server if the user chose it
-        mMaster->Startup(4, &SocketDescriptor(SERVER_PORT, 0), 1);
+        mMaster->Startup(4, &SocketDescriptor(SERVER_PORT, ""), 1);
         SDL_Log("CREATE SESSION: DIRECT. Our GUID: '%s' and our SystemAddress: '%s'", mMaster->GetMyGUID().ToString(), mMaster->GetSystemAddressFromGuid(mMaster->GetMyGUID()).ToString());
         mMaster->SetMaximumIncomingConnections(4);
         break;
@@ -114,6 +113,8 @@ bool RAKNetNetwork::CreateSession(SBNetworkCreation* create) {
 }
 
 void RAKNetNetwork::CloseSession() {
+	SDL_Log("END SESSION");
+	mMaster->Shutdown(100);
     mState = SBNETWORK_SESSION_FINISHED;
 }
 
@@ -423,6 +424,23 @@ SBList<SBStr>* RAKNetNetwork::GetSessionListAsync() {
 }
 
 bool RAKNetNetwork::StartGetSessionListAsync() {
+	if(mState != SBNETWORK_SESSION_SEARCHING) {
+        mState = SBNETWORK_SESSION_SEARCHING;
+
+		mServerBrowserPeer = RakPeerInterface::GetInstance();
+
+        SocketDescriptor sd(0, nullptr);
+        mServerBrowserPeer->Startup(1, &sd, 1);
+		mServerBrowserPeer->SetMaximumIncomingConnections(0); //We don't want that anyone can connect to us, we connect to the server
+
+		delete mRoomsPluginClient;
+
+		mRoomsPluginClient = new RoomsPlugin();
+		mServerBrowserPeer->AttachPlugin(mRoomsPluginClient);
+
+		mRoomsPluginClient->SetServerAddress(SystemAddress(MASTER_SERVER_ADDRESS, MASTER_SERVER_PORT));
+	}
+	
     //if (mState != SBNETWORK_SESSION_SEARCHING) {
     //    //start searching..
     //    mServerSearch = RakPeerInterface::GetInstance();
@@ -451,8 +469,8 @@ bool RAKNetNetwork::StartGetSessionListAsync() {
 bool RAKNetNetwork::JoinSession(const SBStr& session, SBStr nickname) {
     RAKSessionInfo* info = NULL;
     for (mSessionInfo.GetFirst(); !mSessionInfo.IsLast(); mSessionInfo.GetNext()) {
-        if (session == mSessionInfo.GetLastAccessed().sessionName)
-            info = &static_cast<RAKSessionInfo&>(mSessionInfo.GetLastAccessed());
+        if (session == mSessionInfo.GetLastAccessed()->sessionName)
+            info = static_cast<RAKSessionInfo*>(mSessionInfo.GetLastAccessed());
     }
 
     if (!info)

@@ -53,7 +53,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)src\SBLib\include;$(SolutionDir)libs\raknet\Include;$(SolutionDir)libs\enet\include;$(SolutionDir)cmake\sdl2-ttf\include;$(SolutionDir)cmake\sdl2\include;$(SolutionDir)cmake\sdl2-image\include;$(SolutionDir)cmake\sdl2-mixer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)src\SBLib\include;$(SolutionDir)libs\raknet\Include;$(SolutionDir)libs\enet\include;$(SolutionDir)cmake\sdl2-ttf\include;$(SolutionDir)cmake\sdl2\include;$(SolutionDir)cmake\sdl2-image\include;$(SolutionDir)cmake\sdl2-mixer\include;$(ProjectDir)libs\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -86,7 +86,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)src\SBLib\include;$(SolutionDir)libs\raknet\Include;$(SolutionDir)libs\enet\include;$(SolutionDir)cmake\sdl2-ttf\include;$(SolutionDir)cmake\sdl2\include;$(SolutionDir)cmake\sdl2-image\include;$(SolutionDir)cmake\sdl2-mixer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)src\SBLib\include;$(SolutionDir)libs\raknet\Include;$(SolutionDir)libs\enet\include;$(SolutionDir)cmake\sdl2-ttf\include;$(SolutionDir)cmake\sdl2\include;$(SolutionDir)cmake\sdl2-image\include;$(SolutionDir)cmake\sdl2-mixer\include;$(ProjectDir)libs\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -118,6 +118,12 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="libs\rooms-plugin\IntervalTimer.cpp" />
+    <ClCompile Include="libs\rooms-plugin\ProfanityFilter.cpp" />
+    <ClCompile Include="libs\rooms-plugin\RoomsContainer.cpp" />
+    <ClCompile Include="libs\rooms-plugin\RoomsErrorCodes.cpp" />
+    <ClCompile Include="libs\rooms-plugin\RoomsPlugin.cpp" />
+    <ClCompile Include="libs\rooms-plugin\RoomTypes.cpp" />
     <ClCompile Include="source/CBitmap.cpp" />
     <ClCompile Include="source/CCursor.cpp" />
     <ClCompile Include="source/CFont.cpp" />
@@ -125,6 +131,7 @@
     <ClCompile Include="source/Network.cpp" />
     <ClCompile Include="source/Tool2.cpp" />
     <ClCompile Include="source/NetworkTypes\RAKNetNetwork.cpp" />
+    <ClCompile Include="source\NetworkTypes\ENetNetwork.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(SolutionDir)libs\enet\enet.vcxproj">
@@ -138,9 +145,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\BaseNetworkType.hpp" />
+    <ClInclude Include="include\ENetNetwork.hpp" />
     <ClInclude Include="include\network.h" />
     <ClInclude Include="include\RAKNetNetwork.hpp" />
+    <ClInclude Include="include\RAKNetRoomCallbacks.hpp" />
     <ClInclude Include="include\SbLib.h" />
+    <ClInclude Include="libs\rooms-plugin\IntervalTimer.h" />
+    <ClInclude Include="libs\rooms-plugin\ProfanityFilter.h" />
+    <ClInclude Include="libs\rooms-plugin\RoomsContainer.h" />
+    <ClInclude Include="libs\rooms-plugin\RoomsErrorCodes.h" />
+    <ClInclude Include="libs\rooms-plugin\RoomsPlugin.h" />
+    <ClInclude Include="libs\rooms-plugin\RoomTypes.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

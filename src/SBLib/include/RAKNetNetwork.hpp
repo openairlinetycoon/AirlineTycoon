@@ -1,16 +1,17 @@
 #pragma once
 
-#include "BaseNetworkType.hpp"
-#include "MessageIdentifiers.h"
 #include "RakPeerInterface.h"
 #include "RakNetTypes.h"
-#include "CloudClient.h"
+#include "rooms-plugin\RoomsPlugin.h"
+#include "RAKNetRoomCallbacks.hpp"
 
 #define RAKNET_TYPE_DIRECT_JOIN "Direct-IP  Join"
 #define RAKNET_TYPE_DIRECT_HOST "Direct-IP  Host"
 #define RAKNET_TYPE_NAT_HOST "RAKNet NAT Host"
 #define RAKNET_TYPE_NAT_JOIN "RAKNet NAT Join"
 
+constexpr auto  MASTER_SERVER_PORT = 60013;
+constexpr auto  MASTER_SERVER_ADDRESS = "127.0.0.1";
 
 #pragma pack(push, 1)
 namespace RakNet {
@@ -77,7 +78,11 @@ private:
 	bool isNATMode = false;
 
     SBList<RakNet::Packet*> mPackets;
-
+	
+	RakNet::RoomsPlugin* mRoomsPluginClient;
+	RakNet::RakPeerInterface* mServerBrowserPeer;
+	RAKNetRoomCallbacks mRoomCallbacks;
+	
 	/// <summary>
 	/// Starts to retrieve a list of clients that are connected to the specified master server
 	/// Response will be send to the mServerSearch peer

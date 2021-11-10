@@ -1,8 +1,6 @@
 #pragma once
 
 #include "MessageIdentifiers.h"
-#include "RakPeerInterface.h"
-#include "RakNetTypes.h"
 
 //Direct play identifiers
 constexpr auto  DPPLAYERTYPE_GROUP = 0x0000;
@@ -14,8 +12,6 @@ constexpr auto  DPSYS_HOST = 0x0101;
 constexpr auto  SERVER_PORT = 60011;
 constexpr auto  CLIENT_PORT = 60012;
 
-constexpr auto  MASTER_SERVER_PORT = 60013;
-constexpr auto  MASTER_SERVER_ADDRESS = "127.0.0.1";
 
 constexpr auto  KEY_GET_HOST_LIST = "GetHostList";
 
@@ -68,8 +64,7 @@ enum SBTypeEnum
 	SBNETWORK_RAKNET_DIRECT_HOST,
 	SBNETWORK_RAKNET_NAT_JOIN,
 	SBNETWORK_RAKNET_NAT_HOST,
-	SBNETWORK_ENET_DIRECT_JOIN,
-	SBNETWORK_ENET_DIRECT_HOST,
+	SBNETWORK_ENET,
 };
 
 enum SBEventEnum {
@@ -95,7 +90,6 @@ struct SBSessionInfo
 {
 	ULONG hostID;
 	char sessionName[26];
-	//RakNet::RakNetGUID address;
 };
 
 class IServerSearchable {
@@ -108,7 +102,7 @@ public:
 
 protected:
 	SBList<SBStr> mSessions;
-	SBList<SBSessionInfo> mSessionInfo;
+	SBList<SBSessionInfo *> mSessionInfo;
 	unsigned int mSearchTime = 0;
 };
 
@@ -150,11 +144,7 @@ public:
 	/// <summary>
 	/// Returns the local player ID. Uses the implementations definition of ID
 	/// </summary>
-	/// <returns></returns>
 	virtual ULONG GetLocalPlayerID() = 0;
-	//virtual SBList<SBStr>* GetConnectionList() = 0;
-	//virtual SBList<SBStr>* GetSessionListAsync() = 0;
-	//virtual bool StartGetSessionListAsync() = 0;
 	
 	virtual bool IsSessionFinished() = 0;
 	virtual bool IsInSession() = 0;

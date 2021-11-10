@@ -22,6 +22,27 @@
     <ClCompile Include="source/Network.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
+    <ClCompile Include="source\NetworkTypes\ENetNetwork.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\rooms-plugin\IntervalTimer.cpp">
+      <Filter>Lib\room-plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\rooms-plugin\ProfanityFilter.cpp">
+      <Filter>Lib\room-plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\rooms-plugin\RoomsContainer.cpp">
+      <Filter>Lib\room-plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\rooms-plugin\RoomsErrorCodes.cpp">
+      <Filter>Lib\room-plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\rooms-plugin\RoomsPlugin.cpp">
+      <Filter>Lib\room-plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\rooms-plugin\RoomTypes.cpp">
+      <Filter>Lib\room-plugin</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
@@ -36,6 +57,12 @@
     <Filter Include="Source Files\Network">
       <UniqueIdentifier>{8f1f7634-2b5a-4b01-859d-30ef67e68d49}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lib">
+      <UniqueIdentifier>{75c04146-e2ee-457d-aad6-8f1286b854b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\room-plugin">
+      <UniqueIdentifier>{529977a7-3f21-46f3-b202-36ccabd58d23}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\SbLib.h">
@@ -49,6 +76,30 @@
     </ClInclude>
     <ClInclude Include="include\RAKNetNetwork.hpp">
       <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ENetNetwork.hpp">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RAKNetRoomCallbacks.hpp">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\rooms-plugin\IntervalTimer.h">
+      <Filter>Lib\room-plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\rooms-plugin\ProfanityFilter.h">
+      <Filter>Lib\room-plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\rooms-plugin\RoomsContainer.h">
+      <Filter>Lib\room-plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\rooms-plugin\RoomsErrorCodes.h">
+      <Filter>Lib\room-plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\rooms-plugin\RoomsPlugin.h">
+      <Filter>Lib\room-plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\rooms-plugin\RoomTypes.h">
+      <Filter>Lib\room-plugin</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

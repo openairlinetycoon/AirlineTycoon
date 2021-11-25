@@ -50,6 +50,7 @@ extern SBNetwork gNetwork;
 
 #include <fstream>
 #include <filesystem>
+#include <Dbghelp.h>
 
 CHLPool HLPool;
 
@@ -145,7 +146,23 @@ char *UCharToReadableAnsi( const unsigned char *pData, const unsigned uLen );
 unsigned char *ReadableAnsiToUChar( const char *pData, const unsigned uLen );
 
 
+LONG UnhandledExceptionCallback(
+    _EXCEPTION_POINTERS* exceptionInfo) {
 
+    _MINIDUMP_EXCEPTION_INFORMATION info = {GetCurrentThreadId(), exceptionInfo, TRUE};
+
+    HANDLE dump = CreateFile("last_crash.dmp", GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
+        FILE_ATTRIBUTE_NORMAL, NULL);
+
+	MiniDumpWriteDump(
+        GetCurrentProcess(), GetCurrentProcessId(),
+        dump, MiniDumpNormal, &info, nullptr, nullptr);
+        
+
+    CloseHandle(dump);
+	
+	return EXCEPTION_EXECUTE_HANDLER;
+}
 
 
 
@@ -253,6 +270,8 @@ int main(int argc, char* argv[])
    v.muScramble           = 3556112065;
 
    long vv = v.GetValue();
+   
+   SetUnhandledExceptionFilter(UnhandledExceptionCallback);
 
 	const char* pText = "Hallo, ich bin ein Text";
 

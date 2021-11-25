@@ -357,6 +357,7 @@ int FX::Load(const char* file)
     Uint8* buf = (Uint8*)SDL_LoadFile(file, &_fxData.bufferSize);
     _fxData.pBuffer = Mix_QuickLoad_RAW(buf, _fxData.bufferSize);
     ChangeFrequency(_fxData.pBuffer, 22050);
+    _fxData.bufferSize = _fxData.pBuffer->alen;
     return SSE_OK;
 }
 

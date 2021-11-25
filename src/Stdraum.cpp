@@ -2615,7 +2615,7 @@ void CStdRaum::PostPaint (void)
 
          if (pSmackerPartner==NULL || TextAlign!=0 || (pSmackerPartner->GetMood()==SPM_TALKING || (pSmackerPartner->GetMood()==SPM_LISTENING && TextAlign==0 && (status & DSBSTATUS_PLAYING) && TalkingSpeechFx)) || timeGetTime()>DWORD(SmackerTimeToTalk))
          {
-            if (NumberBitmap.Size.x)
+            if (NumberBitmap.Size.x && RoomBm.pBitmap)
                RoomBm.BlitFrom (NumberBitmap, NumberBitmapPos);
 
             //Text kopieren:

@@ -292,6 +292,8 @@ GameFrame::GameFrame()
       pCursor->SetImage (gCursorBm.pBitmap);
 
    ColorFX.ReInit (SB_COLORFX_FADE, 8, gCursorSandBm.pBitmap);
+	
+   UpdateWindow();
 
    /*_beginthread (Copier, 0, NULL);
 

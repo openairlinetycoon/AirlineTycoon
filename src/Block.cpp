@@ -1295,8 +1295,8 @@ switch_again:
 
                   //Ausführlich von A nach B
                   Bitmap.PrintAt (bprintf ("%s - %s", 
-                                  Cities[qRoute.VonCity].Name,
-                                  Cities[qRoute.NachCity].Name),
+                                  (LPCTSTR)Cities[qRoute.VonCity].Name,
+                                  (LPCTSTR)Cities[qRoute.NachCity].Name),
                                   FontSmallBlack, TEC_FONT_LEFT, ClientAreaB+XY(0,1), ClientAreaB+XY(172,168));
                        
                   if (PageB==0)

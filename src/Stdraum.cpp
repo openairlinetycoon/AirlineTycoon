@@ -4671,7 +4671,8 @@ void CStdRaum::MenuRepaint (void)
                   OnscreenBitmap.PrintAt (StandardTexte.GetS (TOKEN_JOBS, 1100), FontSmallBlack, TEC_FONT_LEFT, 40, 155, 250, 319);
                else
                {
-                  OnscreenBitmap.PrintAt (bprintf (StandardTexte.GetS (TOKEN_JOBS, 1101), Sim.Players.Players[PlayerNum].Planes[Workers.Workers[MenuRemapper[MenuPage-1]].PlaneId].Name), FontSmallBlack, TEC_FONT_LEFT, 40, 155, 250, 319);
+                  CString planeName = Sim.Players.Players[PlayerNum].Planes[Workers.Workers[MenuRemapper[MenuPage-1]].PlaneId].Name;
+                  OnscreenBitmap.PrintAt (bprintf (StandardTexte.GetS (TOKEN_JOBS, 1101), (LPCTSTR)planeName), FontSmallBlack, TEC_FONT_LEFT, 40, 155, 250, 319);
                }
                OnscreenBitmap.PrintAt (StandardTexte.GetS (TOKEN_JOBS, 1102), FontSmallBlack, TEC_FONT_LEFT, 40, 181, 250, 319);
             }

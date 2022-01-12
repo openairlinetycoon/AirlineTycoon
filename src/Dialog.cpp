@@ -356,11 +356,16 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                case 1053:
                case 1054:
                case 1055:
-                       if (id==1051 && (Sim.Players.Players[qPlayer.ArabOpfer].SecurityFlags&(1<<6))) MakeSayWindow (0, TOKEN_SABOTAGE, 2096, pFontPartner, Sim.Players.Players[qPlayer.ArabOpfer].AirlineX);
-                  else if (id==1052 && (Sim.Players.Players[qPlayer.ArabOpfer].SecurityFlags&(1<<6))) MakeSayWindow (0, TOKEN_SABOTAGE, 2096, pFontPartner, Sim.Players.Players[qPlayer.ArabOpfer].AirlineX);
-                  else if (id==1053 && (Sim.Players.Players[qPlayer.ArabOpfer].SecurityFlags&(1<<7))) MakeSayWindow (0, TOKEN_SABOTAGE, 2097, pFontPartner, Sim.Players.Players[qPlayer.ArabOpfer].AirlineX);
-                  else if (id==1054 && (Sim.Players.Players[qPlayer.ArabOpfer].SecurityFlags&(1<<7))) MakeSayWindow (0, TOKEN_SABOTAGE, 2097, pFontPartner, Sim.Players.Players[qPlayer.ArabOpfer].AirlineX);
-                  else if (id==1055 && (Sim.Players.Players[qPlayer.ArabOpfer].SecurityFlags&(1<<6))) MakeSayWindow (0, TOKEN_SABOTAGE, 2096, pFontPartner, Sim.Players.Players[qPlayer.ArabOpfer].AirlineX);
+                  if (id==1051 && (Sim.Players.Players[qPlayer.ArabOpfer].SecurityFlags&(1<<6)))
+                     MakeSayWindow (0, TOKEN_SABOTAGE, 2096, pFontPartner, (LPCTSTR)Sim.Players.Players[qPlayer.ArabOpfer].AirlineX);
+                  else if (id==1052 && (Sim.Players.Players[qPlayer.ArabOpfer].SecurityFlags&(1<<6)))
+                     MakeSayWindow (0, TOKEN_SABOTAGE, 2096, pFontPartner, (LPCTSTR)Sim.Players.Players[qPlayer.ArabOpfer].AirlineX);
+                  else if (id==1053 && (Sim.Players.Players[qPlayer.ArabOpfer].SecurityFlags&(1<<7)))
+                     MakeSayWindow (0, TOKEN_SABOTAGE, 2097, pFontPartner, (LPCTSTR)Sim.Players.Players[qPlayer.ArabOpfer].AirlineX);
+                  else if (id==1054 && (Sim.Players.Players[qPlayer.ArabOpfer].SecurityFlags&(1<<7)))
+                     MakeSayWindow (0, TOKEN_SABOTAGE, 2097, pFontPartner, (LPCTSTR)Sim.Players.Players[qPlayer.ArabOpfer].AirlineX);
+                  else if (id==1055 && (Sim.Players.Players[qPlayer.ArabOpfer].SecurityFlags&(1<<6)))
+                     MakeSayWindow (0, TOKEN_SABOTAGE, 2096, pFontPartner, (LPCTSTR)Sim.Players.Players[qPlayer.ArabOpfer].AirlineX);
                   else if (qPlayer.Money-SabotagePrice[id-1051]<DEBT_LIMIT)
                      MakeSayWindow (0, TOKEN_SABOTAGE, 6000, pFontPartner);
                   else
@@ -380,10 +385,14 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                case 1252:
                case 1253:
                case 1254:
-                       if (id==1251 && (Sim.Players.Players[qPlayer.ArabOpfer2].SecurityFlags&(1<<0))) MakeSayWindow (0, TOKEN_SABOTAGE, 2090, pFontPartner, Sim.Players.Players[qPlayer.ArabOpfer2].AirlineX);
-                  else if (id==1252 && (Sim.Players.Players[qPlayer.ArabOpfer2].SecurityFlags&(1<<1))) MakeSayWindow (0, TOKEN_SABOTAGE, 2091, pFontPartner, Sim.Players.Players[qPlayer.ArabOpfer2].AirlineX);
-                  else if (id==1253 && (Sim.Players.Players[qPlayer.ArabOpfer2].SecurityFlags&(1<<0))) MakeSayWindow (0, TOKEN_SABOTAGE, 2090, pFontPartner, Sim.Players.Players[qPlayer.ArabOpfer2].AirlineX);
-                  else if (id==1254 && (Sim.Players.Players[qPlayer.ArabOpfer2].SecurityFlags&(1<<2))) MakeSayWindow (0, TOKEN_SABOTAGE, 2092, pFontPartner, Sim.Players.Players[qPlayer.ArabOpfer2].AirlineX);
+                  if (id==1251 && (Sim.Players.Players[qPlayer.ArabOpfer2].SecurityFlags&(1<<0)))
+                     MakeSayWindow (0, TOKEN_SABOTAGE, 2090, pFontPartner, (LPCTSTR)Sim.Players.Players[qPlayer.ArabOpfer2].AirlineX);
+                  else if (id==1252 && (Sim.Players.Players[qPlayer.ArabOpfer2].SecurityFlags&(1<<1)))
+                     MakeSayWindow (0, TOKEN_SABOTAGE, 2091, pFontPartner, (LPCTSTR)Sim.Players.Players[qPlayer.ArabOpfer2].AirlineX);
+                  else if (id==1253 && (Sim.Players.Players[qPlayer.ArabOpfer2].SecurityFlags&(1<<0)))
+                     MakeSayWindow (0, TOKEN_SABOTAGE, 2090, pFontPartner, (LPCTSTR)Sim.Players.Players[qPlayer.ArabOpfer2].AirlineX);
+                  else if (id==1254 && (Sim.Players.Players[qPlayer.ArabOpfer2].SecurityFlags&(1<<2)))
+                     MakeSayWindow (0, TOKEN_SABOTAGE, 2092, pFontPartner, (LPCTSTR)Sim.Players.Players[qPlayer.ArabOpfer2].AirlineX);
                   else if (qPlayer.Money-SabotagePrice2[id-1251]<DEBT_LIMIT)
                      MakeSayWindow (0, TOKEN_SABOTAGE, 6000, pFontPartner);
                   else
@@ -414,10 +423,14 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                case 1082:
                case 1083:
                case 1084:
-                       if (id==1081 && (Sim.Players.Players[qPlayer.ArabOpfer3].SecurityFlags&(1<<8))) MakeSayWindow (0, TOKEN_SABOTAGE, 2098, pFontPartner, Sim.Players.Players[qPlayer.ArabOpfer3].AirlineX);
-                  else if (id==1082 && (Sim.Players.Players[qPlayer.ArabOpfer3].SecurityFlags&(1<<5))) MakeSayWindow (0, TOKEN_SABOTAGE, 2095, pFontPartner, Sim.Players.Players[qPlayer.ArabOpfer3].AirlineX);
-                  else if (id==1083 && (Sim.Players.Players[qPlayer.ArabOpfer3].SecurityFlags&(1<<5))) MakeSayWindow (0, TOKEN_SABOTAGE, 2095, pFontPartner, Sim.Players.Players[qPlayer.ArabOpfer3].AirlineX);
-                  else if (id==1084 && (Sim.Players.Players[qPlayer.ArabOpfer3].SecurityFlags&(1<<3))) MakeSayWindow (0, TOKEN_SABOTAGE, 2093, pFontPartner, Sim.Players.Players[qPlayer.ArabOpfer3].AirlineX);
+                  if (id==1081 && (Sim.Players.Players[qPlayer.ArabOpfer3].SecurityFlags&(1<<8)))
+                     MakeSayWindow (0, TOKEN_SABOTAGE, 2098, pFontPartner, (LPCTSTR)Sim.Players.Players[qPlayer.ArabOpfer3].AirlineX);
+                  else if (id==1082 && (Sim.Players.Players[qPlayer.ArabOpfer3].SecurityFlags&(1<<5)))
+                     MakeSayWindow (0, TOKEN_SABOTAGE, 2095, pFontPartner, (LPCTSTR)Sim.Players.Players[qPlayer.ArabOpfer3].AirlineX);
+                  else if (id==1083 && (Sim.Players.Players[qPlayer.ArabOpfer3].SecurityFlags&(1<<5)))
+                     MakeSayWindow (0, TOKEN_SABOTAGE, 2095, pFontPartner, (LPCTSTR)Sim.Players.Players[qPlayer.ArabOpfer3].AirlineX);
+                  else if (id==1084 && (Sim.Players.Players[qPlayer.ArabOpfer3].SecurityFlags&(1<<3)))
+                     MakeSayWindow (0, TOKEN_SABOTAGE, 2093, pFontPartner, (LPCTSTR)Sim.Players.Players[qPlayer.ArabOpfer3].AirlineX);
                   else if (qPlayer.Money-SabotagePrice3[id-1081]<DEBT_LIMIT)
                      MakeSayWindow (0, TOKEN_SABOTAGE, 6000, pFontPartner);
                   else
@@ -440,7 +453,8 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                   }
                   break;
                case 1085:
-                  if ((Sim.Players.Players[qPlayer.ArabOpfer3].SecurityFlags&(1<<8))) MakeSayWindow (0, TOKEN_SABOTAGE, 2098, pFontPartner, Sim.Players.Players[qPlayer.ArabOpfer3].AirlineX);
+                  if ((Sim.Players.Players[qPlayer.ArabOpfer3].SecurityFlags&(1<<8)))
+                     MakeSayWindow (0, TOKEN_SABOTAGE, 2098, pFontPartner, (LPCTSTR)Sim.Players.Players[qPlayer.ArabOpfer3].AirlineX);
                   else
                   {
                      qPlayer.ArabTrust=max(qPlayer.ArabTrust, id-1280+1);
@@ -449,7 +463,8 @@ BOOL CStdRaum::PreLButtonDown (CPoint point)
                   }
                   break;
                case 1086:
-                  if ((Sim.Players.Players[qPlayer.ArabOpfer3].SecurityFlags&(1<<5))) MakeSayWindow (0, TOKEN_SABOTAGE, 2095, pFontPartner, Sim.Players.Players[qPlayer.ArabOpfer3].AirlineX);
+                  if ((Sim.Players.Players[qPlayer.ArabOpfer3].SecurityFlags&(1<<5)))
+                     MakeSayWindow (0, TOKEN_SABOTAGE, 2095, pFontPartner, (LPCTSTR)Sim.Players.Players[qPlayer.ArabOpfer3].AirlineX);
                   else
                   {
                      MenuDialogReEntryB=1091;

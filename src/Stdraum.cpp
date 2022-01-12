@@ -1840,8 +1840,10 @@ void CStdRaum::StartDialog (SLONG DialogPartner, BOOL Medium, SLONG DialogPar1, 
          if (Sim.Players.Players[PlayerNum].CalledCities[MouseClickPar2]==0)
          {
             //Haben wir ein Sample dafür?
-            if (Cities[DialogPar2].Wave!="-" && Cities[DialogPar2].Wave!="") MakeSayWindow (0, TOKEN_WELT, 1000, pFontPartner, Sim.Players.Players[DialogPar1].AirlineX, (LPCTSTR)Cities[DialogPar2].Name);
-            else                                                             MakeSayWindow (1, TOKEN_WELT, 2000, 2000, FALSE, &FontDialog, &FontDialogLight, (LPCTSTR)Sim.Players.Players[DialogPar1].AirlineX);
+            if (Cities[DialogPar2].Wave!="-" && Cities[DialogPar2].Wave!="")
+               MakeSayWindow (0, TOKEN_WELT, 1000, pFontPartner, (LPCTSTR)Sim.Players.Players[DialogPar1].AirlineX, (LPCTSTR)Cities[DialogPar2].Name);
+            else
+               MakeSayWindow (1, TOKEN_WELT, 2000, 2000, FALSE, &FontDialog, &FontDialogLight, (LPCTSTR)Sim.Players.Players[DialogPar1].AirlineX);
          }
          else
          {

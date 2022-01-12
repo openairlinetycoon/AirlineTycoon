@@ -1561,7 +1561,8 @@ void CEditor::OnRButtonDown(UINT nFlags, CPoint point)
             
             while (1)
             {
-               for (long c=0; c<(long)Plane.Parts.AnzEntries(); c++)
+               long c = 0;
+               for (c=0; c<(long)Plane.Parts.AnzEntries(); c++)
                   if (Plane.Parts.IsInAlbum(c))
                      if (Plane.Parts[c].Shortname!="")
                      {

@@ -9,6 +9,9 @@
  */
 
 #include "RoomsPlugin.h"
+
+#include <SDL_log.h>
+
 #include "BitStream.h"
 #include "RoomsErrorCodes.h"
 #include "TableSerializer.h"
@@ -19,6 +22,8 @@
 #include "GetTime.h"
 
 using namespace RakNet;
+
+#define printf SDL_Log
 
 int RoomsPlugin::RoomsPluginParticipantCompByRakString( const RakNet::RakString &key, RoomsPluginParticipant* const &data )
 {

@@ -6,6 +6,14 @@
 #define IDR_ATICON                      999
 #define IDR_MAINFRAME1                  1000
 
+#define FILE_VERSION 1, 4, 0
+#ifdef _DEBUG
+#define FILE_VERSION_STRING "VERSION 1.4 DEBUG"
+#else
+#define FILE_VERSION_STRING "VERSION 1.4 RELEASE"
+#endif
+
+
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

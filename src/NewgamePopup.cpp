@@ -751,11 +751,11 @@ void NewGamePopup::RefreshKlackerField(void)
 	}
 	else if (PageNum == 15) //Netzwerk: Session auswählen / erzeugen
 	{
-		if (gNetwork.IsEnumSessionFinished())
-		{
-			pNetworkSessions = gNetwork.GetSessionListAsync();
-			gNetwork.StartGetSessionListAsync();
-		}
+		//if (gNetwork.IsEnumSessionFinished())
+		//{
+		//	pNetworkSessions = gNetwork.GetSessionListAsync();
+		//	gNetwork.StartGetSessionListAsync();
+		//}
 
 		KlackerTafel.PrintAt(0, 0, StandardTexte.GetS(TOKEN_NEWGAME, 701));
 		KlackerTafel.PrintAt(0, 15, StandardTexte.GetS(TOKEN_NEWGAME, 4001)); //Zurück
@@ -1746,7 +1746,7 @@ void NewGamePopup::OnLButtonDown(UINT nFlags, CPoint point)
 					return;
 				}
 
-				if (id == SBNETWORK_ENET) {
+				if (id == SBNETWORK_ENET || id == SBNETWORK_RAKNET_NAT_JOIN) {
 					Sim.bIsHost = FALSE;
 					PageNum = MULTIPLAYER_SELECT_SESSION;
 					RefreshKlackerField();

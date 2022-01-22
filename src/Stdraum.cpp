@@ -4708,7 +4708,7 @@ void CStdRaum::MenuRepaint (void)
             OnscreenBitmap.PrintAt (bprintf (StandardTexte.GetS (TOKEN_JOBS, 1020), MenuPage, MenuPageMax), FontSmallBlack, TEC_FONT_LEFT, 40, 280+26, 250, 319);
          }
 
-         if (MenuPage<MenuPageMax) OnscreenBitmap.BlitFrom (MenuBms[2], OnscreenBitmap.Size-MenuBms[2].Size-XY(3,0));
+         if (MenuPage<MenuPageMax) OnscreenBitmap.BlitFrom (MenuBms[2], OnscreenBitmap.Size-MenuBms[2].Size);
          break;
 
       case MENU_SABOTAGEROUTE:

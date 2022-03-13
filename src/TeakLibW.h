@@ -312,7 +312,7 @@ public:
     friend TEAKFILE& operator << (TEAKFILE& File, const BUFFER<T>& buffer)
     {
         File << buffer.Size;
-        File << (buffer.DelPointer - buffer.MemPointer);
+        File << SLONG(buffer.DelPointer - buffer.MemPointer);
         for (SLONG i = 0; i < buffer.Size; i++)
             File << buffer.MemPointer[i];
         return File;

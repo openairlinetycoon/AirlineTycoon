@@ -2874,7 +2874,11 @@ TEAKFILE &operator << (TEAKFILE &File, const SIM &Sim)
    File << SimDate           << Sim.Time       << Sim.Month;
    File << Sim.MonthDay      << Sim.QuitCountDown;
    File << Sim.TickerTime    << Sim.TimeSlice  << Sim.StartWeekday << Sim.Weekday;
-   File.Write ((UBYTE*)&Sim.StartTime, sizeof (Sim.StartTime));
+   //File.Write ((UBYTE*)&Sim.StartTime, sizeof (Sim.StartTime));
+
+   // Save 32bit savegames correctly
+   __time32_t x = Sim.StartTime;
+   File.Write((UBYTE*)&x, sizeof(x));
 
    //Sonstiges:
    File.WriteTrap (100);
@@ -2990,7 +2994,13 @@ TEAKFILE &operator >> (TEAKFILE &File, SIM &Sim)
    File >> SimDate           >> Sim.Time       >> Sim.Month;
    File >> Sim.MonthDay      >> Sim.QuitCountDown;
    File >> Sim.TickerTime    >> Sim.TimeSlice  >> Sim.StartWeekday >> Sim.Weekday;
-   File.Read ((UBYTE*)&Sim.StartTime, sizeof (Sim.StartTime));
+   //File.Read((UBYTE*)&Sim.StartTime, sizeof(Sim.StartTime));
+
+   // Load 32bit savegames correctly
+   __time32_t x;
+   File.Read((UBYTE*)&x, sizeof(x));
+   Sim.StartTime = x;
+
    Sim.Date=SimDate;
 
    //Sonstiges:

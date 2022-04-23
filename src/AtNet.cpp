@@ -73,8 +73,8 @@ void DisplayBroadcastMessage (CString str, SLONG FromPlayer)
    SBBM    TempBm (gBroadcastBm.Size);
    SLONG   sy, oldy, offy;
 
-   if (!Sim.bNetwork)
-      return;
+   //if (!Sim.bNetwork)
+   //   return;
 
    if (FromPlayer!=Sim.localPlayer)
    {
@@ -88,7 +88,7 @@ void DisplayBroadcastMessage (CString str, SLONG FromPlayer)
 
    if (FromPlayer>=0 && FromPlayer<4) str = Sim.Players.Players[FromPlayer].NameX + ": " + str;
 
-   sy   = gBroadcastBm.TryPrintAt (str, FontSmallBlack, TEC_FONT_LEFT, XY(10, 10), XY(320, 1000));
+   sy   = gBroadcastBm.TryPrintAt (str.c_str(), FontSmallBlack, TEC_FONT_LEFT, XY(10, 10), XY(320, 1000));
    oldy = gBroadcastBm.Size.y;
    offy = gBroadcastBm.Size.y;
 
@@ -121,7 +121,7 @@ void DisplayBroadcastMessage (CString str, SLONG FromPlayer)
       gBroadcastBm.BlitFrom (TempBm, 0, -(TempBm.Size.y-220));
    }
 
-   gBroadcastTimeout = 60;
+   gBroadcastTimeout = 600;
 }
 
 //--------------------------------------------------------------------------------------------
@@ -131,7 +131,7 @@ void DisplayBroadcastMessage (CString str, SLONG FromPlayer)
 //--------------------------------------------------------------------------------------------
 void PumpBroadcastBitmap (bool bJustForEmergency)
 {
-   if (!Sim.bNetwork && gBroadcastBm.Size.y==0)
+   if (gBroadcastBm.Size.y==0)
       return;
 
    static SLONG LastTimeCalled=0;

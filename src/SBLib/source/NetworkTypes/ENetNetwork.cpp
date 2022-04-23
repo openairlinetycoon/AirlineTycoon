@@ -30,7 +30,7 @@ SLONG ENetNetwork::GetMessageCount() {
 
     ENetAddress address;
     ENetBuffer buf;
-    if (mState == SBNETWORK_SESSION_MASTER)
+    if (mState == SBSessionEnum::SBNETWORK_SESSION_MASTER)
     {
         SLONG clientID;
         buf.data = &clientID;
@@ -45,7 +45,7 @@ SLONG ENetNetwork::GetMessageCount() {
             }
         }
     }
-    else if (mState == SBNETWORK_SESSION_SEARCHING)
+    else if (mState == SBSessionEnum::SBNETWORK_SESSION_SEARCHING)
     {
         ENetSessionInfo *info = new ENetSessionInfo();
         buf.data = info;
@@ -64,7 +64,7 @@ SLONG ENetNetwork::GetMessageCount() {
                 {
                     info->address.host = address.host;
                     mSessionInfo.Add(info);
-                    mSessions.Add(SBStr(info->sessionName));
+                    mSessions.Add(std::make_shared<SBStr>(info->sessionName));
                 }
             }
         }
@@ -91,7 +91,7 @@ SLONG ENetNetwork::GetMessageCount() {
                 player->peer = event.peer;
                 player->peer->data = &mPlayers.Add(player);
 
-                if (mState == SBNETWORK_SESSION_MASTER)
+                if (mState == SBSessionEnum::SBNETWORK_SESSION_MASTER)
                 {
                     /* Broadcast the address of this peer to all other peers */
                     ENetNetworkPeer peer;
@@ -166,7 +166,7 @@ SLONG ENetNetwork::GetMessageCount() {
                     dp.dpId = master->ID;
                     ENetPacket* packet = enet_packet_create(&dp, sizeof(DPPacket), ENET_PACKET_FLAG_RELIABLE);
                     mPackets.Add(packet);
-                    mState = SBNETWORK_SESSION_MASTER;
+                    mState = SBSessionEnum::SBNETWORK_SESSION_MASTER;
                 }
 
                 mMaster = master->peer;
@@ -225,14 +225,14 @@ bool ENetNetwork::CreateSession(SBNetworkCreation* sessionSettings) {
     info->address.port = 0xA113;
     mSessionInfo.Clear();
     mSessionInfo.Add(info);
-    mState = SBNETWORK_SESSION_MASTER;
+    mState = SBSessionEnum::SBNETWORK_SESSION_MASTER;
     mSearchTime = enet_time_get();
     Connect("");
     return true;
 }
 
 void ENetNetwork::CloseSession() {
-    mState = SBNETWORK_SESSION_FINISHED;
+    mState = SBSessionEnum::SBNETWORK_SESSION_FINISHED;
 }
 
 ULONG ENetNetwork::GetLocalPlayerID() {
@@ -240,11 +240,11 @@ ULONG ENetNetwork::GetLocalPlayerID() {
 }
 
 bool ENetNetwork::IsSessionFinished() {
-    return mState == SBNETWORK_SESSION_FINISHED;
+    return mState == SBSessionEnum::SBNETWORK_SESSION_FINISHED;
 }
 
 bool ENetNetwork::IsInSession() {
-    return mState == SBNETWORK_SESSION_MASTER || mState == SBNETWORK_SESSION_CLIENT;
+    return mState == SBSessionEnum::SBNETWORK_SESSION_MASTER || mState == SBSessionEnum::SBNETWORK_SESSION_CLIENT;
 }
 
 bool ENetNetwork::Send(BUFFER<UBYTE>& buffer, ULONG length, ULONG peerID, bool compression) {
@@ -287,6 +287,10 @@ SBList<SBNetworkPlayer*>* ENetNetwork::GetAllPlayers() {
     return &mPlayers;
 }
 
+SBCapabilitiesFlags ENetNetwork::GetCapabilities() {
+	return SBCapabilitiesFlags::SBNETWORK_NONE;
+}
+
 bool ENetNetwork::IsServerSearchable() {
 	return true;
 }
@@ -295,7 +299,7 @@ IServerSearchable* ENetNetwork::GetServerSearcher() {
 	return this;
 }
 
-SBList<SBStr>* ENetNetwork::GetSessionListAsync() {
+SBList<std::shared_ptr<SBStr>>* ENetNetwork::GetSessionListAsync() {
     return &mSessions;
 }
 
@@ -304,7 +308,7 @@ bool ENetNetwork::StartGetSessionListAsync() {
     buf.data = &mLocalID;
     buf.dataLength = sizeof(mLocalID);
     enet_socket_send(mSocket, &mServer, &buf, 1);
-    mState = SBNETWORK_SESSION_SEARCHING;
+    mState = SBSessionEnum::SBNETWORK_SESSION_SEARCHING;
     mSearchTime = enet_time_get();
     return true;
 }
@@ -328,7 +332,7 @@ bool ENetNetwork::JoinSession(const SBStr& session, SBStr ) {
     player->peer->data = &mPlayers.Add(player);
     enet_peer_timeout(player->peer, 100000, 0, 100000000);
     mMaster = player->peer;
-    mState = SBNETWORK_SESSION_CLIENT;
+    mState = SBSessionEnum::SBNETWORK_SESSION_CLIENT;
     return enet_host_service(mHost, &event, 5000) > 0 &&
         event.type == ENET_EVENT_TYPE_CONNECT;
 }

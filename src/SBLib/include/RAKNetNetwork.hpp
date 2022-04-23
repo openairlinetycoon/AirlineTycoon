@@ -10,9 +10,9 @@
 #define RAKNET_TYPE_NAT_JOIN "RAKNet NAT Join"
 
 constexpr auto  MASTER_SERVER_GAME_ID = "ATD";
-constexpr auto  MASTER_SERVER_PORT = 60013;
-constexpr auto  MASTER_NAT_SERVER_PORT = 60014;
-constexpr auto  MASTER_SERVER_ADDRESS = "127.0.0.1";
+constexpr auto  MASTER_SERVER_PORT = 61013;
+constexpr auto  MASTER_NAT_SERVER_PORT = 61014;
+constexpr auto  MASTER_SERVER_ADDRESS = "";
 
 #pragma pack(push, 1)
 namespace RakNet {
@@ -57,6 +57,7 @@ public:
 	bool Send(BUFFER<UBYTE>&, ULONG, ULONG, bool) override;
 	bool Receive(UBYTE**, ULONG&) override;
     SBList<SBNetworkPlayer*>* GetAllPlayers() override;
+	SBCapabilitiesFlags GetCapabilities() override;
 	bool IsServerSearchable() override;
 	IServerSearchable *GetServerSearcher() override;
 
@@ -64,7 +65,9 @@ public:
 
 	void LoginMasterServer();
 	void RetrieveRoomList();
-	SBList<SBStr>* GetSessionListAsync() override;
+	bool JoinRoom(const SBStr* roomName);
+	bool DidFuncSucceed(const RakNet::RoomsPluginOperations func) const;
+	SBList<std::shared_ptr<SBStr>>* GetSessionListAsync() override;
 	bool StartGetSessionListAsync() override;
 	bool JoinSession(const SBStr& sessionName, SBStr nickname) override;
 	
@@ -82,13 +85,12 @@ private:
 	RakNet::NatPunchthroughClient* mNATPlugin = nullptr;
 	bool isNATMode = false;
 
-	SBStr*test = nullptr;
-
     SBList<RakNet::Packet*> mPackets;
 
 	RakNet::RoomsPlugin* mRoomsPluginClient = nullptr;
 	RakNet::RakPeerInterface* mServerBrowserPeer = nullptr;
-	RAKNetRoomCallbacks *mRoomCallbacks;
+	RAKNetRoomCallbacks *mRoomCallbacks = nullptr;
+	RAKSessionInfo *mSessionInfo = nullptr;
 	bool mIsConnectingToMaster = false;
 	
 	/// <summary>
@@ -103,6 +105,8 @@ private:
 	/// </summary>
 	/// <returns>true - on success, otherwise false</returns>
 	bool ConnectToMasterServer();
+
+	bool CreateRoom(const char* roomName, const char* password) const;
 
 	//Server Search network elements:
 	RakNet::RakPeerInterface* mRoomClient = nullptr;

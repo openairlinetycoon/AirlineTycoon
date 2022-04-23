@@ -44,11 +44,12 @@ public:
 	bool Send(BUFFER<UBYTE>& buffer, ULONG length, ULONG peerID, bool compression) override;
 	bool Receive(UBYTE** buffer, ULONG& length) override;
 	SBList<SBNetworkPlayer*>* GetAllPlayers() override;
+	SBCapabilitiesFlags GetCapabilities() override;
 	bool IsServerSearchable() override;
 	IServerSearchable* GetServerSearcher() override;
 
 	//IServerSearchable:
-	SBList<SBStr>* GetSessionListAsync() override;
+	SBList<std::shared_ptr<SBStr>>* GetSessionListAsync() override;
 	bool StartGetSessionListAsync() override;
 	bool JoinSession(const SBStr&, SBStr) override;
 private:
@@ -57,4 +58,8 @@ private:
 	ENetPeer* mMaster;
 	ENetSocket mSocket;
 	SBList<ENetPacket*> mPackets;
+	
+	SBList<std::shared_ptr<SBStr>> mSessions;
+	SBList<SBSessionInfo*> mSessionInfo;
+	unsigned int mSearchTime = 0;
 };

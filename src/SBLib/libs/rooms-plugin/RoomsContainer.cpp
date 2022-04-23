@@ -321,6 +321,7 @@ void NetworkedRoomCreationParameters::Serialize(bool writeToBitstream, RakNet::B
 	bitStream->Serialize(writeToBitstream,inviteToSpectatorSlotPermission);
 	bitStream->Serialize(writeToBitstream,clearInvitesOnNewModerator);
 	bitStream->Serialize(writeToBitstream,roomName);
+	bitStream->Serialize(writeToBitstream,password);
 }
 
 const char *NetworkedRoomCreationParameters::SendInvitePermissionToEnum(SendInvitePermission e)

@@ -413,36 +413,47 @@ ULONG SBNetwork::GetLocalPlayerID() {
 	return mNetwork->GetLocalPlayerID();
 }
 
-SLONG SBNetwork::GetProviderID(char* name) {
+SBProviderEnum SBNetwork::GetProviderID(char* name) {
     if (strcmp(name, RAKNET_TYPE_DIRECT_JOIN) == 0) {
-        return SBNETWORK_RAKNET_DIRECT_JOIN;
+        return SBProviderEnum::SBNETWORK_RAKNET_DIRECT_JOIN;
     }
     if (strcmp(name, RAKNET_TYPE_DIRECT_HOST) == 0) {
-        return SBNETWORK_RAKNET_DIRECT_HOST;
+        return SBProviderEnum::SBNETWORK_RAKNET_DIRECT_HOST;
     }
     if (strcmp(name, RAKNET_TYPE_NAT_JOIN) == 0) {
-        return SBNETWORK_RAKNET_NAT_JOIN;
+        return SBProviderEnum::SBNETWORK_RAKNET_NAT_JOIN;
     }
     if (strcmp(name, RAKNET_TYPE_NAT_HOST) == 0) {
-        return SBNETWORK_RAKNET_NAT_HOST;
+        return SBProviderEnum::SBNETWORK_RAKNET_NAT_HOST;
     }
     if (strcmp(name, ENET_TYPE) == 0) {
-        return SBNETWORK_ENET;
+        return SBProviderEnum::SBNETWORK_ENET;
     }
-    return -1;
+    return SBProviderEnum::SBNETWORK_NONE;
 }
 
-void SBNetwork::SetProvider(SBTypeEnum type) {
+SBProviderEnum SBNetwork::GetSelectedProviderID() const{
+	return mType;
+}
+
+SBCapabilitiesFlags SBNetwork::GetSelectedProviderCapabilities() const {
+	if(mNetwork)
+        return mNetwork->GetCapabilities();
+
+    return SBCapabilitiesFlags::SBNETWORK_NONE;
+}
+
+void SBNetwork::SetProvider(SBProviderEnum type) {
     mType = type;
     switch (type) {
 
-    case SBNETWORK_RAKNET_DIRECT_JOIN: 
-    case SBNETWORK_RAKNET_DIRECT_HOST:
-    case SBNETWORK_RAKNET_NAT_HOST:
-    case SBNETWORK_RAKNET_NAT_JOIN:
+    case SBProviderEnum::SBNETWORK_RAKNET_DIRECT_JOIN: 
+    case SBProviderEnum::SBNETWORK_RAKNET_DIRECT_HOST:
+    case SBProviderEnum::SBNETWORK_RAKNET_NAT_HOST:
+    case SBProviderEnum::SBNETWORK_RAKNET_NAT_JOIN:
         mNetwork = new RAKNetNetwork();
 		break;
-    case SBNETWORK_ENET:
+    case SBProviderEnum::SBNETWORK_ENET:
         mNetwork = new ENetNetwork();
     	break;
     }
@@ -483,7 +494,7 @@ bool SBNetwork::JoinSession(const SBStr& name, SBStr user) {
     return false;
 }
 
-SBList<SBStr>* SBNetwork::GetSessionListAsync() {
+SBList<std::shared_ptr<SBStr>>* SBNetwork::GetSessionListAsync() {
     if (mNetwork->IsServerSearchable()) {
         return mNetwork->GetServerSearcher()->GetSessionListAsync();
     }

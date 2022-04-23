@@ -1984,7 +1984,11 @@ void CTakeOffApp::GameLoop(void*)
             //Zeit für die AnimBricks aktualisieren:
             Sim.TickerTime = Time>>5;
          }
-         else { RefreshNeccessary=TRUE; Sim.TickerTime=timeGetTime()>>5; } //Not In Game ==> Always refresh
+         else {
+         	RefreshNeccessary=TRUE;
+         	Sim.TickerTime=timeGetTime()>>5;
+            PumpBroadcastBitmap(true);
+         } //Not In Game ==> Always refresh
 
          //Bildschirm neu zeichnen:
          if (RefreshNeccessary)

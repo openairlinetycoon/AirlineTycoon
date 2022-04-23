@@ -174,6 +174,7 @@ struct NetworkedRoomCreationParameters
 	} inviteToRoomPermission, inviteToSpectatorSlotPermission;
 	bool clearInvitesOnNewModerator; // Leave or change
 	RakNet::RakString roomName;
+	RakNet::RakString password;
 
 	void Serialize(bool writeToBitstream, RakNet::BitStream *bitStream);
 	static const char *SendInvitePermissionToEnum(SendInvitePermission e);

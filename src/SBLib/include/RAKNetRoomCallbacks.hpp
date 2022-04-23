@@ -1,7 +1,7 @@
 #pragma once
 #include <rooms-plugin/RoomsPlugin.h>
 
-struct RAKNetRoomCallbacks : public RakNet::RoomsCallback
+class RAKNetRoomCallbacks : public RakNet::RoomsCallback
 {
 private:
 	RAKNetRoomCallbacks() {	 }
@@ -10,39 +10,48 @@ public:
 	RAKNetRoomCallbacks(RAKNetNetwork* parent) : parent(parent) { }
 	
 	RAKNetNetwork *parent;
-	SBList<SBStr> mMasterRooms = SBList<SBStr>();
+	SBList<std::shared_ptr<SBStr>> mMasterRooms = SBList<std::shared_ptr<SBStr>>();
+
+	RakNet::RoomsPluginFunc *lastFunc;
+	RakNet::JoinedRoomResult joinedRoom;
 
 	//important:
 	void SearchByFilter_Callback(const RakNet::SystemAddress& senderAddress, RakNet::SearchByFilter_Func* callResult) override {
 		//Get room list
 		//printf("Found %i rooms\n", callResult->roomsOutput.Size());
 		if(mMasterRooms.GetNumberOfElements() != 0){
-			for (mMasterRooms.GetFirst(); !mMasterRooms.IsLast(); mMasterRooms.GetNext()) {
-				delete mMasterRooms.GetLastAccessed();
-			}
-
 			mMasterRooms.Clear();
 		}
 
 		for (unsigned int i = 0; i < callResult->roomsOutput.Size(); i++) {
-			mMasterRooms.Add(SBStr(callResult->roomsOutput[i]->GetProperty(DefaultRoomColumns::TC_ROOM_NAME)->c));
-			
+			mMasterRooms.Add(std::make_shared<SBStr>(callResult->roomsOutput[i]->GetProperty(DefaultRoomColumns::TC_ROOM_NAME)->c));
 		}
+
+		lastFunc = callResult;
 
 		//parent->SetRoomList(callResult->roomsOutput.Size(), name);
 	}
 	void CreateRoom_Callback(const RakNet::SystemAddress& senderAddress, RakNet::CreateRoom_Func* callResult) override {
-		(void)senderAddress; callResult->PrintResult();
+		(void)senderAddress; callResult->PrintResult(); lastFunc = callResult;
 	}
 	void EnterRoom_Callback(const RakNet::SystemAddress& senderAddress, RakNet::EnterRoom_Func* callResult) override {
-		(void)senderAddress; callResult->PrintResult();
+		(void)senderAddress;
+		callResult->PrintResult();
+
+		joinedRoom = callResult->joinedRoomResult;
+
+		lastFunc = callResult;
 	}
 
 
 	// Results of calls
-	void JoinByFilter_Callback(const RakNet::SystemAddress& senderAddress, RakNet::JoinByFilter_Func* callResult) override { (void)senderAddress; callResult->PrintResult(); }
-	void LeaveRoom_Callback(const RakNet::SystemAddress& senderAddress, RakNet::LeaveRoom_Func* callResult) override { (void)senderAddress; callResult->PrintResult(); }
-	void GetInvitesToParticipant_Callback(const RakNet::SystemAddress& senderAddress, RakNet::GetInvitesToParticipant_Func* callResult) override { (void)senderAddress; callResult->PrintResult(); }
+	void JoinByFilter_Callback(const RakNet::SystemAddress& senderAddress, RakNet::JoinByFilter_Func* callResult) override {
+		(void)senderAddress;
+		callResult->PrintResult();
+		lastFunc = callResult;
+	}
+	void LeaveRoom_Callback(const RakNet::SystemAddress& senderAddress, RakNet::LeaveRoom_Func* callResult) override { (void)senderAddress; callResult->PrintResult(); lastFunc = callResult; }
+	void GetInvitesToParticipant_Callback(const RakNet::SystemAddress& senderAddress, RakNet::GetInvitesToParticipant_Func* callResult) override { (void)senderAddress; callResult->PrintResult(); lastFunc = callResult; }
 	void SendInvite_Callback(const RakNet::SystemAddress& senderAddress, RakNet::SendInvite_Func* callResult) override { (void)senderAddress; callResult->PrintResult(); }
 	void AcceptInvite_Callback(const RakNet::SystemAddress& senderAddress, RakNet::AcceptInvite_Func* callResult) override { (void)senderAddress; callResult->PrintResult(); }
 	void StartSpectating_Callback(const RakNet::SystemAddress& senderAddress, RakNet::StartSpectating_Func* callResult) override { (void)senderAddress; callResult->PrintResult(); }

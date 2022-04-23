@@ -14,7 +14,7 @@ public:
 
 // Attributes
 private:
-	enum PAGE_TYPE : UBYTE {
+	enum class PAGE_TYPE : UBYTE {
 		MAIN_MENU = 0,
 		MISSION_SELECT = 1,
 		CAMPAIGN_SELECT = 150,
@@ -58,7 +58,7 @@ private:
 
    SBFX            ClickFx;
 
-   SBList<SBStr>           *pNetworkSessions;
+   SBList<std::shared_ptr<SBStr>>* pNetworkSessions;
    SBList<SBStr>           *pNetworkConnections;
    SBList<SBNetworkPlayer*> *pNetworkPlayers;
 

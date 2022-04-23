@@ -46,7 +46,7 @@ struct SBNetworkPlayer
 	//RAKNetworkPeer peer;
 };
 
-enum SBSessionEnum
+enum class SBSessionEnum
 {
 	SBNETWORK_SESSION_DEFAULT,
 	SBNETWORK_SESSION_SEARCHING,
@@ -58,13 +58,20 @@ enum SBSessionEnum
 	SBNETWORK_SESSION_FINISHED
 };
 
-enum SBTypeEnum
+enum class SBProviderEnum
 {
+	SBNETWORK_NONE = -1,
 	SBNETWORK_RAKNET_DIRECT_JOIN,
 	SBNETWORK_RAKNET_DIRECT_HOST,
 	SBNETWORK_RAKNET_NAT_JOIN,
 	SBNETWORK_RAKNET_NAT_HOST,
 	SBNETWORK_ENET,
+};
+
+enum SBCapabilitiesFlags
+{
+	SBNETWORK_NONE = 0,
+	SBNETWORK_HAS_SERVER_BROWSER = 1 << 0,
 };
 
 enum SBEventEnum {
@@ -75,8 +82,8 @@ enum SBEventEnum {
 };
 
 enum class SBCreationFlags {
-	SBNETWORK_CREATE_NONE = 2^0,
-	SBNETWORK_CREATE_TRY_NAT = 2^1,
+	SBNETWORK_CREATE_NONE = 0,
+	SBNETWORK_CREATE_TRY_NAT = 1 << 0,
 };
 
 struct SBNetworkCreation
@@ -96,14 +103,9 @@ class IServerSearchable {
 public:
 	IServerSearchable() {  }
 	virtual ~IServerSearchable() = default;
-	virtual SBList<SBStr>* GetSessionListAsync() = 0;
+	virtual SBList<std::shared_ptr<SBStr>>* GetSessionListAsync() = 0;
 	virtual bool StartGetSessionListAsync() = 0;
 	virtual bool JoinSession(const SBStr&, SBStr) = 0;
-
-protected:
-	SBList<SBStr> mSessions;
-	SBList<SBSessionInfo *> mSessionInfo;
-	unsigned int mSearchTime = 0;
 };
 
 class BaseNetworkType {
@@ -168,9 +170,12 @@ public:
 	/// </summary>
 	virtual SBList<SBNetworkPlayer*>* GetAllPlayers() = 0;
 
+	/// <summary>Retrieves a summary of all active provider capabilities</summary>
+	virtual SBCapabilitiesFlags GetCapabilities() = 0;
+
 	virtual bool IsServerSearchable() = 0;
 	virtual IServerSearchable* GetServerSearcher() = 0;
-	
+
 	SBSessionEnum GetState() const {
 		return mState;
 	}
@@ -181,5 +186,5 @@ protected:
 
 	SBList<SBNetworkPlayer*> mPlayers;
 	
-	SBSessionEnum mState = SBNETWORK_SESSION_DEFAULT;
+	SBSessionEnum mState = SBSessionEnum::SBNETWORK_SESSION_DEFAULT;
 };

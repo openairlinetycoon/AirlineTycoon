@@ -76,7 +76,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <UseFullPaths>false</UseFullPaths>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level2</WarningLevel>
       <PreprocessorDefinitions>DEBUG;WIN32;_WINDOWS;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <MinimalRebuild>false</MinimalRebuild>
@@ -433,6 +433,7 @@
     <ClInclude Include="glwerk.h" />
     <ClInclude Include="glworld.h" />
     <ClInclude Include="HalldiskMenu.h" />
+    <ClInclude Include="helper.h" />
     <ClInclude Include="HLine.h" />
     <ClInclude Include="Insel.h" />
     <ClInclude Include="Intro.h" />

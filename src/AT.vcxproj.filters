@@ -683,6 +683,9 @@
     <ClInclude Include="Statistk.h">
       <Filter>Header Files\Screens</Filter>
     </ClInclude>
+    <ClInclude Include="helper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Res\Script2.rc">

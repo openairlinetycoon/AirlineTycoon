@@ -72,6 +72,7 @@ enum SBCapabilitiesFlags
 {
 	SBNETWORK_NONE = 0,
 	SBNETWORK_HAS_SERVER_BROWSER = 1 << 0,
+	SBNETWORK_HAS_NAT = 1 << 1,
 };
 
 enum SBEventEnum {

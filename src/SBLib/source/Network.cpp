@@ -450,9 +450,13 @@ void SBNetwork::SetProvider(SBProviderEnum type) {
     case SBProviderEnum::SBNETWORK_RAKNET_DIRECT_JOIN: 
     case SBProviderEnum::SBNETWORK_RAKNET_DIRECT_HOST:
     case SBProviderEnum::SBNETWORK_RAKNET_NAT_HOST:
-    case SBProviderEnum::SBNETWORK_RAKNET_NAT_JOIN:
-        mNetwork = new RAKNetNetwork();
-		break;
+    case SBProviderEnum::SBNETWORK_RAKNET_NAT_JOIN: {
+	    RAKNetNetwork* const net = new RAKNetNetwork;
+    	net->SetNatMode(type >= SBProviderEnum::SBNETWORK_RAKNET_NAT_JOIN);
+
+    	mNetwork = net;
+    	break;
+    }
     case SBProviderEnum::SBNETWORK_ENET:
         mNetwork = new ENetNetwork();
     	break;

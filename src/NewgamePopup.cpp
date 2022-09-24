@@ -1860,7 +1860,10 @@ void NewGamePopup::OnLButtonDown(UINT nFlags, CPoint point)
 				NewgameWantsToLoad = 2;
 				cr.sessionName = NetworkSession;
 				cr.maxPlayers = 4;
-				cr.flags = SBCreationFlags::SBNETWORK_CREATE_TRY_NAT;
+				if((gNetwork.GetSelectedProviderCapabilities() & SBNETWORK_HAS_NAT) != 0)
+					cr.flags = SBCreationFlags::SBNETWORK_CREATE_TRY_NAT;
+				else
+					cr.flags = SBCreationFlags::SBNETWORK_CREATE_NONE;
 
 				if (gNetwork.CreateSession(NetworkSession, &cr))
 				{

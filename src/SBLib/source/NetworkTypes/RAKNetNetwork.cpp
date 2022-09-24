@@ -4,6 +4,7 @@
 #include "BitStream.h"
 #include "RAKNetNetwork.hpp"
 #include "NatPunchthroughClient.h"
+#include "UDPProxyClient.h"
 #include <StringCompressor.h>
 #include "RAKNetRoomCallbacks.hpp"
 
@@ -33,7 +34,7 @@ void DeserializePacket(unsigned char* data, unsigned int length, ATPacket* packe
     }
 }
 
-void HandleNetMessages(RakPeerInterface* net, std::function<bool(const Packet*, bool*)> callback) {
+void HandleNetMessages(RakPeerInterface* net, const std::function<bool(const Packet*, bool*/*should exit the loop?*/)>& /*->bool - whether we consumed the packet or if it should be queued*/ callback) {
     SBList<Packet*> queuedMessages;
 
     while(true) {
@@ -66,7 +67,63 @@ void HandleNetMessages(RakPeerInterface* net, std::function<bool(const Packet*, 
     }
 }
 
-RAKNetNetwork::RAKNetNetwork() {
+class UDPCallbacks : public UDPProxyClientResultHandler {
+public:
+    enum class State {
+        Connecting,
+        Failed,
+        Succeeded,
+    } state = State::Connecting;
+
+    const char* proxyIPAddress{};
+    int port{};
+
+    RAKNetNetwork *parent;
+
+    void OnForwardingSuccess(const char* proxyIPAddress, unsigned short proxyPort, SystemAddress proxyCoordinator,
+        SystemAddress sourceAddress, SystemAddress targetAddress, RakNetGUID targetGuid,
+        RakNet::UDPProxyClient* proxyClientPlugin) override {
+        AT_Log("UDP Forward was a success, now running with udp proxy to: %s:%d...\n", proxyIPAddress, proxyPort);
+
+        this->proxyIPAddress = proxyIPAddress;
+        this->port = proxyPort;
+        RakPeerInterface* const peer = proxyClientPlugin->GetRakPeerInterface();
+    	peer->Connect(proxyIPAddress, proxyPort, 0, 0);
+        parent->AwaitConnection(peer);
+        state = State::Succeeded;
+    }
+    void OnForwardingNotification(const char* proxyIPAddress, unsigned short proxyPort, SystemAddress proxyCoordinator,
+        SystemAddress sourceAddress, SystemAddress targetAddress, RakNetGUID targetGuid,
+        RakNet::UDPProxyClient* proxyClientPlugin) override {
+        AT_Log("Recieved OnForwardingNotification...\n");
+    }
+    void OnNoServersOnline(SystemAddress proxyCoordinator, SystemAddress sourceAddress, SystemAddress targetAddress,
+        RakNetGUID targetGuid, RakNet::UDPProxyClient* proxyClientPlugin) override {
+        AT_Log("Recieved OnNoServersOnline...\n");
+        state = State::Failed;
+    }
+    void OnRecipientNotConnected(SystemAddress proxyCoordinator, SystemAddress sourceAddress,
+        SystemAddress targetAddress, RakNetGUID targetGuid, RakNet::UDPProxyClient* proxyClientPlugin) override {
+        AT_Log("Recieved OnRecipientNotConnected...\n");
+        state = State::Failed;
+    }
+    void OnAllServersBusy(SystemAddress proxyCoordinator, SystemAddress sourceAddress, SystemAddress targetAddress,
+        RakNetGUID targetGuid, RakNet::UDPProxyClient* proxyClientPlugin) override {
+        AT_Log("Recieved OnAllServersBusy...\n");
+        state = State::Failed;
+    }
+    void OnForwardingInProgress(const char* proxyIPAddress, unsigned short proxyPort, SystemAddress proxyCoordinator,
+        SystemAddress sourceAddress, SystemAddress targetAddress, RakNetGUID targetGuid,
+        RakNet::UDPProxyClient* proxyClientPlugin) override {
+        AT_Log("Recieved OnForwardingInProgress...\n");
+        state = State::Connecting;
+    }
+
+    explicit UDPCallbacks(RAKNetNetwork* parentNetwork) : parent(parentNetwork) {}
+};
+
+
+RAKNetNetwork::RAKNetNetwork(){
     TEAKRAND rand;
     rand.SRandTime();
 	
@@ -74,10 +131,7 @@ RAKNetNetwork::RAKNetNetwork() {
 
     isHostMigrating = false;
 
-    mRoomsPluginClient = nullptr;
-    mRoomCallbacks = new RAKNetRoomCallbacks(this);
-
-    mMaster = RakPeerInterface::GetInstance();
+    this->RAKNetNetwork::Initialize();
 
     RAKNetworkPlayer *player = new RAKNetworkPlayer();
     player->ID = mLocalID;
@@ -91,7 +145,7 @@ SLONG RAKNetNetwork::GetMessageCount() {
     if(mMaster == nullptr)
         return 0;
 
-    const unsigned int messageCountGame = mMaster->GetReceiveBufferSize();
+    const SLONG messageCountGame = mMaster->GetReceiveBufferSize();
 
     if (mState == SBSessionEnum::SBNETWORK_SESSION_SEARCHING) {
         //We are searching for a session on the master server!
@@ -102,22 +156,38 @@ SLONG RAKNetNetwork::GetMessageCount() {
 }
 
 
+bool RAKNetNetwork::ConnectToUDP(RakNetGUID gameHost) {
+	AT_Log("TESTING UDP...");
+    
+	return mUdpClient->RequestForwarding(SystemAddress(MASTER_SERVER_ADDRESS, MASTER_SERVER_PORT), UNASSIGNED_SYSTEM_ADDRESS, gameHost, (60000 * 10), nullptr);
+}
+
 bool RAKNetNetwork::Connect(const char* host) {
     if (mMaster == nullptr)
         return false;
 
-    if(mServerBrowserPeer != nullptr) {
+    if(mIsNATMode && mServerBrowserPeer != nullptr) {
         RakNetGUID gameHost = RakNetGUID();
         gameHost.FromString(host);
 
         this->mState = SBSessionEnum::SBNETWORK_SESSION_CLIENT;
-
-        
+                
         AT_Log("Opening NAT to %s\n", host);
         mNATPlugin->OpenNAT(gameHost, SystemAddress(MASTER_SERVER_ADDRESS, MASTER_SERVER_PORT));
 
         bool failed = false;
         HandleNetMessages(mServerBrowserPeer, [&](const Packet* packet, bool* shouldExit) {
+            if (mUdpCallbackHandler->state == UDPCallbacks::State::Succeeded) {
+                AT_Log("UDP Proxy established!");
+                *shouldExit = true;
+                failed = false;
+                return false;
+            } else if (mUdpCallbackHandler->state == UDPCallbacks::State::Failed) {
+                *shouldExit = true;
+                failed = true;
+                return true;
+            }
+
             if (packet->data[0] == ID_NAT_TARGET_NOT_CONNECTED ||
                 packet->data[0] == ID_NAT_TARGET_UNRESPONSIVE ||
                 packet->data[0] == ID_NAT_CONNECTION_TO_TARGET_LOST ||
@@ -134,53 +204,67 @@ bool RAKNetNetwork::Connect(const char* host) {
 
                 switch (packet->data[0]) {
                 case ID_NAT_TARGET_NOT_CONNECTED:
-                    AT_Log("Failed: ID_NAT_TARGET_NOT_CONNECTED\n");
+                    AT_Log("Failed: ID_NAT_TARGET_NOT_CONNECTED");
                     break;
                 case ID_NAT_TARGET_UNRESPONSIVE:
-                    AT_Log("Failed: ID_NAT_TARGET_UNRESPONSIVE\n");
+                    AT_Log("Failed: ID_NAT_TARGET_UNRESPONSIVE");
                     break;
                 case ID_NAT_CONNECTION_TO_TARGET_LOST:
-                    AT_Log("Failed: ID_NAT_CONNECTION_TO_TARGET_LOST\n");
+                    AT_Log("Failed: ID_NAT_CONNECTION_TO_TARGET_LOST");
                     break;
                 case ID_NAT_PUNCHTHROUGH_FAILED:
-                    AT_Log("Failed: ID_NAT_PUNCHTHROUGH_FAILED\n");
-                    break;
+                    AT_Log("Failed: ID_NAT_PUNCHTHROUGH_FAILED");
+                	break;
                 }
 
-                failed = true;
+                mNATPlugin->Clear();
+
+                AT_Log("Now trying UDP Client connection...");
+                ConnectToUDP(gameHost);
+                
                 *shouldExit = false;
                 return true;
             } else if (packet->data[0] == ID_NAT_PUNCHTHROUGH_SUCCEEDED) {
+            	const char *host;
+            	int port;
+                
                 unsigned char weAreTheSender = packet->data[1];
                 if (weAreTheSender)
-                    AT_Log("NAT punch success to remote system %s.\n", packet->systemAddress.ToString(true));
+                    AT_Log("Punchthrough success to remote system %s.\n", packet->systemAddress.ToString(true));
                 else
-                    AT_Log("NAT punch success from remote system %s.\n", packet->systemAddress.ToString(true));
+                    AT_Log("Punchthrough success from remote system %s.\n", packet->systemAddress.ToString(true));
 
-                mMaster->Connect(packet->systemAddress.ToString(false), packet->systemAddress.GetPort(), nullptr, 0);
+                host = packet->systemAddress.ToString(false);
+                port = packet->systemAddress.GetPort();
+                
+
+                mMaster->Connect(host, port, nullptr, 0);
                 
                 *shouldExit = true;
-                failed = AwaitConnection(mMaster, false);
+                failed = AwaitConnection(mMaster);
                 return true;
             }
 
         	return false;
         });
     }else{
-
 	    RakNet::SocketDescriptor sd(0, nullptr);
-	    if (mMaster->Startup(5, &sd, 1) == RAKNET_STARTED) {
+
+    	if (mMaster->Startup(5, &sd, 1) == RAKNET_STARTED) {
 	        mMaster->SetMaximumIncomingConnections(4);
 	        mMaster->Connect(host, SERVER_PORT, nullptr, 0);
 
-	        return AwaitConnection(mMaster,false);
+	        return AwaitConnection(mMaster);
 	    }
     }
     return false;
 }
 
 void RAKNetNetwork::Initialize() {
-
+    mMaster = RakPeerInterface::GetInstance();
+	mUdpClient = new UDPProxyClient;
+	mRoomsPluginClient = nullptr;
+	mRoomCallbacks = new RAKNetRoomCallbacks(this);
 }
 
 void RAKNetNetwork::Disconnect() {
@@ -189,10 +273,13 @@ void RAKNetNetwork::Disconnect() {
     
 	CloseSession();
     if(mMaster){
-		mMaster->CloseConnection(mHost, true);
+		mMaster->CloseConnection(*mHost, true);
 	    mMaster->Shutdown(500);
     }
+
 	delete mMaster;
+	mMaster = nullptr;
+    mServerBrowserPeer = nullptr;
 }
 
 bool RAKNetNetwork::CreateSession(SBNetworkCreation* create) {
@@ -210,7 +297,8 @@ bool RAKNetNetwork::CreateSession(SBNetworkCreation* create) {
     {
     case SBCreationFlags::SBNETWORK_CREATE_TRY_NAT:
         if(mServerBrowserPeer == nullptr || !mServerBrowserPeer->IsActive())
-			ConnectToMasterServer();
+			if(!ConnectToMasterServer())
+                return false;
 
     	if(mServerBrowserPeer != nullptr) {
             AT_Log("CREATE SESSION: NAT. Our GUID: '%s' and our SystemAddress: '%s'", mMaster->GetMyGUID().ToString(), mMaster->GetSystemAddressFromGuid(mMaster->GetMyGUID()).ToString());
@@ -230,7 +318,8 @@ bool RAKNetNetwork::CreateSession(SBNetworkCreation* create) {
 
 void RAKNetNetwork::CloseSession() {
     AT_Log("END SESSION");
-	mMaster->Shutdown(100);
+    if(mMaster != nullptr)
+		mMaster->Shutdown(100);
     if(mServerBrowserPeer) {
 	    mServerBrowserPeer->Shutdown(100);
         delete mServerBrowserPeer;
@@ -239,6 +328,8 @@ void RAKNetNetwork::CloseSession() {
         mServerBrowserPeer = nullptr;
         mMaster = nullptr;
         mRoomsPluginClient = nullptr;
+        delete mHost;
+    	mHost = nullptr;
     }
     mState = SBSessionEnum::SBNETWORK_SESSION_FINISHED;
 }
@@ -316,6 +407,8 @@ bool RAKNetNetwork::Receive(UBYTE** buffer, ULONG& size) {
             *buffer = new UBYTE[size];
             memcpy(*buffer, &dp, size);
             mState = SBSessionEnum::SBNETWORK_SESSION_MASTER;
+        }else {
+	        mHost = &static_cast<RAKNetworkPlayer*>(master)->peer;
         }
         isHostMigrating = false;
         return true;
@@ -330,7 +423,7 @@ bool RAKNetNetwork::Receive(UBYTE** buffer, ULONG& size) {
         case ID_DISCONNECTION_NOTIFICATION:
         case ID_CONNECTION_LOST:
         {
-            AT_Log("RECEIVED: SBNETWORK_DISCONNECT");
+            AT_Log("RECEIVED: SBNETWORK_DISCONNECT - reason: %d", p->data[0]);
 
             //ATPacket packet{};
             //DeserializePacket(p->data, p->length, &packet);
@@ -356,7 +449,7 @@ bool RAKNetNetwork::Receive(UBYTE** buffer, ULONG& size) {
                 mPlayers.RemoveLastAccessed();
                 delete disconnectedPlayer;
             }
-            if (mHost == p->guid) { //The server disconnected
+            if (mState != SBSessionEnum::SBNETWORK_SESSION_MASTER && *mHost == p->guid) { //The server disconnected
                 isHostMigrating = true;
             }
             return true;
@@ -368,16 +461,16 @@ bool RAKNetNetwork::Receive(UBYTE** buffer, ULONG& size) {
 
         	//Check if the package was meant for us. 0 for broadcast
             if(packet.peerID && packet.peerID != mLocalID) {
-                AT_Log("RECEIVED PRIVATE: SBNETWORK_MESSAGE - ID: %d. IGNORED, SEND NOT TO US", packet.data[3] << 24 | packet.data[2] << 16 | packet.data[1] << 8 | packet.data[0]);
+                AT_Log("RECEIVED PRIVATE: SBNETWORK_MESSAGE - ID: %x. IGNORED, SEND NOT TO US", packet.data[3] << 24 | packet.data[2] << 16 | packet.data[1] << 8 | packet.data[0]);
 	            break;
             }
         		
             *buffer = packet.data;
             size = packet.dataLength;
             if(packet.peerID)
-                AT_Log("RECEIVED PRIVATE: SBNETWORK_MESSAGE - ID: %d", packet.data[3] << 24 | packet.data[2] << 16 | packet.data[1] << 8 | packet.data[0]);
+                AT_Log("RECEIVED PRIVATE: SBNETWORK_MESSAGE - ID: %x", packet.data[3] << 24 | packet.data[2] << 16 | packet.data[1] << 8 | packet.data[0]);
             else
-                AT_Log("RECEIVED: SBNETWORK_MESSAGE - ID: %d", packet.data[3] << 24 | packet.data[2] << 16 | packet.data[1] << 8 | packet.data[0]);
+                AT_Log("RECEIVED: SBNETWORK_MESSAGE - ID: %x", packet.data[3] << 24 | packet.data[2] << 16 | packet.data[1] << 8 | packet.data[0]);
             
             mMaster->DeallocatePacket(p);
             return true;
@@ -392,20 +485,20 @@ bool RAKNetNetwork::Receive(UBYTE** buffer, ULONG& size) {
             mPlayers.Add(player);
 
             if (mState == SBSessionEnum::SBNETWORK_SESSION_MASTER) {
-                AT_Log("RECEIVED: SBNETWORK_ESTABLISH_CONNECTION - Broadcast new ID: %x", player->ID);
+                AT_Log("RECEIVED: SBNETWORK_ESTABLISH_CONNECTION - Broadcast new ID: %d", player->ID);
                 /* Broadcast the address of this peer to all other peers */
                 RAKNetworkPeer peer;
                 peer.netID = SBEventEnum::SBNETWORK_JOINED;
                 peer.ID = player->ID;
                 peer.guid = player->peer;
                 peer.address = p->systemAddress;
-                mMaster->Send((char*)&peer, sizeof(RAKNetworkPeer), HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, true);
+                mMaster->Send((char*)&peer, sizeof(RAKNetworkPeer), HIGH_PRIORITY, RELIABLE_ORDERED, 0, player->peer, true);
 
                 peer.netID = SBEventEnum::SBNETWORK_JOINED;
                 peer.ID = mLocalID;
                 peer.guid = mMaster->GetMyGUID();
                 peer.address = mMaster->GetSystemAddressFromGuid(mMaster->GetMyGUID());
-                mMaster->Send((char*)&peer, sizeof(RAKNetworkPeer), HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
+                mMaster->Send((char*)&peer, sizeof(RAKNetworkPeer), HIGH_PRIORITY, RELIABLE_ORDERED, 0, player->peer, false);
             } else {
                 AT_Log("RECEIVED: SBNETWORK_ESTABLISH_CONNECTION - From: '%d'", player->ID);
             }
@@ -420,14 +513,14 @@ bool RAKNetNetwork::Receive(UBYTE** buffer, ULONG& size) {
                 mPlayers.Add(player);
 
 
-                if (nPeer->guid == mHost) {
+                if (nPeer->guid == *mHost) {
                     AT_Log("RECEIVED: SBNETWORK_JOINED - Server acknowledged us!");
                     break;
                 }
 
             	
-            	if(isNATMode) {
-            		
+            	if(mIsNATMode) {
+            		Connect(nPeer->guid.ToString());
             	}else {
             		SystemAddress newPlayer = nPeer->address;
 
@@ -436,7 +529,7 @@ bool RAKNetNetwork::Receive(UBYTE** buffer, ULONG& size) {
             		
                     AT_Log("CONNECTING: New connection being made to: %s:%u", address, port);
                     mMaster->Connect(address, port, nullptr, 0);//Connect to other client
-                    AwaitConnection(mMaster, true);
+                    AwaitConnection(mMaster);
             	}
 
                 AT_Log("RECEIVED: SBNETWORK_JOINED - New ID: %u", nPeer->ID);
@@ -483,7 +576,12 @@ SBCapabilitiesFlags RAKNetNetwork::GetCapabilities() {
 	if(this->GetState() == SBSessionEnum::SBNETWORK_SESSION_MASTER)
         return SBCapabilitiesFlags::SBNETWORK_NONE;
 
-    return  SBCapabilitiesFlags::SBNETWORK_HAS_SERVER_BROWSER;
+    SBCapabilitiesFlags caps = SBCapabilitiesFlags::SBNETWORK_HAS_SERVER_BROWSER;
+
+	if(mIsNATMode)
+        caps = (SBCapabilitiesFlags)(caps | SBCapabilitiesFlags::SBNETWORK_HAS_NAT);
+
+    return  caps;
 }
 
 bool RAKNetNetwork::IsServerSearchable() {
@@ -494,52 +592,59 @@ IServerSearchable* RAKNetNetwork::GetServerSearcher() {
 	return this;
 }
 
-bool RAKNetNetwork::AwaitConnection(RakPeerInterface* peerInterface, bool isAnotherPeer) {
+int RAKNetNetwork::CheckConnectionPacket(Packet* p, RakPeerInterface* peerInterface, bool isAnotherPeer) {
+    switch (p->data[0]) {
+    case ID_CONNECTION_REQUEST_ACCEPTED:
+    { //Send our ID to server so that others can connect to us
+        BitStream data;
+        data.Write((char)SBEventEnum::SBNETWORK_ESTABLISH_CONNECTION);
+        data.Write(mLocalID);
+
+        if (isAnotherPeer == false)
+            mHost = new RakNet::RakNetGUID(p->guid); //Only set the host guid if we are actually connecting to the host
+
+        mState = SBSessionEnum::SBNETWORK_SESSION_CLIENT;
+        AT_Log("Connect(..) successful. We (%s) are now sending our ID: %d", mMaster->GetMyGUID().ToString(), mLocalID);
+
+        peerInterface->Send(&data, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
+        return 1;
+    }
+    case ID_CONNECTION_ATTEMPT_FAILED:
+    case ID_REMOTE_SYSTEM_REQUIRES_PUBLIC_KEY:
+    case ID_OUR_SYSTEM_REQUIRES_SECURITY:
+    case ID_PUBLIC_KEY_MISMATCH:
+    case ID_INVALID_PASSWORD:
+    case ID_CONNECTION_BANNED:
+    case ID_INCOMPATIBLE_PROTOCOL_VERSION:
+    case ID_NO_FREE_INCOMING_CONNECTIONS:
+    case ID_IP_RECENTLY_CONNECTED:
+        AT_Log("Connect(..) failed! Reason: %d", p->data[0]);
+        if (isAnotherPeer) {
+            peerInterface->Shutdown(0);
+        } //TODO: Send message to server to kick(? maybe) the new player whom we can't connect to
+        return 0;
+    case ID_ALREADY_CONNECTED:
+        return 0;
+    default:
+        AT_Log("Unknown packet in connection phase! ID: %d", p->data[0]);
+        return 2;
+    }
+}
+
+bool RAKNetNetwork::AwaitConnection(RakPeerInterface* peerInterface) {
     while (true) {
         Packet* p = peerInterface->Receive();
         if (p == nullptr)
             continue;
 
-        switch (p->data[0]) {
-        case ID_CONNECTION_REQUEST_ACCEPTED:
-        { //Send our ID to server so that others can connect to us
-            BitStream data;
-            data.Write((char)SBEventEnum::SBNETWORK_ESTABLISH_CONNECTION);
-            data.Write(mLocalID);
+        const int result = CheckConnectionPacket(p, peerInterface, mState == SBSessionEnum::SBNETWORK_SESSION_MASTER || mHost != nullptr);
 
-        	if(isAnotherPeer == false)
-				mHost = p->guid; //Only set the host guid if we are actually connecting to the host
-        	
-            mState = SBSessionEnum::SBNETWORK_SESSION_CLIENT;
-            AT_Log("Connect(..) successful. We (%s) are now sending our ID: %d", mMaster->GetMyGUID().ToString(), mLocalID);
-
-            peerInterface->Send(&data, HIGH_PRIORITY, RELIABLE_ORDERED, 0, p->systemAddress, false);
+        if(result == 2) {
+            peerInterface->PushBackPacket(p, false);
+        } else {
             peerInterface->DeallocatePacket(p);
-            return true;
+			return result == 1;
         }
-        case ID_CONNECTION_ATTEMPT_FAILED:
-        case ID_REMOTE_SYSTEM_REQUIRES_PUBLIC_KEY:
-        case ID_OUR_SYSTEM_REQUIRES_SECURITY:
-        case ID_PUBLIC_KEY_MISMATCH:
-        case ID_INVALID_PASSWORD:
-        case ID_CONNECTION_BANNED:
-        case ID_INCOMPATIBLE_PROTOCOL_VERSION:
-        case ID_NO_FREE_INCOMING_CONNECTIONS:
-        case ID_IP_RECENTLY_CONNECTED:
-            AT_Log("Connect(..) failed! Reason: %d", p->data[0]);
-        	if(isAnotherPeer){
-				peerInterface->Shutdown(0);
-        	} //TODO: Send message to server to kick(? maybe) the new player whom we can't connect to
-            peerInterface->DeallocatePacket(p);
-            return false;
-        case ID_ALREADY_CONNECTED:
-            return false;
-        default:
-            AT_Log("Unknown packet in connection phase! ID: %d", p->data[0]);
-            peerInterface->PushBackPacket(p,false);
-            break;
-        }
-
     }
 }
 
@@ -558,19 +663,25 @@ void WriteStringToBitStream(const char* myString, RakNet::BitStream* output) {
 RakString username;
 RakString baseName = "WizzardMaker";
 void RAKNetNetwork::LoginMasterServer() {
-    AT_Log("SBNETWORK: Connection to master server established, sending username \"%s\"", username.C_String());
     
     const int64_t id = rand();
     username = (baseName + RakString::ToString(id)).C_String();
 	RakNet::BitStream* data = new RakNet::BitStream();
 	data->Write(REGISTER_NAME);
 	WriteStringToBitStream(username, data);
+
+	AT_Log("SBNETWORK: Connection to master server established, sending username \"%s\"", username.C_String());
+
 	mServerBrowserPeer->Send(data, IMMEDIATE_PRIORITY, RELIABLE, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
     delete data;
 }
 
 bool RAKNetNetwork::ConnectToMasterServer() {
     AT_Log("Connecting to master server...");
+    if(mMaster == nullptr) {
+	    Initialize();
+    }
+
     mServerBrowserPeer = mMaster;//RakPeerInterface::GetInstance();
 
     SocketDescriptor sd(0, "");
@@ -579,15 +690,23 @@ bool RAKNetNetwork::ConnectToMasterServer() {
 
     delete mRoomsPluginClient;
     delete mNATPlugin;
+    delete mUdpCallbackHandler;
 
+    /*NAT*/
     mNATPlugin = new NatPunchthroughClient();
     mServerBrowserPeer->AttachPlugin(mNATPlugin);
     NatPunchthroughDebugInterface_Printf *debug = new NatPunchthroughDebugInterface_Printf();
     mNATPlugin->SetDebugInterface(debug);
     PunchthroughConfiguration* config = mNATPlugin->GetPunchthroughConfiguration();
 
-    config->retryOnFailure = true;
+    config->retryOnFailure = false;
 
+    /*UDP PROXY*/
+    mServerBrowserPeer->AttachPlugin(mUdpClient);
+    this->mUdpCallbackHandler = new UDPCallbacks(this);
+    mUdpClient->SetResultHandler(mUdpCallbackHandler);
+
+    /*ROOMS*/
     mRoomsPluginClient = new RoomsPlugin();
     mServerBrowserPeer->AttachPlugin(mRoomsPluginClient);
 
@@ -596,40 +715,48 @@ bool RAKNetNetwork::ConnectToMasterServer() {
     mRoomsPluginClient->SetRoomsCallback(mRoomCallbacks);
 
     RakNet::ConnectionAttemptResult car = mServerBrowserPeer->Connect(MASTER_SERVER_ADDRESS, MASTER_SERVER_PORT, nullptr, 0);
-    while (true) {
-        Packet* packet = mServerBrowserPeer->Receive();
-        if (packet == nullptr)
-            continue;
 
-        switch (packet->data[0]) {
-        case ID_CONNECTION_REQUEST_ACCEPTED:
-            AT_Log("Connected to master server!");
-            LoginMasterServer();
-            mServerBrowserPeer->DeallocatePacket(packet);
-            mIsConnectingToMaster = false;
-            return true;
-        case ID_CONNECTION_ATTEMPT_FAILED:
-        case ID_REMOTE_SYSTEM_REQUIRES_PUBLIC_KEY:
-        case ID_OUR_SYSTEM_REQUIRES_SECURITY:
-        case ID_PUBLIC_KEY_MISMATCH:
-        case ID_INVALID_PASSWORD:
-        case ID_CONNECTION_BANNED:
-        case ID_INCOMPATIBLE_PROTOCOL_VERSION:
-        case ID_NO_FREE_INCOMING_CONNECTIONS:
-        case ID_IP_RECENTLY_CONNECTED:
-        case ID_ALREADY_CONNECTED:
-            AT_Log("Connect to master server failed! Reason: %d", packet->data[0]);
-            break;
-        default:
-            AT_Log("Unknown packet in master server connection phase! ID: %d", packet->data[0]);
-            mServerBrowserPeer->PushBackPacket(packet, false);
-            break;
-        }
-        mIsConnectingToMaster = false;
-        mServerBrowserPeer->DeallocatePacket(packet);
-        mState = SBSessionEnum::SBNETWORK_SESSION_FINISHED;
-        return false;
+    if(car == CONNECTION_ATTEMPT_STARTED) {
+	    while (true) {
+	        Packet* packet = mServerBrowserPeer->Receive();
+	        if (packet == nullptr)
+	            continue;
+
+	        switch (packet->data[0]) {
+	        case ID_CONNECTION_REQUEST_ACCEPTED:
+	            AT_Log("Connected to master server!");
+	            LoginMasterServer();
+	            mServerBrowserPeer->DeallocatePacket(packet);
+	            mIsConnectingToMaster = false;
+	            return true;
+	        case ID_CONNECTION_ATTEMPT_FAILED:
+	        case ID_REMOTE_SYSTEM_REQUIRES_PUBLIC_KEY:
+	        case ID_OUR_SYSTEM_REQUIRES_SECURITY:
+	        case ID_PUBLIC_KEY_MISMATCH:
+	        case ID_INVALID_PASSWORD:
+	        case ID_CONNECTION_BANNED:
+	        case ID_INCOMPATIBLE_PROTOCOL_VERSION:
+	        case ID_NO_FREE_INCOMING_CONNECTIONS:
+	        case ID_IP_RECENTLY_CONNECTED:
+	        case ID_ALREADY_CONNECTED:
+	            AT_Log("Connect to master server failed! Reason: %d", packet->data[0]);
+	            DisplayBroadcastMessage("Connect to master server failed!");
+                mServerBrowserPeer->DeallocatePacket(packet);
+                CloseSession();
+                Initialize();
+	            return false;
+	        default:
+	            AT_Log("Unknown packet in master server connection phase! ID: %d", packet->data[0]);
+	            mServerBrowserPeer->PushBackPacket(packet, false);
+	            continue;
+	        }
+	    }
     }
+
+    AT_Log("Connection to master server failed!");
+    mIsConnectingToMaster = false;
+    mState = SBSessionEnum::SBNETWORK_SESSION_FINISHED;
+    return false;
 }
 
 #pragma endregion
@@ -723,19 +850,7 @@ bool RAKNetNetwork::CreateRoom(const char* roomNameC, const char* password) cons
 
 SBList<std::shared_ptr<SBStr>>* RAKNetNetwork::GetSessionListAsync() {
 	if (mState == SBSessionEnum::SBNETWORK_SESSION_SEARCHING && mServerBrowserPeer && !mIsConnectingToMaster) {
-    //    while (true) {
-    //        Packet* packet = mServerBrowserPeer->Receive();
-    //        if (packet == nullptr)
-    //            break;
-
-    //        if(packet->data[0] == ID_ROOMS_EXECUTE_FUNC) {
-    //            mServerBrowserPeer->DeallocatePacket(packet);
-    //        }else {
-				//mServerBrowserPeer->PushBackPacket(packet,false);    
-    //        }
-    //    }
-
-		RetrieveRoomList();
+        RetrieveRoomList();
 
         if (mRoomCallbacks->mMasterRooms.GetNumberOfElements() != 0)
             return &mRoomCallbacks->mMasterRooms;
@@ -761,7 +876,7 @@ bool RAKNetNetwork::JoinSession(const SBStr& session, SBStr nickname) {
 
     RAKSessionInfo *info = new RAKSessionInfo();
 
-    strcpy(info->sessionName, session.c_str());
+    strcpy_s(info->sessionName, session.c_str());
     info->address = mRoomCallbacks->joinedRoom.roomDescriptor.roomMemberList[0].guid;
     
     mSessionInfo = info;
@@ -796,4 +911,8 @@ bool RAKNetNetwork::JoinSession(const SBStr& session, SBStr nickname) {
     }
 
     return true;
+}
+
+void RAKNetNetwork::SetNatMode(bool enabled) {
+	this->mIsNATMode = enabled;
 }

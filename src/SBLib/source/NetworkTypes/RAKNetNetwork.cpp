@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "SbLib.h"
 #include "network.h"
+#include <time.h>
 #include "BitStream.h"
 #include "RAKNetNetwork.hpp"
 #include "NatPunchthroughClient.h"
@@ -34,10 +35,22 @@ void DeserializePacket(unsigned char* data, unsigned int length, ATPacket* packe
     }
 }
 
-void HandleNetMessages(RakPeerInterface* net, const std::function<bool(const Packet*, bool*/*should exit the loop?*/)>& /*->bool - whether we consumed the packet or if it should be queued*/ callback) {
+#define MAX_TIMEOUT 8
+
+bool HandleNetMessages(RakPeerInterface* net, int secondTimeout, const std::function<bool(const Packet*, bool*/*should exit the loop?*/)>& /*->bool - whether we consumed the packet or if it should be queued*/ callback) {
     SBList<Packet*> queuedMessages;
+    time_t begin, current;
+    time(&begin);
+    const time_t end = begin + secondTimeout;
+    bool failed = false;
 
     while(true) {
+        time(&current);
+        if(end < current) {
+            failed = true;
+			break;    
+        }
+
 	    Packet *p = net->Receive();
         if(p == nullptr)
             continue;
@@ -60,11 +73,13 @@ void HandleNetMessages(RakPeerInterface* net, const std::function<bool(const Pac
     }
 
     if(queuedMessages.GetNumberOfElements() == 0)
-        return;
+        return !failed;
 
     FOREACH_SB(Packet, p, queuedMessages) {
         net->PushBackPacket(p, true);
     }
+
+    return !failed;
 }
 
 class UDPCallbacks : public UDPProxyClientResultHandler {
@@ -176,7 +191,7 @@ bool RAKNetNetwork::Connect(const char* host) {
         mNATPlugin->OpenNAT(gameHost, SystemAddress(MASTER_SERVER_ADDRESS, MASTER_SERVER_PORT));
 
         bool failed = false;
-        HandleNetMessages(mServerBrowserPeer, [&](const Packet* packet, bool* shouldExit) {
+        failed |= !HandleNetMessages(mServerBrowserPeer, MAX_TIMEOUT, [&](const Packet* packet, bool* shouldExit) {
             if (mUdpCallbackHandler->state == UDPCallbacks::State::Succeeded) {
                 AT_Log("UDP Proxy established!");
                 *shouldExit = true;
@@ -247,6 +262,8 @@ bool RAKNetNetwork::Connect(const char* host) {
 
         	return false;
         });
+
+        return failed;
     }else{
 	    RakNet::SocketDescriptor sd(0, nullptr);
 
@@ -321,6 +338,7 @@ void RAKNetNetwork::CloseSession() {
     if(mMaster != nullptr)
 		mMaster->Shutdown(100);
     if(mServerBrowserPeer) {
+        mNATPlugin->Clear();
 	    mServerBrowserPeer->Shutdown(100);
         delete mServerBrowserPeer;
         delete mRoomsPluginClient;
@@ -763,7 +781,7 @@ bool RAKNetNetwork::ConnectToMasterServer() {
 
 bool RAKNetNetwork::DidFuncSucceed(const RoomsPluginOperations func) const {
     bool failed = false;
-    HandleNetMessages(mServerBrowserPeer, [&](const Packet* p, bool* shouldExit) {
+    failed |= !HandleNetMessages(mServerBrowserPeer, MAX_TIMEOUT,[&](const Packet* p, bool* shouldExit) {
         *shouldExit = true;
 
         switch (p->data[0]) {

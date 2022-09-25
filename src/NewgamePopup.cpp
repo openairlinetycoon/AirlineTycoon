@@ -289,129 +289,9 @@ void NewGamePopup::Konstruktor(BOOL bHandy, SLONG PlayerNum)
 	VersionFont.Load(lpDD, (char*)(LPCTSTR)FullFilename("stat_1.mcf", MiscPath));
 
 	SDL_ShowWindow(FrameWnd->m_hWnd);
+	SDL_GetWindowSurface(FrameWnd->m_hWnd);
 	SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
-
-	//Versteckter Kopierschutz:
-#ifdef CD_PROTECTION_METALOCK
-	if (!gSpawnOnly)
-	{
-		long          ifil = open(FullFilename(CString("g") + CString("a") + CString("m") + CString("e") + CString(".") + CString("s") + CString("m") + CString("k"), IntroPath), _O_RDONLY | _O_BINARY);
-		unsigned char readbyte = 0;
-
-		if (ifil > 0)
-		{
-			if (-1 != lseek(ifil, CD_PROTECTION_METALOCK_POS, SEEK_SET))
-				read(ifil, &readbyte, 1);
-		}
-
-		if (readbyte != CD_PROTECTION_METALOCK_BYTE)
-		{
-			VersionString[strlen(VersionString) - 1] = 'M';
-			bad = TRUE;
-			RefreshKlackerField();
-		}
-
-		if (ifil > 0) close(ifil);
-	}
-#endif
-
-#ifdef CD_PROTECTION
-	/*if (gCDPath!="-:\\data\\" && (CString(gCDPath).GetLength()>0 && ((1<<(toupper(CString(gCDPath)[0])-'A')) & gPhysicalCdRomBitlist)==0 ))
-	{
-	   VersionString[strlen(VersionString)-1]='C';
-	   bad=TRUE;
-	   RefreshKlackerField ();
-	}
-	else*/ if (!gSpawnOnly)
-	{
-		BOOL	bFound = FALSE;
-		char	chLabel[255];
-
-#ifdef CD_PROTECTION_FILLFILE
-		if (CreditsSmackerFileHandle == 0)
-		{
-			VersionString[strlen(VersionString) - 1] = 'A';
-			bad = TRUE;
-			RefreshKlackerField();
-		}
-#endif
-
-		// Alle Laufwerke durchsuchen
-		for (word d = 2; d <= 26; d++)
-		{
-			char laufwerk[4];
-			laufwerk[0] = 65 + d;
-			laufwerk[1] = ':';
-			laufwerk[2] = '\\';
-			laufwerk[3] = 0;
-			if ((GetDriveType(laufwerk)) == DRIVE_CDROM /*&& ((1<<d) & gPhysicalCdRomBitlist)*/)
-			{
-				dword componentLength;
-				dword	fileSystemFlags = 0;
-				GetVolumeInformation(laufwerk, chLabel, 255, NULL, &componentLength, &fileSystemFlags, NULL, 0);
-
-				CString file = CString(laufwerk) + 'd' + 'a' + 't' + 'a' + '\\';
-				file += "at.exe";
-				HANDLE hf = CreateFile(file, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0);
-				if (hf && hf != INVALID_HANDLE_VALUE)
-				{
-					CloseHandle(hf);
-
-					DWORD SectorsPerCluster;
-					DWORD BytesPerSector;
-					DWORD NumberOfFreeClusters;
-					DWORD TotalNumberOfClusters;
-
-					GetDiskFreeSpace(laufwerk, &SectorsPerCluster, &BytesPerSector, &NumberOfFreeClusters, &TotalNumberOfClusters);
-
-					bFound = 1;
-
-#ifdef CD_PROTECTION_LARGE
-					if (TotalNumberOfClusters * SectorsPerCluster * BytesPerSector < REQUIRED_CD_SIZE)
-					{
-						//Ge'fake'te CD; Es fehlen Dateien
-						bFound = 2;
-					}
-#endif
-
-					if (bFound == 1) break;
-				}
-			}
-		}
-
-		if (bFound == 0)
-		{
-			VersionString[strlen(VersionString) - 1] = 'D';
-			bad = TRUE;
-			RefreshKlackerField();
-		}
-		else if (bFound == 2)
-		{
-			VersionString[strlen(VersionString) - 1] = 'E';
-			bad = TRUE;
-			RefreshKlackerField();
-		}
-	}
-#endif
-
-#ifdef BETA_TIME_LIMIT
-	{
-		CTime t = CTime::GetCurrentTime();
-
-		if (t.GetYear() > BETA_TIME_LIMIT_YEAR || (t.GetYear() == BETA_TIME_LIMIT_YEAR && t.GetMonth() > BETA_TIME_LIMIT_MONTH))
-		{
-			bad = TRUE;
-			RefreshKlackerField();
-			MenuStart(MENU_REQUEST, MENU_REQUEST_BETATEST2);
-		}
-	}
-#endif
-
-#ifdef CD_PROTECTION
-	// Put the end marker
-	PUTENDMARK;
-#endif
-
+	
 	SetMouseLook(CURSOR_NORMAL, 0, ROOM_TITLE, 0);
 
 	//Create a timer to 'klacker'
@@ -2020,6 +1900,8 @@ void NewGamePopup::CheckNetEvents() {
 				ULONG MessageType, Par1 = 0, Par2 = 0, Par3 = 0;
 				Message >> MessageType;
 
+				AT_Log_I("Net", "Received net event: %s", Translate_ATNET(MessageType));
+
 				switch (MessageType)
 				{
 				case ATNET_ENTERNAME:
@@ -2666,7 +2548,7 @@ void NewGamePopup::PushName(SLONG n)
 bool SIM::SendMemFile(TEAKFILE& file, ULONG target, bool useCompression)
 {
 	useCompression = false;
-
+	AT_Log_I("Net", "Send Event: %s TO: %x", Translate_ATNET((file.MemBuffer[3] << 24) | (file.MemBuffer[2] << 16) | (file.MemBuffer[1] << 8) | (file.MemBuffer[0])), target);
 	if ((Sim.bNetwork || bNetworkUnderway) && gNetwork.IsInSession())
 		return gNetwork.Send(file.MemBuffer, file.MemBufferUsed, target, useCompression);
 	else

@@ -149,13 +149,18 @@ inline bool operator!=(const CPoint& lhs, const CPoint& rhs)
    return !(lhs == rhs);
 }
 
+#define START_NAME_MAP(name) static const char* Translate_##name(unsigned long value, bool withDescription = false) { switch (value) {
+#define DEFINE_NAME_ENTRY(name, desc) case name: return withDescription ? #name " - " desc : #name;
+#define END_NAME_MAP  }return "unknown";}
+
+
 //Was wohl:
 #define FEMALE 0
 #define MALE   1
 
 //Generelles
-#define CUSTOMERS_PER_PERSON  15       //Eine Person (Bildschirm) repräsentiert 10 Kunden
-#define CUSTOMERS_PER_PERSONB 45       //Wenn schon 100 an Bord sind, geht es hiermit weiter
+#define CUSTOMERS_PER_PERSON  5       //Eine Person (Bildschirm) repräsentiert 10 Kunden
+#define CUSTOMERS_PER_PERSONB 15       //Wenn schon 100 an Bord sind, geht es hiermit weiter
 #define DEBT_LIMIT           -1000000  //Max. Kontokorrentkredit
 #define DEBT_WARNLIMIT1       -500000  //Warnung: Limit ist 1 Mio
 #define DEBT_WARNLIMIT2      -1000000  //Warnung: Kein weiterer Kredit
@@ -588,6 +593,36 @@ inline bool operator!=(const CPoint& lhs, const CPoint& rhs)
 #define ACTION_BUYUSEDPLANE   300
 #define ACTION_BUYNEWPLANE    301
 #define ACTION_WERBUNG        400
+
+
+START_NAME_MAP(ACTION)
+	DEFINE_NAME_ENTRY(ACTION_NONE, )
+	DEFINE_NAME_ENTRY(ACTION_WAIT, )
+	DEFINE_NAME_ENTRY(ACTION_RAISEMONEY, )
+	DEFINE_NAME_ENTRY(ACTION_DROPMONEY, )
+	DEFINE_NAME_ENTRY(ACTION_VISITBANK, )
+	DEFINE_NAME_ENTRY(ACTION_EMITSHARES, )
+	DEFINE_NAME_ENTRY(ACTION_CHECKAGENT1, )
+	DEFINE_NAME_ENTRY(ACTION_CHECKAGENT2, )
+	DEFINE_NAME_ENTRY(ACTION_CHECKAGENT3, )
+	DEFINE_NAME_ENTRY(ACTION_MEETING, )
+	DEFINE_NAME_ENTRY(ACTION_STARTDAY, )
+	DEFINE_NAME_ENTRY(ACTION_PERSONAL, )
+	DEFINE_NAME_ENTRY(ACTION_VISITARAB, )
+	DEFINE_NAME_ENTRY(ACTION_VISITKIOSK, )
+	DEFINE_NAME_ENTRY(ACTION_VISITMECH, )
+	DEFINE_NAME_ENTRY(ACTION_VISITMUSEUM, )
+	DEFINE_NAME_ENTRY(ACTION_VISITDUTYFREE, )
+	DEFINE_NAME_ENTRY(ACTION_VISITAUFSICHT, )
+	DEFINE_NAME_ENTRY(ACTION_VISITNASA, )
+	DEFINE_NAME_ENTRY(ACTION_VISITTELESCOPE, )
+	DEFINE_NAME_ENTRY(ACTION_VISITMAKLER, )
+	DEFINE_NAME_ENTRY(ACTION_VISITRICK, )
+	DEFINE_NAME_ENTRY(ACTION_VISITROUTEBOX, )
+	DEFINE_NAME_ENTRY(ACTION_VISITSECURITY, )
+	DEFINE_NAME_ENTRY(ACTION_VISITDESIGNER, )
+	DEFINE_NAME_ENTRY(ACTION_VISITSECURITY2, )
+END_NAME_MAP
 
 //Die Arten von Beratern:
 #define BERATERTYP_GIRL        0    //Die Sekretärin

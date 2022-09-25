@@ -381,18 +381,6 @@ bool RAKNetNetwork::Send(BUFFER<UBYTE>& buffer, ULONG length, ULONG peerID, bool
 
     if (peerID) {
         AT_Log("SEND PRIVATE: SBNETWORK_MESSAGE ID: - ID %x TO: %x", (a.data[3] << 24) | (a.data[2] << 16) | (a.data[1] << 8) | (a.data[0]), peerID);
-
-    //    for (mPlayers.GetFirst(); !mPlayers.IsLast(); mPlayers.GetNext())
-    //    {
-    //        if (mPlayers.GetLastAccessed().ID == peerID){
-				//SBNetworkPlayer *player = &mPlayers.GetLastAccessed();
-    //        	
-    //            int result = mMaster->Send(&data, HIGH_PRIORITY, RELIABLE_ORDERED, 0, static_cast<RAKNetworkPlayer*>(player)->peer, false);
-				//SDL_Log("SEND PRIVATE: STATUS: %x", result);
-    //        }
-    //    }
-    } else {
-        AT_Log("SEND: SBNETWORK_MESSAGE ID: - ID %x", (a.data[3] << 24) | (a.data[2] << 16) | (a.data[1] << 8) | (a.data[0]));
     }
 
 	mMaster->Send(&data, HIGH_PRIORITY, RELIABLE_ORDERED, 0, NET_BROADCAST, true);
@@ -479,17 +467,12 @@ bool RAKNetNetwork::Receive(UBYTE** buffer, ULONG& size) {
 
         	//Check if the package was meant for us. 0 for broadcast
             if(packet.peerID && packet.peerID != mLocalID) {
-                AT_Log("RECEIVED PRIVATE: SBNETWORK_MESSAGE - ID: %x. IGNORED, SEND NOT TO US", packet.data[3] << 24 | packet.data[2] << 16 | packet.data[1] << 8 | packet.data[0]);
 	            break;
             }
         		
             *buffer = packet.data;
             size = packet.dataLength;
-            if(packet.peerID)
-                AT_Log("RECEIVED PRIVATE: SBNETWORK_MESSAGE - ID: %x", packet.data[3] << 24 | packet.data[2] << 16 | packet.data[1] << 8 | packet.data[0]);
-            else
-                AT_Log("RECEIVED: SBNETWORK_MESSAGE - ID: %x", packet.data[3] << 24 | packet.data[2] << 16 | packet.data[1] << 8 | packet.data[0]);
-            
+
             mMaster->DeallocatePacket(p);
             return true;
         }

@@ -1,5 +1,8 @@
 #include "stdafx.h"
 
+#include <filesystem>
+namespace fs = std::filesystem;
+
 const char* ExcOpen     = "Can't open %s!";
 const char* ExcRead     = "Can't read %s!";
 const char* ExcWrite    = "Can't write %s!";
@@ -237,13 +240,7 @@ bool CRLEReader::Read(BYTE* buffer, SLONG size, bool decode)
 
 int DoesFileExist(char const* path)
 {
-    SDL_RWops *ctx = SDL_RWFromFile(path, "rb");
-    if (ctx)
-    {
-        SDL_RWclose(ctx);
-        return true;
-    }
-    return false;
+    return fs::exists(path);
 }
 
 BUFFER<BYTE>* LoadCompleteFile(char const* path)

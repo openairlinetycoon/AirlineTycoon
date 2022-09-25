@@ -1,4 +1,9 @@
 #pragma once
+
+#define AT_Log(a,...) AT_Log_I("RAKNetNetwork>Lobby", a, __VA_ARGS__)
+
+#define printf AT_Log
+
 #include <rooms-plugin/RoomsPlugin.h>
 
 class RAKNetRoomCallbacks : public RakNet::RoomsCallback
@@ -97,3 +102,6 @@ public:
 	void RoomDestroyedOnModeratorLeft_Callback(const RakNet::SystemAddress& senderAddress, RakNet::RoomDestroyedOnModeratorLeft_Notification* notification) override { (void)senderAddress; notification->PrintResult(); }
 	void Chat_Callback(const RakNet::SystemAddress& senderAddress, RakNet::Chat_Notification* notification) override { (void)senderAddress; notification->PrintResult(); printf("Chat=%s\nFiltered=%s\n", notification->chatMessage.C_String(), notification->filteredChatMessage.C_String()); }
 };
+
+#undef printf
+#undef AT_Log

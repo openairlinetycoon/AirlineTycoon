@@ -249,6 +249,7 @@ GameFrame::GameFrame()
       return;
    }
    SDL_ShowWindow(h);
+   SDL_GetWindowSurface(h);
    SDL_UpdateWindowSurface(h);
    m_hWnd = h;
 

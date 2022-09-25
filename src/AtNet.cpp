@@ -200,6 +200,7 @@ void PumpNetwork (void)
          ULONG MessageType, Par1=0, Par2=0, Par3=0;
 
          Message >> MessageType;
+         AT_Log_I("Net", "Received net event: %s", Translate_ATNET(MessageType));
 
          switch (MessageType)
          {

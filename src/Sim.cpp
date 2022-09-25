@@ -7,6 +7,9 @@
 #include "AtNet.h"
 #include <filesystem>
 
+#define AT_Log(a,...) AT_Log_I("Sim", a, __VA_ARGS__)
+
+
                             //Für Menschen     Für Computer
                             //Money   Credit   Money    Credit
 static long InitMoney [] = { 1500000,        0, 2000000,        0,   //DIFF_FREEGAME
@@ -93,11 +96,11 @@ extern long GenericAsyncIdPars[4*100];
 void DumpAASeedSum (long CallerId)
 {
 #ifdef _DEBUG
-   long sum=0;
+   long long sum=0;
    for (long c=0; c<MAX_CITIES; c++)
       sum += AuslandsAuftraege[c].Random.GetSeed();
 
-   Hdu.HercPrintf("Summe for %li is %li\n", CallerId, sum);
+   AT_Log("AA Seed sum for %li is %lli\n", CallerId, sum);
 #endif
 }
 

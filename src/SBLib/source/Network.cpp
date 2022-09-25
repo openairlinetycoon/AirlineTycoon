@@ -361,6 +361,8 @@ SBList<SBNetworkPlayer>* SBNetwork::GetAllPlayers()
 
 #ifdef RAKNET_NETWORK
 
+#define AT_Log(a,...) AT_Log_I("SBNetwork", a, __VA_ARGS__)
+
 SBNetwork::SBNetwork(bool)
 	: mState(SBNETWORK_IDLE)
 	  , mType(){
@@ -374,7 +376,7 @@ SBNetwork::SBNetwork(bool)
     mConnections.Add(RAKNET_TYPE_NAT_JOIN);
     mConnections.Add(RAKNET_TYPE_NAT_HOST);
 
-	SDL_Log("Started SBNetwork");
+    AT_Log("Started SBNetwork");
 }
 
 SLONG SBNetwork::GetMessageCount() {

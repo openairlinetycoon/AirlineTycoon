@@ -680,7 +680,7 @@ struct RoomMemberJoinedRoom_Notification : public RoomsPluginNotification {
 	virtual void Serialize(bool writeToBitstream, RakNet::BitStream *bitStream);
 	virtual void PrintResult(void)
 	{
-		printf("RoomMemberJoinedRoom_Notification to %s: %s (%s) has joined the room.\n", recipient.C_String(), joinedRoomResult->joiningMemberName.C_String(), joinedRoomResult->joiningMemberAddress.ToString());
+		printf("%s (%s) has joined the room.\n", joinedRoomResult->joiningMemberName.C_String(), joinedRoomResult->joiningMemberAddress.ToString());
 	}
 };
 /// \brief You have received an invitation to a room

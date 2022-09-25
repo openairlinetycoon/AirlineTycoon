@@ -76,6 +76,7 @@ AirportView::AirportView (BOOL bHandy, ULONG PlayerNum) : CStdRaum (bHandy, Play
       CenterCameraOnPlayer ();
 
    SDL_ShowWindow(FrameWnd->m_hWnd);
+   SDL_GetWindowSurface(FrameWnd->m_hWnd);
    SDL_UpdateWindowSurface(FrameWnd->m_hWnd);
 
    if (Sim.ShowExtrablatt!=-1)

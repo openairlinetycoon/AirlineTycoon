@@ -4,6 +4,8 @@
 #include "stdafx.h"
 #include "AtNet.h"
 
+#define AT_Log(a,...) AT_Log_I("Schedule", a, __VA_ARGS__)
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -728,7 +730,7 @@ void CFlugplanEintrag::BookFlight (CPlane *Plane, SLONG PlayerNum)
    //Bei Aufträgen, die Prämie verbuchen; Aufträge als erledigt markieren
    else if (ObjectType==2)
    {
-      Hdu.HercPrintf("Player %li flies %li Passengers from %s to %s\n", PlayerNum, qPlayer.Auftraege[ObjectId].Personen, (LPCTSTR)Cities[qPlayer.Auftraege[ObjectId].VonCity].Name, (LPCTSTR)Cities[qPlayer.Auftraege[ObjectId].NachCity].Name);
+      AT_Log("Player %li flies %li Passengers from %s to %s\n", PlayerNum, qPlayer.Auftraege[ObjectId].Personen, (LPCTSTR)Cities[qPlayer.Auftraege[ObjectId].VonCity].Name, (LPCTSTR)Cities[qPlayer.Auftraege[ObjectId].NachCity].Name);
 
       if (Okay==0 || Okay==1)
       {

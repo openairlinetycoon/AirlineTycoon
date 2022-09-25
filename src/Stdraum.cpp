@@ -4444,7 +4444,7 @@ void CStdRaum::MenuStart (SLONG MenuType, SLONG MenuPar1, SLONG MenuPar2, SLONG 
          MenuBms.ReSize(pMenuLib1, "CHAT TEXTAREA");
          OnscreenBitmap.ReSize (MenuBms[0].Size);
          Optionen[0]="";
-         MenuBms[1].PrintAt (bprintf (StandardTexte.GetS (TOKEN_MISC, 3004), Sim.Players.Players[MenuPar1].NameX, Sim.Players.Players[MenuPar1].AirlineX), FontNormalGrey, TEC_FONT_LEFT, 6, 119, 279, 147);
+         MenuBms[1].PrintAt (bprintf (StandardTexte.GetS (TOKEN_MISC, 3004), (LPCSTR)Sim.Players.Players[MenuPar1].NameX, Sim.Players.Players[MenuPar1].AirlineX.c_str()), FontNormalGrey, TEC_FONT_LEFT, 6, 119, 279, 147);
          MenuBms[1].ShiftUp (10);
          break;
 

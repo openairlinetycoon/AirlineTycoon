@@ -7322,18 +7322,17 @@ phone_busy:
       case MENU_BROADCAST:
          if (MouseClickArea==-101 && MouseClickId==MENU_RENAMEPLANE && MouseClickPar1==1)
          {
-            MenuStop ();
 
             for (SLONG c=0; c<4; c++)
                if ((MenuPar1&(1<<c)) && Sim.Players.Players[c].Owner==2 && strlen(Optionen[0]))
                {
                   TEAKFILE Message;
-                  SLONG c=Sim.localPlayer;
 
                   Sim.SendChatBroadcast (Optionen[0], true, Sim.Players.Players[c].NetworkID);
                }
 
             DisplayBroadcastMessage (Optionen[0], Sim.localPlayer);
+            MenuStop();
          }
          if (MouseClickArea==-101 && MouseClickId==MENU_RENAMEPLANE && MouseClickPar1==2) MenuStop ();
 
@@ -8132,7 +8131,6 @@ void CStdRaum::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
                       if ((MenuPar1 & (1 << c)) && Sim.Players.Players[c].Owner == 2 && strlen(Optionen[0]))
                       {
                           TEAKFILE Message;
-                          SLONG d = Sim.localPlayer;
 
                           Sim.SendChatBroadcast(Optionen[0], true, Sim.Players.Players[c].NetworkID);
                       }

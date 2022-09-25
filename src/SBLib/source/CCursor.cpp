@@ -51,7 +51,7 @@ SLONG SB_CCursor::Show(bool show)
 SLONG SB_CCursor::Render(SDL_Renderer* renderer)
 {
     SDL_Rect dst = { Position.x, Position.y, Cursor->GetXSize(), Cursor->GetYSize() };
-    if (renderer)
+    if (renderer && Cursor->GetTexture())
         return SDL_RenderCopy(renderer, Cursor->GetTexture(), NULL, &dst);
     return -1;
 }

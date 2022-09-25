@@ -100,7 +100,7 @@ void CRushmore::OnPaint()
          //Hack: Damit die Sortierung stimmt, wurde vorher das Vorzeichen verdreht. Jetzt machen wir es wieder richtig.
          if (Sim.Difficulty==DIFF_ADDON01) r=abs(r);
 
-         RoomBm.PrintAt (bprintf (StandardTexte.GetS (TOKEN_MISC, 1200+diff), (CString)(LPCTSTR)Insert1000erDots(r), (CString)(LPCTSTR)Insert1000erDots(r2)), FontBigGrey, TEC_FONT_LEFT, XY(225,LogoBmsYPositions[c]-1), XY(640,440));
+         RoomBm.PrintAt (bprintf (StandardTexte.GetS (TOKEN_MISC, 1200+diff), (LPCTSTR)Insert1000erDots(r), (LPCTSTR)Insert1000erDots(r2)), FontBigGrey, TEC_FONT_LEFT, XY(225,LogoBmsYPositions[c]-1), XY(640,440));
       }
 
    //Ggf. Onscreen-Texte einbauen:

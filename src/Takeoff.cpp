@@ -45,12 +45,14 @@
 
 #include "AtNet.h"
 #include "SbLib.h"
-#include "network.h"
 extern SBNetwork gNetwork;
 
 #include <fstream>
 #include <filesystem>
-#include <Dbghelp.h>
+
+#ifdef SENTRY
+#include "sentry.h"
+#endif
 
 CHLPool HLPool;
 
@@ -144,27 +146,6 @@ __int64 betaId[3] = { 123456789876543210, 765423432423432676, 432987774377733433
 
 char *UCharToReadableAnsi( const unsigned char *pData, const unsigned uLen );
 unsigned char *ReadableAnsiToUChar( const char *pData, const unsigned uLen );
-
-
-LONG UnhandledExceptionCallback(
-    _EXCEPTION_POINTERS* exceptionInfo) {
-
-    _MINIDUMP_EXCEPTION_INFORMATION info = {GetCurrentThreadId(), exceptionInfo, TRUE};
-
-    HANDLE dump = CreateFile("last_crash.dmp", GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
-        FILE_ATTRIBUTE_NORMAL, NULL);
-
-	MiniDumpWriteDump(
-        GetCurrentProcess(), GetCurrentProcessId(),
-        dump, MiniDumpNormal, &info, nullptr, nullptr);
-        
-
-    CloseHandle(dump);
-	
-	return EXCEPTION_EXECUTE_HANDLER;
-}
-
-
 
 #define SCRAMBLE_ADD_XOR 0xa0febff4
 
@@ -264,14 +245,29 @@ extern "C"
 #endif
 int main(int argc, char* argv[])
 {
-   protectedValue v;
+	protectedValue v;
 
-   v.mcharintScore.iValue = 792628216;
-   v.muScramble           = 3556112065;
+	v.mcharintScore.iValue = 792628216;
+	v.muScramble           = 3556112065;
 
-   long vv = v.GetValue();
-   
-   SetUnhandledExceptionFilter(UnhandledExceptionCallback);
+	long vv = v.GetValue();
+
+#ifdef SENTRY
+    sentry_options_t* options = sentry_options_new();
+    sentry_options_set_dsn(options, "https://6c9b29cfe559442b98417942e221250d@o4503905572225024.ingest.sentry.io/4503905573797888");
+    // This is also the default-path. For further information and recommendations:
+    // https://docs.sentry.io/platforms/native/configuration/options/#database-path
+    sentry_options_set_database_path(options, ".sentry-native");
+    sentry_options_set_release(options, VersionString);
+    sentry_options_set_debug(options, 0);
+    sentry_options_add_attachment(options, "debug.txt");
+    sentry_options_set_on_crash(options, [] (const sentry_ucontext_t* uctx, sentry_value_t event, void* closure) {
+		    MessageBoxA(nullptr, "Airline Tycoon experienced an unexpected exception\nCrash information is being send to sentry...", "Airline Tycoon Deluxe Crash Handler", MB_OK);
+    		return event;
+	    }, nullptr);
+    sentry_init(options);
+#endif
+
 
 	const char* pText = "Hallo, ich bin ein Text";
 
@@ -292,6 +288,8 @@ int main(int argc, char* argv[])
 	delete [] pDecodeBack3;
 
 	theApp.InitInstance(argc, argv);
+
+    sentry_close();
 	return 0;
 }
 

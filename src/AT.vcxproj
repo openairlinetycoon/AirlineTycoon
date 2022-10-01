@@ -62,7 +62,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)src\SBLib\include;$(SolutionDir)libs\raknet\Include;$(SolutionDir)libs\enet\include;$(SolutionDir)libs\libsmacker;$(SolutionDir)cmake\sdl2-ttf\include;$(SolutionDir)cmake\sdl2\include;$(SolutionDir)cmake\sdl2-image\include;$(SolutionDir)cmake\sdl2-mixer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)src\SBLib\include;$(SolutionDir)libs\raknet\Include;$(SolutionDir)libs\enet\include;$(SolutionDir)libs\libsmacker;$(SolutionDir)libs\CrashRpt\install\include;$(SolutionDir)cmake\sdl2-ttf\include;$(SolutionDir)cmake\sdl2\include;$(SolutionDir)cmake\sdl2-image\include;$(SolutionDir)cmake\sdl2-mixer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions) -m /Zc:__cplusplus</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -94,7 +94,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>$(SolutionDir)BUILD\TeakLib\$(Configuration)\TeakLibW.lib;$(SolutionDir)BUILD\SSE\$(Configuration)\SSE.lib;$(SolutionDir)BUILD\SBLib\$(Configuration)\SBLib.lib;$(SolutionDir)BUILD\libsmacker\$(Configuration)\libsmacker.lib;$(SolutionDir)BUILD\raknet\$(Configuration)\raknet.lib;$(SolutionDir)BUILD\enet\$(Configuration)\enet.lib;$(SolutionDir)cmake\sdl2-ttf\lib\x64\SDL2_ttf.lib;$(SolutionDir)cmake\sdl2-image\lib\x64\SDL2_image.lib;$(SolutionDir)cmake\sdl2-mixer\lib\x64\SDL2_mixer.lib;$(SolutionDir)cmake\sdl2\lib\x64\SDL2.lib;$(SolutionDir)cmake\sdl2\lib\x64\SDL2main.lib;ws2_32.lib;Winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;dbghelp.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)BUILD\TeakLib\$(Configuration)\TeakLibW.lib;$(SolutionDir)BUILD\SSE\$(Configuration)\SSE.lib;$(SolutionDir)BUILD\SBLib\$(Configuration)\SBLib.lib;$(SolutionDir)BUILD\libsmacker\$(Configuration)\libsmacker.lib;$(SolutionDir)BUILD\raknet\$(Configuration)\raknet.lib;$(SolutionDir)BUILD\enet\$(Configuration)\enet.lib;$(SolutionDir)libs\CrashRpt\install\lib\sentry.lib;$(SolutionDir)cmake\sdl2-ttf\lib\x64\SDL2_ttf.lib;$(SolutionDir)cmake\sdl2-image\lib\x64\SDL2_image.lib;$(SolutionDir)cmake\sdl2-mixer\lib\x64\SDL2_mixer.lib;$(SolutionDir)cmake\sdl2\lib\x64\SDL2.lib;$(SolutionDir)cmake\sdl2\lib\x64\SDL2main.lib;ws2_32.lib;Winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;dbghelp.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -102,6 +102,7 @@
       <ImportLibrary>$(SolutionDir)BUILD/AT/$(Configuration)/AT.lib</ImportLibrary>
       <ProgramDataBaseFile>$(SolutionDir)BUILD\AT\$(Configuration)\AT.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
+      <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -113,7 +114,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)src\SBLib\include;$(SolutionDir)libs\raknet\Include;$(SolutionDir)libs\enet\include;$(SolutionDir)libs\libsmacker;$(SolutionDir)cmake\sdl2-ttf\include;$(SolutionDir)cmake\sdl2\include;$(SolutionDir)cmake\sdl2-image\include;$(SolutionDir)cmake\sdl2-mixer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)src\SBLib\include;$(SolutionDir)libs\raknet\Include;$(SolutionDir)libs\enet\include;$(SolutionDir)libs\libsmacker;$(SolutionDir)libs\CrashRpt\install\include;$(SolutionDir)cmake\sdl2-ttf\include;$(SolutionDir)cmake\sdl2\include;$(SolutionDir)cmake\sdl2-image\include;$(SolutionDir)cmake\sdl2-mixer\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>%(AdditionalOptions) -m /Zc:__cplusplus</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
@@ -128,7 +129,7 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <UseFullPaths>false</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SENTRY;WIN32;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
     </ClCompile>
     <ResourceCompile>
@@ -144,7 +145,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>$(SolutionDir)BUILD\TeakLib\$(Configuration)\TeakLibW.lib;$(SolutionDir)BUILD\SSE\$(Configuration)\SSE.lib;$(SolutionDir)BUILD\SBLib\$(Configuration)\SBLib.lib;$(SolutionDir)BUILD\libsmacker\$(Configuration)\libsmacker.lib;$(SolutionDir)BUILD\raknet\$(Configuration)\raknet.lib;$(SolutionDir)BUILD\enet\$(Configuration)\enet.lib;$(SolutionDir)cmake\sdl2-ttf\lib\x64\SDL2_ttf.lib;$(SolutionDir)cmake\sdl2-image\lib\x64\SDL2_image.lib;$(SolutionDir)cmake\sdl2-mixer\lib\x64\SDL2_mixer.lib;$(SolutionDir)cmake\sdl2\lib\x64\SDL2.lib;$(SolutionDir)cmake\sdl2\lib\x64\SDL2main.lib;ws2_32.lib;Winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;dbghelp.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)BUILD\TeakLib\$(Configuration)\TeakLibW.lib;$(SolutionDir)BUILD\SSE\$(Configuration)\SSE.lib;$(SolutionDir)BUILD\SBLib\$(Configuration)\SBLib.lib;$(SolutionDir)BUILD\libsmacker\$(Configuration)\libsmacker.lib;$(SolutionDir)BUILD\raknet\$(Configuration)\raknet.lib;$(SolutionDir)BUILD\enet\$(Configuration)\enet.lib;$(SolutionDir)libs\CrashRpt\install\lib\sentry.lib;$(SolutionDir)cmake\sdl2-ttf\lib\x64\SDL2_ttf.lib;$(SolutionDir)cmake\sdl2-image\lib\x64\SDL2_image.lib;$(SolutionDir)cmake\sdl2-mixer\lib\x64\SDL2_mixer.lib;$(SolutionDir)cmake\sdl2\lib\x64\SDL2.lib;$(SolutionDir)cmake\sdl2\lib\x64\SDL2main.lib;ws2_32.lib;Winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;dbghelp.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -152,6 +153,7 @@
       <ImportLibrary>$(SolutionDir)BUILD/AT/$(Configuration)/AT.lib</ImportLibrary>
       <ProgramDataBaseFile>$(SolutionDir)BUILD\AT\$(Configuration)\AT.pdb</ProgramDataBaseFile>
       <SubSystem>Windows</SubSystem>
+      <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>

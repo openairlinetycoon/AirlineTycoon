@@ -487,19 +487,35 @@ void BLOCK::Refresh (SLONG PlayerNum, BOOL StyleType)
                   else                                       f=&FontSmallBlack;
 
                   Bitmap.PrintAt (Table.Values[0+c*Table.AnzColums], *f, TEC_FONT_LEFT, ClientArea+XY(0,  (c-Page)*26), Bitmap.Size);
-                  Bitmap.PrintAt (Table.Values[1+c*Table.AnzColums], *f, TEC_FONT_LEFT, ClientArea+XY(123, (c-Page)*26), Bitmap.Size);
+                  Bitmap.PrintAt (Table.Values[1+c*Table.AnzColums], *f, TEC_FONT_RIGHT, ClientArea+XY(145, (c-Page)*26), ClientArea + XY(175, (c - Page) * 26+10));
 
                   Bitmap.PrintAt (Table.Values[3+c*Table.AnzColums], *f, TEC_FONT_LEFT, ClientArea+XY(0, (c-Page)*26+10), Bitmap.Size);
                   
                   // Add additional information to plane list
-                  CPlane& qPlane = qPlayer.Planes[c];
-                  // check if plane name is correct, some are mixed up
-                  if (qPlayer.Planes[c].Name == Table.Values[0 + c * Table.AnzColums])
-                  { 
-                      Bitmap.PrintAt(bprintf("%li (%li)", qPlane.MaxPassagiere, qPlane.MaxPassagiereFC), FontSmallGrey, TEC_FONT_LEFT, ClientArea + XY(70, (c - Page) * 26 + 10), Bitmap.Size);
-                      Bitmap.PrintAt(Einheiten[EINH_KM].bString(qPlane.ptReichweite), FontSmallGrey, TEC_FONT_LEFT, ClientArea + XY(123, (c - Page) * 26 + 10), Bitmap.Size);
+                  for (i = 0, d = 0; i < (SLONG)qPlayer.Planes.AnzEntries(); i++){
+                      if (qPlayer.Planes.IsInAlbum(i)) {
+                          CPlane& qPlane = qPlayer.Planes[i];
+
+		                  // check if plane name is correct, some are mixed up
+		                  if (qPlane.Name == Table.Values[0 + c * Table.AnzColums])
+		                  {
+
+                              XY left = ClientArea + XY(110, (c - Page) * 26);
+                              XY right = ClientArea + XY(143, (c - Page) * 26 + 10);
+
+                              if(BlockTypeB == 6) {
+	                              //Freight
+                                  Bitmap.PrintAt(Einheiten[EINH_T].bString(qPlane.ptPassagiere / 10), FontSmallGrey, TEC_FONT_RIGHT, left, right);
+                              }else if(BlockTypeB == 4) { //Routes
+                                  Bitmap.PrintAt(bprintf("(%li/%li)", qPlane.MaxPassagiere, qPlane.MaxPassagiereFC), FontSmallGrey, TEC_FONT_RIGHT, left, right);
+                              }else{
+                                  Bitmap.PrintAt(bprintf("(%li)", qPlane.MaxPassagiere + qPlane.MaxPassagiereFC), FontSmallGrey, TEC_FONT_RIGHT, left, right);
+                              }
+		                      Bitmap.PrintAt(Einheiten[EINH_KM].bString(qPlane.ptReichweite), FontSmallGrey, TEC_FONT_LEFT, ClientArea + XY(123, (c - Page) * 26 + 10), Bitmap.Size);
+                              break;
+		                  }
+                      }
                   }
-                  
                }
                break;
 

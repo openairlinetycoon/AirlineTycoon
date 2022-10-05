@@ -138,6 +138,15 @@ public:
 };
 
 
+void RAKNetNetwork::InitPlayerList() {
+    mPlayers.Clear();
+
+	RAKNetworkPlayer *player = new RAKNetworkPlayer();
+	player->ID = mLocalID;
+	player->peer = mMaster->GetMyGUID();
+	mPlayers.Add(player);
+}
+
 RAKNetNetwork::RAKNetNetwork(){
     TEAKRAND rand;
     rand.SRandTime();
@@ -148,10 +157,7 @@ RAKNetNetwork::RAKNetNetwork(){
 
     this->RAKNetNetwork::Initialize();
 
-    RAKNetworkPlayer *player = new RAKNetworkPlayer();
-    player->ID = mLocalID;
-    player->peer = mMaster->GetMyGUID();
-    mPlayers.Add(player);
+    InitPlayerList();
 
     AT_Log("RAKNetNetwork initialized! LocalId: %d", mLocalID);
 }
@@ -196,7 +202,7 @@ bool RAKNetNetwork::Connect(const char* host) {
                 AT_Log("UDP Proxy established!");
                 *shouldExit = true;
                 failed = false;
-                return false;
+                return true;
             } else if (mUdpCallbackHandler->state == UDPCallbacks::State::Failed) {
                 *shouldExit = true;
                 failed = true;
@@ -260,7 +266,7 @@ bool RAKNetNetwork::Connect(const char* host) {
                 return true;
             }
 
-        	return false;
+        	return true;
         });
 
         return failed;
@@ -307,6 +313,7 @@ bool RAKNetNetwork::CreateSession(SBNetworkCreation* create) {
     delete mSessionInfo;
     mSessionInfo = nullptr;
     mSessionInfo = info;
+    InitPlayerList();
 
     mState = SBSessionEnum::SBNETWORK_SESSION_MASTER;
 
@@ -415,6 +422,8 @@ bool RAKNetNetwork::Receive(UBYTE** buffer, ULONG& size) {
             mState = SBSessionEnum::SBNETWORK_SESSION_MASTER;
         }else {
 	        mHost = &static_cast<RAKNetworkPlayer*>(master)->peer;
+            isHostMigrating = false;
+            return false;
         }
         isHostMigrating = false;
         return true;
@@ -542,6 +551,7 @@ bool RAKNetNetwork::Receive(UBYTE** buffer, ULONG& size) {
             switch (p->data[1]) {
 	            case RPN_ROOM_MEMBER_JOINED_ROOM:
                 case RPN_ROOM_MEMBER_LEFT_ROOM:
+				case RPN_MODERATOR_CHANGED:
                 case RPO_SEARCH_BY_FILTER:
 	                ignoreFunc = true;
 	                break;
@@ -781,7 +791,7 @@ bool RAKNetNetwork::DidFuncSucceed(const RoomsPluginOperations func) const {
         }
 
         *shouldExit = false;
-        return false;
+        return true;
     });
 
     return !failed;

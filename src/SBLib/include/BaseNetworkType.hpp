@@ -185,7 +185,7 @@ protected:
 	bool isHostMigrating = false;
 	ULONG mLocalID = -1;
 
-	SBList<SBNetworkPlayer*> mPlayers;
+	SBList<SBNetworkPlayer*> mPlayers{};
 	
 	SBSessionEnum mState = SBSessionEnum::SBNETWORK_SESSION_DEFAULT;
 };

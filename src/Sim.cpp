@@ -441,7 +441,7 @@ void SIM::ChooseStartup (BOOL GameModeQuick)
    if (!Sim.bNetwork)
    {
       if (Sim.Options.OptionRandomStartday)
-         Sim.StartTime = (rand()%365)*60*60*24;
+          Sim.StartTime = (rand()%365)*60*60*24;
       else
          Sim.StartTime = time (NULL);
    }
@@ -2684,25 +2684,30 @@ void SIM::NewDay (void)
 //--------------------------------------------------------------------------------------------
 void SIM::CreateRandomUsedPlane (SLONG Index)
 {
-   TEAKRAND rnd;
+	TEAKRAND rnd;
 
-   rnd.SRand (Sim.Date+Index);
+	rnd.SRand (Sim.Date+Index);
 
-   UsedPlanes[0x1000000+Index]=CPlane (PlaneNames.GetUnused(&rnd), PlaneTypes.GetRandomExistingType(&rnd), UBYTE(rnd.Rand(80)+11), 1900);
+	UsedPlanes[0x1000000+Index]=CPlane (PlaneNames.GetUnused(&rnd), PlaneTypes.GetRandomExistingType(&rnd), 100, 0);
 
-   //if (PlaneTypes[UsedPlanes[0x1000000+Index].TypeId].Erstbaujahr<1990)
-   if (UsedPlanes[0x1000000+Index].ptErstbaujahr<1990)
-      //UsedPlanes[0x1000000+Index].Baujahr = 1990-rnd.Rand (1990-PlaneTypes[UsedPlanes[0x1000000+Index].TypeId].Erstbaujahr);
-      UsedPlanes[0x1000000+Index].Baujahr = 1990-rnd.Rand (1990-UsedPlanes[0x1000000+Index].ptErstbaujahr);
-   else
-      UsedPlanes[0x1000000+Index].Baujahr = 1996-rnd.Rand (1996-UsedPlanes[0x1000000+Index].ptErstbaujahr);
-      //UsedPlanes[0x1000000+Index].Baujahr = 1996-rnd.Rand (1996-PlaneTypes[UsedPlanes[0x1000000+Index].TypeId].Erstbaujahr);
+	//Get Random Time: Now > Desired Time > Release Year
 
-   UsedPlanes[0x1000000+Index].Zustand = UBYTE((UsedPlanes[0x1000000+Index].Baujahr-1950)+25+rnd.Rand(40)-20);
-   if (UsedPlanes[0x1000000+Index].Zustand<20 || UsedPlanes[0x1000000+Index].Zustand>200) UsedPlanes[0x1000000+Index].Zustand=20;
-   if (UsedPlanes[0x1000000+Index].Zustand>100) UsedPlanes[0x1000000+Index].Zustand=100;
+	auto t = time(nullptr);
+	tm currentTime{};
+	localtime_s(  &currentTime, &t);
+	const int thisYear = currentTime.tm_year + 1900;
 
-   UsedPlanes[0x1000000+Index].TargetZustand = UsedPlanes[0x1000000+Index].Zustand;
+    CPlane *usedPlane = &UsedPlanes[0x1000000 + Index];
+
+    if(thisYear < usedPlane->ptErstbaujahr) {
+	    TeakLibW_Exception(FNL, "Tried to add used plane that was built before this year (%d < %d)", thisYear, usedPlane->ptErstbaujahr);
+    }
+
+    usedPlane->Baujahr = thisYear - rnd.Rand(thisYear - usedPlane->ptErstbaujahr);
+    usedPlane->Zustand = static_cast<UBYTE>(usedPlane->Baujahr - usedPlane->ptErstbaujahr + 25 + rnd.Rand(40) - 20);
+    usedPlane->Zustand = static_cast<UBYTE>(max(20, min(usedPlane->Zustand, 100)));
+
+    usedPlane->TargetZustand = usedPlane->Zustand;
 }
 
 //--------------------------------------------------------------------------------------------

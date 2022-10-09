@@ -173,12 +173,12 @@ inline bool operator!=(const CPoint& lhs, const CPoint& rhs)
 //Der Einfachheit halber Maximalwerte für ein paar Tabellen:
 #define MAX_BODIES     30
 #define MAX_TYCOONS    30
-#define MAX_PLANETYPES 80
+#define MAX_PLANETYPES 200
 #define MAX_BRICKS     340
-#define MAX_CITIES     80
+#define MAX_CITIES     300
 #define MAX_CLANS      90
 #define MAX_SPECIALS   128             //Zahl der Gates, Rooms, Check-Ins
-#define MAX_ROUTES     370             //Zahl der vordefinierten Flugrouten
+#define MAX_ROUTES     600             //Zahl der vordefinierten Flugrouten
 #define MAX_PNAMES1    200
 #define MAX_PNAMES2    100
 #define MAX_WORKERS    350             //Maximale Zahl der Angestellten

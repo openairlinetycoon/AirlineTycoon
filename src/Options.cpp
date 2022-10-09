@@ -20,7 +20,6 @@ extern SLONG NewgameWantsToLoad;
 extern SLONG NewgameToOptions;
 extern SLONG gNetworkSavegameLoading;
 
-extern char VersionString[];
 extern SBNetwork gNetwork;
 
 static SLONG nLocalOptionsOption = 0;

@@ -66,7 +66,6 @@ void Unvideo (CString Filename, CString TargetFilename);
 CJumpingVar<ULONG>   gPhysicalCdRomBitlist=0;
 CJumpingVar<CString> gCDPath;
 
-extern char  VersionString[];
 extern SLONG bCAbendOpen;
 extern SLONG SkipPlaneCalculation;
 
@@ -264,14 +263,27 @@ int main(int argc, char* argv[])
 	    sentry_options_set_release(options, VersionString);
 	    sentry_options_set_debug(options, 0);
 	    sentry_options_add_attachment(options, "debug.txt");
+
+        srand(time(nullptr));
+        int crashId = rand() % 1000 + rand()%1000 * 1000;
+
 	    sentry_options_set_on_crash(options, [] (const sentry_ucontext_t* uctx, sentry_value_t event, void* closure) {
-			    MessageBoxA(nullptr, "Airline Tycoon experienced an unexpected exception\nCrash information is being send to sentry...", "Airline Tycoon Deluxe Crash Handler", MB_OK);
+				const std::string id = std::to_string(*(int*)closure);
+				const std::string msg = std::string("Airline Tycoon experienced an unexpected exception\nCrash information is being send to sentry...\nCustom Crash ID is: ") + id;
+                AT_Log_I("CRASH", msg);
+                std::filesystem::copy_file("debug.txt", std::string("crash-") + id + std::string(".txt"));
+			    MessageBoxA(nullptr, msg.c_str(), "Airline Tycoon Deluxe Crash Handler", MB_OK);
     			return event;
-		    }, nullptr);
+		    }, &crashId);
 	    sentry_init(options);
+
+        const sentry_value_t crumbId = sentry_value_new_breadcrumb("default", "");
+        sentry_value_set_by_key(crumbId, "category", sentry_value_new_string("Custom Crash ID"));
+        sentry_value_set_by_key(crumbId, "level", sentry_value_new_string("info"));
+        sentry_value_set_by_key(crumbId, "message", sentry_value_new_string(std::to_string(crashId).c_str()));
+        sentry_add_breadcrumb(crumbId);
     }
 #endif
-
 
 	const char* pText = "Hallo, ich bin ein Text";
 

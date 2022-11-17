@@ -28,12 +28,6 @@ SLONG gNetworkSavegameLoading = -1;    //Komm-Variable, über die der Options-Scr
 extern CJumpingVar<ULONG>   gPhysicalCdRomBitlist;
 extern CJumpingVar<CString> gCDPath;
 
-#ifdef _DEBUG
-char VersionString[] = "VERSION 1.4 DEBUG"; // (pre-release; build 100)";
-#else
-char VersionString[] = "VERSION 1.4 PRE-RELEASE"; // (pre-release; build 100)";
-#endif
-
 extern SLONG gLoadGameNumber;
 extern FILE* CreditsSmackerFileHandle;
 extern BOOL gSpawnOnly;

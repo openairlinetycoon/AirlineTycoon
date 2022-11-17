@@ -85,6 +85,8 @@ private:
 	/// <returns>true - when a connection was established</returns>
     bool AwaitConnection(RakNet::RakPeerInterface* peerInterface);
 
+	void InitPlayerList();
+
     RakNet::SystemAddress mServer;
     RakNet::RakNetGUID *mHost = nullptr;
     RakNet::RakPeerInterface* mMaster = nullptr;

@@ -3561,7 +3561,7 @@ void PLAYER::RobotExecuteAction(void)
                                        SLONG Cost=((CalculateFlightCost (qFracht.VonCity, qFracht.NachCity, 8000, 700, -1))+99)/100*100;
 
                                        //Multiplikator, weil wir mehrere Flüge durchführen müssen:
-                                       Cost = Cost*2 * (qFracht.Tons / (Planes[c].ptPassagiere/10) + 1);
+                                       Cost = Cost*2 * (qFracht.Tons / (Planes[c].ptPassagiere/10 + 1) + 1);
 
                                        if ((Cost <= qFracht.Praemie*8/10+Bewertungsbonus) || (RobotUse(ROBOT_USE_FREE_FRACHT) && qFracht.Praemie==0))
                                        {

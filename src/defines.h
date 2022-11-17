@@ -158,6 +158,13 @@ inline bool operator!=(const CPoint& lhs, const CPoint& rhs)
 #define FEMALE 0
 #define MALE   1
 
+
+#ifdef _DEBUG
+constexpr char VersionString[] = "VERSION 1.5.2 DEBUG";
+#else
+constexpr char VersionString[] = "VERSION 1.5.2 PRE-RELEASE";
+#endif
+
 //Generelles
 #define CUSTOMERS_PER_PERSON  5       //Eine Person (Bildschirm) repräsentiert 10 Kunden
 #define CUSTOMERS_PER_PERSONB 15       //Wenn schon 100 an Bord sind, geht es hiermit weiter
@@ -173,12 +180,12 @@ inline bool operator!=(const CPoint& lhs, const CPoint& rhs)
 //Der Einfachheit halber Maximalwerte für ein paar Tabellen:
 #define MAX_BODIES     30
 #define MAX_TYCOONS    30
-#define MAX_PLANETYPES 80
+#define MAX_PLANETYPES 200
 #define MAX_BRICKS     340
-#define MAX_CITIES     80
+#define MAX_CITIES     300
 #define MAX_CLANS      90
 #define MAX_SPECIALS   128             //Zahl der Gates, Rooms, Check-Ins
-#define MAX_ROUTES     370             //Zahl der vordefinierten Flugrouten
+#define MAX_ROUTES     600             //Zahl der vordefinierten Flugrouten
 #define MAX_PNAMES1    200
 #define MAX_PNAMES2    100
 #define MAX_WORKERS    350             //Maximale Zahl der Angestellten
